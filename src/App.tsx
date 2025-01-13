@@ -13,6 +13,7 @@ import Markets from "./pages/Markets";
 import Blog from "./pages/Blog";
 import Tools from "./pages/Tools";
 import SideHustles from "./pages/SideHustles";
+import Community from "./pages/Community";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
           <Route path="/side-hustles" element={<SideHustles />} />
           <Route path="/tools" element={<Tools />} />
           <Route path="/blog" element={<Blog />} />
+          <Route path="/community" element={<Community />} />
           <Route path="/auth/signin" element={<SignIn />} />
           <Route path="/auth/signup" element={<SignUp />} />
           <Route path="/auth/forgot-password" element={<ForgotPassword />} />
