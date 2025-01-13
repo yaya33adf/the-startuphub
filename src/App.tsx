@@ -11,6 +11,7 @@ import { NavigationMenu } from "./components/NavigationMenu";
 import Trends from "./pages/Trends";
 import Markets from "./pages/Markets";
 import Blog from "./pages/Blog";
+import Tools from "./pages/Tools";
 
 const queryClient = new QueryClient();
 
@@ -26,7 +27,7 @@ const App = () => (
           <Route path="/trends" element={<Trends />} />
           <Route path="/markets" element={<Markets />} />
           <Route path="/side-hustles" element={<div className="p-8">Side Hustles page coming soon...</div>} />
-          <Route path="/tools" element={<div className="p-8">Tools page coming soon...</div>} />
+          <Route path="/tools" element={<Tools />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/auth/signin" element={<SignIn />} />
           <Route path="/auth/signup" element={<SignUp />} />
