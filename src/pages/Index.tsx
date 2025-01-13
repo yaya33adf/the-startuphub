@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartLine, Briefcase, Lightbulb, Wrench, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
+import { TrendSearch } from "@/components/TrendSearch";
 
 const Index = () => {
   return (
@@ -15,6 +16,9 @@ const Index = () => {
           <p className="text-lg md:text-xl text-muted-foreground mb-8">
             Your comprehensive platform for tracking market trends, exploring opportunities, and discovering side hustles
           </p>
+          <div className="mb-8">
+            <TrendSearch />
+          </div>
           <Button size="lg" asChild>
             <Link to="/trends">Explore Trends</Link>
           </Button>
