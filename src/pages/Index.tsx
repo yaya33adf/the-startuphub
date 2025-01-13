@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartLineUp, Briefcase, Lightbulb, Tools, BookOpen } from "lucide-react";
+import { ChartLine, Briefcase, Lightbulb, Wrench, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
@@ -26,7 +26,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <Card>
             <CardHeader>
-              <ChartLineUp className="w-10 h-10 text-primary mb-2" />
+              <ChartLine className="w-10 h-10 text-primary mb-2" />
               <CardTitle>Trends</CardTitle>
               <CardDescription>
                 Stay updated with the latest trends across industries and markets
@@ -80,7 +80,7 @@ const Index = () => {
 
           <Card>
             <CardHeader>
-              <Tools className="w-10 h-10 text-primary mb-2" />
+              <Wrench className="w-10 h-10 text-primary mb-2" />
               <CardTitle>Tools for Startups</CardTitle>
               <CardDescription>
                 Essential resources for entrepreneurs and startups

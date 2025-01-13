@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChartLineUp, Briefcase, Lightbulb, Tools, BookOpen, Home } from "lucide-react";
+import { ChartLine, Briefcase, Lightbulb, Wrench, BookOpen, Home } from "lucide-react";
 
 export const NavigationMenu = () => {
   return (
@@ -15,7 +15,7 @@ export const NavigationMenu = () => {
           <div className="hidden md:flex space-x-4">
             <Button variant="ghost" asChild>
               <Link to="/trends" className="flex items-center space-x-2">
-                <ChartLineUp className="w-4 h-4" />
+                <ChartLine className="w-4 h-4" />
                 <span>Trends</span>
               </Link>
             </Button>
@@ -36,7 +36,7 @@ export const NavigationMenu = () => {
             
             <Button variant="ghost" asChild>
               <Link to="/tools" className="flex items-center space-x-2">
-                <Tools className="w-4 h-4" />
+                <Wrench className="w-4 h-4" />
                 <span>Tools</span>
               </Link>
             </Button>
