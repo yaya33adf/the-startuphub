@@ -2,8 +2,13 @@ import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { SearchForm } from "./search/SearchForm";
 import { calculateTrendScores } from "@/services/trendService";
+import type { TrendData } from "@/types/trends";
 
-export const TrendSearch = () => {
+interface TrendSearchProps {
+  onSearchResults: (results: TrendData) => void;
+}
+
+export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [country, setCountry] = useState("global");
   const [period, setPeriod] = useState("7d");
@@ -24,6 +29,7 @@ export const TrendSearch = () => {
     setIsLoading(true);
     try {
       const result = await calculateTrendScores(searchQuery);
+      onSearchResults(result);
       
       toast({
         title: "Trend scores calculated",

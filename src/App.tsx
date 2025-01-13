@@ -8,6 +8,7 @@ import SignIn from "./pages/auth/SignIn";
 import SignUp from "./pages/auth/SignUp";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import { NavigationMenu } from "./components/NavigationMenu";
+import Trends from "./pages/Trends";
 
 const queryClient = new QueryClient();
 
@@ -20,7 +21,7 @@ const App = () => (
         <NavigationMenu />
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/trends" element={<div className="p-8">Trends page coming soon...</div>} />
+          <Route path="/trends" element={<Trends />} />
           <Route path="/markets" element={<div className="p-8">Markets page coming soon...</div>} />
           <Route path="/side-hustles" element={<div className="p-8">Side Hustles page coming soon...</div>} />
           <Route path="/tools" element={<div className="p-8">Tools page coming soon...</div>} />
