@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChartLine, Briefcase, Lightbulb, Wrench, BookOpen, Home, LogIn } from "lucide-react";
+import { ChartLine, Globe, Lightbulb, Wrench, BookOpen, Home, LogIn } from "lucide-react";
 
 export const NavigationMenu = () => {
   return (
@@ -22,7 +22,7 @@ export const NavigationMenu = () => {
             
             <Button variant="ghost" asChild>
               <Link to="/markets" className="flex items-center space-x-2">
-                <Briefcase className="w-4 h-4" />
+                <Globe className="w-4 h-4" />
                 <span>Markets</span>
               </Link>
             </Button>
