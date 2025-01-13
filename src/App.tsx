@@ -15,6 +15,7 @@ import Blog from "./pages/Blog";
 import Tools from "./pages/Tools";
 import SideHustles from "./pages/SideHustles";
 import Community from "./pages/Community";
+import AdminDashboard from "./pages/admin/Dashboard";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/auth/signin" element={<SignIn />} />
               <Route path="/auth/signup" element={<SignUp />} />
               <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+              <Route path="/admin" element={<AdminDashboard />} />
             </Routes>
           </main>
           <Footer />
