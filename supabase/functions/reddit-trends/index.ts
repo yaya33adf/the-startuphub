@@ -16,18 +16,39 @@ serve(async (req) => {
     const { query } = await req.json();
     console.log('Searching Reddit for:', query);
 
-    // Search Reddit for the query
+    // Search Reddit for the query with a more detailed User-Agent
     const response = await fetch(
       `https://www.reddit.com/search.json?q=${encodeURIComponent(query)}&sort=relevance&t=month&limit=25`,
       {
         headers: {
-          'User-Agent': 'TrendAnalyzer/1.0',
+          // More detailed User-Agent to comply with Reddit's API requirements
+          'User-Agent': 'TrendAnalyzer/1.0 (by /u/TrendAnalyzerBot; Market trend analysis tool)',
         },
       }
     );
 
     if (!response.ok) {
-      throw new Error(`Reddit API error: ${response.status}`);
+      console.error('Reddit API error:', response.status, await response.text());
+      // Return a more graceful fallback response instead of throwing an error
+      return new Response(
+        JSON.stringify({
+          score: 0,
+          metadata: {
+            error: `Reddit API temporarily unavailable (${response.status})`,
+            total_posts: 0,
+            top_subreddits: {},
+            engagement_metrics: {
+              total_comments: 0,
+              total_upvotes: 0,
+              average_upvote_ratio: 0,
+            },
+          },
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 200, // Return 200 with fallback data instead of 500
+        }
+      );
     }
 
     const data = await response.json();
@@ -73,7 +94,7 @@ serve(async (req) => {
     }
 
     // Normalize final score to 0-100 range
-    const normalizedScore = Math.min(100, Math.round((totalScore / posts.length) / 10));
+    const normalizedScore = Math.min(100, Math.round((totalScore / (posts.length || 1)) / 10));
 
     console.log('Calculated Reddit trend score:', normalizedScore);
 
@@ -88,11 +109,24 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error('Error in reddit-trends function:', error);
+    // Return a fallback response instead of an error
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({
+        score: 0,
+        metadata: {
+          error: error.message,
+          total_posts: 0,
+          top_subreddits: {},
+          engagement_metrics: {
+            total_comments: 0,
+            total_upvotes: 0,
+            average_upvote_ratio: 0,
+          },
+        },
+      }),
       {
-        status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200, // Return 200 with fallback data instead of 500
       }
     );
   }
