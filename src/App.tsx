@@ -10,6 +10,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import { NavigationMenu } from "./components/NavigationMenu";
 import Trends from "./pages/Trends";
 import Markets from "./pages/Markets";
+import Blog from "./pages/Blog";
 
 const queryClient = new QueryClient();
 
@@ -26,7 +27,7 @@ const App = () => (
           <Route path="/markets" element={<Markets />} />
           <Route path="/side-hustles" element={<div className="p-8">Side Hustles page coming soon...</div>} />
           <Route path="/tools" element={<div className="p-8">Tools page coming soon...</div>} />
-          <Route path="/blog" element={<div className="p-8">Blog page coming soon...</div>} />
+          <Route path="/blog" element={<Blog />} />
           <Route path="/auth/signin" element={<SignIn />} />
           <Route path="/auth/signup" element={<SignUp />} />
           <Route path="/auth/forgot-password" element={<ForgotPassword />} />
