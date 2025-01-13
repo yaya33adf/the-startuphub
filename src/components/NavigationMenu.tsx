@@ -1,10 +1,42 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChartLine, Globe, Lightbulb, Wrench, BookOpen, Home, LogIn, MessageSquare } from "lucide-react";
+import { ChartLine, Globe, Lightbulb, Wrench, BookOpen, Home, LogIn, MessageSquare, Menu, X } from "lucide-react";
+import { useState } from "react";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 export const NavigationMenu = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const navItems = [
+    { to: "/trends", icon: ChartLine, label: "Trends" },
+    { to: "/markets", icon: Globe, label: "Markets" },
+    { to: "/side-hustles", icon: Lightbulb, label: "Side Hustles" },
+    { to: "/tools", icon: Wrench, label: "Tools" },
+    { to: "/blog", icon: BookOpen, label: "Blog" },
+    { to: "/community", icon: MessageSquare, label: "Community" },
+  ];
+
+  const NavLinks = ({ onClick = () => {} }) => (
+    <>
+      {navItems.map((item) => (
+        <Button key={item.to} variant="ghost" asChild onClick={onClick}>
+          <Link to={item.to} className="flex items-center space-x-2">
+            <item.icon className="w-4 h-4" />
+            <span>{item.label}</span>
+          </Link>
+        </Button>
+      ))}
+    </>
+  );
+
   return (
-    <nav className="border-b">
+    <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-2">
@@ -12,49 +44,9 @@ export const NavigationMenu = () => {
             <span className="font-bold text-xl">Startup Hub</span>
           </Link>
           
-          <div className="hidden md:flex space-x-4">
-            <Button variant="ghost" asChild>
-              <Link to="/trends" className="flex items-center space-x-2">
-                <ChartLine className="w-4 h-4" />
-                <span>Trends</span>
-              </Link>
-            </Button>
-            
-            <Button variant="ghost" asChild>
-              <Link to="/markets" className="flex items-center space-x-2">
-                <Globe className="w-4 h-4" />
-                <span>Markets</span>
-              </Link>
-            </Button>
-            
-            <Button variant="ghost" asChild>
-              <Link to="/side-hustles" className="flex items-center space-x-2">
-                <Lightbulb className="w-4 h-4" />
-                <span>Side Hustles</span>
-              </Link>
-            </Button>
-            
-            <Button variant="ghost" asChild>
-              <Link to="/tools" className="flex items-center space-x-2">
-                <Wrench className="w-4 h-4" />
-                <span>Tools</span>
-              </Link>
-            </Button>
-            
-            <Button variant="ghost" asChild>
-              <Link to="/blog" className="flex items-center space-x-2">
-                <BookOpen className="w-4 h-4" />
-                <span>Blog</span>
-              </Link>
-            </Button>
-
-            <Button variant="ghost" asChild>
-              <Link to="/community" className="flex items-center space-x-2">
-                <MessageSquare className="w-4 h-4" />
-                <span>Community</span>
-              </Link>
-            </Button>
-
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-4">
+            <NavLinks />
             <Button variant="outline" asChild>
               <Link to="/auth/signin" className="flex items-center space-x-2">
                 <LogIn className="w-4 h-4" />
@@ -62,6 +54,29 @@ export const NavigationMenu = () => {
               </Link>
             </Button>
           </div>
+
+          {/* Mobile Navigation */}
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild className="md:hidden">
+              <Button variant="ghost" size="icon">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[80vw] sm:w-[350px]">
+              <SheetHeader>
+                <SheetTitle>Menu</SheetTitle>
+              </SheetHeader>
+              <div className="flex flex-col space-y-4 mt-4">
+                <NavLinks onClick={() => setIsOpen(false)} />
+                <Button variant="outline" asChild onClick={() => setIsOpen(false)}>
+                  <Link to="/auth/signin" className="flex items-center space-x-2">
+                    <LogIn className="w-4 h-4" />
+                    <span>Sign In</span>
+                  </Link>
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </nav>
