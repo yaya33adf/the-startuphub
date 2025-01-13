@@ -32,40 +32,56 @@ serve(async (req) => {
 
     // Process each package
     for (const packageName of packageNames) {
-      // Get download stats for the last 30 days
-      const statsResponse = await fetch(`https://pypistats.org/api/packages/${packageName}/recent`);
-      const statsData = await statsResponse.json();
-      
-      // Get package info from PyPI JSON API
-      const infoResponse = await fetch(`https://pypi.org/pypi/${packageName}/json`);
-      const packageInfo = await infoResponse.json();
-      
-      // Calculate package score based on:
-      // - Monthly downloads (up to 60 points)
-      // - Version count (up to 20 points)
-      // - Project maturity (up to 20 points)
-      const monthlyDownloads = statsData.data.last_month;
-      const downloadScore = Math.min(60, (monthlyDownloads / 10000));
-      const versionScore = Math.min(20, Object.keys(packageInfo.releases).length * 2);
-      const maturityScore = packageInfo.info.development_status ? 20 : 10;
-      
-      const packageScore = Math.round(downloadScore + versionScore + maturityScore);
-      
-      metadata.push({
-        name: packageName,
-        monthlyDownloads,
-        version: packageInfo.info.version,
-        description: packageInfo.info.summary,
-        score: packageScore,
-        releaseCount: Object.keys(packageInfo.releases).length,
-        lastRelease: packageInfo.info.version,
-      });
-      
-      totalScore += packageScore;
+      try {
+        // Get package info from PyPI JSON API first
+        const infoResponse = await fetch(`https://pypi.org/pypi/${packageName}/json`);
+        if (!infoResponse.ok) {
+          console.error(`Failed to fetch package info for ${packageName}`);
+          continue;
+        }
+        const packageInfo = await infoResponse.json();
+
+        // Try to get download stats, with fallback values
+        let monthlyDownloads = 0;
+        try {
+          const statsResponse = await fetch(`https://pypistats.org/api/packages/${packageName}/recent`);
+          if (statsResponse.ok) {
+            const statsData = await statsResponse.json();
+            monthlyDownloads = statsData?.data?.last_month || 0;
+          }
+        } catch (statsError) {
+          console.error(`Failed to fetch download stats for ${packageName}:`, statsError);
+        }
+        
+        // Calculate package score based on available data:
+        // - Monthly downloads (up to 60 points)
+        // - Version count (up to 20 points)
+        // - Project maturity (up to 20 points)
+        const downloadScore = Math.min(60, (monthlyDownloads / 10000));
+        const versionScore = Math.min(20, Object.keys(packageInfo.releases || {}).length * 2);
+        const maturityScore = packageInfo.info?.development_status ? 20 : 10;
+        
+        const packageScore = Math.round(downloadScore + versionScore + maturityScore);
+        
+        metadata.push({
+          name: packageName,
+          monthlyDownloads,
+          version: packageInfo.info?.version || 'unknown',
+          description: packageInfo.info?.summary || '',
+          score: packageScore,
+          releaseCount: Object.keys(packageInfo.releases || {}).length,
+          lastRelease: packageInfo.info?.version || 'unknown',
+        });
+        
+        totalScore += packageScore;
+      } catch (packageError) {
+        console.error(`Error processing package ${packageName}:`, packageError);
+        continue;
+      }
     }
 
     // Calculate final score (0-100)
-    const finalScore = Math.round(Math.min(100, totalScore / (packageNames.length || 1)));
+    const finalScore = packageNames.length ? Math.round(Math.min(100, totalScore / packageNames.length)) : 0;
     console.log('Final PyPI trend score:', finalScore);
 
     return new Response(
@@ -83,10 +99,18 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error('Error in pypi-trends function:', error);
+    // Return a valid response with a 0 score instead of throwing
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({
+        score: 0,
+        metadata: {
+          packages: [],
+          query: '',
+          timestamp: new Date().toISOString(),
+          error: error.message
+        },
+      }),
       {
-        status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
