@@ -5,15 +5,43 @@ import { useToast } from "@/components/ui/use-toast";
 
 export const NewsletterSection = () => {
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Thanks for subscribing!",
-      description: "You'll receive our latest updates soon.",
-    });
-    setEmail("");
+    console.log("Newsletter subscription attempt for:", email);
+    
+    if (!email.trim()) {
+      toast({
+        title: "Email required",
+        description: "Please enter your email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log("Newsletter subscription successful");
+      
+      toast({
+        title: "Thanks for subscribing!",
+        description: "You'll receive our latest updates soon.",
+      });
+      setEmail("");
+    } catch (error) {
+      console.error('Newsletter subscription error:', error);
+      toast({
+        title: "Subscription failed",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -31,9 +59,10 @@ export const NewsletterSection = () => {
             onChange={(e) => setEmail(e.target.value)}
             className="bg-white/10 border-white/20 text-white placeholder:text-white/60"
             required
+            disabled={isLoading}
           />
-          <Button type="submit" variant="secondary">
-            Subscribe
+          <Button type="submit" variant="secondary" disabled={isLoading}>
+            {isLoading ? "Subscribing..." : "Subscribe"}
           </Button>
         </form>
       </div>

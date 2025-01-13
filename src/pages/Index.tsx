@@ -12,7 +12,7 @@ const Index = () => {
 
   const handleSearchResults = (results: TrendData) => {
     setSearchResults(results);
-    console.log("Search results received:", results);
+    console.log("Search results received on Index page:", results);
   };
 
   return (

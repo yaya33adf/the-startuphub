@@ -17,6 +17,8 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Starting trend search for:", searchQuery);
+    
     if (!searchQuery.trim()) {
       toast({
         title: "Search query required",
@@ -28,7 +30,10 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
 
     setIsLoading(true);
     try {
+      console.log("Calculating trend scores...");
       const result = await calculateTrendScores(searchQuery);
+      console.log("Trend scores calculated:", result);
+      
       onSearchResults(result);
       
       toast({
@@ -39,7 +44,7 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
       console.error('Search error:', error);
       toast({
         title: "Error calculating trend score",
-        description: error.message,
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
         variant: "destructive",
       });
     } finally {
