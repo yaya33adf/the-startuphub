@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChartLine, Globe, Lightbulb, Wrench, BookOpen, Home, LogIn, MessageSquare, Menu, X } from "lucide-react";
+import { ChartLine, Globe, Lightbulb, Wrench, BookOpen, Home, LogIn, MessageSquare, Menu, Rocket } from "lucide-react";
 import { useState } from "react";
 import {
   Sheet,
@@ -39,9 +39,13 @@ export const NavigationMenu = () => {
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center space-x-2">
-            <Home className="w-6 h-6" />
-            <span className="font-bold text-xl">Startup Hub</span>
+          <Link to="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary">
+              <Rocket className="w-5 h-5 text-white transform rotate-45" />
+            </div>
+            <span className="font-bold text-xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Startup Hub
+            </span>
           </Link>
           
           {/* Desktop Navigation */}
