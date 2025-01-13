@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Globe, TrendingUp, ChartBar } from "lucide-react";
+import { Globe, TrendingUp, ChartBar, Lightbulb, DollarSign } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Card,
@@ -21,18 +21,18 @@ import {
 } from "recharts";
 
 const Markets = () => {
-  // Fetch trend scores data
-  const { data: trendScores, isLoading } = useQuery({
-    queryKey: ["trendScores"],
+  // Fetch market opportunities data
+  const { data: marketData, isLoading } = useQuery({
+    queryKey: ["marketOpportunities"],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("trend_scores")
+        .from("side_hustles")
         .select("*")
-        .order("total_score", { ascending: false })
+        .order("trend_score", { ascending: false })
         .limit(10);
 
       if (error) throw error;
-      console.log("Fetched trend scores:", data);
+      console.log("Fetched market opportunities:", data);
       return data;
     },
   });
@@ -42,7 +42,7 @@ const Markets = () => {
       <div className="p-8">
         <div className="flex items-center space-x-2">
           <Globe className="w-6 h-6" />
-          <h1 className="text-2xl font-bold">Markets</h1>
+          <h1 className="text-2xl font-bold">Market Opportunities</h1>
         </div>
         <div className="mt-4">Loading market data...</div>
       </div>
@@ -50,31 +50,29 @@ const Markets = () => {
   }
 
   // Transform data for the chart
-  const chartData = trendScores?.map((score) => ({
-    name: score.query,
-    totalScore: score.total_score,
-    githubScore: score.github_score,
-    googleScore: score.google_trends_score,
-    wikipediaScore: score.wikipedia_score,
+  const chartData = marketData?.map((market) => ({
+    name: market.name,
+    trendScore: market.trend_score,
+    potentialEarnings: (market.monthly_earnings_min + market.monthly_earnings_max) / 2,
   }));
 
   return (
     <div className="p-8">
       <div className="flex items-center space-x-2 mb-6">
         <Globe className="w-6 h-6" />
-        <h1 className="text-2xl font-bold">Markets</h1>
+        <h1 className="text-2xl font-bold">Market Opportunities</h1>
       </div>
 
       <div className="grid gap-6">
-        {/* Trend Overview Chart */}
+        {/* Market Overview Chart */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="w-5 h-5" />
-              Market Trends Overview
+              Market Trends & Potential
             </CardTitle>
             <CardDescription>
-              Top 10 markets by trend score analysis
+              Top market opportunities by trend score and earnings potential
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -88,21 +86,23 @@ const Markets = () => {
                     textAnchor="end"
                     height={70}
                   />
-                  <YAxis />
+                  <YAxis yAxisId="left" orientation="left" stroke="#4f46e5" label={{ value: 'Trend Score', angle: -90, position: 'insideLeft' }} />
+                  <YAxis yAxisId="right" orientation="right" stroke="#2563eb" label={{ value: 'Potential Monthly Earnings ($)', angle: 90, position: 'insideRight' }} />
                   <Tooltip />
                   <Legend />
                   <Bar
-                    dataKey="totalScore"
+                    yAxisId="left"
+                    dataKey="trendScore"
                     fill="#4f46e5"
-                    name="Total Score"
+                    name="Trend Score"
                   />
                   <Line
+                    yAxisId="right"
                     type="monotone"
-                    dataKey="totalScore"
+                    dataKey="potentialEarnings"
                     stroke="#2563eb"
                     strokeWidth={2}
-                    dot={false}
-                    name="Trend Line"
+                    name="Potential Earnings"
                   />
                 </ComposedChart>
               </ResponsiveContainer>
@@ -110,32 +110,64 @@ const Markets = () => {
           </CardContent>
         </Card>
 
-        {/* Market Details */}
+        {/* Market Opportunities Cards */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {trendScores?.map((market) => (
-            <Card key={market.id}>
+          {marketData?.map((market) => (
+            <Card key={market.id} className="flex flex-col">
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
-                  <span className="text-lg">{market.query}</span>
-                  <ChartBar className="w-5 h-5" />
+                  <span className="text-lg">{market.name}</span>
+                  <div className="flex items-center gap-2">
+                    <Lightbulb className="w-5 h-5" />
+                    <span className="text-sm font-normal">
+                      Score: {market.trend_score}
+                    </span>
+                  </div>
                 </CardTitle>
-                <CardDescription>
-                  Trend Score: {market.total_score}
+                <CardDescription className="flex items-center gap-2">
+                  <DollarSign className="w-4 h-4" />
+                  {market.monthly_earnings_min && market.monthly_earnings_max ? (
+                    <span>
+                      ${market.monthly_earnings_min.toLocaleString()} - $
+                      {market.monthly_earnings_max.toLocaleString()}/month
+                    </span>
+                  ) : (
+                    "Earnings vary"
+                  )}
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span>GitHub Activity:</span>
-                    <span>{market.github_score}</span>
+              <CardContent className="flex-1">
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold mb-2">Description</h4>
+                    <p className="text-sm text-gray-600">
+                      {market.description || "No description available"}
+                    </p>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Google Trends:</span>
-                    <span>{market.google_trends_score}</span>
+                  <div>
+                    <h4 className="font-semibold mb-2">Required Skills</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {market.skills?.map((skill, index) => (
+                        <span
+                          key={index}
+                          className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs"
+                        >
+                          {skill}
+                        </span>
+                      )) || "No specific skills listed"}
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Wikipedia Interest:</span>
-                    <span>{market.wikipedia_score}</span>
+                  <div>
+                    <h4 className="font-semibold mb-2">Time Commitment</h4>
+                    <span className="text-sm">
+                      {market.time_commitment || "Flexible"}
+                    </span>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Difficulty Level</h4>
+                    <span className="text-sm capitalize">
+                      {market.difficulty || "Not specified"}
+                    </span>
                   </div>
                 </div>
               </CardContent>
