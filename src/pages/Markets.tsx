@@ -21,30 +21,80 @@ import {
 } from "recharts";
 
 const Markets = () => {
-  // Fetch market opportunities data
-  const { data: marketData, isLoading } = useQuery({
+  // Fetch market opportunities data with proper error handling
+  const { data: marketData, isLoading, error } = useQuery({
     queryKey: ["marketOpportunities"],
     queryFn: async () => {
+      console.log("Fetching market opportunities...");
       const { data, error } = await supabase
         .from("side_hustles")
         .select("*")
         .order("trend_score", { ascending: false })
         .limit(10);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching market data:", error);
+        throw error;
+      }
+      
       console.log("Fetched market opportunities:", data);
       return data;
     },
   });
 
+  // Handle loading state with a better UI
   if (isLoading) {
     return (
       <div className="p-8">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 mb-6">
           <Globe className="w-6 h-6" />
           <h1 className="text-2xl font-bold">Market Opportunities</h1>
         </div>
-        <div className="mt-4">Loading market data...</div>
+        <div className="grid gap-4">
+          <Card>
+            <CardHeader>
+              <div className="h-6 bg-gray-200 rounded animate-pulse w-1/3"></div>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[400px] bg-gray-100 rounded animate-pulse"></div>
+            </CardContent>
+          </Card>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="flex flex-col">
+                <CardHeader>
+                  <div className="h-6 bg-gray-200 rounded animate-pulse w-2/3"></div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="h-4 bg-gray-100 rounded animate-pulse"></div>
+                    <div className="h-4 bg-gray-100 rounded animate-pulse w-5/6"></div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Handle error state
+  if (error) {
+    return (
+      <div className="p-8">
+        <div className="flex items-center space-x-2 mb-6">
+          <Globe className="w-6 h-6" />
+          <h1 className="text-2xl font-bold">Market Opportunities</h1>
+        </div>
+        <Card className="bg-red-50">
+          <CardHeader>
+            <CardTitle className="text-red-600">Error Loading Market Data</CardTitle>
+            <CardDescription>
+              There was an error loading the market opportunities. Please try again later.
+            </CardDescription>
+          </CardHeader>
+        </Card>
       </div>
     );
   }
@@ -53,7 +103,9 @@ const Markets = () => {
   const chartData = marketData?.map((market) => ({
     name: market.name,
     trendScore: market.trend_score,
-    potentialEarnings: (market.monthly_earnings_min + market.monthly_earnings_max) / 2,
+    potentialEarnings: market.monthly_earnings_min && market.monthly_earnings_max
+      ? (market.monthly_earnings_min + market.monthly_earnings_max) / 2
+      : 0,
   }));
 
   return (
@@ -140,17 +192,17 @@ const Markets = () => {
                 <div className="space-y-4">
                   <div>
                     <h4 className="font-semibold mb-2">Description</h4>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-muted-foreground">
                       {market.description || "No description available"}
                     </p>
                   </div>
                   <div>
                     <h4 className="font-semibold mb-2">Required Skills</h4>
                     <div className="flex flex-wrap gap-2">
-                      {market.skills?.map((skill, index) => (
+                      {market.skills?.map((skill: string, index: number) => (
                         <span
                           key={index}
-                          className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs"
+                          className="px-2 py-1 bg-secondary text-secondary-foreground rounded-full text-xs"
                         >
                           {skill}
                         </span>
@@ -159,13 +211,13 @@ const Markets = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold mb-2">Time Commitment</h4>
-                    <span className="text-sm">
+                    <span className="text-sm text-muted-foreground">
                       {market.time_commitment || "Flexible"}
                     </span>
                   </div>
                   <div>
                     <h4 className="font-semibold mb-2">Difficulty Level</h4>
-                    <span className="text-sm capitalize">
+                    <span className="text-sm capitalize text-muted-foreground">
                       {market.difficulty || "Not specified"}
                     </span>
                   </div>
