@@ -41,13 +41,22 @@ export const calculateTrendScores = async (searchQuery: string) => {
   if (stackOverflowError) throw stackOverflowError;
   console.log('Stack Overflow Trends data:', stackOverflowData);
 
+  // Call Wikipedia Trends Edge Function
+  const { data: wikipediaData, error: wikipediaError } = await supabase.functions.invoke('wikipedia-trends', {
+    body: { query: searchQuery },
+  });
+
+  if (wikipediaError) throw wikipediaError;
+  console.log('Wikipedia Trends data:', wikipediaData);
+
   // Calculate combined score
   const scores = [
     githubData.score,
     googleData.score,
     redditData.score,
     hackerNewsData.score,
-    stackOverflowData.score
+    stackOverflowData.score,
+    wikipediaData.score
   ];
   const avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
 
@@ -59,6 +68,7 @@ export const calculateTrendScores = async (searchQuery: string) => {
       github_score: githubData.score,
       google_trends_score: googleData.score,
       reddit_score: redditData.score,
+      wikipedia_score: wikipediaData.score,
       total_score: avgScore,
       metadata: {
         github: githubData.metadata,
@@ -66,6 +76,7 @@ export const calculateTrendScores = async (searchQuery: string) => {
         reddit: redditData.metadata,
         hacker_news: hackerNewsData.metadata,
         stack_overflow: stackOverflowData.metadata,
+        wikipedia: wikipediaData.metadata,
       },
     });
 
@@ -79,6 +90,7 @@ export const calculateTrendScores = async (searchQuery: string) => {
       reddit: redditData.metadata,
       hacker_news: hackerNewsData.metadata,
       stack_overflow: stackOverflowData.metadata,
+      wikipedia: wikipediaData.metadata,
     },
   };
 };
