@@ -6,13 +6,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TrendData } from "@/types/trends";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line, ComposedChart, Scatter } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line, ComposedChart } from 'recharts';
 
 interface TrendResultsProps {
   data: TrendData;
 }
 
 export const TrendResults = ({ data }: TrendResultsProps) => {
+  // Sort data by score to show platforms from highest to lowest impact
   const chartData = [
     { name: 'GitHub', score: data.metadata.github?.score || 0 },
     { name: 'Google', score: data.metadata.google_trends?.score || 0 },
@@ -22,69 +23,91 @@ export const TrendResults = ({ data }: TrendResultsProps) => {
     { name: 'Wikipedia', score: data.metadata.wikipedia?.score || 0 },
     { name: 'NPM', score: data.metadata.npm?.score || 0 },
     { name: 'PyPI', score: data.metadata.pypi?.score || 0 },
-  ];
+  ].sort((a, b) => b.score - a.score);
 
-  // Calculate future predictions
+  // Calculate trend indicators
   const avgScore = chartData.reduce((acc, curr) => acc + curr.score, 0) / chartData.length;
-  const predictedData = [
-    { name: 'Prediction 1', score: avgScore * 1.1 },
-    { name: 'Prediction 2', score: avgScore * 1.2 },
-    { name: 'Prediction 3', score: avgScore * 1.3 },
-  ];
-
-  // Combine actual and predicted data
-  const combinedData = [
-    ...chartData,
-    ...predictedData.map(item => ({
-      ...item,
-      isPrediction: true,
-      actualScore: null,
-      predictedScore: item.score
-    }))
-  ];
+  const trendStrength = avgScore > 60 ? "Strong" : avgScore > 40 ? "Moderate" : "Weak";
+  const trendDirection = avgScore > 50 ? "Positive" : "Needs More Research";
 
   return (
     <div className="space-y-8">
       <Card>
         <CardHeader>
-          <CardTitle>Overall Trend Score</CardTitle>
-          <CardDescription>Combined score across all platforms</CardDescription>
+          <CardTitle>Overall Trend Analysis</CardTitle>
+          <CardDescription>Comprehensive trend evaluation across platforms</CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="text-4xl font-bold">{data.score}/100</div>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="p-4 bg-background rounded-lg border">
+              <div className="text-sm text-muted-foreground">Overall Score</div>
+              <div className="text-4xl font-bold">{data.score}/100</div>
+            </div>
+            <div className="p-4 bg-background rounded-lg border">
+              <div className="text-sm text-muted-foreground">Trend Strength</div>
+              <div className="text-2xl font-semibold">{trendStrength}</div>
+            </div>
+            <div className="p-4 bg-background rounded-lg border">
+              <div className="text-sm text-muted-foreground">Recommendation</div>
+              <div className="text-2xl font-semibold">{trendDirection}</div>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Platform Breakdown</CardTitle>
-          <CardDescription>Individual scores by platform with trend prediction</CardDescription>
+          <CardTitle>Platform Impact Analysis</CardTitle>
+          <CardDescription>Breakdown of trend signals across different platforms</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-[400px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart data={combinedData}>
+              <ComposedChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis domain={[0, 100]} />
-                <Tooltip />
-                <Bar dataKey="score" fill="#3b82f6" />
+                <XAxis 
+                  dataKey="name" 
+                  angle={-45}
+                  textAnchor="end"
+                  height={60}
+                />
+                <YAxis 
+                  domain={[0, 100]}
+                  label={{ 
+                    value: 'Impact Score', 
+                    angle: -90, 
+                    position: 'insideLeft',
+                    style: { textAnchor: 'middle' }
+                  }}
+                />
+                <Tooltip 
+                  formatter={(value: number) => [`${value}/100`, 'Impact Score']}
+                  labelStyle={{ color: 'var(--foreground)' }}
+                />
+                <Bar 
+                  dataKey="score" 
+                  fill="#3b82f6"
+                  name="Platform Impact"
+                />
                 <Line
                   type="monotone"
                   dataKey="score"
                   stroke="#10b981"
                   strokeWidth={2}
                   dot={{ fill: '#10b981' }}
-                  connectNulls
-                />
-                <Scatter
-                  data={predictedData}
-                  fill="#ef4444"
-                  name="Predicted"
-                  dataKey="score"
+                  name="Trend Line"
                 />
               </ComposedChart>
             </ResponsiveContainer>
+          </div>
+          <div className="mt-4 text-sm text-muted-foreground">
+            <p>
+              {trendStrength === "Strong" 
+                ? "This trend shows significant momentum across multiple platforms, suggesting a robust market opportunity."
+                : trendStrength === "Moderate"
+                ? "The trend shows moderate potential, consider further research or niche targeting."
+                : "Current signals suggest limited momentum, consider alternative opportunities or wait for stronger indicators."}
+            </p>
           </div>
         </CardContent>
       </Card>
