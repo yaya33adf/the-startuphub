@@ -1,32 +1,7 @@
 import { useState } from "react";
-import { Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-
-const countries = [
-  { value: "global", label: "Global" },
-  { value: "us", label: "United States" },
-  { value: "uk", label: "United Kingdom" },
-  { value: "ca", label: "Canada" },
-  { value: "au", label: "Australia" },
-];
-
-const periods = [
-  { value: "1d", label: "Last 24 hours" },
-  { value: "7d", label: "Last 7 days" },
-  { value: "30d", label: "Last 30 days" },
-  { value: "90d", label: "Last 90 days" },
-  { value: "12m", label: "Last 12 months" },
-];
+import { SearchForm } from "./search/SearchForm";
+import { calculateTrendScores } from "@/services/trendService";
 
 export const TrendSearch = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -48,59 +23,11 @@ export const TrendSearch = () => {
 
     setIsLoading(true);
     try {
-      // Call GitHub Trends Edge Function
-      const { data: githubData, error: githubError } = await supabase.functions.invoke('github-trends', {
-        body: { query: searchQuery },
-      });
-
-      if (githubError) throw githubError;
-      console.log('GitHub Trends data:', githubData);
-
-      // Call Google Trends Edge Function
-      const { data: googleData, error: googleError } = await supabase.functions.invoke('google-trends', {
-        body: { query: searchQuery },
-      });
-
-      if (googleError) throw googleError;
-      console.log('Google Trends data:', googleData);
-
-      // Call Reddit Trends Edge Function
-      const { data: redditData, error: redditError } = await supabase.functions.invoke('reddit-trends', {
-        body: { query: searchQuery },
-      });
-
-      if (redditError) throw redditError;
-      console.log('Reddit Trends data:', redditData);
-
-      // Calculate combined score
-      const scores = [
-        githubData.score,
-        googleData.score,
-        redditData.score
-      ];
-      const avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
-
-      // Store the trend scores in Supabase
-      const { error: dbError } = await supabase
-        .from('trend_scores')
-        .insert({
-          query: searchQuery,
-          github_score: githubData.score,
-          google_trends_score: googleData.score,
-          reddit_score: redditData.score,
-          total_score: avgScore,
-          metadata: {
-            github: githubData.metadata,
-            google_trends: googleData.metadata,
-            reddit: redditData.metadata,
-          },
-        });
-
-      if (dbError) throw dbError;
-
+      const result = await calculateTrendScores(searchQuery);
+      
       toast({
         title: "Trend scores calculated",
-        description: `Combined trend score for "${searchQuery}": ${avgScore}/100`,
+        description: `Combined trend score for "${searchQuery}": ${result.score}/100`,
       });
     } catch (error) {
       console.error('Search error:', error);
@@ -115,46 +42,15 @@ export const TrendSearch = () => {
   };
 
   return (
-    <form onSubmit={handleSearch} className="w-full max-w-4xl mx-auto space-y-4">
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex-1">
-          <Input
-            type="text"
-            placeholder="Search for market trends..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full"
-          />
-        </div>
-        <Select value={country} onValueChange={setCountry}>
-          <SelectTrigger className="w-full md:w-[180px]">
-            <SelectValue placeholder="Select country" />
-          </SelectTrigger>
-          <SelectContent>
-            {countries.map((country) => (
-              <SelectItem key={country.value} value={country.value}>
-                {country.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={period} onValueChange={setPeriod}>
-          <SelectTrigger className="w-full md:w-[180px]">
-            <SelectValue placeholder="Select period" />
-          </SelectTrigger>
-          <SelectContent>
-            {periods.map((period) => (
-              <SelectItem key={period.value} value={period.value}>
-                {period.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Button type="submit" className="w-full md:w-auto" disabled={isLoading}>
-          <Search className="w-4 h-4 mr-2" />
-          {isLoading ? "Searching..." : "Search"}
-        </Button>
-      </div>
-    </form>
+    <SearchForm
+      searchQuery={searchQuery}
+      setSearchQuery={setSearchQuery}
+      country={country}
+      setCountry={setCountry}
+      period={period}
+      setPeriod={setPeriod}
+      onSubmit={handleSearch}
+      isLoading={isLoading}
+    />
   );
 };
