@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const countries = [
   { value: "global", label: "Global" },
@@ -31,9 +32,10 @@ export const TrendSearch = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [country, setCountry] = useState("global");
   const [period, setPeriod] = useState("7d");
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!searchQuery.trim()) {
       toast({
@@ -43,18 +45,43 @@ export const TrendSearch = () => {
       });
       return;
     }
-    
-    console.log("Searching for:", {
-      query: searchQuery,
-      country,
-      period,
-    });
-    
-    // TODO: Implement actual search functionality
-    toast({
-      title: "Search initiated",
-      description: `Searching for "${searchQuery}" trends in ${country} for the last ${period}`,
-    });
+
+    setIsLoading(true);
+    try {
+      // Call GitHub Trends Edge Function
+      const { data: githubData, error: githubError } = await supabase.functions.invoke('github-trends', {
+        body: { query: searchQuery },
+      });
+
+      if (githubError) throw githubError;
+
+      console.log('GitHub Trends data:', githubData);
+
+      // Store the trend score in Supabase
+      const { error: dbError } = await supabase
+        .from('trend_scores')
+        .insert({
+          query: searchQuery,
+          github_score: githubData.score,
+          metadata: githubData.metadata,
+        });
+
+      if (dbError) throw dbError;
+
+      toast({
+        title: "Trend score calculated",
+        description: `GitHub trend score for "${searchQuery}": ${githubData.score}/100`,
+      });
+    } catch (error) {
+      console.error('Search error:', error);
+      toast({
+        title: "Error calculating trend score",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -93,9 +120,9 @@ export const TrendSearch = () => {
             ))}
           </SelectContent>
         </Select>
-        <Button type="submit" className="w-full md:w-auto">
+        <Button type="submit" className="w-full md:w-auto" disabled={isLoading}>
           <Search className="w-4 h-4 mr-2" />
-          Search
+          {isLoading ? "Searching..." : "Search"}
         </Button>
       </div>
     </form>
