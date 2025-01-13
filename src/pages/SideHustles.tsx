@@ -52,14 +52,14 @@ const SideHustles = () => {
   return (
     <div className="container mx-auto p-8">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">Top Side Hustles in 2025</h1>
+        <h1 className="text-4xl font-bold mb-4">Top Side Hustles</h1>
         <p className="text-muted-foreground">
           Discover trending opportunities to earn extra income, ranked by market demand and growth potential
         </p>
       </div>
 
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-4">
           {[...Array(6)].map((_, i) => (
             <Card key={i} className="w-full">
               <CardHeader>
@@ -73,7 +73,7 @@ const SideHustles = () => {
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-4">
           {sideHustles?.map((hustle) => (
             <Card key={hustle.id} className="w-full hover:shadow-lg transition-shadow">
               <CardHeader>
@@ -87,11 +87,10 @@ const SideHustles = () => {
                     <span>Trend Score: {hustle.trend_score || 'N/A'}</span>
                   </Badge>
                 </div>
+                <CardDescription className="mt-2">{hustle.description}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <CardDescription>{hustle.description}</CardDescription>
-                
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="flex items-center gap-2">
                     <DollarSign className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm">
