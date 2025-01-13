@@ -54,7 +54,6 @@ export const TrendSearch = () => {
       });
 
       if (githubError) throw githubError;
-
       console.log('GitHub Trends data:', githubData);
 
       // Call Google Trends Edge Function
@@ -63,8 +62,23 @@ export const TrendSearch = () => {
       });
 
       if (googleError) throw googleError;
-
       console.log('Google Trends data:', googleData);
+
+      // Call Reddit Trends Edge Function
+      const { data: redditData, error: redditError } = await supabase.functions.invoke('reddit-trends', {
+        body: { query: searchQuery },
+      });
+
+      if (redditError) throw redditError;
+      console.log('Reddit Trends data:', redditData);
+
+      // Calculate combined score
+      const scores = [
+        githubData.score,
+        googleData.score,
+        redditData.score
+      ];
+      const avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
 
       // Store the trend scores in Supabase
       const { error: dbError } = await supabase
@@ -73,9 +87,12 @@ export const TrendSearch = () => {
           query: searchQuery,
           github_score: githubData.score,
           google_trends_score: googleData.score,
+          reddit_score: redditData.score,
+          total_score: avgScore,
           metadata: {
             github: githubData.metadata,
             google_trends: googleData.metadata,
+            reddit: redditData.metadata,
           },
         });
 
@@ -83,7 +100,7 @@ export const TrendSearch = () => {
 
       toast({
         title: "Trend scores calculated",
-        description: `Combined trend score for "${searchQuery}": ${Math.round((githubData.score + googleData.score) / 2)}/100`,
+        description: `Combined trend score for "${searchQuery}": ${avgScore}/100`,
       });
     } catch (error) {
       console.error('Search error:', error);
