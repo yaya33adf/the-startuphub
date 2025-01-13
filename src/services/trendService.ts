@@ -25,11 +25,20 @@ export const calculateTrendScores = async (searchQuery: string) => {
   if (redditError) throw redditError;
   console.log('Reddit Trends data:', redditData);
 
+  // Call HackerNews Trends Edge Function
+  const { data: hackerNewsData, error: hackerNewsError } = await supabase.functions.invoke('hackernews-trends', {
+    body: { query: searchQuery },
+  });
+
+  if (hackerNewsError) throw hackerNewsError;
+  console.log('HackerNews Trends data:', hackerNewsData);
+
   // Calculate combined score
   const scores = [
     githubData.score,
     googleData.score,
-    redditData.score
+    redditData.score,
+    hackerNewsData.score
   ];
   const avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
 
@@ -46,6 +55,7 @@ export const calculateTrendScores = async (searchQuery: string) => {
         github: githubData.metadata,
         google_trends: googleData.metadata,
         reddit: redditData.metadata,
+        hacker_news: hackerNewsData.metadata,
       },
     });
 
@@ -57,6 +67,7 @@ export const calculateTrendScores = async (searchQuery: string) => {
       github: githubData.metadata,
       google_trends: googleData.metadata,
       reddit: redditData.metadata,
+      hacker_news: hackerNewsData.metadata,
     },
   };
 };
