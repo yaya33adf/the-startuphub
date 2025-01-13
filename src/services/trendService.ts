@@ -17,14 +17,6 @@ export const calculateTrendScores = async (searchQuery: string) => {
   if (googleError) throw googleError;
   console.log('Google Trends data:', googleData);
 
-  // Call Reddit Trends Edge Function
-  const { data: redditData, error: redditError } = await supabase.functions.invoke('reddit-trends', {
-    body: { query: searchQuery },
-  });
-
-  if (redditError) throw redditError;
-  console.log('Reddit Trends data:', redditData);
-
   // Call HackerNews Trends Edge Function
   const { data: hackerNewsData, error: hackerNewsError } = await supabase.functions.invoke('hackernews-trends', {
     body: { query: searchQuery },
@@ -65,11 +57,10 @@ export const calculateTrendScores = async (searchQuery: string) => {
   if (pypiError) throw pypiError;
   console.log('PyPI Trends data:', pypiData);
 
-  // Calculate combined score
+  // Calculate combined score (excluding Reddit)
   const scores = [
     githubData.score,
     googleData.score,
-    redditData.score,
     hackerNewsData.score,
     stackOverflowData.score,
     wikipediaData.score,
@@ -85,13 +76,11 @@ export const calculateTrendScores = async (searchQuery: string) => {
       query: searchQuery,
       github_score: githubData.score,
       google_trends_score: googleData.score,
-      reddit_score: redditData.score,
       wikipedia_score: wikipediaData.score,
       total_score: avgScore,
       metadata: {
         github: githubData.metadata,
         google_trends: googleData.metadata,
-        reddit: redditData.metadata,
         hacker_news: hackerNewsData.metadata,
         stack_overflow: stackOverflowData.metadata,
         wikipedia: wikipediaData.metadata,
@@ -107,7 +96,6 @@ export const calculateTrendScores = async (searchQuery: string) => {
     metadata: {
       github: githubData.metadata,
       google_trends: googleData.metadata,
-      reddit: redditData.metadata,
       hacker_news: hackerNewsData.metadata,
       stack_overflow: stackOverflowData.metadata,
       wikipedia: wikipediaData.metadata,
