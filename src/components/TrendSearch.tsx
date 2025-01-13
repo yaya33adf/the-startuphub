@@ -57,20 +57,33 @@ export const TrendSearch = () => {
 
       console.log('GitHub Trends data:', githubData);
 
-      // Store the trend score in Supabase
+      // Call Google Trends Edge Function
+      const { data: googleData, error: googleError } = await supabase.functions.invoke('google-trends', {
+        body: { query: searchQuery },
+      });
+
+      if (googleError) throw googleError;
+
+      console.log('Google Trends data:', googleData);
+
+      // Store the trend scores in Supabase
       const { error: dbError } = await supabase
         .from('trend_scores')
         .insert({
           query: searchQuery,
           github_score: githubData.score,
-          metadata: githubData.metadata,
+          google_trends_score: googleData.score,
+          metadata: {
+            github: githubData.metadata,
+            google_trends: googleData.metadata,
+          },
         });
 
       if (dbError) throw dbError;
 
       toast({
-        title: "Trend score calculated",
-        description: `GitHub trend score for "${searchQuery}": ${githubData.score}/100`,
+        title: "Trend scores calculated",
+        description: `Combined trend score for "${searchQuery}": ${Math.round((githubData.score + googleData.score) / 2)}/100`,
       });
     } catch (error) {
       console.error('Search error:', error);
