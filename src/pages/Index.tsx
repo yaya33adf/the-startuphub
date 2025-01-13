@@ -3,8 +3,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ChartLine, Briefcase, Lightbulb, Wrench, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import { TrendSearch } from "@/components/TrendSearch";
+import { useState } from "react";
+import type { TrendData } from "@/types/trends";
+import { TrendResults } from "@/components/TrendResults";
 
 const Index = () => {
+  const [searchResults, setSearchResults] = useState<TrendData | null>(null);
+
+  const handleSearchResults = (results: TrendData) => {
+    setSearchResults(results);
+    console.log("Search results received on Index page:", results);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
@@ -17,7 +27,8 @@ const Index = () => {
             Your comprehensive platform for tracking market trends, exploring opportunities, and discovering side hustles
           </p>
           <div className="mb-8">
-            <TrendSearch />
+            <TrendSearch onSearchResults={handleSearchResults} />
+            {searchResults && <TrendResults data={searchResults} />}
           </div>
           <Button size="lg" asChild>
             <Link to="/trends">Explore Trends</Link>
