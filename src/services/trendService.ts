@@ -57,6 +57,14 @@ export const calculateTrendScores = async (searchQuery: string) => {
   if (npmError) throw npmError;
   console.log('NPM Trends data:', npmData);
 
+  // Call PyPI Trends Edge Function
+  const { data: pypiData, error: pypiError } = await supabase.functions.invoke('pypi-trends', {
+    body: { query: searchQuery },
+  });
+
+  if (pypiError) throw pypiError;
+  console.log('PyPI Trends data:', pypiData);
+
   // Calculate combined score
   const scores = [
     githubData.score,
@@ -65,7 +73,8 @@ export const calculateTrendScores = async (searchQuery: string) => {
     hackerNewsData.score,
     stackOverflowData.score,
     wikipediaData.score,
-    npmData.score
+    npmData.score,
+    pypiData.score
   ];
   const avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
 
@@ -87,6 +96,7 @@ export const calculateTrendScores = async (searchQuery: string) => {
         stack_overflow: stackOverflowData.metadata,
         wikipedia: wikipediaData.metadata,
         npm: npmData.metadata,
+        pypi: pypiData.metadata,
       },
     });
 
@@ -102,6 +112,7 @@ export const calculateTrendScores = async (searchQuery: string) => {
       stack_overflow: stackOverflowData.metadata,
       wikipedia: wikipediaData.metadata,
       npm: npmData.metadata,
+      pypi: pypiData.metadata,
     },
   };
 };
