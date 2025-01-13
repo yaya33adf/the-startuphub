@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChartLine, Clock, DollarSign, Lightbulb, Trophy } from "lucide-react";
+import { Briefcase, Clock, DollarSign, TrendingUp, Trophy } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface SideHustle {
@@ -52,14 +52,17 @@ const SideHustles = () => {
   return (
     <div className="container mx-auto p-8">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">Top Side Hustles</h1>
+        <h1 className="text-4xl font-bold mb-4 flex items-center gap-2">
+          <Briefcase className="h-8 w-8" />
+          Top Side Hustles
+        </h1>
         <p className="text-muted-foreground">
           Discover trending opportunities to earn extra income, ranked by market demand and growth potential
         </p>
       </div>
 
       {isLoading ? (
-        <div className="space-y-4">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {[...Array(6)].map((_, i) => (
             <Card key={i} className="w-full">
               <CardHeader>
@@ -73,47 +76,49 @@ const SideHustles = () => {
           ))}
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {sideHustles?.map((hustle) => (
             <Card key={hustle.id} className="w-full hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Lightbulb className="h-6 w-6 text-primary" />
-                    <CardTitle>{hustle.name}</CardTitle>
-                  </div>
+                  <CardTitle className="text-xl">{hustle.name}</CardTitle>
                   <Badge variant="secondary" className="flex items-center gap-1">
-                    <ChartLine className="h-4 w-4" />
-                    <span>Trend Score: {hustle.trend_score || 'N/A'}</span>
+                    <TrendingUp className="h-4 w-4" />
+                    <span>{hustle.trend_score}</span>
                   </Badge>
                 </div>
                 <CardDescription className="mt-2">{hustle.description}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex items-center gap-2">
-                    <DollarSign className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">
-                      ${hustle.monthly_earnings_min || 0} - ${hustle.monthly_earnings_max || '1000+'}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">{hustle.time_commitment || 'Flexible'}</span>
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <DollarSign className="h-4 w-4" />
+                  <span>
+                    ${hustle.monthly_earnings_min?.toLocaleString()} - ${hustle.monthly_earnings_max?.toLocaleString()}/month
+                  </span>
+                </div>
+                
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Clock className="h-4 w-4" />
+                  <span>{hustle.time_commitment}</span>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-2 flex items-center gap-2">
+                    <Trophy className="h-4 w-4" />
+                    Required Skills
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {hustle.skills?.map((skill, index) => (
+                      <Badge key={index} variant="outline">
+                        {skill}
+                      </Badge>
+                    ))}
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
-                  {hustle.skills?.map((skill) => (
-                    <Badge key={skill} variant="outline">
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <Trophy className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">{hustle.difficulty || 'Beginner Friendly'}</span>
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <span className="font-semibold">Difficulty:</span>
+                  <span>{hustle.difficulty}</span>
                 </div>
               </CardContent>
             </Card>
