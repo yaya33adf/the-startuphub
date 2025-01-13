@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TrendData } from "@/types/trends";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line, ComposedChart, Scatter } from 'recharts';
 
 interface TrendResultsProps {
   data: TrendData;
@@ -24,6 +24,25 @@ export const TrendResults = ({ data }: TrendResultsProps) => {
     { name: 'PyPI', score: data.metadata.pypi?.score || 0 },
   ];
 
+  // Calculate future predictions
+  const avgScore = chartData.reduce((acc, curr) => acc + curr.score, 0) / chartData.length;
+  const predictedData = [
+    { name: 'Prediction 1', score: avgScore * 1.1 },
+    { name: 'Prediction 2', score: avgScore * 1.2 },
+    { name: 'Prediction 3', score: avgScore * 1.3 },
+  ];
+
+  // Combine actual and predicted data
+  const combinedData = [
+    ...chartData,
+    ...predictedData.map(item => ({
+      ...item,
+      isPrediction: true,
+      actualScore: null,
+      predictedScore: item.score
+    }))
+  ];
+
   return (
     <div className="space-y-8">
       <Card>
@@ -39,18 +58,32 @@ export const TrendResults = ({ data }: TrendResultsProps) => {
       <Card>
         <CardHeader>
           <CardTitle>Platform Breakdown</CardTitle>
-          <CardDescription>Individual scores by platform</CardDescription>
+          <CardDescription>Individual scores by platform with trend prediction</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-[400px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={chartData}>
+              <ComposedChart data={combinedData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" />
                 <YAxis domain={[0, 100]} />
                 <Tooltip />
                 <Bar dataKey="score" fill="#3b82f6" />
-              </BarChart>
+                <Line
+                  type="monotone"
+                  dataKey="score"
+                  stroke="#10b981"
+                  strokeWidth={2}
+                  dot={{ fill: '#10b981' }}
+                  connectNulls
+                />
+                <Scatter
+                  data={predictedData}
+                  fill="#ef4444"
+                  name="Predicted"
+                  dataKey="score"
+                />
+              </ComposedChart>
             </ResponsiveContainer>
           </div>
         </CardContent>
