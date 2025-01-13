@@ -196,6 +196,51 @@ export type Database = {
         }
         Relationships: []
       }
+      trend_scores: {
+        Row: {
+          created_at: string | null
+          github_score: number | null
+          google_trends_score: number | null
+          id: string
+          metadata: Json | null
+          product_hunt_score: number | null
+          query: string
+          reddit_score: number | null
+          total_score: number | null
+          twitter_score: number | null
+          updated_at: string | null
+          wikipedia_score: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          github_score?: number | null
+          google_trends_score?: number | null
+          id?: string
+          metadata?: Json | null
+          product_hunt_score?: number | null
+          query: string
+          reddit_score?: number | null
+          total_score?: number | null
+          twitter_score?: number | null
+          updated_at?: string | null
+          wikipedia_score?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          github_score?: number | null
+          google_trends_score?: number | null
+          id?: string
+          metadata?: Json | null
+          product_hunt_score?: number | null
+          query?: string
+          reddit_score?: number | null
+          total_score?: number | null
+          twitter_score?: number | null
+          updated_at?: string | null
+          wikipedia_score?: number | null
+        }
+        Relationships: []
+      }
       users: {
         Row: {
           created_at: string | null
