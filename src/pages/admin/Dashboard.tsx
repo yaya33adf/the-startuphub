@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -64,12 +64,13 @@ const AdminDashboard = () => {
     const formData = new FormData(event.currentTarget);
     
     try {
-      const { error } = await supabase.from("blog_posts").insert({
-        title: formData.get("title"),
-        content: formData.get("content"),
-        excerpt: formData.get("excerpt"),
+      // Fix: Wrap the blog post data in an array
+      const { error } = await supabase.from("blog_posts").insert([{
+        title: formData.get("title") as string,
+        content: formData.get("content") as string,
+        excerpt: formData.get("excerpt") as string,
         status: "draft",
-      });
+      }]);
 
       if (error) throw error;
 
