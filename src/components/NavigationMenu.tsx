@@ -1,6 +1,18 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChartLine, Globe, Lightbulb, Wrench, BookOpen, LogIn, MessageSquare, Menu, TrendingUp, DollarSign } from "lucide-react";
+import { 
+  ChartLine, 
+  Globe, 
+  Lightbulb, 
+  Wrench, 
+  BookOpen, 
+  LogIn, 
+  MessageSquare, 
+  Menu, 
+  TrendingUp, 
+  DollarSign,
+  Briefcase 
+} from "lucide-react";
 import { useState } from "react";
 import {
   Sheet,
@@ -9,22 +21,53 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const NavigationMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const navItems = [
+  const businessInsightsItems = [
     { to: "/trends", icon: ChartLine, label: "Trends" },
     { to: "/markets", icon: Globe, label: "Markets" },
     { to: "/side-hustles", icon: Lightbulb, label: "Side Hustles" },
+  ];
+
+  const navItems = [
     { to: "/tools", icon: Wrench, label: "Tools" },
     { to: "/blog", icon: BookOpen, label: "Blog" },
     { to: "/community", icon: MessageSquare, label: "Community" },
     { to: "/crowdfunding", icon: DollarSign, label: "Crowdfunding" },
   ];
 
+  const BusinessInsightsDropdown = ({ onClick = () => {} }) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-10 px-3 py-2">
+          <Briefcase className="w-4 h-4 mr-2" />
+          <span>Business Insights</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start">
+        {businessInsightsItems.map((item) => (
+          <DropdownMenuItem key={item.to} asChild onClick={onClick}>
+            <Link to={item.to} className="flex items-center gap-2 w-full">
+              <item.icon className="w-4 h-4" />
+              <span>{item.label}</span>
+            </Link>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
   const NavLinks = ({ onClick = () => {} }) => (
     <>
+      <BusinessInsightsDropdown onClick={onClick} />
       {navItems.map((item) => (
         <Button 
           key={item.to} 
