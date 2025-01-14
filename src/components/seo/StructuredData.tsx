@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useLocation } from 'react-router-dom';
 
 interface StructuredDataProps {
-  type?: 'website' | 'article' | 'faq';
+  type?: 'website' | 'article' | 'faq' | 'howto' | 'product';
   articleData?: {
     title: string;
     description: string;
@@ -15,9 +15,49 @@ interface StructuredDataProps {
     question: string;
     answer: string;
   }>;
+  howToData?: {
+    name: string;
+    description: string;
+    image?: string;
+    estimatedCost?: {
+      currency: string;
+      value: number;
+    };
+    steps: Array<{
+      name: string;
+      text: string;
+      image?: string;
+    }>;
+    tools?: Array<{
+      name: string;
+      requiredStatus?: 'required' | 'recommended' | 'optional';
+    }>;
+    totalTime?: string;
+  };
+  productData?: {
+    name: string;
+    description: string;
+    image: string;
+    brand?: string;
+    price: number;
+    priceCurrency: string;
+    sku?: string;
+    availability?: 'InStock' | 'OutOfStock' | 'PreOrder';
+    review?: {
+      reviewRating: number;
+      author: string;
+      reviewBody?: string;
+    };
+  };
 }
 
-export const StructuredData: FC<StructuredDataProps> = ({ type = 'website', articleData, faqData }) => {
+export const StructuredData: FC<StructuredDataProps> = ({ 
+  type = 'website', 
+  articleData, 
+  faqData,
+  howToData,
+  productData 
+}) => {
   const location = useLocation();
   const currentUrl = window.location.origin + location.pathname;
 
@@ -69,7 +109,7 @@ export const StructuredData: FC<StructuredDataProps> = ({ type = 'website', arti
     ]
   };
 
-  // Article Schema (only included when type is 'article' and articleData is provided)
+  // Article Schema
   const articleSchema = articleData ? {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -96,7 +136,7 @@ export const StructuredData: FC<StructuredDataProps> = ({ type = 'website', arti
     }
   } : null;
 
-  // FAQ Schema (only included when type is 'faq' and faqData is provided)
+  // FAQ Schema
   const faqSchema = faqData ? {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -108,6 +148,65 @@ export const StructuredData: FC<StructuredDataProps> = ({ type = 'website', arti
         text: item.answer
       }
     }))
+  } : null;
+
+  // HowTo Schema
+  const howToSchema = howToData ? {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name: howToData.name,
+    description: howToData.description,
+    image: howToData.image,
+    estimatedCost: howToData.estimatedCost ? {
+      '@type': 'MonetaryAmount',
+      currency: howToData.estimatedCost.currency,
+      value: howToData.estimatedCost.value
+    } : undefined,
+    step: howToData.steps.map((step, index) => ({
+      '@type': 'HowToStep',
+      position: index + 1,
+      name: step.name,
+      text: step.text,
+      image: step.image
+    })),
+    tool: howToData.tools?.map(tool => ({
+      '@type': 'HowToTool',
+      name: tool.name,
+      requiredStatus: tool.requiredStatus
+    })),
+    totalTime: howToData.totalTime
+  } : null;
+
+  // Product Schema
+  const productSchema = productData ? {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: productData.name,
+    description: productData.description,
+    image: productData.image,
+    brand: productData.brand ? {
+      '@type': 'Brand',
+      name: productData.brand
+    } : undefined,
+    offers: {
+      '@type': 'Offer',
+      price: productData.price,
+      priceCurrency: productData.priceCurrency,
+      availability: `https://schema.org/${productData.availability || 'InStock'}`
+    },
+    sku: productData.sku,
+    review: productData.review ? {
+      '@type': 'Review',
+      reviewRating: {
+        '@type': 'Rating',
+        ratingValue: productData.review.reviewRating
+      },
+      author: {
+        '@type': 'Person',
+        name: productData.review.author
+      },
+      reviewBody: productData.review.reviewBody
+    } : undefined
   } : null;
 
   return (
@@ -134,6 +233,18 @@ export const StructuredData: FC<StructuredDataProps> = ({ type = 'website', arti
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      )}
+      {type === 'howto' && howToData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+        />
+      )}
+      {type === 'product' && productData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
         />
       )}
     </>
