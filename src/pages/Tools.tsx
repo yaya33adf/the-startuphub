@@ -59,6 +59,7 @@ const Tools = () => {
       icon: BarChart3,
       component: SalesAnalytics,
       active: true,
+      fullWidth: true,
     },
     {
       title: "Email Campaign Manager",
@@ -87,6 +88,7 @@ const Tools = () => {
       icon: CalendarDays,
       component: AppointmentScheduler,
       active: true,
+      fullWidth: true,
     },
   ];
 
@@ -108,7 +110,7 @@ const Tools = () => {
           <Card 
             key={tool.title} 
             className={`hover:shadow-lg transition-shadow ${
-              tool.component === SalesAnalytics ? 'md:col-span-2 lg:col-span-3' : ''
+              tool.fullWidth ? 'md:col-span-2 lg:col-span-3' : ''
             }`}
           >
             <CardHeader>
