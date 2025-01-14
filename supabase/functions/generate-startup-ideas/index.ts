@@ -23,11 +23,11 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4',
         messages: [
           {
             role: 'system',
-            content: 'You are a startup idea generator. Generate 5 innovative startup ideas based on the given keyword. Each idea should include a name, description, and potential market.'
+            content: 'You are a startup idea generator. Generate 5 innovative startup ideas based on the given keyword. Each idea should include a name, description, and potential market. Format the response as a JSON array with objects containing name, description, and market fields.'
           },
           {
             role: 'user',
