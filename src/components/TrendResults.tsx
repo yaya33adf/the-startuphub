@@ -8,7 +8,6 @@ interface TrendResultsProps {
 }
 
 export const TrendResults = ({ data }: TrendResultsProps) => {
-  // Calculate trend indicators
   const avgScore = data.score;
   const interestLevel = avgScore > 70 ? "High" : avgScore > 40 ? "Moderate" : "Low";
   const searchVolume = avgScore > 60 ? "Growing" : "Stable";
@@ -78,28 +77,28 @@ export const TrendResults = ({ data }: TrendResultsProps) => {
     },
   ];
 
-  // Top trending items data
+  // Top trending items data with diverse categories and real images
   const trendingItems = [
     {
       name: "ChatGPT",
       type: "AI App",
       score: 95,
-      image: "https://images.unsplash.com/photo-1693514206397-6b77a8c9ac08?w=800&auto=format&fit=crop&q=60",
+      image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=800&auto=format&fit=crop&q=60",
       description: "Leading AI chatbot platform revolutionizing conversations",
     },
     {
-      name: "Solar Energy",
+      name: "Clean Energy",
       type: "Market",
       score: 88,
       image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&auto=format&fit=crop&q=60",
       description: "Renewable energy market showing exceptional growth",
     },
     {
-      name: "Threads",
-      type: "Social App",
-      score: 82,
-      image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&auto=format&fit=crop&q=60",
-      description: "Meta's Twitter competitor gaining rapid adoption",
+      name: "Web3",
+      type: "Technology",
+      score: 86,
+      image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&auto=format&fit=crop&q=60",
+      description: "Decentralized internet technologies gaining momentum",
     },
     {
       name: "Remote Work Tools",
@@ -109,19 +108,40 @@ export const TrendResults = ({ data }: TrendResultsProps) => {
       description: "Growing market for remote collaboration solutions",
     },
     {
-      name: "BeReal",
-      type: "Social App",
-      score: 79,
-      image: "https://images.unsplash.com/photo-1573152143286-0c422b4d2175?w=800&auto=format&fit=crop&q=60",
-      description: "Authentic social media platform rising in popularity",
+      name: "Cybersecurity",
+      type: "Market",
+      score: 92,
+      image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&auto=format&fit=crop&q=60",
+      description: "Rapidly expanding digital security sector",
     },
     {
-      name: "Electric Vehicles",
-      type: "Market",
-      score: 90,
-      image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=800&auto=format&fit=crop&q=60",
-      description: "Rapidly expanding sustainable transportation sector",
+      name: "AI Development",
+      type: "Technology",
+      score: 94,
+      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=800&auto=format&fit=crop&q=60",
+      description: "Artificial Intelligence development tools and platforms",
     },
+    {
+      name: "Digital Health",
+      type: "Market",
+      score: 87,
+      image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952?w=800&auto=format&fit=crop&q=60",
+      description: "Healthcare technology solutions and telemedicine",
+    },
+    {
+      name: "Smart Devices",
+      type: "Technology",
+      score: 83,
+      image: "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=800&auto=format&fit=crop&q=60",
+      description: "Connected devices and IoT technology trends",
+    },
+    {
+      name: "Cloud Computing",
+      type: "Technology",
+      score: 91,
+      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&auto=format&fit=crop&q=60",
+      description: "Cloud infrastructure and services market",
+    }
   ];
 
   return (
