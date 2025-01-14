@@ -16,7 +16,7 @@ export const GrowthAnimation = () => {
     ];
 
     // Clear existing elements
-    const existingElements = containerRef.current.querySelectorAll('.growth-point, .growth-text, .sparkle');
+    const existingElements = containerRef.current.querySelectorAll('.growth-point, .growth-text, .sparkle, .arrow');
     existingElements.forEach(el => el.remove());
 
     // Add climbing line
@@ -24,8 +24,17 @@ export const GrowthAnimation = () => {
     line.className = 'climbing-line';
     containerRef.current.appendChild(line);
 
-    // Add points and text
-    points.forEach(point => {
+    // Create SVG container for arrows
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', '100%');
+    svg.style.position = 'absolute';
+    svg.style.top = '0';
+    svg.style.left = '0';
+    containerRef.current.appendChild(svg);
+
+    // Add points, text, and arrows
+    points.forEach((point, index) => {
       // Create point
       const pointEl = document.createElement('div');
       pointEl.className = 'growth-point';
@@ -42,6 +51,51 @@ export const GrowthAnimation = () => {
       textEl.style.top = `calc(${point.y} - 25px)`;
       textEl.style.animation = `fadeInUp 0.5s ease-out forwards ${point.delay + 0.2}s`;
       containerRef.current?.appendChild(textEl);
+
+      // Create arrow to next point (except for last point)
+      if (index < points.length - 1) {
+        const nextPoint = points[index + 1];
+        const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        
+        // Calculate arrow path
+        const startX = parseFloat(point.x) / 100 * containerRef.current.offsetWidth;
+        const startY = parseFloat(point.y) / 100 * containerRef.current.offsetHeight;
+        const endX = parseFloat(nextPoint.x) / 100 * containerRef.current.offsetWidth;
+        const endY = parseFloat(nextPoint.y) / 100 * containerRef.current.offsetHeight;
+        
+        // Create curved path for arrow
+        const path = `M ${startX} ${startY} 
+                     Q ${(startX + endX) / 2} ${startY} 
+                       ${(startX + endX) / 2} ${(startY + endY) / 2} 
+                     T ${endX} ${endY}`;
+        
+        arrow.setAttribute('d', path);
+        arrow.setAttribute('fill', 'none');
+        arrow.setAttribute('stroke', '#9b87f5');
+        arrow.setAttribute('stroke-width', '2');
+        arrow.setAttribute('marker-end', 'url(#arrowhead)');
+        arrow.classList.add('arrow');
+        arrow.style.animation = `drawArrow 1.5s ease-out forwards ${point.delay + 0.5}s`;
+        
+        // Add arrowhead marker
+        const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+        const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+        marker.setAttribute('id', 'arrowhead');
+        marker.setAttribute('markerWidth', '10');
+        marker.setAttribute('markerHeight', '7');
+        marker.setAttribute('refX', '9');
+        marker.setAttribute('refY', '3.5');
+        marker.setAttribute('orient', 'auto');
+        
+        const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+        polygon.setAttribute('points', '0 0, 10 3.5, 0 7');
+        polygon.setAttribute('fill', '#9b87f5');
+        
+        marker.appendChild(polygon);
+        defs.appendChild(marker);
+        svg.appendChild(defs);
+        svg.appendChild(arrow);
+      }
     });
 
     // Add sparkles
@@ -57,7 +111,7 @@ export const GrowthAnimation = () => {
     // Cleanup function
     return () => {
       if (containerRef.current) {
-        const elements = containerRef.current.querySelectorAll('.growth-point, .growth-text, .sparkle, .climbing-line');
+        const elements = containerRef.current.querySelectorAll('.growth-point, .growth-text, .sparkle, .climbing-line, svg');
         elements.forEach(el => el.remove());
       }
     };

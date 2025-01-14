@@ -37,6 +37,7 @@
   border-radius: 50%;
   transform: translate(-50%, -50%);
   opacity: 0;
+  z-index: 2;
 }
 
 .growth-point::after {
@@ -55,6 +56,7 @@
   color: #1A1F2C;
   opacity: 0;
   transform: translateY(20px);
+  z-index: 2;
 }
 
 .sparkle {
@@ -64,6 +66,29 @@
   background: #D6BCFA;
   border-radius: 50%;
   opacity: 0;
+}
+
+.arrow {
+  position: absolute;
+  opacity: 0;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawArrow 1.5s ease-out forwards;
+  z-index: 1;
+}
+
+@keyframes drawArrow {
+  0% {
+    opacity: 0;
+    stroke-dashoffset: 1000;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
 }
 
 @keyframes drawLine {
