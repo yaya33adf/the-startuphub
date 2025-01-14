@@ -30,7 +30,7 @@ export const GrowthAnimation = () => {
       containerRef.current?.appendChild(dataPoint);
     });
 
-    // Add more sparkles for enhanced effect
+    // Add sparkles for enhanced effect
     const sparkleCount = 15;
     for (let i = 0; i < sparkleCount; i++) {
       const sparkle = document.createElement('div');
@@ -40,8 +40,6 @@ export const GrowthAnimation = () => {
       sparkle.style.animationDelay = `${Math.random() * 3}s`;
       containerRef.current?.appendChild(sparkle);
     }
-
-    console.log('Growth Animation initialized with enhanced effects');
 
     // Cleanup function
     return () => {
