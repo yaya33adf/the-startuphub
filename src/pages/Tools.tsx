@@ -19,6 +19,7 @@ import { InvoiceGenerator } from "@/components/tools/InvoiceGenerator";
 import { ExpenseTracker } from "@/components/tools/ExpenseTracker";
 import { SalesAnalytics } from "@/components/tools/SalesAnalytics";
 import { EmailCampaignManager } from "@/components/tools/EmailCampaignManager";
+import { GoalTracker } from "@/components/tools/GoalTracker";
 
 const Tools = () => {
   const tools = [
@@ -68,7 +69,8 @@ const Tools = () => {
       title: "Goal Tracker",
       description: "Set and track business goals and KPIs",
       icon: Target,
-      active: false,
+      component: GoalTracker,
+      active: true,
     },
     {
       title: "Team Management",
