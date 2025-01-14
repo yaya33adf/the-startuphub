@@ -3,7 +3,7 @@ import type { TrendData } from "@/types/trends";
 import { TrendResults } from "@/components/TrendResults";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { GrowthAnimation } from "./GrowthAnimation";
+import { StartupJourney } from "./StartupJourney";
 import GlobalTrendsHeader from "./GlobalTrendsHeader";
 
 interface HeroSectionProps {
@@ -17,7 +17,7 @@ export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps
       <div className="max-w-4xl mx-auto">
         <GlobalTrendsHeader />
         <div className="relative z-10 mb-12">
-          <GrowthAnimation />
+          <StartupJourney />
         </div>
         <p className="text-lg md:text-xl text-muted-foreground mb-8 animate-fade-in" style={{ animationDelay: '0.2s' }}>
           Your comprehensive platform for tracking market trends, exploring opportunities, and discovering side hustles
