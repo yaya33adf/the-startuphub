@@ -1,4 +1,4 @@
-import { QrCode, DollarSign, Receipt, FileSpreadsheet, BarChart3, Mail, Target, Users, CalendarDays, Shield, Sparkles } from "lucide-react";
+import { QrCode, DollarSign, Receipt, FileSpreadsheet, BarChart3, Mail, Target, Users, CalendarDays, Shield } from "lucide-react";
 import { QRCodeGenerator } from "./QRCodeGenerator";
 import { CurrencyConverter } from "./CurrencyConverter";
 import { InvoiceGenerator } from "./InvoiceGenerator";
@@ -9,7 +9,6 @@ import { GoalTracker } from "./GoalTracker";
 import { TeamManagement } from "./TeamManagement";
 import { AppointmentScheduler } from "./AppointmentScheduler";
 import { BrandIdentityTool } from "./BrandIdentityTool";
-import { BrandNameGenerator } from "./BrandNameGenerator";
 
 export const tools = [
   {
@@ -17,13 +16,6 @@ export const tools = [
     description: "Create and manage your brand's visual identity",
     icon: Shield,
     component: BrandIdentityTool,
-    active: true,
-  },
-  {
-    title: "Brand Name Generator",
-    description: "Generate unique and creative brand names",
-    icon: Sparkles,
-    component: BrandNameGenerator,
     active: true,
   },
   {
