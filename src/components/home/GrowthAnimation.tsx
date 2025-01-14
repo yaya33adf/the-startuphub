@@ -116,14 +116,15 @@ export const GrowthAnimation = () => {
     });
 
     // Add falling dollars
+
+    // Add falling dollars
     const createDollar = () => {
       if (!containerRef.current) return;
       
       const dollar = document.createElement('div');
       dollar.className = 'dollar';
-      dollar.textContent = '$';
-      dollar.style.left = `${Math.random() * 100}%`;
-      dollar.style.animationDelay = `${Math.random() * 2}s`;
+      dollar.style.left = `${Math.random() * 80 + 10}%`; // Keep dollars more centered
+      dollar.style.animationDelay = `${Math.random() * 3}s`;
       containerRef.current.appendChild(dollar);
 
       // Remove dollar after animation
@@ -132,15 +133,15 @@ export const GrowthAnimation = () => {
       });
     };
 
-    // Create initial dollars
-    for (let i = 0; i < 10; i++) {
+    // Create initial dollars (reduced number)
+    for (let i = 0; i < 5; i++) {
       createDollar();
     }
 
-    // Continuously create new dollars
+    // Continuously create new dollars at a slower rate
     const dollarInterval = setInterval(() => {
       createDollar();
-    }, 300);
+    }, 800); // Increased interval for fewer dollars
 
     // Cleanup function
     return () => {
