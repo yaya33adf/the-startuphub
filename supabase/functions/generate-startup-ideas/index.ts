@@ -15,6 +15,11 @@ serve(async (req) => {
 
   try {
     const { keyword } = await req.json();
+    console.log('Received keyword:', keyword);
+
+    if (!openAIApiKey) {
+      throw new Error('OpenAI API key is not configured');
+    }
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -23,7 +28,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4',
+        model: 'gpt-4o-mini',
         messages: [
           {
             role: 'system',
@@ -38,10 +43,20 @@ serve(async (req) => {
     });
 
     const data = await response.json();
-    return new Response(JSON.stringify({ ideas: data.choices[0].message.content }), {
+    console.log('OpenAI API response:', data);
+
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      throw new Error('Invalid response format from OpenAI API');
+    }
+
+    const content = data.choices[0].message.content;
+    console.log('Generated content:', content);
+
+    return new Response(JSON.stringify({ ideas: content }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
+    console.error('Error in generate-startup-ideas function:', error);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
