@@ -16,7 +16,7 @@ export const GrowthAnimation = () => {
     ];
 
     // Clear existing elements
-    const existingElements = containerRef.current.querySelectorAll('.growth-point, .growth-text, .sparkle, .arrow');
+    const existingElements = containerRef.current.querySelectorAll('.growth-point, .growth-text, .sparkle, .arrow, .dollar');
     existingElements.forEach(el => el.remove());
 
     // Add climbing line
@@ -115,20 +115,38 @@ export const GrowthAnimation = () => {
       }
     });
 
-    // Add sparkles
-    for (let i = 0; i < 20; i++) {
-      const sparkle = document.createElement('div');
-      sparkle.className = 'sparkle';
-      sparkle.style.left = `${Math.random() * 100}%`;
-      sparkle.style.top = `${Math.random() * 100}%`;
-      sparkle.style.animation = `sparkle 2s infinite ${Math.random() * 2}s`;
-      containerRef.current?.appendChild(sparkle);
+    // Add falling dollars
+    const createDollar = () => {
+      if (!containerRef.current) return;
+      
+      const dollar = document.createElement('div');
+      dollar.className = 'dollar';
+      dollar.textContent = '$';
+      dollar.style.left = `${Math.random() * 100}%`;
+      dollar.style.animationDelay = `${Math.random() * 2}s`;
+      containerRef.current.appendChild(dollar);
+
+      // Remove dollar after animation
+      dollar.addEventListener('animationend', () => {
+        dollar.remove();
+      });
+    };
+
+    // Create initial dollars
+    for (let i = 0; i < 10; i++) {
+      createDollar();
     }
+
+    // Continuously create new dollars
+    const dollarInterval = setInterval(() => {
+      createDollar();
+    }, 300);
 
     // Cleanup function
     return () => {
+      clearInterval(dollarInterval);
       if (containerRef.current) {
-        const elements = containerRef.current.querySelectorAll('.growth-point, .growth-text, .sparkle, .climbing-line, svg');
+        const elements = containerRef.current.querySelectorAll('.growth-point, .growth-text, .sparkle, .climbing-line, svg, .dollar');
         elements.forEach(el => el.remove());
       }
     };
