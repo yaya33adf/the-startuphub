@@ -9,50 +9,50 @@ export const GrowthAnimation = () => {
 
     // Create data points
     const points = [
-      { bottom: '20%', left: '20%', delay: '1s' },
-      { bottom: '40%', left: '40%', delay: '1.5s' },
-      { bottom: '60%', left: '60%', delay: '2s' },
-      { bottom: '80%', left: '80%', delay: '2.5s' }
+      { x: 20, y: 80, delay: 0.5 },
+      { x: 40, y: 60, delay: 1 },
+      { x: 60, y: 40, delay: 1.5 },
+      { x: 80, y: 20, delay: 2 }
     ];
 
-    // Create sparkles
-    const sparklePositions = Array.from({ length: 10 }, () => ({
-      top: `${Math.random() * 100}%`,
-      left: `${Math.random() * 100}%`,
-      animationDelay: `${Math.random() * 2}s`
-    }));
+    // Clear existing points
+    const existingPoints = containerRef.current.querySelectorAll('.data-point');
+    existingPoints.forEach(point => point.remove());
 
     // Add data points
     points.forEach(point => {
       const dataPoint = document.createElement('div');
       dataPoint.className = 'data-point';
-      dataPoint.style.bottom = point.bottom;
-      dataPoint.style.left = point.left;
-      dataPoint.style.animation = `appearPoint 0.5s ease-out forwards ${point.delay}`;
+      dataPoint.style.left = `${point.x}%`;
+      dataPoint.style.bottom = `${point.y}%`;
+      dataPoint.style.animationDelay = `${point.delay}s`;
       containerRef.current?.appendChild(dataPoint);
     });
 
     // Add sparkles
-    sparklePositions.forEach(sparkle => {
-      const sparkleElement = document.createElement('div');
-      sparkleElement.className = 'sparkle';
-      sparkleElement.style.top = sparkle.top;
-      sparkleElement.style.left = sparkle.left;
-      sparkleElement.style.animationDelay = sparkle.animationDelay;
-      containerRef.current?.appendChild(sparkleElement);
-    });
+    const sparkleCount = 10;
+    for (let i = 0; i < sparkleCount; i++) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'sparkle';
+      sparkle.style.left = `${Math.random() * 100}%`;
+      sparkle.style.top = `${Math.random() * 100}%`;
+      sparkle.style.animationDelay = `${Math.random() * 2}s`;
+      containerRef.current?.appendChild(sparkle);
+    }
 
-    console.log('Growth Animation mounted');
+    console.log('Growth Animation mounted and initialized');
   }, []);
 
   return (
-    <div 
-      ref={containerRef}
-      className="growth-container"
-      aria-hidden="true"
-    >
-      <div className="chart-line"></div>
-      <div className="success-icon">🚀</div>
+    <div className="animation-wrapper">
+      <div 
+        ref={containerRef}
+        className="growth-container"
+        aria-hidden="true"
+      >
+        <div className="chart-line" />
+        <div className="success-icon">🚀</div>
+      </div>
     </div>
   );
 };
