@@ -6,6 +6,7 @@ import { HowItWorksSection } from "@/components/home/HowItWorksSection";
 import { FeaturedSideHustles } from "@/components/home/FeaturedSideHustles";
 import { NewsletterSection } from "@/components/home/NewsletterSection";
 import { FeaturesSection } from "@/components/home/FeaturesSection";
+import { StructuredData } from "@/components/seo/StructuredData";
 
 const Index = () => {
   const [searchResults, setSearchResults] = useState<TrendData | null>(null);
@@ -17,6 +18,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <StructuredData type="website" />
       <HeroSection 
         searchResults={searchResults} 
         onSearchResults={handleSearchResults} 
