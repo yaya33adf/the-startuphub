@@ -9,14 +9,14 @@ import SignUp from "./pages/auth/SignUp";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import { NavigationMenu } from "./components/NavigationMenu";
 import Footer from "./components/Footer";
+import Trends from "./pages/Trends";
+import Markets from "./pages/Markets";
 import Blog from "./pages/Blog";
 import Tools from "./pages/Tools";
+import SideHustles from "./pages/SideHustles";
 import Community from "./pages/Community";
 import AdminDashboard from "./pages/admin/Dashboard";
 import Crowdfunding from "./pages/Crowdfunding";
-import Trends from "./pages/Trends";
-import Markets from "./pages/Markets";
-import SideHustles from "./pages/SideHustles";
 
 const queryClient = new QueryClient();
 
