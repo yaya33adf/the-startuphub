@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Wrench, Code, Terminal, Database, LineChart, Lock, QrCode } from "lucide-react";
+import { Wrench, Code, Terminal, Database, LineChart, Lock, QrCode, DollarSign } from "lucide-react";
 import { QRCodeGenerator } from "@/components/tools/QRCodeGenerator";
+import { CurrencyConverter } from "@/components/tools/CurrencyConverter";
 
 const Tools = () => {
   const tools = [
@@ -9,6 +10,12 @@ const Tools = () => {
       description: "Generate QR codes for text or URLs",
       icon: QrCode,
       component: QRCodeGenerator,
+    },
+    {
+      title: "Currency Converter",
+      description: "Convert between different currencies with real-time exchange rates",
+      icon: DollarSign,
+      component: CurrencyConverter,
     },
     {
       title: "API Testing",
