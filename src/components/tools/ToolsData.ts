@@ -1,4 +1,4 @@
-import { QrCode, DollarSign, Receipt, FileSpreadsheet, BarChart3, Mail, Target, Users, CalendarDays } from "lucide-react";
+import { QrCode, DollarSign, Receipt, FileSpreadsheet, BarChart3, Mail, Target, Users, CalendarDays, Lightbulb } from "lucide-react";
 import { QRCodeGenerator } from "./QRCodeGenerator";
 import { CurrencyConverter } from "./CurrencyConverter";
 import { InvoiceGenerator } from "./InvoiceGenerator";
@@ -10,6 +10,13 @@ import { TeamManagement } from "./TeamManagement";
 import { AppointmentScheduler } from "./AppointmentScheduler";
 
 export const tools = [
+  {
+    title: "Startup Ideas Generator",
+    description: "Generate innovative startup ideas based on keywords using AI",
+    icon: Lightbulb,
+    path: "/startup-ideas",
+    active: true,
+  },
   {
     title: "QR Code Generator",
     description: "Generate QR codes for text or URLs",
