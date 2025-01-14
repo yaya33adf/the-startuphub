@@ -3,7 +3,7 @@ import type { TrendData } from "@/types/trends";
 import { TrendResults } from "@/components/TrendResults";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { StartupJourney } from "./StartupJourney";
+import StartupJourney from "./StartupJourney";
 import GlobalTrendsHeader from "./GlobalTrendsHeader";
 
 interface HeroSectionProps {
