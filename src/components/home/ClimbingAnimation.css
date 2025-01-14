@@ -2,10 +2,11 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 30px;
-  height: 50px;
+  width: 40px;
+  height: 60px;
   animation: climb 6s infinite linear;
   transform-origin: bottom center;
+  z-index: 10;
 }
 
 .head {
@@ -13,19 +14,19 @@
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
   background-color: #0EA5E9;
   border-radius: 50%;
 }
 
 .body {
   position: absolute;
-  top: 20px;
+  top: 25px;
   left: 50%;
   transform: translateX(-50%);
-  width: 4px;
-  height: 20px;
+  width: 6px;
+  height: 25px;
   background-color: #0EA5E9;
 }
 
@@ -34,9 +35,14 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 20px;
-  height: 4px;
+  width: 25px;
+  height: 6px;
   background-color: #0EA5E9;
+}
+
+.stair {
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes climb {

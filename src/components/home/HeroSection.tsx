@@ -12,12 +12,14 @@ interface HeroSectionProps {
 
 export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps) => {
   return (
-    <section className="py-20 px-4 text-center bg-gradient-to-b from-primary/10 to-background">
+    <section className="py-20 px-4 text-center bg-gradient-to-b from-primary/10 to-background relative">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl md:text-6xl font-bold mb-6">
           Welcome to The Startup Hub
         </h1>
-        <ClimbingAnimation />
+        <div className="relative z-10">
+          <ClimbingAnimation />
+        </div>
         <p className="text-lg md:text-xl text-muted-foreground mb-8">
           Your comprehensive platform for tracking market trends, exploring opportunities, and discovering side hustles
         </p>

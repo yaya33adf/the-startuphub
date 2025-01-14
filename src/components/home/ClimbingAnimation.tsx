@@ -5,12 +5,16 @@ export const ClimbingAnimation = () => {
 
   useEffect(() => {
     console.log("ClimbingAnimation mounted");
+    // Add a class to verify the component is rendered
+    if (containerRef.current) {
+      containerRef.current.classList.add('animation-mounted');
+    }
   }, []);
 
   return (
     <div 
       ref={containerRef}
-      className="relative h-[300px] w-full max-w-[500px] mx-auto mb-8"
+      className="relative h-[300px] w-full max-w-[500px] mx-auto mb-8 overflow-visible"
       aria-hidden="true"
     >
       <div className="climbing-boy">
@@ -23,7 +27,7 @@ export const ClimbingAnimation = () => {
           key={index}
           className="stair absolute h-12 bg-primary/20 rounded-md"
           style={{
-            width: '100px',
+            width: '120px',
             left: `${index * 80}px`,
             bottom: `${index * 50}px`,
           }}
