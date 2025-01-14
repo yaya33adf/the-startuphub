@@ -22,11 +22,7 @@ const GlobalTrendsHeader = () => {
           }
         `}
       </style>
-      <div className="flex items-center justify-center mb-8 animate-float" style={{
-        background: 'linear-gradient(to bottom, #111827, #1f2937)',
-        color: 'rgb(255 255 255)',
-        fontFamily: 'Inter',
-      }}>
+      <div className="flex items-center justify-center mb-8 animate-float">
         <div className="relative">
           <Globe className="h-20 w-20 text-blue-400" />
           <Sparkles className="h-6 w-6 text-yellow-400 absolute -top-2 -right-2 animate-pulse" />
