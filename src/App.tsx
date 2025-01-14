@@ -9,14 +9,12 @@ import SignUp from "./pages/auth/SignUp";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import { NavigationMenu } from "./components/NavigationMenu";
 import Footer from "./components/Footer";
-import Trends from "./pages/Trends";
-import Markets from "./pages/Markets";
 import Blog from "./pages/Blog";
 import Tools from "./pages/Tools";
-import SideHustles from "./pages/SideHustles";
 import Community from "./pages/Community";
 import AdminDashboard from "./pages/admin/Dashboard";
 import Crowdfunding from "./pages/Crowdfunding";
+import BusinessInsights from "./pages/BusinessInsights";
 
 const queryClient = new QueryClient();
 
@@ -33,9 +31,7 @@ const App = () => (
           <main className="flex-1 w-full max-w-[100vw] overflow-x-hidden">
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/trends" element={<Trends />} />
-              <Route path="/markets" element={<Markets />} />
-              <Route path="/side-hustles" element={<SideHustles />} />
+              <Route path="/business-insights" element={<BusinessInsights />} />
               <Route path="/tools" element={<Tools />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/community" element={<Community />} />

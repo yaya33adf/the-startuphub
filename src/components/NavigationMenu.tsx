@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChartLine, Globe, Lightbulb, Wrench, BookOpen, LogIn, MessageSquare, Menu, TrendingUp, DollarSign } from "lucide-react";
+import { ChartLine, Wrench, BookOpen, LogIn, MessageSquare, Menu, TrendingUp, DollarSign } from "lucide-react";
 import { useState } from "react";
 import {
   Sheet,
@@ -10,18 +10,16 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
+const navItems = [
+  { to: "/business-insights", icon: ChartLine, label: "Business Insights" },
+  { to: "/tools", icon: Wrench, label: "Tools" },
+  { to: "/blog", icon: BookOpen, label: "Blog" },
+  { to: "/community", icon: MessageSquare, label: "Community" },
+  { to: "/crowdfunding", icon: DollarSign, label: "Crowdfunding" },
+];
+
 export const NavigationMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const navItems = [
-    { to: "/trends", icon: ChartLine, label: "Trends" },
-    { to: "/markets", icon: Globe, label: "Markets" },
-    { to: "/side-hustles", icon: Lightbulb, label: "Side Hustles" },
-    { to: "/tools", icon: Wrench, label: "Tools" },
-    { to: "/blog", icon: BookOpen, label: "Blog" },
-    { to: "/community", icon: MessageSquare, label: "Community" },
-    { to: "/crowdfunding", icon: DollarSign, label: "Crowdfunding" },
-  ];
 
   const NavLinks = ({ onClick = () => {} }) => (
     <>
@@ -50,8 +48,8 @@ export const NavigationMenu = () => {
             <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-r from-primary to-secondary">
               <TrendingUp className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Startup Hub
+            <span className="text-lg font-semibold">
+              TrendScope
             </span>
           </Link>
           
