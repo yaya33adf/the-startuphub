@@ -7,45 +7,58 @@ export const GrowthAnimation = () => {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Create data points with more dramatic positioning
+    // Create climbing line animation points
     const points = [
-      { x: 15, y: 85, delay: 0.8 },
-      { x: 35, y: 65, delay: 1.4 },
-      { x: 55, y: 45, delay: 2.0 },
-      { x: 75, y: 25, delay: 2.6 },
-      { x: 85, y: 15, delay: 3.2 }
+      { x: '20%', y: '80%', delay: 0.5, text: 'Start' },
+      { x: '40%', y: '60%', delay: 1.0, text: 'Growth' },
+      { x: '60%', y: '40%', delay: 1.5, text: 'Scale' },
+      { x: '80%', y: '20%', delay: 2.0, text: 'Success' }
     ];
 
-    // Clear existing points
-    const existingPoints = containerRef.current.querySelectorAll('.data-point');
-    existingPoints.forEach(point => point.remove());
+    // Clear existing elements
+    const existingElements = containerRef.current.querySelectorAll('.growth-point, .growth-text, .sparkle');
+    existingElements.forEach(el => el.remove());
 
-    // Add data points
+    // Add climbing line
+    const line = document.createElement('div');
+    line.className = 'climbing-line';
+    containerRef.current.appendChild(line);
+
+    // Add points and text
     points.forEach(point => {
-      const dataPoint = document.createElement('div');
-      dataPoint.className = 'data-point';
-      dataPoint.style.left = `${point.x}%`;
-      dataPoint.style.bottom = `${point.y}%`;
-      dataPoint.style.animationDelay = `${point.delay}s`;
-      containerRef.current?.appendChild(dataPoint);
+      // Create point
+      const pointEl = document.createElement('div');
+      pointEl.className = 'growth-point';
+      pointEl.style.left = point.x;
+      pointEl.style.top = point.y;
+      pointEl.style.animation = `fadeInUp 0.5s ease-out forwards ${point.delay}s`;
+      containerRef.current?.appendChild(pointEl);
+
+      // Create text
+      const textEl = document.createElement('div');
+      textEl.className = 'growth-text';
+      textEl.textContent = point.text;
+      textEl.style.left = point.x;
+      textEl.style.top = `calc(${point.y} - 25px)`;
+      textEl.style.animation = `fadeInUp 0.5s ease-out forwards ${point.delay + 0.2}s`;
+      containerRef.current?.appendChild(textEl);
     });
 
-    // Add sparkles for enhanced effect
-    const sparkleCount = 15;
-    for (let i = 0; i < sparkleCount; i++) {
+    // Add sparkles
+    for (let i = 0; i < 20; i++) {
       const sparkle = document.createElement('div');
       sparkle.className = 'sparkle';
       sparkle.style.left = `${Math.random() * 100}%`;
       sparkle.style.top = `${Math.random() * 100}%`;
-      sparkle.style.animationDelay = `${Math.random() * 3}s`;
+      sparkle.style.animation = `sparkle 2s infinite ${Math.random() * 2}s`;
       containerRef.current?.appendChild(sparkle);
     }
 
     // Cleanup function
     return () => {
       if (containerRef.current) {
-        const points = containerRef.current.querySelectorAll('.data-point, .sparkle');
-        points.forEach(point => point.remove());
+        const elements = containerRef.current.querySelectorAll('.growth-point, .growth-text, .sparkle, .climbing-line');
+        elements.forEach(el => el.remove());
       }
     };
   }, []);
@@ -56,10 +69,7 @@ export const GrowthAnimation = () => {
         ref={containerRef}
         className="growth-container"
         aria-hidden="true"
-      >
-        <div className="chart-line" />
-        <div className="success-icon">⭐</div>
-      </div>
+      />
     </div>
   );
 };
