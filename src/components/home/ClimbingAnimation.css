@@ -1,0 +1,61 @@
+.climbing-boy {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 30px;
+  height: 50px;
+  animation: climb 6s infinite linear;
+  transform-origin: bottom center;
+}
+
+.head {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 20px;
+  background-color: #0EA5E9;
+  border-radius: 50%;
+}
+
+.body {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 20px;
+  background-color: #0EA5E9;
+}
+
+.legs {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 4px;
+  background-color: #0EA5E9;
+}
+
+@keyframes climb {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  20% {
+    transform: translate(80px, -50px) scale(1.2);
+  }
+  40% {
+    transform: translate(160px, -100px) scale(1.4);
+  }
+  60% {
+    transform: translate(240px, -150px) scale(1.6);
+  }
+  80% {
+    transform: translate(320px, -200px) scale(1.8);
+  }
+  100% {
+    transform: translate(400px, -250px) scale(2);
+  }
+}

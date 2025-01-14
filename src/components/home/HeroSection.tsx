@@ -3,6 +3,7 @@ import type { TrendData } from "@/types/trends";
 import { TrendResults } from "@/components/TrendResults";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { ClimbingAnimation } from "./ClimbingAnimation";
 
 interface HeroSectionProps {
   searchResults: TrendData | null;
@@ -16,6 +17,7 @@ export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps
         <h1 className="text-4xl md:text-6xl font-bold mb-6">
           Welcome to The Startup Hub
         </h1>
+        <ClimbingAnimation />
         <p className="text-lg md:text-xl text-muted-foreground mb-8">
           Your comprehensive platform for tracking market trends, exploring opportunities, and discovering side hustles
         </p>
