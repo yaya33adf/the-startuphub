@@ -73,11 +73,11 @@ export const SalesAnalytics = () => {
   ];
 
   return (
-    <div className="space-y-6 p-4">
+    <div className="w-full space-y-6">
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {metrics.map((metric) => (
-          <Card key={metric.title}>
+          <Card key={metric.title} className="w-full">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div>
@@ -124,8 +124,8 @@ export const SalesAnalytics = () => {
       </div>
 
       {/* Sales Chart */}
-      <Card>
-        <CardContent className="p-4">
+      <Card className="w-full">
+        <CardContent className="p-6">
           <div className="h-[400px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={data[timeframe]}>
