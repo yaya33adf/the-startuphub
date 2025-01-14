@@ -184,6 +184,57 @@ export type Database = {
           },
         ]
       }
+      crowdfunding_companies: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          current_funding: number | null
+          description: string | null
+          end_date: string | null
+          funding_goal: number | null
+          id: string
+          launch_date: string | null
+          logo_url: string | null
+          name: string
+          score: number | null
+          status: string | null
+          updated_at: string | null
+          website_url: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          current_funding?: number | null
+          description?: string | null
+          end_date?: string | null
+          funding_goal?: number | null
+          id?: string
+          launch_date?: string | null
+          logo_url?: string | null
+          name: string
+          score?: number | null
+          status?: string | null
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          current_funding?: number | null
+          description?: string | null
+          end_date?: string | null
+          funding_goal?: number | null
+          id?: string
+          launch_date?: string | null
+          logo_url?: string | null
+          name?: string
+          score?: number | null
+          status?: string | null
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
       expenses: {
         Row: {
           amount: number

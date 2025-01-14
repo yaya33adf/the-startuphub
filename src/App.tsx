@@ -16,6 +16,7 @@ import Tools from "./pages/Tools";
 import SideHustles from "./pages/SideHustles";
 import Community from "./pages/Community";
 import AdminDashboard from "./pages/admin/Dashboard";
+import Crowdfunding from "./pages/Crowdfunding";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/tools" element={<Tools />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/community" element={<Community />} />
+              <Route path="/crowdfunding" element={<Crowdfunding />} />
               <Route path="/auth/signin" element={<SignIn />} />
               <Route path="/auth/signup" element={<SignUp />} />
               <Route path="/auth/forgot-password" element={<ForgotPassword />} />

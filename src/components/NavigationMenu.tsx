@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChartLine, Globe, Lightbulb, Wrench, BookOpen, Home, LogIn, MessageSquare, Menu, TrendingUp } from "lucide-react";
+import { ChartLine, Globe, Lightbulb, Wrench, BookOpen, Home, LogIn, MessageSquare, Menu, TrendingUp, DollarSign } from "lucide-react";
 import { useState } from "react";
 import {
   Sheet,
@@ -20,6 +20,7 @@ export const NavigationMenu = () => {
     { to: "/tools", icon: Wrench, label: "Tools" },
     { to: "/blog", icon: BookOpen, label: "Blog" },
     { to: "/community", icon: MessageSquare, label: "Community" },
+    { to: "/crowdfunding", icon: DollarSign, label: "Crowdfunding" },
   ];
 
   const NavLinks = ({ onClick = () => {} }) => (
