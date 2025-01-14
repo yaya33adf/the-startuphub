@@ -34,26 +34,6 @@ const BusinessInsights = () => {
     },
   });
 
-  const { data: trendScores, isLoading: trendsLoading } = useQuery({
-    queryKey: ["trendScores"],
-    queryFn: async () => {
-      console.log("Fetching trend scores...");
-      const { data, error } = await supabase
-        .from("trend_scores")
-        .select("*")
-        .order("total_score", { ascending: false })
-        .limit(6);
-
-      if (error) {
-        console.error("Error fetching trend scores:", error);
-        throw error;
-      }
-      
-      console.log("Fetched trend scores:", data);
-      return data;
-    },
-  });
-
   const { data: sideHustles, isLoading: sideHustlesLoading } = useQuery({
     queryKey: ["sideHustles"],
     queryFn: async () => {
@@ -82,12 +62,18 @@ const BusinessInsights = () => {
     console.log("Searching markets with:", { query, region, timeframe });
   };
 
+  // Market-specific images
   const marketImages = {
-    "artificial intelligence": "https://images.unsplash.com/photo-1487958449943-2429e8be8625",
-    "blockchain": "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
-    "machine learning": "https://images.unsplash.com/photo-1500673922987-e212871fec22",
-    "cloud computing": "https://images.unsplash.com/photo-1439337153520-7082a56a81f4",
+    "solar energy": "https://images.unsplash.com/photo-1509391366360-2e959784a276",
+    "electric vehicles": "https://images.unsplash.com/photo-1593941707882-a5bba14938c7",
+    "artificial intelligence": "https://images.unsplash.com/photo-1677442136019-21780ecad995",
+    "blockchain": "https://images.unsplash.com/photo-1639762681485-074b7f938ba0",
+    "machine learning": "https://images.unsplash.com/photo-1555949963-aa79dcee981c",
+    "cloud computing": "https://images.unsplash.com/photo-1544197150-b99a580bb7a8",
     "cybersecurity": "https://images.unsplash.com/photo-1496307653780-42ee777d4833",
+    "renewable energy": "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e",
+    "healthcare tech": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d",
+    "sustainable agriculture": "https://images.unsplash.com/photo-1625246333195-78d9c38ad449",
     "default": "https://images.unsplash.com/photo-1524230572899-a752b3835840"
   };
 
@@ -99,6 +85,42 @@ const BusinessInsights = () => {
       ? (market.monthly_earnings_min + market.monthly_earnings_max) / 2
       : 0,
   }));
+
+  // Sample emerging markets data
+  const emergingMarkets = [
+    {
+      name: "Solar Energy",
+      category: "Renewable Energy",
+      trendScore: 95,
+      description: "Residential and commercial solar installation and consulting",
+      monthlyEarningsMin: 3000,
+      monthlyEarningsMax: 15000,
+    },
+    {
+      name: "Electric Vehicle Services",
+      category: "Automotive",
+      trendScore: 92,
+      description: "EV charging station installation and maintenance",
+      monthlyEarningsMin: 4000,
+      monthlyEarningsMax: 12000,
+    },
+    {
+      name: "Sustainable Agriculture",
+      category: "Agriculture",
+      trendScore: 88,
+      description: "Urban farming and sustainable agriculture consulting",
+      monthlyEarningsMin: 2000,
+      monthlyEarningsMax: 8000,
+    },
+    {
+      name: "Healthcare Tech",
+      category: "Healthcare",
+      trendScore: 90,
+      description: "Telemedicine and digital health solutions",
+      monthlyEarningsMin: 5000,
+      monthlyEarningsMax: 20000,
+    }
+  ];
 
   return (
     <div className="container mx-auto p-8">
@@ -121,47 +143,45 @@ const BusinessInsights = () => {
         </TabsList>
 
         <TabsContent value="trends" className="space-y-8">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
-            {trendsLoading ? (
-              Array(6).fill(0).map((_, i) => (
-                <Card key={i} className="overflow-hidden">
-                  <div className="h-48 bg-gray-200 animate-pulse" />
-                  <CardHeader>
-                    <div className="h-6 bg-gray-200 rounded animate-pulse w-3/4 mb-2" />
-                    <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2" />
-                  </CardHeader>
-                </Card>
-              ))
-            ) : (
-              trendScores?.map((trend) => (
-                <Card key={trend.id} className="overflow-hidden">
-                  <img
-                    src={marketImages[trend.query.toLowerCase() as keyof typeof marketImages] || marketImages.default}
-                    alt={trend.query}
-                    className="h-48 w-full object-cover"
-                  />
-                  <CardHeader>
-                    <CardTitle className="flex items-center justify-between">
-                      <span className="capitalize">{trend.query}</span>
-                      <Badge variant="secondary" className="flex items-center gap-1">
-                        <TrendingUp className="h-4 w-4" />
-                        {trend.total_score}
-                      </Badge>
-                    </CardTitle>
-                    <CardDescription>
-                      Trend score based on multiple data sources including Google Trends, GitHub, and Reddit
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-              ))
-            )}
+          {/* Emerging Markets Section */}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
+            {emergingMarkets.map((market) => (
+              <Card key={market.name} className="overflow-hidden">
+                <img
+                  src={marketImages[market.name.toLowerCase() as keyof typeof marketImages] || marketImages.default}
+                  alt={market.name}
+                  className="h-48 w-full object-cover"
+                />
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-xl">{market.name}</CardTitle>
+                    <Badge variant="secondary" className="flex items-center gap-1">
+                      <TrendingUp className="h-4 w-4" />
+                      {market.trendScore}
+                    </Badge>
+                  </div>
+                  <CardDescription className="mt-2">
+                    {market.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <DollarSign className="h-4 w-4" />
+                    <span>
+                      ${market.monthlyEarningsMin.toLocaleString()} - ${market.monthlyEarningsMax.toLocaleString()}/month
+                    </span>
+                  </div>
+                  <Badge variant="outline">{market.category}</Badge>
+                </CardContent>
+              </Card>
+            ))}
           </div>
-          
+
           <TrendSearch onSearchResults={handleSearchResults} />
           {searchResults && <TrendResults data={searchResults} />}
         </TabsContent>
 
-        <TabsContent value="markets" className="space-y-8">
+        <TabsContent value="markets">
           <MarketSearch onSearch={handleMarketSearch} />
           
           {marketsLoading ? (
@@ -222,7 +242,7 @@ const BusinessInsights = () => {
           )}
         </TabsContent>
 
-        <TabsContent value="sidehustles" className="space-y-8">
+        <TabsContent value="sidehustles">
           <div className="mb-8">
             <h2 className="text-3xl font-bold mb-4 flex items-center gap-2">
               <Briefcase className="h-8 w-8" />
