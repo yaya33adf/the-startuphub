@@ -5,7 +5,6 @@ export const ClimbingAnimation = () => {
 
   useEffect(() => {
     console.log("ClimbingAnimation mounted");
-    // Add a class to verify the component is rendered
     if (containerRef.current) {
       containerRef.current.classList.add('animation-mounted');
     }
@@ -25,11 +24,13 @@ export const ClimbingAnimation = () => {
       {[...Array(5)].map((_, index) => (
         <div
           key={index}
-          className="stair absolute h-12 bg-primary/20 rounded-md"
+          className="stair absolute h-12 rounded-md backdrop-blur-sm"
           style={{
             width: '120px',
             left: `${index * 80}px`,
             bottom: `${index * 50}px`,
+            transform: `rotate(${Math.sin(index) * 2}deg)`,
+            animationDelay: `${index * 0.2}s`
           }}
         />
       ))}
