@@ -23,13 +23,15 @@ import { Trash2, UserPlus, Calendar } from "lucide-react";
 
 interface TeamMember {
   id: string;
+  user_id: string;
   member_name: string;
   role: string;
   email: string;
-  status: string;
-  assignment?: string;
-  due_date?: string;
-  user_id: string;
+  status: string | null;
+  assignment: string | null;
+  due_date: string | null;
+  created_at: string | null;
+  updated_at: string | null;
 }
 
 export const TeamManagement = () => {
@@ -75,7 +77,7 @@ export const TeamManagement = () => {
   });
 
   const addMemberMutation = useMutation({
-    mutationFn: async (memberData: Omit<TeamMember, "id" | "status">) => {
+    mutationFn: async (memberData: Omit<TeamMember, "id" | "status" | "created_at" | "updated_at">) => {
       if (!userId) throw new Error("User not authenticated");
 
       console.log("Adding team member:", memberData);
@@ -149,7 +151,7 @@ export const TeamManagement = () => {
       });
       return;
     }
-    addMemberMutation.mutate(newMember);
+    addMemberMutation.mutate({ ...newMember, user_id: userId! });
   };
 
   if (isLoading) {
