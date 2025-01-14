@@ -104,6 +104,42 @@ export type Database = {
           },
         ]
       }
+      brand_identities: {
+        Row: {
+          brand_name: string
+          created_at: string
+          font_family: string | null
+          id: string
+          logo_url: string | null
+          primary_color: string | null
+          tagline: string | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          brand_name: string
+          created_at?: string
+          font_family?: string | null
+          id?: string
+          logo_url?: string | null
+          primary_color?: string | null
+          tagline?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          brand_name?: string
+          created_at?: string
+          font_family?: string | null
+          id?: string
+          logo_url?: string | null
+          primary_color?: string | null
+          tagline?: string | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       community_posts: {
         Row: {
           author_id: string | null
