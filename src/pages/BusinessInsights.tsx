@@ -54,6 +54,25 @@ const BusinessInsights = () => {
     },
   });
 
+  const { data: sideHustles, isLoading: sideHustlesLoading } = useQuery({
+    queryKey: ["sideHustles"],
+    queryFn: async () => {
+      console.log("Fetching side hustles...");
+      const { data, error } = await supabase
+        .from("side_hustles")
+        .select("*")
+        .order("trend_score", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching side hustles:", error);
+        throw error;
+      }
+
+      console.log("Fetched side hustles:", data);
+      return data;
+    },
+  });
+
   const handleSearchResults = (results: TrendData) => {
     setSearchResults(results);
     console.log("Search results received:", results);
@@ -71,6 +90,15 @@ const BusinessInsights = () => {
     "cybersecurity": "https://images.unsplash.com/photo-1496307653780-42ee777d4833",
     "default": "https://images.unsplash.com/photo-1524230572899-a752b3835840"
   };
+
+  // Transform data for the chart
+  const chartData = marketData?.map((market) => ({
+    name: market.name,
+    trendScore: market.trend_score,
+    potentialEarnings: market.monthly_earnings_min && market.monthly_earnings_max
+      ? (market.monthly_earnings_min + market.monthly_earnings_max) / 2
+      : 0,
+  }));
 
   return (
     <div className="container mx-auto p-8">
