@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export const BrandNameGenerator = () => {
   const [keyword, setKeyword] = useState("");
@@ -23,15 +24,12 @@ export const BrandNameGenerator = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch("/api/generate-brand-names", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ keyword, industry }),
+      const { data, error } = await supabase.functions.invoke('generate-brand-names', {
+        body: { keyword, industry }
       });
 
-      if (!response.ok) throw new Error("Failed to generate names");
+      if (error) throw error;
 
-      const data = await response.json();
       setGeneratedNames(data.names || []);
       
       toast({
