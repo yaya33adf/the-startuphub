@@ -4,7 +4,7 @@ import { TrendResults } from "@/components/TrendResults";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { GrowthAnimation } from "./GrowthAnimation";
-import { GlobalTrendsHeader } from "./GlobalTrendsHeader";
+import GlobalTrendsHeader from "./GlobalTrendsHeader";
 
 interface HeroSectionProps {
   searchResults: TrendData | null;
