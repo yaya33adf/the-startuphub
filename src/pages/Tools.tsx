@@ -18,6 +18,7 @@ import { CurrencyConverter } from "@/components/tools/CurrencyConverter";
 import { InvoiceGenerator } from "@/components/tools/InvoiceGenerator";
 import { ExpenseTracker } from "@/components/tools/ExpenseTracker";
 import { SalesAnalytics } from "@/components/tools/SalesAnalytics";
+import { EmailCampaignManager } from "@/components/tools/EmailCampaignManager";
 
 const Tools = () => {
   const tools = [
@@ -60,7 +61,8 @@ const Tools = () => {
       title: "Email Campaign Manager",
       description: "Create and manage email marketing campaigns",
       icon: Mail,
-      active: false,
+      component: EmailCampaignManager,
+      active: true,
     },
     {
       title: "Goal Tracker",
