@@ -11,12 +11,25 @@ interface Goal {
   id: string;
   title: string;
   completed: boolean;
+  user_id: string;
 }
 
 export const GoalTracker = () => {
   const [newGoal, setNewGoal] = useState("");
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Get the current user's ID when component mounts
+    const getCurrentUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        setUserId(user.id);
+      }
+    };
+    getCurrentUser();
+  }, []);
 
   const { data: goals = [], isLoading } = useQuery({
     queryKey: ['goals'],
@@ -44,10 +57,18 @@ export const GoalTracker = () => {
 
   const addGoalMutation = useMutation({
     mutationFn: async (title: string) => {
+      if (!userId) {
+        throw new Error("User not authenticated");
+      }
+
       console.log('Adding goal:', title);
       const { data, error } = await supabase
         .from('goals')
-        .insert([{ title, completed: false }])
+        .insert([{ 
+          title, 
+          completed: false,
+          user_id: userId 
+        }])
         .select()
         .single();
 
