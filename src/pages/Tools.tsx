@@ -97,7 +97,12 @@ const Tools = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {activeTools.map((tool) => (
-          <Card key={tool.title} className="hover:shadow-lg transition-shadow">
+          <Card 
+            key={tool.title} 
+            className={`hover:shadow-lg transition-shadow ${
+              tool.component === SalesAnalytics ? 'md:col-span-2 lg:col-span-3' : ''
+            }`}
+          >
             <CardHeader>
               <div className="flex items-center gap-3">
                 <tool.icon className="h-6 w-6 text-primary" />
