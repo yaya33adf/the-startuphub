@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Target, Check, Trash2 } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface Goal {
   id: string;
@@ -13,9 +14,122 @@ interface Goal {
 }
 
 export const GoalTracker = () => {
-  const [goals, setGoals] = useState<Goal[]>([]);
   const [newGoal, setNewGoal] = useState("");
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const { data: goals = [], isLoading } = useQuery({
+    queryKey: ['goals'],
+    queryFn: async () => {
+      console.log('Fetching goals...');
+      const { data, error } = await supabase
+        .from('goals')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching goals:', error);
+        toast({
+          title: "Error",
+          description: "Failed to load goals",
+          variant: "destructive",
+        });
+        throw error;
+      }
+
+      console.log('Goals fetched:', data);
+      return data as Goal[];
+    },
+  });
+
+  const addGoalMutation = useMutation({
+    mutationFn: async (title: string) => {
+      console.log('Adding goal:', title);
+      const { data, error } = await supabase
+        .from('goals')
+        .insert([{ title, completed: false }])
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error adding goal:', error);
+        throw error;
+      }
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['goals'] });
+      setNewGoal("");
+      toast({
+        title: "Goal Added",
+        description: "Your new goal has been added successfully",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to add goal",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const toggleGoalMutation = useMutation({
+    mutationFn: async ({ id, completed }: { id: string; completed: boolean }) => {
+      console.log('Toggling goal:', id, completed);
+      const { data, error } = await supabase
+        .from('goals')
+        .update({ completed })
+        .eq('id', id)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Error toggling goal:', error);
+        throw error;
+      }
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['goals'] });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to update goal",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteGoalMutation = useMutation({
+    mutationFn: async (id: string) => {
+      console.log('Deleting goal:', id);
+      const { error } = await supabase
+        .from('goals')
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        console.error('Error deleting goal:', error);
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['goals'] });
+      toast({
+        title: "Goal Deleted",
+        description: "The goal has been removed",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to delete goal",
+        variant: "destructive",
+      });
+    },
+  });
 
   const addGoal = () => {
     if (!newGoal.trim()) {
@@ -27,36 +141,12 @@ export const GoalTracker = () => {
       return;
     }
 
-    const goal: Goal = {
-      id: crypto.randomUUID(),
-      title: newGoal.trim(),
-      completed: false,
-    };
-
-    setGoals([...goals, goal]);
-    setNewGoal("");
-    
-    toast({
-      title: "Goal Added",
-      description: "Your new goal has been added successfully",
-    });
+    addGoalMutation.mutate(newGoal.trim());
   };
 
-  const toggleGoal = (id: string) => {
-    setGoals(
-      goals.map((goal) =>
-        goal.id === id ? { ...goal, completed: !goal.completed } : goal
-      )
-    );
-  };
-
-  const deleteGoal = (id: string) => {
-    setGoals(goals.filter((goal) => goal.id !== id));
-    toast({
-      title: "Goal Deleted",
-      description: "The goal has been removed",
-    });
-  };
+  if (isLoading) {
+    return <div className="text-center py-8">Loading goals...</div>;
+  }
 
   return (
     <div className="space-y-4 mt-4">
@@ -79,7 +169,7 @@ export const GoalTracker = () => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => toggleGoal(goal.id)}
+                  onClick={() => toggleGoalMutation.mutate({ id: goal.id, completed: !goal.completed })}
                   className={goal.completed ? "text-green-500" : "text-gray-400"}
                 >
                   <Check className="h-5 w-5" />
@@ -95,7 +185,7 @@ export const GoalTracker = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => deleteGoal(goal.id)}
+                onClick={() => deleteGoalMutation.mutate(goal.id)}
                 className="text-red-500 hover:text-red-600"
               >
                 <Trash2 className="h-5 w-5" />
