@@ -1,5 +1,16 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Wrench, Code, Terminal, Database, LineChart, Lock, QrCode, DollarSign } from "lucide-react";
+import { 
+  Wrench, 
+  QrCode, 
+  DollarSign, 
+  FileSpreadsheet, 
+  BarChart3, 
+  Mail, 
+  Target, 
+  Users, 
+  Receipt, 
+  CalendarDays 
+} from "lucide-react";
 import { QRCodeGenerator } from "@/components/tools/QRCodeGenerator";
 import { CurrencyConverter } from "@/components/tools/CurrencyConverter";
 
@@ -18,34 +29,39 @@ const Tools = () => {
       component: CurrencyConverter,
     },
     {
-      title: "API Testing",
-      description: "Test and debug API endpoints with our intuitive interface",
-      icon: Terminal,
+      title: "Invoice Generator",
+      description: "Create professional invoices for your business",
+      icon: Receipt,
     },
     {
-      title: "Code Generator",
-      description: "Generate boilerplate code for common programming tasks",
-      icon: Code,
+      title: "Expense Tracker",
+      description: "Track and categorize your business expenses",
+      icon: FileSpreadsheet,
     },
     {
-      title: "Database Explorer",
-      description: "Explore and visualize your database structure",
-      icon: Database,
+      title: "Sales Analytics",
+      description: "Visualize and analyze your sales data",
+      icon: BarChart3,
     },
     {
-      title: "Analytics Dashboard",
-      description: "Track and analyze your startup metrics",
-      icon: LineChart,
+      title: "Email Campaign Manager",
+      description: "Create and manage email marketing campaigns",
+      icon: Mail,
     },
     {
-      title: "Security Scanner",
-      description: "Scan your application for security vulnerabilities",
-      icon: Lock,
+      title: "Goal Tracker",
+      description: "Set and track business goals and KPIs",
+      icon: Target,
     },
     {
-      title: "Development Utils",
-      description: "Various utilities for developers and startups",
-      icon: Wrench,
+      title: "Team Management",
+      description: "Manage team members and assignments",
+      icon: Users,
+    },
+    {
+      title: "Appointment Scheduler",
+      description: "Schedule and manage business appointments",
+      icon: CalendarDays,
     },
   ];
 
@@ -56,9 +72,9 @@ const Tools = () => {
   return (
     <div className="container mx-auto p-8">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">Startup Tools</h1>
+        <h1 className="text-4xl font-bold mb-4">Business Tools</h1>
         <p className="text-muted-foreground">
-          Essential tools to help you build and grow your startup
+          Essential tools to help you manage and grow your business
         </p>
       </div>
 
@@ -101,7 +117,7 @@ const Tools = () => {
       )}
 
       <div className="mt-12 text-center text-muted-foreground">
-        <p>More tools coming soon...</p>
+        <p>More business tools coming soon...</p>
       </div>
     </div>
   );
