@@ -258,40 +258,40 @@ export type Database = {
       }
       teams: {
         Row: {
+          assignment: string | null
+          created_at: string | null
+          due_date: string | null
+          email: string
           id: string
-          user_id: string
           member_name: string
           role: string
-          email: string
           status: string | null
-          assignment: string | null
-          due_date: string | null
-          created_at: string | null
           updated_at: string | null
+          user_id: string
         }
         Insert: {
+          assignment?: string | null
+          created_at?: string | null
+          due_date?: string | null
+          email: string
           id?: string
-          user_id: string
           member_name: string
           role: string
-          email: string
           status?: string | null
-          assignment?: string | null
-          due_date?: string | null
-          created_at?: string | null
           updated_at?: string | null
+          user_id: string
         }
         Update: {
+          assignment?: string | null
+          created_at?: string | null
+          due_date?: string | null
+          email?: string
           id?: string
-          user_id?: string
           member_name?: string
           role?: string
-          email?: string
           status?: string | null
-          assignment?: string | null
-          due_date?: string | null
-          created_at?: string | null
           updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -392,7 +392,7 @@ export type Tables<
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never,
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
@@ -446,10 +446,10 @@ export type TablesUpdate<
     : never
   : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
     ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-      Update: infer U
-    }
-    ? U
-    : never
+        Update: infer U
+      }
+      ? U
+      : never
     : never
 
 export type Enums<
