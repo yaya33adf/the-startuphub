@@ -42,6 +42,10 @@ const Tools = () => {
     },
   ];
 
+  // Filter to show only tools with active components
+  const activeTools = tools.filter(tool => tool.component);
+  const comingSoonTools = tools.filter(tool => !tool.component);
+
   return (
     <div className="container mx-auto p-8">
       <div className="mb-8">
@@ -52,7 +56,7 @@ const Tools = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {tools.map((tool) => (
+        {activeTools.map((tool) => (
           <Card key={tool.title} className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <div className="flex items-center gap-3">
@@ -67,6 +71,27 @@ const Tools = () => {
           </Card>
         ))}
       </div>
+
+      {comingSoonTools.length > 0 && (
+        <>
+          <h2 className="text-2xl font-semibold mt-12 mb-6">Coming Soon</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-50">
+            {comingSoonTools.map((tool) => (
+              <Card key={tool.title} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <tool.icon className="h-6 w-6 text-primary" />
+                    <CardTitle>{tool.title}</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>{tool.description}</CardDescription>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </>
+      )}
 
       <div className="mt-12 text-center text-muted-foreground">
         <p>More tools coming soon...</p>
