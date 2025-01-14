@@ -17,6 +17,7 @@ interface Appointment {
   end_time: string;
   location: string | null;
   attendees: string[] | null;
+  user_id: string;
 }
 
 export const AppointmentScheduler = () => {
@@ -36,6 +37,13 @@ export const AppointmentScheduler = () => {
     queryKey: ["appointments"],
     queryFn: async () => {
       console.log("Fetching appointments...");
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        console.error("No authenticated user found");
+        return [];
+      }
+
       const { data, error } = await supabase
         .from("appointments")
         .select("*")
@@ -54,9 +62,15 @@ export const AppointmentScheduler = () => {
   // Create appointment mutation
   const createAppointment = useMutation({
     mutationFn: async (appointment: Omit<Appointment, "id">) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        throw new Error("No authenticated user found");
+      }
+
       const { data, error } = await supabase
         .from("appointments")
-        .insert([appointment])
+        .insert([{ ...appointment, user_id: user.id }])
         .select()
         .single();
 
@@ -111,7 +125,7 @@ export const AppointmentScheduler = () => {
       end_time: endDateTime.toISOString(),
       location,
       attendees: attendees ? attendees.split(",").map(email => email.trim()) : null,
-    });
+    } as Omit<Appointment, "id">);
   };
 
   return (
