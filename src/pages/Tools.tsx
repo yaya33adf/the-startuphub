@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { QRCodeGenerator } from "@/components/tools/QRCodeGenerator";
 import { CurrencyConverter } from "@/components/tools/CurrencyConverter";
+import { InvoiceGenerator } from "@/components/tools/InvoiceGenerator";
 
 const Tools = () => {
   const tools = [
@@ -36,7 +37,8 @@ const Tools = () => {
       title: "Invoice Generator",
       description: "Create professional invoices for your business",
       icon: Receipt,
-      active: false,
+      component: InvoiceGenerator,
+      active: true,
     },
     {
       title: "Expense Tracker",
