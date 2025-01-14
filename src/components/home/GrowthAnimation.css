@@ -63,11 +63,8 @@
 .growth-text {
   position: absolute;
   font-size: 1.2rem;
-  background: linear-gradient(to right, #2F855A, #38A169);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  font-weight: 600;
+  color: #000000;
+  font-weight: 700;
   opacity: 0;
   transform: translateY(20px);
   z-index: 2;
