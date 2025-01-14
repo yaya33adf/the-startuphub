@@ -6,7 +6,6 @@ import { SentimentAnalysis } from "./trends/SentimentAnalysis";
 import { CompetitorAnalysis } from "./trends/CompetitorAnalysis";
 import { PredictiveAnalysis } from "./trends/PredictiveAnalysis";
 import { GrowthOpportunities } from "./trends/GrowthOpportunities";
-import { TrendFooter } from "./trends/TrendFooter";
 
 interface TrendResultsProps {
   data: TrendData;
@@ -107,8 +106,6 @@ export const TrendResults = ({ data }: TrendResultsProps) => {
         <MarketSegmentationChart segmentationData={segmentationData} />
         <GrowthOpportunities insights={insights} recommendations={recommendations} />
       </div>
-      
-      <TrendFooter />
     </div>
   );
 };
