@@ -7,12 +7,13 @@ export const GrowthAnimation = () => {
   useEffect(() => {
     if (!containerRef.current) return;
 
-    // Create data points
+    // Create data points with more dramatic positioning
     const points = [
-      { x: 20, y: 80, delay: 0.5 },
-      { x: 40, y: 60, delay: 1 },
-      { x: 60, y: 40, delay: 1.5 },
-      { x: 80, y: 20, delay: 2 }
+      { x: 15, y: 85, delay: 0.8 },
+      { x: 35, y: 65, delay: 1.4 },
+      { x: 55, y: 45, delay: 2.0 },
+      { x: 75, y: 25, delay: 2.6 },
+      { x: 85, y: 15, delay: 3.2 }
     ];
 
     // Clear existing points
@@ -29,18 +30,26 @@ export const GrowthAnimation = () => {
       containerRef.current?.appendChild(dataPoint);
     });
 
-    // Add sparkles
-    const sparkleCount = 10;
+    // Add more sparkles for enhanced effect
+    const sparkleCount = 15;
     for (let i = 0; i < sparkleCount; i++) {
       const sparkle = document.createElement('div');
       sparkle.className = 'sparkle';
       sparkle.style.left = `${Math.random() * 100}%`;
       sparkle.style.top = `${Math.random() * 100}%`;
-      sparkle.style.animationDelay = `${Math.random() * 2}s`;
+      sparkle.style.animationDelay = `${Math.random() * 3}s`;
       containerRef.current?.appendChild(sparkle);
     }
 
-    console.log('Growth Animation mounted and initialized');
+    console.log('Growth Animation initialized with enhanced effects');
+
+    // Cleanup function
+    return () => {
+      if (containerRef.current) {
+        const points = containerRef.current.querySelectorAll('.data-point, .sparkle');
+        points.forEach(point => point.remove());
+      }
+    };
   }, []);
 
   return (
@@ -51,7 +60,7 @@ export const GrowthAnimation = () => {
         aria-hidden="true"
       >
         <div className="chart-line" />
-        <div className="success-icon">🚀</div>
+        <div className="success-icon">⭐</div>
       </div>
     </div>
   );

@@ -12,9 +12,9 @@ interface HeroSectionProps {
 
 export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps) => {
   return (
-    <section className="relative py-20 px-4 text-center bg-gradient-to-b from-primary/20 via-accent/10 to-background min-h-[800px] overflow-hidden">
+    <section className="relative py-20 px-4 text-center bg-gradient-to-br from-secondary/30 via-accent/20 to-primary/10 min-h-[800px] overflow-hidden">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl md:text-6xl font-bold mb-8 animate-fade-in">
+        <h1 className="text-4xl md:text-6xl font-bold mb-8 animate-fade-in bg-clip-text text-transparent bg-gradient-to-r from-secondary to-primary">
           Welcome to The Startup Hub
         </h1>
         <div className="relative z-10 mb-12">
@@ -27,7 +27,12 @@ export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps
           <TrendSearch onSearchResults={onSearchResults} />
           {searchResults && <TrendResults data={searchResults} />}
         </div>
-        <Button size="lg" asChild className="animate-fade-in hover:scale-105 transition-transform" style={{ animationDelay: '0.6s' }}>
+        <Button 
+          size="lg" 
+          asChild 
+          className="animate-fade-in hover:scale-105 transition-transform bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90" 
+          style={{ animationDelay: '0.6s' }}
+        >
           <Link to="/trends">Explore Trends</Link>
         </Button>
       </div>
