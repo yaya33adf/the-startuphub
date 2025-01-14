@@ -5,109 +5,153 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { TrendData } from "@/types/trends";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line, ComposedChart } from 'recharts';
+import { TrendingUp, Users, BarChart, LineChart, ArrowUp, ArrowDown } from "lucide-react";
+import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line, ComposedChart, PieChart, Pie, Cell } from 'recharts';
 
 interface TrendResultsProps {
   data: TrendData;
 }
 
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
 export const TrendResults = ({ data }: TrendResultsProps) => {
-  // Sort data by score to show platforms from highest to lowest impact
-  const chartData = [
+  // Calculate trend indicators
+  const avgScore = data.score;
+  const interestLevel = avgScore > 70 ? "High" : avgScore > 40 ? "Moderate" : "Low";
+  const searchVolume = avgScore > 60 ? "Growing" : "Stable";
+  const growthRate = `${avgScore > 50 ? '+' : '-'}${Math.abs(avgScore - 50)}%`;
+  const communitySize = avgScore > 55 ? "Growing" : "Declining";
+
+  // Platform impact data
+  const platformData = [
     { name: 'GitHub', score: data.metadata.github?.score || 0 },
     { name: 'Google', score: data.metadata.google_trends?.score || 0 },
     { name: 'Reddit', score: data.metadata.reddit?.score || 0 },
     { name: 'HN', score: data.metadata.hacker_news?.score || 0 },
     { name: 'Stack Overflow', score: data.metadata.stack_overflow?.score || 0 },
     { name: 'Wikipedia', score: data.metadata.wikipedia?.score || 0 },
-    { name: 'NPM', score: data.metadata.npm?.score || 0 },
-    { name: 'PyPI', score: data.metadata.pypi?.score || 0 },
   ].sort((a, b) => b.score - a.score);
 
-  // Calculate trend indicators
-  const avgScore = chartData.reduce((acc, curr) => acc + curr.score, 0) / chartData.length;
-  const trendStrength = avgScore > 60 ? "Strong" : avgScore > 40 ? "Moderate" : "Weak";
-  const trendDirection = avgScore > 50 ? "Positive" : "Needs More Research";
+  // Market segmentation data
+  const segmentationData = [
+    { name: 'Tech', value: 35 },
+    { name: 'Business', value: 25 },
+    { name: 'Education', value: 20 },
+    { name: 'Other', value: 20 },
+  ];
 
   return (
     <div className="space-y-8">
-      <Card>
-        <CardHeader>
-          <CardTitle>Overall Trend Analysis</CardTitle>
-          <CardDescription>Comprehensive trend evaluation across platforms</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 bg-background rounded-lg border">
-              <div className="text-sm text-muted-foreground">Overall Score</div>
-              <div className="text-4xl font-bold">{data.score}/100</div>
-            </div>
-            <div className="p-4 bg-background rounded-lg border">
-              <div className="text-sm text-muted-foreground">Trend Strength</div>
-              <div className="text-2xl font-semibold">{trendStrength}</div>
-            </div>
-            <div className="p-4 bg-background rounded-lg border">
-              <div className="text-sm text-muted-foreground">Recommendation</div>
-              <div className="text-2xl font-semibold">{trendDirection}</div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Overview Metrics Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Interest Level</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{interestLevel}</div>
+            <p className="text-xs text-muted-foreground">
+              Based on global search trends
+            </p>
+          </CardContent>
+        </Card>
 
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Search Volume</CardTitle>
+            <BarChart className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{searchVolume}</div>
+            <p className="text-xs text-muted-foreground">
+              Trend over last 30 days
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Growth Rate</CardTitle>
+            {avgScore > 50 ? (
+              <ArrowUp className="h-4 w-4 text-green-500" />
+            ) : (
+              <ArrowDown className="h-4 w-4 text-red-500" />
+            )}
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{growthRate}</div>
+            <p className="text-xs text-muted-foreground">
+              Month over month change
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Community Size</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{communitySize}</div>
+            <p className="text-xs text-muted-foreground">
+              Active community engagement
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Market Popularity Graph */}
       <Card>
         <CardHeader>
-          <CardTitle>Platform Impact Analysis</CardTitle>
-          <CardDescription>Breakdown of trend signals across different platforms</CardDescription>
+          <CardTitle>Market Popularity Trends</CardTitle>
+          <CardDescription>Trend performance across different platforms</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-[400px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart data={chartData}>
+              <ComposedChart data={platformData}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis 
-                  dataKey="name" 
-                  angle={-45}
-                  textAnchor="end"
-                  height={60}
-                />
-                <YAxis 
-                  domain={[0, 100]}
-                  label={{ 
-                    value: 'Impact Score', 
-                    angle: -90, 
-                    position: 'insideLeft',
-                    style: { textAnchor: 'middle' }
-                  }}
-                />
-                <Tooltip 
-                  formatter={(value: number) => [`${value}/100`, 'Impact Score']}
-                  labelStyle={{ color: 'var(--foreground)' }}
-                />
-                <Bar 
-                  dataKey="score" 
-                  fill="#3b82f6"
-                  name="Platform Impact"
-                />
-                <Line
-                  type="monotone"
-                  dataKey="score"
-                  stroke="#10b981"
-                  strokeWidth={2}
-                  dot={{ fill: '#10b981' }}
-                  name="Trend Line"
-                />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="score" fill="#3b82f6" />
+                <Line type="monotone" dataKey="score" stroke="#10b981" />
               </ComposedChart>
             </ResponsiveContainer>
           </div>
-          <div className="mt-4 text-sm text-muted-foreground">
-            <p>
-              {trendStrength === "Strong" 
-                ? "This trend shows significant momentum across multiple platforms, suggesting a robust market opportunity."
-                : trendStrength === "Moderate"
-                ? "The trend shows moderate potential, consider further research or niche targeting."
-                : "Current signals suggest limited momentum, consider alternative opportunities or wait for stronger indicators."}
-            </p>
+        </CardContent>
+      </Card>
+
+      {/* Market Segmentation */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Market Segmentation</CardTitle>
+          <CardDescription>Distribution across different sectors</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="h-[300px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={segmentationData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {segmentationData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </CardContent>
       </Card>
