@@ -6,6 +6,8 @@ import { SentimentAnalysis } from "./trends/SentimentAnalysis";
 import { CompetitorAnalysis } from "./trends/CompetitorAnalysis";
 import { PredictiveAnalysis } from "./trends/PredictiveAnalysis";
 import { GrowthOpportunities } from "./trends/GrowthOpportunities";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 interface TrendResultsProps {
   data: TrendData;
@@ -82,6 +84,52 @@ export const TrendResults = ({ data }: TrendResultsProps) => {
     },
   ];
 
+  // Top trending items data
+  const trendingItems = [
+    {
+      name: "ChatGPT",
+      type: "AI App",
+      score: 95,
+      image: "https://images.unsplash.com/photo-1693514206397-6b77a8c9ac08?w=800&auto=format&fit=crop&q=60",
+      description: "Leading AI chatbot platform revolutionizing conversations",
+    },
+    {
+      name: "Solar Energy",
+      type: "Market",
+      score: 88,
+      image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800&auto=format&fit=crop&q=60",
+      description: "Renewable energy market showing exceptional growth",
+    },
+    {
+      name: "Threads",
+      type: "Social App",
+      score: 82,
+      image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&auto=format&fit=crop&q=60",
+      description: "Meta's Twitter competitor gaining rapid adoption",
+    },
+    {
+      name: "Remote Work Tools",
+      type: "Market",
+      score: 85,
+      image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&auto=format&fit=crop&q=60",
+      description: "Growing market for remote collaboration solutions",
+    },
+    {
+      name: "BeReal",
+      type: "Social App",
+      score: 79,
+      image: "https://images.unsplash.com/photo-1573152143286-0c422b4d2175?w=800&auto=format&fit=crop&q=60",
+      description: "Authentic social media platform rising in popularity",
+    },
+    {
+      name: "Electric Vehicles",
+      type: "Market",
+      score: 90,
+      image: "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?w=800&auto=format&fit=crop&q=60",
+      description: "Rapidly expanding sustainable transportation sector",
+    },
+  ];
+
   return (
     <div className="space-y-8">
       <TrendMetricsCards
@@ -91,6 +139,38 @@ export const TrendResults = ({ data }: TrendResultsProps) => {
         growthRate={growthRate}
         communitySize={communitySize}
       />
+
+      {/* New Top Trending Section */}
+      <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {trendingItems.map((item, index) => (
+          <Card key={index} className="overflow-hidden">
+            <div className="relative h-48">
+              <img
+                src={item.image}
+                alt={item.name}
+                className="w-full h-full object-cover"
+              />
+              <Badge 
+                className="absolute top-2 right-2" 
+                variant={item.type === "Market" ? "default" : "secondary"}
+              >
+                {item.type}
+              </Badge>
+            </div>
+            <CardHeader className="space-y-1">
+              <div className="flex justify-between items-center">
+                <CardTitle className="text-xl">{item.name}</CardTitle>
+                <span className="text-lg font-bold text-primary">
+                  {item.score}/100
+                </span>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground">{item.description}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
       
       <div className="grid gap-8 md:grid-cols-2">
         <MarketPopularityChart platformData={platformData} />
