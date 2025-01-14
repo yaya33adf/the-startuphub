@@ -1,13 +1,7 @@
 import { TrendData } from "@/types/trends";
 import { TrendMetricsCards } from "./trends/TrendMetricsCards";
-import { MarketPopularityChart } from "./trends/MarketPopularityChart";
-import { MarketSegmentationChart } from "./trends/MarketSegmentationChart";
-import { SentimentAnalysis } from "./trends/SentimentAnalysis";
-import { CompetitorAnalysis } from "./trends/CompetitorAnalysis";
-import { PredictiveAnalysis } from "./trends/PredictiveAnalysis";
-import { GrowthOpportunities } from "./trends/GrowthOpportunities";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { TrendingItemsGrid } from "./trends/TrendingItemsGrid";
+import { ChartSection } from "./trends/ChartSection";
 
 interface TrendResultsProps {
   data: TrendData;
@@ -140,52 +134,17 @@ export const TrendResults = ({ data }: TrendResultsProps) => {
         communitySize={communitySize}
       />
 
-      {/* New Top Trending Section */}
-      <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {trendingItems.map((item, index) => (
-          <Card key={index} className="overflow-hidden">
-            <div className="relative h-48">
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-full h-full object-cover"
-              />
-              <Badge 
-                className="absolute top-2 right-2" 
-                variant={item.type === "Market" ? "default" : "secondary"}
-              >
-                {item.type}
-              </Badge>
-            </div>
-            <CardHeader className="space-y-1">
-              <div className="flex justify-between items-center">
-                <CardTitle className="text-xl">{item.name}</CardTitle>
-                <span className="text-lg font-bold text-primary">
-                  {item.score}/100
-                </span>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">{item.description}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      <TrendingItemsGrid items={trendingItems} />
       
-      <div className="grid gap-8 md:grid-cols-2">
-        <MarketPopularityChart platformData={platformData} />
-        <SentimentAnalysis data={sentimentData} />
-      </div>
-      
-      <div className="grid gap-8 md:grid-cols-2">
-        <CompetitorAnalysis data={competitorData} />
-        <PredictiveAnalysis data={predictiveData} confidenceScore={85} />
-      </div>
-      
-      <div className="grid gap-8 md:grid-cols-2">
-        <MarketSegmentationChart segmentationData={segmentationData} />
-        <GrowthOpportunities insights={insights} recommendations={recommendations} />
-      </div>
+      <ChartSection
+        platformData={platformData}
+        segmentationData={segmentationData}
+        sentimentData={sentimentData}
+        competitorData={competitorData}
+        predictiveData={predictiveData}
+        insights={insights}
+        recommendations={recommendations}
+      />
     </div>
   );
 };
