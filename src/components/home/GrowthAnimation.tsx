@@ -33,6 +33,25 @@ export const GrowthAnimation = () => {
     svg.style.left = '0';
     containerRef.current.appendChild(svg);
 
+    // Add gradient definition
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    gradient.setAttribute('id', 'arrow-gradient');
+    gradient.setAttribute('gradientUnits', 'userSpaceOnUse');
+    
+    const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop1.setAttribute('offset', '0%');
+    stop1.setAttribute('stop-color', '#8B5CF6');
+    
+    const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop2.setAttribute('offset', '100%');
+    stop2.setAttribute('stop-color', '#D946EF');
+    
+    gradient.appendChild(stop1);
+    gradient.appendChild(stop2);
+    defs.appendChild(gradient);
+    svg.appendChild(defs);
+
     // Add points, text, and arrows
     points.forEach((point, index) => {
       // Create point
@@ -71,14 +90,13 @@ export const GrowthAnimation = () => {
         
         arrow.setAttribute('d', path);
         arrow.setAttribute('fill', 'none');
-        arrow.setAttribute('stroke', '#9b87f5');
-        arrow.setAttribute('stroke-width', '2');
+        arrow.setAttribute('stroke', 'url(#arrow-gradient)');
+        arrow.setAttribute('stroke-width', '3');
         arrow.setAttribute('marker-end', 'url(#arrowhead)');
         arrow.classList.add('arrow');
         arrow.style.animation = `drawArrow 1.5s ease-out forwards ${point.delay + 0.5}s`;
         
-        // Add arrowhead marker
-        const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+        // Add arrowhead marker with gradient
         const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
         marker.setAttribute('id', 'arrowhead');
         marker.setAttribute('markerWidth', '10');
@@ -89,11 +107,10 @@ export const GrowthAnimation = () => {
         
         const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
         polygon.setAttribute('points', '0 0, 10 3.5, 0 7');
-        polygon.setAttribute('fill', '#9b87f5');
+        polygon.setAttribute('fill', '#D946EF');
         
         marker.appendChild(polygon);
         defs.appendChild(marker);
-        svg.appendChild(defs);
         svg.appendChild(arrow);
       }
     });
