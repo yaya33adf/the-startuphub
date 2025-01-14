@@ -16,7 +16,6 @@ import Tools from "./pages/Tools";
 import SideHustles from "./pages/SideHustles";
 import Community from "./pages/Community";
 import AdminDashboard from "./pages/admin/Dashboard";
-import StartupIdeas from "./pages/StartupIdeas";
 
 const queryClient = new QueryClient();
 
@@ -43,7 +42,6 @@ const App = () => (
               <Route path="/auth/signup" element={<SignUp />} />
               <Route path="/auth/forgot-password" element={<ForgotPassword />} />
               <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/startup-ideas" element={<StartupIdeas />} />
             </Routes>
           </main>
           <Footer />
