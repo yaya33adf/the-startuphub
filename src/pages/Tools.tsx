@@ -16,6 +16,7 @@ import {
 import { QRCodeGenerator } from "@/components/tools/QRCodeGenerator";
 import { CurrencyConverter } from "@/components/tools/CurrencyConverter";
 import { InvoiceGenerator } from "@/components/tools/InvoiceGenerator";
+import { ExpenseTracker } from "@/components/tools/ExpenseTracker";
 
 const Tools = () => {
   const tools = [
@@ -44,7 +45,8 @@ const Tools = () => {
       title: "Expense Tracker",
       description: "Track and categorize your business expenses",
       icon: FileSpreadsheet,
-      active: false,
+      component: ExpenseTracker,
+      active: true,
     },
     {
       title: "Sales Analytics",
