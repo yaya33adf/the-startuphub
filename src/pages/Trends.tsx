@@ -1,6 +1,6 @@
+import { useState } from "react";
 import { TrendSearch } from "@/components/TrendSearch";
 import { TrendResults } from "@/components/TrendResults";
-import { useState } from "react";
 import type { TrendData } from "@/types/trends";
 
 const Trends = () => {

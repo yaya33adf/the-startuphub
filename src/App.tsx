@@ -14,7 +14,9 @@ import Tools from "./pages/Tools";
 import Community from "./pages/Community";
 import AdminDashboard from "./pages/admin/Dashboard";
 import Crowdfunding from "./pages/Crowdfunding";
-import BusinessInsights from "./pages/BusinessInsights";
+import Trends from "./pages/Trends";
+import Markets from "./pages/Markets";
+import SideHustles from "./pages/SideHustles";
 
 const queryClient = new QueryClient();
 
@@ -31,7 +33,9 @@ const App = () => (
           <main className="flex-1 w-full max-w-[100vw] overflow-x-hidden">
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/business-insights" element={<BusinessInsights />} />
+              <Route path="/trends" element={<Trends />} />
+              <Route path="/markets" element={<Markets />} />
+              <Route path="/side-hustles" element={<SideHustles />} />
               <Route path="/tools" element={<Tools />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/community" element={<Community />} />

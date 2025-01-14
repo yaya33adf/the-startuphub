@@ -42,7 +42,6 @@ const SideHustles = () => {
 
   const handleSearch = async (query: string, region: string, timeframe: string) => {
     console.log("Searching side hustles with:", { query, region, timeframe });
-    // Implement search logic here
   };
 
   if (error) {

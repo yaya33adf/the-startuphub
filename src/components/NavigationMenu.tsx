@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ChartLine, Wrench, BookOpen, LogIn, MessageSquare, Menu, TrendingUp, DollarSign } from "lucide-react";
+import { ChartLine, Wrench, BookOpen, LogIn, MessageSquare, Menu, TrendingUp, DollarSign, ArrowRight, ChartBar, Briefcase } from "lucide-react";
 import { useState } from "react";
 import {
   Sheet,
@@ -9,9 +9,25 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+const businessInsightsItems = [
+  { to: "/trends", icon: TrendingUp, label: "Trends" },
+  { to: "/markets", icon: ChartBar, label: "Markets" },
+  { to: "/side-hustles", icon: Briefcase, label: "Side Hustles" },
+];
 
 const navItems = [
-  { to: "/business-insights", icon: ChartLine, label: "Business Insights" },
+  {
+    icon: ChartLine,
+    label: "Business Insights",
+    subItems: businessInsightsItems,
+  },
   { to: "/tools", icon: Wrench, label: "Tools" },
   { to: "/blog", icon: BookOpen, label: "Blog" },
   { to: "/community", icon: MessageSquare, label: "Community" },
@@ -23,20 +39,51 @@ export const NavigationMenu = () => {
 
   const NavLinks = ({ onClick = () => {} }) => (
     <>
-      {navItems.map((item) => (
-        <Button 
-          key={item.to} 
-          variant="ghost" 
-          asChild 
-          onClick={onClick}
-          className="h-10 px-3 py-2"
-        >
-          <Link to={item.to} className="flex items-center gap-2 min-w-[100px] justify-start">
-            <item.icon className="w-4 h-4 flex-shrink-0" />
-            <span className="whitespace-nowrap">{item.label}</span>
-          </Link>
-        </Button>
-      ))}
+      {navItems.map((item) => {
+        if (item.subItems) {
+          return (
+            <DropdownMenu key={item.label}>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-10 px-3 py-2">
+                  <div className="flex items-center gap-2 min-w-[100px] justify-start">
+                    <item.icon className="w-4 h-4 flex-shrink-0" />
+                    <span className="whitespace-nowrap">{item.label}</span>
+                  </div>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                {item.subItems.map((subItem) => (
+                  <DropdownMenuItem key={subItem.to} asChild>
+                    <Link
+                      to={subItem.to}
+                      className="flex items-center gap-2"
+                      onClick={onClick}
+                    >
+                      <subItem.icon className="w-4 h-4" />
+                      <span>{subItem.label}</span>
+                      <ArrowRight className="w-4 h-4 ml-auto" />
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          );
+        }
+        return (
+          <Button 
+            key={item.to} 
+            variant="ghost" 
+            asChild 
+            onClick={onClick}
+            className="h-10 px-3 py-2"
+          >
+            <Link to={item.to} className="flex items-center gap-2 min-w-[100px] justify-start">
+              <item.icon className="w-4 h-4 flex-shrink-0" />
+              <span className="whitespace-nowrap">{item.label}</span>
+            </Link>
+          </Button>
+        );
+      })}
     </>
   );
 
