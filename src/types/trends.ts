@@ -1,13 +1,37 @@
 export interface TrendData {
   score: number;
   metadata: {
-    github?: any;
-    google_trends?: any;
-    reddit?: any;
-    hacker_news?: any;
-    stack_overflow?: any;
-    wikipedia?: any;
-    npm?: any;
-    pypi?: any;
+    github?: {
+      score: number;
+      metadata?: any;
+    };
+    google_trends?: {
+      score: number;
+      metadata?: any;
+    };
+    reddit?: {
+      score: number;
+      metadata?: any;
+    };
+    hacker_news?: {
+      score: number;
+      metadata?: any;
+    };
+    stack_overflow?: {
+      score: number;
+      metadata?: any;
+    };
+    wikipedia?: {
+      score: number;
+      metadata?: any;
+    };
+    npm?: {
+      score: number;
+      metadata?: any;
+    };
+    pypi?: {
+      score: number;
+      metadata?: any;
+    };
   };
 }

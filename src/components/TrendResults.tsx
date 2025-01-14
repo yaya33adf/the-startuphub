@@ -2,6 +2,11 @@ import { TrendData } from "@/types/trends";
 import { TrendMetricsCards } from "./trends/TrendMetricsCards";
 import { MarketPopularityChart } from "./trends/MarketPopularityChart";
 import { MarketSegmentationChart } from "./trends/MarketSegmentationChart";
+import { SentimentAnalysis } from "./trends/SentimentAnalysis";
+import { CompetitorAnalysis } from "./trends/CompetitorAnalysis";
+import { PredictiveAnalysis } from "./trends/PredictiveAnalysis";
+import { GrowthOpportunities } from "./trends/GrowthOpportunities";
+import { TrendFooter } from "./trends/TrendFooter";
 
 interface TrendResultsProps {
   data: TrendData;
@@ -33,6 +38,51 @@ export const TrendResults = ({ data }: TrendResultsProps) => {
     { name: 'Other', value: 20 },
   ];
 
+  // Sample sentiment data
+  const sentimentData = [
+    { date: '2024-01', positive: 65, neutral: 25, negative: 10 },
+    { date: '2024-02', positive: 70, neutral: 20, negative: 10 },
+    { date: '2024-03', positive: 75, neutral: 15, negative: 10 },
+  ];
+
+  // Sample competitor data
+  const competitorData = [
+    { date: '2024-01', current: 45, competitor1: 30, competitor2: 25 },
+    { date: '2024-02', current: 48, competitor1: 32, competitor2: 20 },
+    { date: '2024-03', current: 52, competitor1: 28, competitor2: 20 },
+  ];
+
+  // Sample predictive data
+  const predictiveData = [
+    { date: '2024-01', actual: 45, predicted: null },
+    { date: '2024-02', actual: 48, predicted: null },
+    { date: '2024-03', actual: 52, predicted: 52 },
+    { date: '2024-04', actual: null, predicted: 55 },
+    { date: '2024-05', actual: null, predicted: 58 },
+  ];
+
+  // Sample insights and recommendations
+  const insights = [
+    "Strong growth in tech sector adoption",
+    "Increasing interest from educational institutions",
+    "Positive sentiment trending upward",
+  ];
+
+  const recommendations = [
+    {
+      title: "Focus on Educational Market",
+      description: "Expand presence in educational institutions to capture growing interest.",
+    },
+    {
+      title: "Technical Content Creation",
+      description: "Develop more technical content to address growing developer interest.",
+    },
+    {
+      title: "Regional Expansion",
+      description: "Consider expanding into emerging markets showing high growth potential.",
+    },
+  ];
+
   return (
     <div className="space-y-8">
       <TrendMetricsCards
@@ -42,8 +92,23 @@ export const TrendResults = ({ data }: TrendResultsProps) => {
         growthRate={growthRate}
         communitySize={communitySize}
       />
-      <MarketPopularityChart platformData={platformData} />
-      <MarketSegmentationChart segmentationData={segmentationData} />
+      
+      <div className="grid gap-8 md:grid-cols-2">
+        <MarketPopularityChart platformData={platformData} />
+        <SentimentAnalysis data={sentimentData} />
+      </div>
+      
+      <div className="grid gap-8 md:grid-cols-2">
+        <CompetitorAnalysis data={competitorData} />
+        <PredictiveAnalysis data={predictiveData} confidenceScore={85} />
+      </div>
+      
+      <div className="grid gap-8 md:grid-cols-2">
+        <MarketSegmentationChart segmentationData={segmentationData} />
+        <GrowthOpportunities insights={insights} recommendations={recommendations} />
+      </div>
+      
+      <TrendFooter />
     </div>
   );
 };
