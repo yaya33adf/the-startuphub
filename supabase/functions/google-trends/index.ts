@@ -17,37 +17,54 @@ serve(async (req) => {
     const { query } = await req.json()
     console.log('Searching Google Trends for:', query)
 
-    // Get interest over time
-    const interestOverTime = await googleTrends.interestOverTime({
-      keyword: query,
-      startTime: new Date(Date.now() - (30 * 24 * 60 * 60 * 1000)), // Last 30 days
-    })
+    // Get interest over time with proper error handling
+    try {
+      const interestOverTime = await googleTrends.interestOverTime({
+        keyword: query,
+        startTime: new Date(Date.now() - (30 * 24 * 60 * 60 * 1000)), // Last 30 days
+      })
 
-    const data = JSON.parse(interestOverTime)
-    console.log('Google Trends data received')
+      const data = JSON.parse(interestOverTime)
+      console.log('Google Trends data received')
 
-    // Calculate trend score based on interest over time
-    const timelineData = data.default.timelineData
-    const score = calculateGoogleTrendsScore(timelineData)
-    console.log('Calculated Google Trends score:', score)
+      // Calculate trend score based on interest over time
+      const timelineData = data.default.timelineData
+      const score = calculateGoogleTrendsScore(timelineData)
+      console.log('Calculated Google Trends score:', score)
 
-    return new Response(
-      JSON.stringify({
-        score,
-        metadata: {
-          timeline: timelineData,
-          averageValue: score,
-        },
-      }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
+      return new Response(
+        JSON.stringify({
+          score,
+          metadata: {
+            timeline: timelineData,
+            averageValue: score,
+          },
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    } catch (googleError) {
+      console.error('Error fetching Google Trends data:', googleError)
+      return new Response(
+        JSON.stringify({ 
+          error: 'Failed to fetch Google Trends data',
+          details: googleError.message 
+        }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 500 
+        }
+      )
+    }
   } catch (error) {
     console.error('Error in google-trends function:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: 'Failed to process request',
+        details: error.message 
+      }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500 
+        status: 400 
       }
     )
   }
