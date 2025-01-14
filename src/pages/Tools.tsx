@@ -21,6 +21,7 @@ import { SalesAnalytics } from "@/components/tools/SalesAnalytics";
 import { EmailCampaignManager } from "@/components/tools/EmailCampaignManager";
 import { GoalTracker } from "@/components/tools/GoalTracker";
 import { TeamManagement } from "@/components/tools/TeamManagement";
+import { AppointmentScheduler } from "@/components/tools/AppointmentScheduler";
 
 const Tools = () => {
   const tools = [
@@ -84,7 +85,8 @@ const Tools = () => {
       title: "Appointment Scheduler",
       description: "Schedule and manage business appointments",
       icon: CalendarDays,
-      active: false,
+      component: AppointmentScheduler,
+      active: true,
     },
   ];
 
