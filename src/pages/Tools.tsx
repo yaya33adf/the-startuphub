@@ -9,7 +9,9 @@ import {
   Target, 
   Users, 
   Receipt, 
-  CalendarDays 
+  CalendarDays,
+  CheckCircle2,
+  XCircle
 } from "lucide-react";
 import { QRCodeGenerator } from "@/components/tools/QRCodeGenerator";
 import { CurrencyConverter } from "@/components/tools/CurrencyConverter";
@@ -21,53 +23,62 @@ const Tools = () => {
       description: "Generate QR codes for text or URLs",
       icon: QrCode,
       component: QRCodeGenerator,
+      active: true,
     },
     {
       title: "Currency Converter",
       description: "Convert between different currencies with real-time exchange rates",
       icon: DollarSign,
       component: CurrencyConverter,
+      active: true,
     },
     {
       title: "Invoice Generator",
       description: "Create professional invoices for your business",
       icon: Receipt,
+      active: false,
     },
     {
       title: "Expense Tracker",
       description: "Track and categorize your business expenses",
       icon: FileSpreadsheet,
+      active: false,
     },
     {
       title: "Sales Analytics",
       description: "Visualize and analyze your sales data",
       icon: BarChart3,
+      active: false,
     },
     {
       title: "Email Campaign Manager",
       description: "Create and manage email marketing campaigns",
       icon: Mail,
+      active: false,
     },
     {
       title: "Goal Tracker",
       description: "Set and track business goals and KPIs",
       icon: Target,
+      active: false,
     },
     {
       title: "Team Management",
       description: "Manage team members and assignments",
       icon: Users,
+      active: false,
     },
     {
       title: "Appointment Scheduler",
       description: "Schedule and manage business appointments",
       icon: CalendarDays,
+      active: false,
     },
   ];
 
   // Filter to show only tools with active components
-  const activeTools = tools.filter(tool => tool.component);
-  const comingSoonTools = tools.filter(tool => !tool.component);
+  const activeTools = tools.filter(tool => tool.active);
+  const inactiveTools = tools.filter(tool => !tool.active);
 
   return (
     <div className="container mx-auto p-8">
@@ -84,7 +95,8 @@ const Tools = () => {
             <CardHeader>
               <div className="flex items-center gap-3">
                 <tool.icon className="h-6 w-6 text-primary" />
-                <CardTitle>{tool.title}</CardTitle>
+                <CardTitle className="flex-1">{tool.title}</CardTitle>
+                <CheckCircle2 className="h-5 w-5 text-green-500" />
               </div>
             </CardHeader>
             <CardContent>
@@ -95,16 +107,17 @@ const Tools = () => {
         ))}
       </div>
 
-      {comingSoonTools.length > 0 && (
+      {inactiveTools.length > 0 && (
         <>
           <h2 className="text-2xl font-semibold mt-12 mb-6">Coming Soon</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-50">
-            {comingSoonTools.map((tool) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 opacity-70">
+            {inactiveTools.map((tool) => (
               <Card key={tool.title} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-center gap-3">
                     <tool.icon className="h-6 w-6 text-primary" />
-                    <CardTitle>{tool.title}</CardTitle>
+                    <CardTitle className="flex-1">{tool.title}</CardTitle>
+                    <XCircle className="h-5 w-5 text-gray-400" />
                   </div>
                 </CardHeader>
                 <CardContent>
