@@ -20,6 +20,7 @@ import { ExpenseTracker } from "@/components/tools/ExpenseTracker";
 import { SalesAnalytics } from "@/components/tools/SalesAnalytics";
 import { EmailCampaignManager } from "@/components/tools/EmailCampaignManager";
 import { GoalTracker } from "@/components/tools/GoalTracker";
+import { TeamManagement } from "@/components/tools/TeamManagement";
 
 const Tools = () => {
   const tools = [
@@ -76,7 +77,8 @@ const Tools = () => {
       title: "Team Management",
       description: "Manage team members and assignments",
       icon: Users,
-      active: false,
+      component: TeamManagement,
+      active: true,
     },
     {
       title: "Appointment Scheduler",
