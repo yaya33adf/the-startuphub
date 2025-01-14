@@ -17,6 +17,7 @@ import { QRCodeGenerator } from "@/components/tools/QRCodeGenerator";
 import { CurrencyConverter } from "@/components/tools/CurrencyConverter";
 import { InvoiceGenerator } from "@/components/tools/InvoiceGenerator";
 import { ExpenseTracker } from "@/components/tools/ExpenseTracker";
+import { SalesAnalytics } from "@/components/tools/SalesAnalytics";
 
 const Tools = () => {
   const tools = [
@@ -52,7 +53,8 @@ const Tools = () => {
       title: "Sales Analytics",
       description: "Visualize and analyze your sales data",
       icon: BarChart3,
-      active: false,
+      component: SalesAnalytics,
+      active: true,
     },
     {
       title: "Email Campaign Manager",
