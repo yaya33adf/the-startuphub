@@ -37,12 +37,12 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: `You are a startup idea generator. Generate 5 innovative startup ideas based on the given keyword. 
-                     Format your response as a JSON array of objects, each with these exact fields:
-                     - name: string (the startup name)
-                     - description: string (2-3 sentences about the idea)
-                     - market: string (target market/industry)
-                     Example: [{"name": "EcoTrack", "description": "A sustainability tracking app...", "market": "Environmental Tech"}]`
+            content: `You are a startup idea generator. Generate 5 innovative startup ideas based on the given keyword.
+                     Return ONLY a JSON array of objects with these fields:
+                     - name (string): startup name
+                     - description (string): 2-3 sentences about the idea
+                     - market (string): target market/industry
+                     Example: [{"name":"EcoTrack","description":"A sustainability tracking app...","market":"Environmental Tech"}]`
           },
           {
             role: 'user',
@@ -54,6 +54,11 @@ serve(async (req) => {
       }),
     });
 
+    if (!response.ok) {
+      console.error('OpenAI API error:', await response.text());
+      throw new Error('Failed to get response from OpenAI API');
+    }
+
     const data = await response.json();
     console.log('OpenAI API response:', data);
 
@@ -63,19 +68,31 @@ serve(async (req) => {
     }
 
     try {
-      const content = data.choices[0].message.content;
+      const content = data.choices[0].message.content.trim();
       console.log('Raw content from OpenAI:', content);
       
-      // Parse the content as JSON
-      const parsedIdeas = JSON.parse(content.replace(/\n/g, ''));
+      // Attempt to parse the content as JSON
+      const parsedIdeas = JSON.parse(content);
       
       if (!Array.isArray(parsedIdeas)) {
         throw new Error('Generated content is not an array');
       }
 
-      console.log('Successfully parsed ideas:', parsedIdeas);
+      // Validate the structure of each idea
+      const validatedIdeas = parsedIdeas.map(idea => {
+        if (!idea.name || !idea.description || !idea.market) {
+          throw new Error('Invalid idea structure');
+        }
+        return {
+          name: String(idea.name),
+          description: String(idea.description),
+          market: String(idea.market)
+        };
+      });
+
+      console.log('Successfully parsed and validated ideas:', validatedIdeas);
       
-      return new Response(JSON.stringify({ ideas: parsedIdeas }), {
+      return new Response(JSON.stringify({ ideas: validatedIdeas }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     } catch (parseError) {
