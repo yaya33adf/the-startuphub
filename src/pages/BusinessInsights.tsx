@@ -34,21 +34,22 @@ const BusinessInsights = () => {
     },
   });
 
-  const { data: sideHustles, isLoading: sideHustlesLoading } = useQuery({
-    queryKey: ["sideHustles"],
+  const { data: trendScores, isLoading: trendsLoading } = useQuery({
+    queryKey: ["trendScores"],
     queryFn: async () => {
-      console.log("Fetching side hustles...");
+      console.log("Fetching trend scores...");
       const { data, error } = await supabase
-        .from("side_hustles")
+        .from("trend_scores")
         .select("*")
-        .order("trend_score", { ascending: false });
+        .order("total_score", { ascending: false })
+        .limit(6);
 
       if (error) {
-        console.error("Error fetching side hustles:", error);
+        console.error("Error fetching trend scores:", error);
         throw error;
       }
-
-      console.log("Fetched side hustles:", data);
+      
+      console.log("Fetched trend scores:", data);
       return data;
     },
   });
@@ -62,14 +63,14 @@ const BusinessInsights = () => {
     console.log("Searching markets with:", { query, region, timeframe });
   };
 
-  // Transform data for the chart
-  const chartData = marketData?.map((market) => ({
-    name: market.name,
-    trendScore: market.trend_score,
-    potentialEarnings: market.monthly_earnings_min && market.monthly_earnings_max
-      ? (market.monthly_earnings_min + market.monthly_earnings_max) / 2
-      : 0,
-  }));
+  const marketImages = {
+    "artificial intelligence": "https://images.unsplash.com/photo-1487958449943-2429e8be8625",
+    "blockchain": "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7",
+    "machine learning": "https://images.unsplash.com/photo-1500673922987-e212871fec22",
+    "cloud computing": "https://images.unsplash.com/photo-1439337153520-7082a56a81f4",
+    "cybersecurity": "https://images.unsplash.com/photo-1496307653780-42ee777d4833",
+    "default": "https://images.unsplash.com/photo-1524230572899-a752b3835840"
+  };
 
   return (
     <div className="container mx-auto p-8">
@@ -92,6 +93,42 @@ const BusinessInsights = () => {
         </TabsList>
 
         <TabsContent value="trends" className="space-y-8">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
+            {trendsLoading ? (
+              Array(6).fill(0).map((_, i) => (
+                <Card key={i} className="overflow-hidden">
+                  <div className="h-48 bg-gray-200 animate-pulse" />
+                  <CardHeader>
+                    <div className="h-6 bg-gray-200 rounded animate-pulse w-3/4 mb-2" />
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2" />
+                  </CardHeader>
+                </Card>
+              ))
+            ) : (
+              trendScores?.map((trend) => (
+                <Card key={trend.id} className="overflow-hidden">
+                  <img
+                    src={marketImages[trend.query.toLowerCase() as keyof typeof marketImages] || marketImages.default}
+                    alt={trend.query}
+                    className="h-48 w-full object-cover"
+                  />
+                  <CardHeader>
+                    <CardTitle className="flex items-center justify-between">
+                      <span className="capitalize">{trend.query}</span>
+                      <Badge variant="secondary" className="flex items-center gap-1">
+                        <TrendingUp className="h-4 w-4" />
+                        {trend.total_score}
+                      </Badge>
+                    </CardTitle>
+                    <CardDescription>
+                      Trend score based on multiple data sources including Google Trends, GitHub, and Reddit
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
+              ))
+            )}
+          </div>
+          
           <TrendSearch onSearchResults={handleSearchResults} />
           {searchResults && <TrendResults data={searchResults} />}
         </TabsContent>
