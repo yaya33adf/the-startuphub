@@ -1,8 +1,15 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Wrench, Code, Terminal, Database, LineChart, Lock } from "lucide-react";
+import { Wrench, Code, Terminal, Database, LineChart, Lock, QrCode } from "lucide-react";
+import { QRCodeGenerator } from "@/components/tools/QRCodeGenerator";
 
 const Tools = () => {
   const tools = [
+    {
+      title: "QR Code Generator",
+      description: "Generate QR codes for text or URLs",
+      icon: QrCode,
+      component: QRCodeGenerator,
+    },
     {
       title: "API Testing",
       description: "Test and debug API endpoints with our intuitive interface",
@@ -55,6 +62,7 @@ const Tools = () => {
             </CardHeader>
             <CardContent>
               <CardDescription>{tool.description}</CardDescription>
+              {tool.component && <tool.component />}
             </CardContent>
           </Card>
         ))}
