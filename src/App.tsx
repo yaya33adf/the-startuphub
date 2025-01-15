@@ -42,7 +42,7 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter basename={import.meta.env.BASE_URL || '/'}>
           <div className="min-h-screen flex flex-col bg-background">
             <header>
               <NavigationMenu />
@@ -64,7 +64,7 @@ const App = () => (
                 <Route path="/auth/forgot-password" element={<ForgotPassword />} />
                 <Route path="/auth/profile" element={<ProfileSettings />} />
                 <Route 
-                  path="/admin" 
+                  path="/admin/*" 
                   element={
                     <ProtectedAdminRoute>
                       <AdminDashboard />
