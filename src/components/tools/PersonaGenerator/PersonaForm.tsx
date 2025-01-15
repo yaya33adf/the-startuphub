@@ -42,15 +42,15 @@ export const PersonaForm = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      age: "",
-      gender: "",
-      occupation: "",
-      income: "",
-      location: "",
-      interests: "",
-      painPoints: "",
-      goals: "",
+      name: "",           // Changed from undefined to empty string
+      age: "",           // Changed from undefined to empty string
+      gender: "",        // Changed from undefined to empty string
+      occupation: "",    // Changed from undefined to empty string
+      income: "",        // Changed from undefined to empty string
+      location: "",      // Changed from undefined to empty string
+      interests: "",     // Changed from undefined to empty string
+      painPoints: "",    // Changed from undefined to empty string
+      goals: "",         // Changed from undefined to empty string
     },
   });
 
