@@ -43,24 +43,39 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
           return;
         }
 
-        const { data: profile, error } = await supabase
+        // First check if user exists in profiles table
+        const { data: profile, error: profileError } = await supabase
           .from('profiles')
           .select('role')
           .eq('id', session.user.id)
           .single();
-        
-        if (error) {
-          console.error("Error fetching profile:", error);
-          toast({
-            variant: "destructive",
-            title: "Error checking admin status",
-            description: error.message
-          });
-          setIsAdmin(false);
-        } else {
-          console.log("Profile data:", profile);
-          setIsAdmin(profile?.role === 'admin');
+
+        if (profileError) {
+          console.error("Error fetching profile:", profileError);
+          // If profile doesn't exist, create it
+          if (profileError.code === 'PGRST116') {
+            const { error: insertError } = await supabase
+              .from('profiles')
+              .insert([
+                { 
+                  id: session.user.id,
+                  email: session.user.email,
+                  role: 'user'
+                }
+              ]);
+            
+            if (insertError) {
+              console.error("Error creating profile:", insertError);
+              throw insertError;
+            }
+          } else {
+            throw profileError;
+          }
         }
+
+        console.log("Profile data:", profile);
+        setIsAdmin(profile?.role === 'admin');
+        
       } catch (error: any) {
         console.error("Error in checkAdmin:", error);
         toast({
