@@ -6,29 +6,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { User } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { useSession } from "@supabase/auth-helpers-react";
+import { Link } from "react-router-dom";
 
-export function UserMenu() {
-  const session = useSession();
-  const navigate = useNavigate();
-  const userEmail = session?.user?.email;
-  const userProfile = session?.user?.user_metadata;
+interface UserMenuProps {
+  userProfile: any;
+  handleSignOut: () => Promise<void>;
+  userEmail: string;
+}
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    navigate("/");
-  };
-
-  if (!session) {
-    return (
-      <Button variant="ghost" onClick={() => navigate("/auth/signin")}>
-        Sign In
-      </Button>
-    );
-  }
-
+export function UserMenu({ userProfile, handleSignOut, userEmail }: UserMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -38,10 +24,12 @@ export function UserMenu() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => navigate("/auth/profile")}>
-          Profile Settings
+        <DropdownMenuItem asChild>
+          <Link to="/auth/profile">Profile Settings</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleSignOut}>Sign Out</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleSignOut}>
+          Sign Out
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
