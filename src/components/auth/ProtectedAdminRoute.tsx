@@ -34,8 +34,10 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
           console.error("Error fetching profile:", error);
           setIsAdmin(false);
         } else {
-          console.log("Profile found:", profile);
-          setIsAdmin(profile?.role === 'admin');
+          console.log("Full profile data:", profile);
+          const hasAdminRole = profile?.role === 'admin';
+          console.log("Is user admin?", hasAdminRole);
+          setIsAdmin(hasAdminRole);
         }
       } catch (error) {
         console.error("Error in checkAdminStatus:", error);
@@ -45,11 +47,17 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
       }
     };
 
-    checkAdminStatus();
+    if (session?.user) {
+      console.log("Session exists, checking admin status");
+      checkAdminStatus();
+    } else {
+      console.log("No session, skipping admin check");
+      setIsLoading(false);
+    }
   }, [session]);
 
-  // Show loading spinner while checking session and admin status
   if (sessionLoading || isLoading) {
+    console.log("Loading state:", { sessionLoading, isLoading });
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
@@ -57,19 +65,16 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
     );
   }
 
-  // Redirect to login if no session
   if (!session) {
     console.log("No session found, redirecting to login");
     return <Navigate to="/auth/signin" replace />;
   }
 
-  // Redirect to home if not admin
   if (!isAdmin) {
     console.log("User is not admin, redirecting to home");
     return <Navigate to="/" replace />;
   }
 
-  // If we get here, user is admin
   console.log("User is admin, rendering admin content");
   return <>{children}</>;
 };
