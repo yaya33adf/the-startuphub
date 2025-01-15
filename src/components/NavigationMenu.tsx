@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { DesktopNav } from "./navigation/DesktopNav";
 import { MobileMenu } from "./navigation/MobileMenu";
@@ -16,10 +16,12 @@ export const NavigationMenu = () => {
   const location = useLocation();
   const { toast } = useToast();
 
+  // Close mobile menu on route change
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
 
+  // Memoize fetchUserProfile to prevent unnecessary recreations
   const fetchUserProfile = useCallback(async (userId: string) => {
     try {
       console.log("Fetching profile for user:", userId);
@@ -50,7 +52,9 @@ export const NavigationMenu = () => {
     }
   }, [toast]);
 
+  // Handle auth state changes
   useEffect(() => {
+    // Initial session check
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       if (session?.user) {
@@ -58,6 +62,7 @@ export const NavigationMenu = () => {
       }
     });
 
+    // Subscribe to auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -73,7 +78,8 @@ export const NavigationMenu = () => {
     return () => subscription.unsubscribe();
   }, [fetchUserProfile]);
 
-  const handleSignOut = async () => {
+  // Memoize sign out handler
+  const handleSignOut = useCallback(async () => {
     try {
       await supabase.auth.signOut();
       setSession(null);
@@ -90,29 +96,37 @@ export const NavigationMenu = () => {
         variant: "destructive",
       });
     }
-  };
+  }, [toast]);
+
+  // Memoize navigation content
+  const navigationContent = useMemo(() => (
+    isMobile ? (
+      <MobileMenu 
+        isOpen={isOpen} 
+        setIsOpen={setIsOpen}
+        session={session}
+        handleSignOut={handleSignOut}
+      />
+    ) : (
+      <DesktopNav
+        session={session}
+        userProfile={userProfile}
+        handleSignOut={handleSignOut}
+      />
+    )
+  ), [isMobile, isOpen, session, userProfile, handleSignOut]);
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm overflow-hidden">
+    <nav 
+      className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm overflow-hidden"
+      style={{ willChange: 'transform' }}
+    >
       <div className="container flex h-16 items-center justify-between transition-all duration-200 ease-in-out transform-gpu max-w-[100vw] overflow-hidden">
         <div className="flex items-center gap-4 flex-shrink-0">
           <Logo />
         </div>
         <div className="flex-1 flex items-center justify-end overflow-hidden">
-          {isMobile ? (
-            <MobileMenu 
-              isOpen={isOpen} 
-              setIsOpen={setIsOpen}
-              session={session}
-              handleSignOut={handleSignOut}
-            />
-          ) : (
-            <DesktopNav
-              session={session}
-              userProfile={userProfile}
-              handleSignOut={handleSignOut}
-            />
-          )}
+          {navigationContent}
           <div className="flex items-center justify-end space-x-2">
             <div className="w-full flex-1 md:w-auto md:flex-none" />
             {session && (
