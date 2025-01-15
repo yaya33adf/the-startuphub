@@ -1,10 +1,11 @@
 import { Card } from "@/components/ui/card";
+import { TeamRecommendationForm } from "@/components/tools/TeamRecommendationForm";
 
 const Team = () => {
   return (
     <div className="container py-8">
       <h1 className="text-4xl font-bold mb-8">Team Building</h1>
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2 mb-8">
         <Card className="p-6">
           <h2 className="text-2xl font-semibold mb-4">Build Your Dream Team</h2>
           <p className="text-gray-600 mb-4">
@@ -28,6 +29,7 @@ const Team = () => {
           </ul>
         </Card>
       </div>
+      <TeamRecommendationForm />
     </div>
   );
 };
