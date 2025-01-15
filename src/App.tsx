@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import SignIn from "./pages/auth/SignIn";
 import SignUp from "./pages/auth/SignUp";
 import ForgotPassword from "./pages/auth/ForgotPassword";
+import ProfileSettings from "./pages/auth/ProfileSettings";
 import { NavigationMenu } from "./components/NavigationMenu";
 import Footer from "./components/Footer";
 import Trends from "./pages/Trends";
@@ -57,6 +58,7 @@ const App = () => (
                 <Route path="/auth/signin" element={<SignIn />} />
                 <Route path="/auth/signup" element={<SignUp />} />
                 <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+                <Route path="/auth/profile" element={<ProfileSettings />} />
                 <Route 
                   path="/admin" 
                   element={
