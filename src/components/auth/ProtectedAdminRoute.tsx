@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 
 interface ProtectedAdminRouteProps {
@@ -16,6 +16,7 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   useEffect(() => {
     const checkAdminStatus = async () => {
       if (!session?.user) {
+        console.log("No session user found");
         setIsAdmin(false);
         setIsLoading(false);
         return;
@@ -25,7 +26,7 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
         console.log("Checking admin status for user:", session.user.id);
         const { data: profile, error } = await supabase
           .from('profiles')
-          .select('role')
+          .select('*')
           .eq('id', session.user.id)
           .single();
 
@@ -47,6 +48,7 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
     checkAdminStatus();
   }, [session]);
 
+  // Show loading spinner while checking session and admin status
   if (sessionLoading || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -55,15 +57,19 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
     );
   }
 
+  // Redirect to login if no session
   if (!session) {
     console.log("No session found, redirecting to login");
     return <Navigate to="/auth/signin" replace />;
   }
 
+  // Redirect to home if not admin
   if (!isAdmin) {
     console.log("User is not admin, redirecting to home");
     return <Navigate to="/" replace />;
   }
 
+  // If we get here, user is admin
+  console.log("User is admin, rendering admin content");
   return <>{children}</>;
 };
