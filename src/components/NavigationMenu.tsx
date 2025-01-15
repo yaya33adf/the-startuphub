@@ -1,20 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { 
-  ChartLine, 
-  Globe, 
-  Lightbulb, 
-  Wrench, 
-  BookOpen, 
-  LogIn, 
-  LogOut,
-  MessageSquare, 
-  Menu, 
-  TrendingUp, 
-  DollarSign,
-  Briefcase,
-  User
-} from "lucide-react";
+import { LogIn, Menu, TrendingUp } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,19 +11,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
-
-interface UserMenuProps {
-  userProfile: any;
-  handleSignOut: () => Promise<void>;
-}
+import { UserMenu } from "./navigation/UserMenu";
+import { NavLinks } from "./navigation/NavLinks";
 
 export const NavigationMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -77,7 +53,6 @@ export const NavigationMenu = () => {
       }
     };
 
-    // Set up the initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (mounted) {
         console.log("Initial session check:", session);
@@ -90,7 +65,6 @@ export const NavigationMenu = () => {
       }
     });
 
-    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -132,88 +106,6 @@ export const NavigationMenu = () => {
     }
   };
 
-  const businessInsightsItems = [
-    { to: "/trends", icon: ChartLine, label: "Trends" },
-    { to: "/markets", icon: Globe, label: "Markets" },
-    { to: "/side-hustles", icon: Lightbulb, label: "Side Hustles" },
-  ];
-
-  const navItems = [
-    { to: "/tools", icon: Wrench, label: "Tools" },
-    { to: "/blog", icon: BookOpen, label: "Blog" },
-    { to: "/community", icon: MessageSquare, label: "Community" },
-    { to: "/crowdfunding", icon: DollarSign, label: "Crowdfunding" },
-  ];
-
-  const BusinessInsightsDropdown = ({ onClick = () => {} }) => (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-10 px-3 py-2">
-          <Briefcase className="w-4 h-4 mr-2" />
-          <span>Business Insights</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
-        {businessInsightsItems.map((item) => (
-          <DropdownMenuItem key={item.to} asChild onClick={onClick}>
-            <Link to={item.to} className="flex items-center gap-2 w-full">
-              <item.icon className="w-4 h-4" />
-              <span>{item.label}</span>
-            </Link>
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-
-  const UserMenu = ({ userProfile, handleSignOut }: UserMenuProps) => (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-10 px-3">
-          <User className="w-4 h-4 mr-2" />
-          <span>{session?.user?.email || 'Profile'}</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {userProfile?.role === 'admin' && (
-          <>
-            <DropdownMenuItem asChild>
-              <Link to="/admin" className="flex items-center gap-2">
-                <Wrench className="w-4 h-4" />
-                <span>Admin Dashboard</span>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-          </>
-        )}
-        <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
-          <LogOut className="w-4 h-4 mr-2" />
-          <span>Sign Out</span>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-
-  const NavLinks = ({ onClick = () => {} }) => (
-    <>
-      <BusinessInsightsDropdown onClick={onClick} />
-      {navItems.map((item) => (
-        <Button 
-          key={item.to} 
-          variant="ghost" 
-          asChild 
-          onClick={onClick}
-          className="h-10 px-3 py-2"
-        >
-          <Link to={item.to} className="flex items-center gap-2 min-w-[100px] justify-start">
-            <item.icon className="w-4 h-4 flex-shrink-0" />
-            <span className="whitespace-nowrap">{item.label}</span>
-          </Link>
-        </Button>
-      ))}
-    </>
-  );
-
   return (
     <nav className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="max-w-7xl mx-auto px-4">
@@ -231,7 +123,11 @@ export const NavigationMenu = () => {
           <div className="hidden md:flex items-center gap-1 overflow-x-auto flex-grow justify-end max-w-[calc(100%-200px)]">
             <NavLinks />
             {session ? (
-              <UserMenu userProfile={userProfile} handleSignOut={handleSignOut} />
+              <UserMenu 
+                userProfile={userProfile} 
+                handleSignOut={handleSignOut}
+                userEmail={session.user.email}
+              />
             ) : (
               <Button variant="outline" asChild className="ml-2 h-10 px-3 py-2">
                 <Link to="/auth/signin" className="flex items-center gap-2 min-w-[100px] justify-center">
@@ -261,7 +157,7 @@ export const NavigationMenu = () => {
                     onClick={handleSignOut} 
                     className="mt-2 text-red-600"
                   >
-                    <LogOut className="w-4 h-4 mr-2" />
+                    <LogIn className="w-4 h-4 mr-2" />
                     Sign Out
                   </Button>
                 ) : (
