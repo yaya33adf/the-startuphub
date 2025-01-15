@@ -1,25 +1,7 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { BookOpen, RefreshCw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-
-const genres = [
-  "Fiction",
-  "Non-Fiction",
-  "Mystery",
-  "Science Fiction",
-  "Fantasy",
-  "Romance",
-  "Business",
-  "Self-Help",
-  "Biography",
-  "History",
-  "Technology",
-  "Science",
-] as const;
+import { BookNameForm } from "./book-generator/BookNameForm";
+import { BookTitlesList } from "./book-generator/BookTitlesList";
 
 export const BookNameGenerator = () => {
   const [genre, setGenre] = useState<string>("");
@@ -83,69 +65,19 @@ export const BookNameGenerator = () => {
 
   return (
     <div className="space-y-6">
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="genre">Genre</Label>
-          <Select value={genre} onValueChange={setGenre}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select a genre" />
-            </SelectTrigger>
-            <SelectContent>
-              {genres.map((g) => (
-                <SelectItem key={g} value={g}>
-                  {g}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="keywords">Keywords (comma-separated)</Label>
-          <Input
-            id="keywords"
-            placeholder="e.g., adventure, mystery, journey"
-            value={keywords}
-            onChange={(e) => setKeywords(e.target.value)}
-          />
-        </div>
-
-        <Button 
-          onClick={generateBookNames} 
-          disabled={isLoading} 
-          className="w-full"
-        >
-          <BookOpen className="w-4 h-4 mr-2" />
-          Generate Book Titles
-        </Button>
-      </div>
-
-      {generatedTitles.length > 0 && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold">Generated Titles:</h3>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefresh}
-              disabled={isLoading}
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Refresh Titles
-            </Button>
-          </div>
-          <div className="grid gap-2">
-            {generatedTitles.map((title, index) => (
-              <div
-                key={index}
-                className="p-3 rounded-lg border bg-card hover:shadow-md transition-shadow"
-              >
-                {title}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      <BookNameForm
+        genre={genre}
+        keywords={keywords}
+        onGenreChange={setGenre}
+        onKeywordsChange={setKeywords}
+        onSubmit={generateBookNames}
+        isLoading={isLoading}
+      />
+      <BookTitlesList
+        titles={generatedTitles}
+        onRefresh={handleRefresh}
+        isLoading={isLoading}
+      />
     </div>
   );
 };
