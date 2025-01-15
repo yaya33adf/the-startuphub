@@ -1,7 +1,8 @@
 import { TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
+import { memo } from "react";
 
-export const Logo = () => (
+export const Logo = memo(() => (
   <Link 
     to="/" 
     className="flex items-center space-x-2 transition-all duration-200 hover:opacity-80 hover:scale-105 flex-shrink-0"
@@ -13,4 +14,6 @@ export const Logo = () => (
       Startup Hub
     </span>
   </Link>
-);
+));
+
+Logo.displayName = "Logo";

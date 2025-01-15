@@ -2,7 +2,6 @@ import { LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { NavLinks } from "./NavLinks";
-import { UserMenu } from "./UserMenu";
 
 interface DesktopNavProps {
   session: any;
@@ -10,7 +9,7 @@ interface DesktopNavProps {
   handleSignOut: () => Promise<void>;
 }
 
-export const DesktopNav = ({ session, userProfile, handleSignOut }: DesktopNavProps) => (
+export const DesktopNav = ({ session }: DesktopNavProps) => (
   <div className="hidden md:flex items-center gap-1 overflow-x-auto flex-grow justify-end max-w-[calc(100%-200px)]">
     <NavLinks />
     {!session && (
