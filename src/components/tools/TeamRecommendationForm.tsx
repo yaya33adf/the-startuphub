@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
+import { useSession } from "@supabase/auth-helpers-react";
 import {
   Card,
   CardContent,
@@ -21,21 +22,26 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface TeamRecommendation {
-  id: string;
+interface FormData {
   project_name: string;
   project_description: string;
   project_type: string;
   project_size: string;
   budget_range: string;
   timeline: string;
-  recommended_roles: any;
+}
+
+interface TeamRecommendation extends FormData {
+  id: string;
+  user_id: string | null;
+  recommended_roles: Array<{ role: string; count: number }>;
 }
 
 export const TeamRecommendationForm = () => {
   const { toast } = useToast();
+  const session = useSession();
   const queryClient = useQueryClient();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     project_name: "",
     project_description: "",
     project_type: "",
@@ -64,13 +70,18 @@ export const TeamRecommendationForm = () => {
   });
 
   const generateRecommendationMutation = useMutation({
-    mutationFn: async (formData: typeof formData) => {
+    mutationFn: async (formData: FormData) => {
+      if (!session?.user?.id) {
+        throw new Error("User must be logged in to generate recommendations");
+      }
+
       console.log("Generating team recommendation:", formData);
       const { data, error } = await supabase
         .from("team_recommendations")
         .insert([
           {
             ...formData,
+            user_id: session.user.id,
             recommended_roles: generateTeamRoles(formData),
           },
         ])
@@ -99,7 +110,7 @@ export const TeamRecommendationForm = () => {
       console.error("Error generating recommendation:", error);
       toast({
         title: "Error",
-        description: "Failed to generate team recommendation",
+        description: "Failed to generate team recommendation. Please try again.",
         variant: "destructive",
       });
     },
@@ -148,6 +159,14 @@ export const TeamRecommendationForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!session?.user) {
+      toast({
+        title: "Error",
+        description: "Please sign in to generate team recommendations",
+        variant: "destructive",
+      });
+      return;
+    }
     if (!formData.project_name || !formData.project_type || !formData.project_size) {
       toast({
         title: "Error",
