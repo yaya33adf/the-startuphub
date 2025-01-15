@@ -29,8 +29,12 @@ serve(async (req) => {
       }
     );
 
+    if (!repoResponse.ok) {
+      throw new Error(`GitHub API returned ${repoResponse.status}`);
+    }
+
     const repoData = await repoResponse.json();
-    console.log('GitHub API response received');
+    console.log('GitHub API response received:', repoData);
 
     // Calculate GitHub score based on repository metrics
     const score = calculateGitHubScore(repoData);
@@ -41,12 +45,12 @@ serve(async (req) => {
         score,
         metadata: {
           total_count: repoData.total_count,
-          top_repos: repoData.items.slice(0, 5).map((repo: any) => ({
+          top_repos: repoData.items?.slice(0, 5).map((repo: any) => ({
             name: repo.full_name,
             stars: repo.stargazers_count,
             forks: repo.forks_count,
             url: repo.html_url,
-          })),
+          })) || [],
         },
       }),
       {
@@ -55,10 +59,16 @@ serve(async (req) => {
     );
   } catch (error) {
     console.error('Error in github-trends function:', error);
+    // Return a valid response with a 0 score instead of throwing
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({
+        score: 0,
+        metadata: {
+          error: error.message,
+          timestamp: new Date().toISOString()
+        },
+      }),
       {
-        status: 500,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
@@ -74,13 +84,17 @@ function calculateGitHubScore(data: any): number {
   const topRepos = data.items.slice(0, 10);
   
   // Calculate score based on stars, forks, and watchers
-  const score = topRepos.reduce((acc: number, repo: any) => {
-    const starScore = repo.stargazers_count * 1;
-    const forkScore = repo.forks_count * 2;
-    const watcherScore = repo.watchers_count * 0.5;
-    return acc + starScore + forkScore + watcherScore;
-  }, 0);
+  let totalScore = 0;
+  
+  topRepos.forEach((repo: any) => {
+    const starScore = Math.min(50, repo.stargazers_count / 100);
+    const forkScore = Math.min(30, repo.forks_count / 50);
+    const watcherScore = Math.min(20, repo.watchers_count / 30);
+    
+    totalScore += starScore + forkScore + watcherScore;
+  });
 
   // Normalize score to 0-100 range
-  return Math.min(Math.round(score / 1000), 100);
+  const normalizedScore = Math.min(100, Math.round((totalScore / topRepos.length)));
+  return normalizedScore;
 }
