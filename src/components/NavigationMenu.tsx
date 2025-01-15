@@ -126,7 +126,7 @@ export const NavigationMenu = () => {
               <UserMenu 
                 userProfile={userProfile} 
                 handleSignOut={handleSignOut}
-                userEmail={session.user.email}
+                userEmail={session.user.email || ''}
               />
             ) : (
               <Button variant="outline" asChild className="ml-2 h-10 px-3 py-2">
