@@ -1,73 +1,11 @@
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { DesktopNav } from "./navigation/DesktopNav";
-import { MobileMenu } from "./navigation/MobileMenu";
-import { Logo } from "./navigation/Logo";
-import { NavLinks } from "./navigation/NavLinks";
-import { useMobile } from "@/hooks/use-mobile";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { AuthStateHandler } from "./navigation/AuthStateHandler";
+import { NavigationContainer } from "./navigation/NavigationContainer";
 
 export const NavigationMenu = () => {
-  const isMobile = useMobile();
-  const [isOpen, setIsOpen] = useState(false);
   const [session, setSession] = useState<any>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
-  const location = useLocation();
-
-  useEffect(() => {
-    setIsOpen(false);
-  }, [location.pathname]);
-
-  useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log("Initial session:", session);
-      setSession(session);
-      if (session?.user) {
-        fetchUserProfile(session.user.id);
-      }
-    });
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      console.log("Auth state changed:", _event, session);
-      setSession(session);
-      if (session?.user) {
-        fetchUserProfile(session.user.id);
-      } else {
-        setUserProfile(null);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const fetchUserProfile = async (userId: string) => {
-    try {
-      console.log("Fetching profile for user:", userId);
-      const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .maybeSingle();
-
-      if (error) {
-        console.error("Error fetching user profile:", error);
-        throw error;
-      }
-
-      if (!profile) {
-        console.log("No profile found for user:", userId);
-      } else {
-        console.log("Profile found:", profile);
-        setUserProfile(profile);
-      }
-    } catch (error) {
-      console.error("Error in fetchUserProfile:", error);
-    }
-  };
 
   const handleSignOut = async () => {
     try {
@@ -80,27 +18,16 @@ export const NavigationMenu = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
-      <div className="container flex h-16 items-center px-4 transition-all duration-200">
-        <Logo />
-        <div className="flex items-center gap-4 ml-auto">
-          {!isMobile && <NavLinks />}
-          {isMobile ? (
-            <MobileMenu 
-              isOpen={isOpen} 
-              setIsOpen={setIsOpen}
-              session={session}
-              handleSignOut={handleSignOut}
-            />
-          ) : (
-            <DesktopNav
-              session={session}
-              userProfile={userProfile}
-              handleSignOut={handleSignOut}
-            />
-          )}
-        </div>
-      </div>
-    </nav>
+    <>
+      <AuthStateHandler 
+        setSession={setSession}
+        setUserProfile={setUserProfile}
+      />
+      <NavigationContainer
+        session={session}
+        userProfile={userProfile}
+        handleSignOut={handleSignOut}
+      />
+    </>
   );
 };
