@@ -29,17 +29,24 @@ export const NavigationMenu = () => {
             .from('profiles')
             .select('*')
             .eq('id', user.id)
-            .single();
+            .maybeSingle();
 
           if (error) {
             console.error("Error fetching user profile:", error);
             throw error;
           }
 
-          setUserProfile(profile);
+          if (!profile) {
+            console.log("No profile found for user:", user.id);
+            // Handle case where profile doesn't exist
+            // You might want to create a profile here or show a different UI state
+          } else {
+            console.log("Profile found:", profile);
+            setUserProfile(profile);
+          }
         }
       } catch (error) {
-        console.error("Error fetching user profile:", error);
+        console.error("Error in fetchUserProfile:", error);
       }
     };
 
