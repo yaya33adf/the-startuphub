@@ -34,5 +34,5 @@ export interface TrendData {
       metadata?: any;
     };
     [key: string]: any;  // Allow any additional properties
-  } | Record<string, any>;  // Allow any object structure for metadata
+  };
 }

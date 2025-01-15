@@ -52,10 +52,21 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
       const result = await calculateTrendScores(searchQuery);
       console.log("Trend scores calculated:", result);
       
-      // Ensure the result matches TrendData interface
+      // Transform the metadata to match TrendData interface
+      const transformedMetadata = {
+        ...(result.metadata || {}),
+        github: result.metadata?.github || { score: 0 },
+        google_trends: result.metadata?.google_trends || { score: 0 },
+        hacker_news: result.metadata?.hacker_news || { score: 0 },
+        stack_overflow: result.metadata?.stack_overflow || { score: 0 },
+        wikipedia: result.metadata?.wikipedia || { score: 0 },
+        npm: result.metadata?.npm || { score: 0 },
+        pypi: result.metadata?.pypi || { score: 0 }
+      };
+      
       const trendData: TrendData = {
         score: result.score,
-        metadata: result.metadata || {}
+        metadata: transformedMetadata
       };
       
       onSearchResults(trendData);
