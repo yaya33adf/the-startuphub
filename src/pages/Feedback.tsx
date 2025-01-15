@@ -60,6 +60,8 @@ const Feedback = () => {
             user_id: session.user.id,
             idea_title: ideaData.title,
             idea_description: ideaData.description,
+            feedback_text: '', // Initialize with empty string since it's required
+            rating: null
           }
         ])
         .select()
