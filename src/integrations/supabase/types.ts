@@ -385,6 +385,48 @@ export type Database = {
         }
         Relationships: []
       }
+      team_recommendations: {
+        Row: {
+          budget_range: string | null
+          created_at: string | null
+          id: string
+          project_description: string | null
+          project_name: string
+          project_size: string
+          project_type: string
+          recommended_roles: Json | null
+          timeline: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          budget_range?: string | null
+          created_at?: string | null
+          id?: string
+          project_description?: string | null
+          project_name: string
+          project_size: string
+          project_type: string
+          recommended_roles?: Json | null
+          timeline?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          budget_range?: string | null
+          created_at?: string | null
+          id?: string
+          project_description?: string | null
+          project_name?: string
+          project_size?: string
+          project_type?: string
+          recommended_roles?: Json | null
+          timeline?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       teams: {
         Row: {
           assignment: string | null
