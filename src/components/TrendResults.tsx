@@ -73,6 +73,25 @@ export const TrendResults = memo(({ data }: TrendResultsProps) => {
     setCompetitors(competitors.filter(c => c !== competitor));
   };
 
+  // Create competitor data with dynamic keys based on competitor names
+  const competitorData = competitors.length > 0 ? [
+    { 
+      date: '2024-01', 
+      current: data.score,
+      ...Object.fromEntries(competitors.map((c, i) => [c, 65 - i * 10]))
+    },
+    { 
+      date: '2024-02', 
+      current: data.score + 2,
+      ...Object.fromEntries(competitors.map((c, i) => [c, 68 - i * 10]))
+    },
+    { 
+      date: '2024-03', 
+      current: data.score + 5,
+      ...Object.fromEntries(competitors.map((c, i) => [c, 70 - i * 10]))
+    }
+  ] : [];
+
   return (
     <div className="space-y-8">
       <TrendHeader onExport={handleExportPDF} />
@@ -118,11 +137,8 @@ export const TrendResults = memo(({ data }: TrendResultsProps) => {
                 ))}
               </div>
               <CompetitorAnalysis 
-                data={[
-                  { date: '2024-01', current: data.score, competitor1: 65, competitor2: 45 },
-                  { date: '2024-02', current: data.score + 2, competitor1: 68, competitor2: 48 },
-                  { date: '2024-03', current: data.score + 5, competitor1: 70, competitor2: 50 }
-                ]} 
+                data={competitorData}
+                competitors={competitors}
               />
             </div>
           )}

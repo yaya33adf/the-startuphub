@@ -9,13 +9,12 @@ interface CompetitorAnalysisProps {
   data: Array<{
     date: string;
     current: number;
-    competitor1?: number;
-    competitor2?: number;
-    competitor3?: number;
+    [key: string]: number | string; // Allow dynamic competitor names
   }>;
+  competitors: string[];
 }
 
-export const CompetitorAnalysis = ({ data }: CompetitorAnalysisProps) => {
+export const CompetitorAnalysis = ({ data, competitors }: CompetitorAnalysisProps) => {
   const handleExport = () => {
     // TODO: Implement export functionality
     console.log("Exporting competitor analysis data...");
@@ -24,14 +23,23 @@ export const CompetitorAnalysis = ({ data }: CompetitorAnalysisProps) => {
   const getWinnerForPeriod = (period: typeof data[0]) => {
     const scores = [
       { name: 'Current Trend', score: period.current },
-      { name: 'Competitor 1', score: period.competitor1 },
-      { name: 'Competitor 2', score: period.competitor2 },
-      { name: 'Competitor 3', score: period.competitor3 }
+      ...competitors.map(competitor => ({
+        name: competitor,
+        score: period[competitor] as number
+      }))
     ].filter(item => item.score !== undefined);
 
     return scores.reduce((max, current) => 
       current.score > max.score ? current : max
     );
+  };
+
+  // Generate unique colors for each competitor
+  const competitorColors = {
+    'Current Trend': '#3b82f6',
+    [competitors[0]]: '#6b7280',
+    [competitors[1]]: '#9ca3af',
+    [competitors[2]]: '#d1d5db'
   };
 
   return (
@@ -58,31 +66,20 @@ export const CompetitorAnalysis = ({ data }: CompetitorAnalysisProps) => {
               <Line 
                 type="monotone" 
                 dataKey="current" 
-                stroke="#3b82f6" 
+                stroke={competitorColors['Current Trend']}
                 name="Current Trend" 
                 strokeWidth={2}
               />
-              <Line 
-                type="monotone" 
-                dataKey="competitor1" 
-                stroke="#6b7280" 
-                name="Competitor 1" 
-                strokeDasharray="5 5"
-              />
-              <Line 
-                type="monotone" 
-                dataKey="competitor2" 
-                stroke="#9ca3af" 
-                name="Competitor 2" 
-                strokeDasharray="3 3"
-              />
-              <Line 
-                type="monotone" 
-                dataKey="competitor3" 
-                stroke="#d1d5db" 
-                name="Competitor 3" 
-                strokeDasharray="1 1"
-              />
+              {competitors.map((competitor, index) => (
+                <Line 
+                  key={competitor}
+                  type="monotone" 
+                  dataKey={competitor}
+                  stroke={competitorColors[competitor]}
+                  name={competitor}
+                  strokeDasharray={`${(index + 1) * 2} ${(index + 1) * 2}`}
+                />
+              ))}
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -93,9 +90,9 @@ export const CompetitorAnalysis = ({ data }: CompetitorAnalysisProps) => {
             <TableRow>
               <TableHead>Period</TableHead>
               <TableHead>Current Trend</TableHead>
-              <TableHead>Competitor 1</TableHead>
-              <TableHead>Competitor 2</TableHead>
-              <TableHead>Competitor 3</TableHead>
+              {competitors.map((competitor) => (
+                <TableHead key={competitor}>{competitor}</TableHead>
+              ))}
               <TableHead>Winner</TableHead>
             </TableRow>
           </TableHeader>
@@ -114,30 +111,19 @@ export const CompetitorAnalysis = ({ data }: CompetitorAnalysisProps) => {
                       <Trophy className="h-4 w-4 inline ml-2 text-yellow-500" />
                     )}
                   </TableCell>
-                  <TableCell className={cn(
-                    winner.name === 'Competitor 1' && "text-primary font-bold"
-                  )}>
-                    {period.competitor1}
-                    {winner.name === 'Competitor 1' && (
-                      <Trophy className="h-4 w-4 inline ml-2 text-yellow-500" />
-                    )}
-                  </TableCell>
-                  <TableCell className={cn(
-                    winner.name === 'Competitor 2' && "text-primary font-bold"
-                  )}>
-                    {period.competitor2}
-                    {winner.name === 'Competitor 2' && (
-                      <Trophy className="h-4 w-4 inline ml-2 text-yellow-500" />
-                    )}
-                  </TableCell>
-                  <TableCell className={cn(
-                    winner.name === 'Competitor 3' && "text-primary font-bold"
-                  )}>
-                    {period.competitor3}
-                    {winner.name === 'Competitor 3' && (
-                      <Trophy className="h-4 w-4 inline ml-2 text-yellow-500" />
-                    )}
-                  </TableCell>
+                  {competitors.map((competitor) => (
+                    <TableCell 
+                      key={competitor}
+                      className={cn(
+                        winner.name === competitor && "text-primary font-bold"
+                      )}
+                    >
+                      {period[competitor]}
+                      {winner.name === competitor && (
+                        <Trophy className="h-4 w-4 inline ml-2 text-yellow-500" />
+                      )}
+                    </TableCell>
+                  ))}
                   <TableCell className="font-medium">
                     {winner.name}
                   </TableCell>
