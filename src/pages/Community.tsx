@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { MessageSquare, Search, Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+import { useSession } from "@supabase/auth-helpers-react";
 import {
   Card,
   CardContent,
@@ -21,6 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
 
 const Community = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,6 +32,20 @@ const Community = () => {
     content: "",
     tags: "",
   });
+  const session = useSession();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  // Redirect to login if not authenticated
+  if (!session) {
+    toast({
+      title: "Authentication required",
+      description: "Please sign in to access the community features",
+      variant: "destructive",
+    });
+    navigate("/auth/signin");
+    return null;
+  }
 
   const { data: posts, isLoading } = useQuery({
     queryKey: ["communityPosts"],
@@ -65,6 +82,7 @@ const Community = () => {
           title: newQuestion.title,
           content: newQuestion.content,
           tags: newQuestion.tags.split(",").map((tag) => tag.trim()),
+          author_id: session.user.id,
         },
       ]);
 
@@ -72,8 +90,18 @@ const Community = () => {
 
       // Reset form
       setNewQuestion({ title: "", content: "", tags: "" });
+      
+      toast({
+        title: "Success",
+        description: "Your question has been posted successfully",
+      });
     } catch (error) {
       console.error("Error submitting question:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to submit your question. Please try again.",
+      });
     }
   };
 

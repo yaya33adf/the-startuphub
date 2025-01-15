@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { calculateTrendScores } from "@/services/trendService";
+import { useSession } from "@supabase/auth-helpers-react";
+import { useNavigate } from "react-router-dom";
 import type { TrendData } from "@/types/trends";
 import { SearchHeader } from "./search/SearchHeader";
 import { SearchForm } from "./search/SearchForm";
@@ -24,9 +26,22 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
   const [timeframe, setTimeframe] = useState("7d");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const session = useSession();
+  const navigate = useNavigate();
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!session) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to search trends",
+        variant: "destructive",
+      });
+      navigate("/auth/signin");
+      return;
+    }
+
     console.log("Starting trend search for:", searchQuery);
     
     if (!searchQuery.trim()) {
