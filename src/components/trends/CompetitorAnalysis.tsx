@@ -22,7 +22,7 @@ export const CompetitorAnalysis = ({ data, competitors }: CompetitorAnalysisProp
 
   const getWinnerForPeriod = (period: typeof data[0]) => {
     const scores = [
-      { name: 'Current Trend', score: period.current },
+      { name: 'Your Search', score: period.current },
       ...competitors.map(competitor => ({
         name: competitor,
         score: period[competitor] as number
@@ -36,18 +36,40 @@ export const CompetitorAnalysis = ({ data, competitors }: CompetitorAnalysisProp
 
   // Generate unique colors for each competitor
   const competitorColors = {
-    'Current Trend': '#3b82f6',
-    [competitors[0]]: '#6b7280',
-    [competitors[1]]: '#9ca3af',
-    [competitors[2]]: '#d1d5db'
+    'Your Search': '#3b82f6', // Blue for current trend
+    [competitors[0]]: '#ef4444', // Red
+    [competitors[1]]: '#10b981', // Green
+    [competitors[2]]: '#f59e0b'  // Yellow
+  };
+
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white p-4 rounded-lg shadow border">
+          <p className="font-semibold">{label}</p>
+          {payload.map((entry: any) => (
+            <div key={entry.name} className="flex items-center gap-2">
+              <div 
+                className="w-3 h-3 rounded-full" 
+                style={{ backgroundColor: entry.color }}
+              />
+              <span>{entry.name}: {entry.value}</span>
+            </div>
+          ))}
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-          <CardTitle>Market Position Analysis</CardTitle>
-          <CardDescription>Trend score comparison over time</CardDescription>
+          <CardTitle>Trend Score Comparison</CardTitle>
+          <CardDescription>
+            Compare your search trend with competitors over time (0-100 scale)
+          </CardDescription>
         </div>
         <Button onClick={handleExport} variant="outline" size="sm">
           <Download className="h-4 w-4 mr-2" />
@@ -59,16 +81,30 @@ export const CompetitorAnalysis = ({ data, competitors }: CompetitorAnalysisProp
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={data}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis domain={[0, 100]} />
-              <Tooltip />
+              <XAxis 
+                dataKey="date" 
+                label={{ 
+                  value: 'Time Period', 
+                  position: 'bottom' 
+                }}
+              />
+              <YAxis 
+                domain={[0, 100]}
+                label={{ 
+                  value: 'Trend Score', 
+                  angle: -90, 
+                  position: 'left' 
+                }}
+              />
+              <Tooltip content={<CustomTooltip />} />
               <Legend />
               <Line 
                 type="monotone" 
                 dataKey="current" 
-                stroke={competitorColors['Current Trend']}
-                name="Current Trend" 
-                strokeWidth={2}
+                stroke={competitorColors['Your Search']}
+                name="Your Search" 
+                strokeWidth={3}
+                dot={{ strokeWidth: 2 }}
               />
               {competitors.map((competitor, index) => (
                 <Line 
@@ -77,61 +113,65 @@ export const CompetitorAnalysis = ({ data, competitors }: CompetitorAnalysisProp
                   dataKey={competitor}
                   stroke={competitorColors[competitor]}
                   name={competitor}
-                  strokeDasharray={`${(index + 1) * 2} ${(index + 1) * 2}`}
+                  strokeWidth={2}
+                  strokeDasharray={`${(index + 1) * 3} ${(index + 1) * 3}`}
+                  dot={{ strokeWidth: 2 }}
                 />
               ))}
             </LineChart>
           </ResponsiveContainer>
         </div>
 
-        {/* Numerical Comparison Table */}
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Period</TableHead>
-              <TableHead>Current Trend</TableHead>
-              {competitors.map((competitor) => (
-                <TableHead key={competitor}>{competitor}</TableHead>
-              ))}
-              <TableHead>Winner</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.map((period) => {
-              const winner = getWinnerForPeriod(period);
-              return (
-                <TableRow key={period.date}>
-                  <TableCell>{period.date}</TableCell>
-                  <TableCell className={cn(
-                    "font-medium",
-                    winner.name === 'Current Trend' && "text-primary font-bold"
-                  )}>
-                    {period.current}
-                    {winner.name === 'Current Trend' && (
-                      <Trophy className="h-4 w-4 inline ml-2 text-yellow-500" />
-                    )}
-                  </TableCell>
-                  {competitors.map((competitor) => (
-                    <TableCell 
-                      key={competitor}
-                      className={cn(
-                        winner.name === competitor && "text-primary font-bold"
-                      )}
-                    >
-                      {period[competitor]}
-                      {winner.name === competitor && (
+        <div className="space-y-2">
+          <h4 className="font-medium">Score Comparison Table</h4>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Period</TableHead>
+                <TableHead>Your Search</TableHead>
+                {competitors.map((competitor) => (
+                  <TableHead key={competitor}>{competitor}</TableHead>
+                ))}
+                <TableHead>Winner</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.map((period) => {
+                const winner = getWinnerForPeriod(period);
+                return (
+                  <TableRow key={period.date}>
+                    <TableCell>{period.date}</TableCell>
+                    <TableCell className={cn(
+                      "font-medium",
+                      winner.name === 'Your Search' && "text-primary font-bold"
+                    )}>
+                      {period.current}
+                      {winner.name === 'Your Search' && (
                         <Trophy className="h-4 w-4 inline ml-2 text-yellow-500" />
                       )}
                     </TableCell>
-                  ))}
-                  <TableCell className="font-medium">
-                    {winner.name}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+                    {competitors.map((competitor) => (
+                      <TableCell 
+                        key={competitor}
+                        className={cn(
+                          winner.name === competitor && "text-primary font-bold"
+                        )}
+                      >
+                        {period[competitor]}
+                        {winner.name === competitor && (
+                          <Trophy className="h-4 w-4 inline ml-2 text-yellow-500" />
+                        )}
+                      </TableCell>
+                    ))}
+                    <TableCell className="font-medium">
+                      {winner.name}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
       </CardContent>
     </Card>
   );
