@@ -1,18 +1,10 @@
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Search, Globe, Calendar } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { calculateTrendScores } from "@/services/trendService";
 import type { TrendData } from "@/types/trends";
+import { SearchHeader } from "./search/SearchHeader";
+import { SearchForm } from "./search/SearchForm";
+import { PopularSearches } from "./search/PopularSearches";
 
 interface TrendSearchProps {
   onSearchResults: (results: TrendData) => void;
@@ -52,12 +44,10 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
       const result = await calculateTrendScores(searchQuery);
       console.log("Trend scores calculated:", result);
       
-      // Type assertion for metadata
       const metadata = (typeof result.metadata === 'object' && result.metadata !== null) 
         ? result.metadata as Record<string, { score?: number; metadata?: any }>
         : {};
 
-      // Create a type-safe transformed metadata object
       const transformedMetadata: TrendData['metadata'] = {
         github: {
           score: metadata.github?.score ?? 0,
@@ -119,74 +109,21 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
 
   return (
     <div className="space-y-6">
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold">Global Trends Analysis</h1>
-        <p className="text-muted-foreground">
-          Discover emerging trends and analyze market opportunities across different regions
-        </p>
-      </div>
-
-      <form onSubmit={handleSearch} className="space-y-4">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
-            <Input
-              type="text"
-              placeholder="Search for trends (e.g., AI, Crypto, Electric Cars)"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full"
-            />
-          </div>
-          
-          <Select value={region} onValueChange={setRegion}>
-            <SelectTrigger className="w-full md:w-[180px]">
-              <Globe className="w-4 h-4 mr-2" />
-              <SelectValue placeholder="Select region" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="worldwide">Worldwide</SelectItem>
-              <SelectItem value="us">United States</SelectItem>
-              <SelectItem value="eu">Europe</SelectItem>
-              <SelectItem value="asia">Asia</SelectItem>
-              <SelectItem value="other">Other Regions</SelectItem>
-            </SelectContent>
-          </Select>
-          
-          <Select value={timeframe} onValueChange={setTimeframe}>
-            <SelectTrigger className="w-full md:w-[180px]">
-              <Calendar className="w-4 h-4 mr-2" />
-              <SelectValue placeholder="Select timeframe" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="7d">Last 7 days</SelectItem>
-              <SelectItem value="30d">Last 30 days</SelectItem>
-              <SelectItem value="90d">Last 90 days</SelectItem>
-              <SelectItem value="12m">Last 12 months</SelectItem>
-            </SelectContent>
-          </Select>
-          
-          <Button type="submit" className="w-full md:w-auto" disabled={isLoading}>
-            <Search className="w-4 h-4 mr-2" />
-            {isLoading ? "Searching..." : "Explore Trends"}
-          </Button>
-        </div>
-      </form>
-
-      <div className="space-y-2">
-        <p className="text-sm text-muted-foreground">Popular Searches:</p>
-        <div className="flex flex-wrap gap-2">
-          {popularSearches.map((search) => (
-            <Badge
-              key={search}
-              variant="secondary"
-              className="cursor-pointer hover:bg-secondary/80"
-              onClick={() => handlePopularSearch(search)}
-            >
-              {search}
-            </Badge>
-          ))}
-        </div>
-      </div>
+      <SearchHeader />
+      <SearchForm
+        searchQuery={searchQuery}
+        onSearchQueryChange={setSearchQuery}
+        region={region}
+        onRegionChange={setRegion}
+        timeframe={timeframe}
+        onTimeframeChange={setTimeframe}
+        onSubmit={handleSearch}
+        isLoading={isLoading}
+      />
+      <PopularSearches 
+        searches={popularSearches}
+        onSearchSelect={handlePopularSearch}
+      />
     </div>
   );
 };
