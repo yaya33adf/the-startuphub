@@ -20,6 +20,7 @@ import SideHustles from "./pages/SideHustles";
 import Community from "./pages/Community";
 import AdminDashboard from "./pages/admin/Dashboard";
 import Crowdfunding from "./pages/Crowdfunding";
+import { useToast } from "./components/ui/use-toast";
 
 const queryClient = new QueryClient();
 
@@ -27,42 +28,73 @@ const queryClient = new QueryClient();
 const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
     const checkAdmin = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      console.log("Checking admin status for session:", session);
-      
-      if (!session?.user?.id) {
-        console.log("No session or user ID found");
-        setIsAdmin(false);
-        setLoading(false);
-        return;
-      }
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        console.log("Checking admin status for session:", session);
+        
+        if (!session?.user?.id) {
+          console.log("No session or user ID found");
+          setIsAdmin(false);
+          setLoading(false);
+          return;
+        }
 
-      const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', session.user.id)
-        .single();
-      
-      if (error) {
-        console.error("Error fetching profile:", error);
+        const { data: profile, error } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', session.user.id)
+          .single();
+        
+        if (error) {
+          console.error("Error fetching profile:", error);
+          toast({
+            variant: "destructive",
+            title: "Error checking admin status",
+            description: error.message
+          });
+          setIsAdmin(false);
+        } else {
+          console.log("Profile data:", profile);
+          setIsAdmin(profile?.role === 'admin');
+        }
+      } catch (error: any) {
+        console.error("Error in checkAdmin:", error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to verify admin status"
+        });
+        setIsAdmin(false);
+      } finally {
+        setLoading(false);
       }
-      
-      console.log("Profile data:", profile);
-      setIsAdmin(profile?.role === 'admin');
-      setLoading(false);
     };
 
     checkAdmin();
-  }, []);
+  }, [toast]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
-  return isAdmin ? <>{children}</> : <Navigate to="/auth/signin" replace />;
+  if (!isAdmin) {
+    toast({
+      variant: "destructive",
+      title: "Access Denied",
+      description: "You need admin privileges to access this page"
+    });
+    return <Navigate to="/auth/signin" replace />;
+  }
+
+  return <>{children}</>;
 };
 
 // 404 Page Component
