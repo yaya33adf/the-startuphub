@@ -33,6 +33,6 @@ export interface TrendData {
       score: number;
       metadata?: any;
     };
-    [key: string]: any;  // Allow additional properties
-  };
+    [key: string]: any;  // Allow any additional properties
+  } | Record<string, any>;  // Allow any object structure for metadata
 }

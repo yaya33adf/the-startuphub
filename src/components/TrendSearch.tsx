@@ -52,7 +52,13 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
       const result = await calculateTrendScores(searchQuery);
       console.log("Trend scores calculated:", result);
       
-      onSearchResults(result);
+      // Ensure the result matches TrendData interface
+      const trendData: TrendData = {
+        score: result.score,
+        metadata: result.metadata || {}
+      };
+      
+      onSearchResults(trendData);
       
       toast({
         title: "Trend scores calculated",
@@ -125,7 +131,7 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
           
           <Button type="submit" className="w-full md:w-auto" disabled={isLoading}>
             <Search className="w-4 h-4 mr-2" />
-            Explore Trends
+            {isLoading ? "Searching..." : "Explore Trends"}
           </Button>
         </div>
       </form>
