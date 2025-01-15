@@ -42,9 +42,13 @@ export const NavigationMenu = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  console.log("Current session:", session); // Debug log
+  console.log("Current user profile:", userProfile); // Debug log
+
   useEffect(() => {
     // Set up the initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("Initial session check:", session); // Debug log
       setSession(session);
       if (session?.user?.id) {
         fetchUserProfile(session.user.id);
@@ -55,6 +59,7 @@ export const NavigationMenu = () => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log("Auth state changed:", _event, session); // Debug log
       setSession(session);
       if (session?.user?.id) {
         fetchUserProfile(session.user.id);
@@ -68,17 +73,23 @@ export const NavigationMenu = () => {
 
   const fetchUserProfile = async (userId: string) => {
     try {
+      console.log("Fetching profile for user:", userId); // Debug log
       const { data: profile, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching user profile:', error);
+        throw error;
+      }
+      
+      console.log("Fetched profile:", profile); // Debug log
       setUserProfile(profile);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching user profile:', error);
-    } finally {
       setLoading(false);
     }
   };
@@ -142,7 +153,7 @@ export const NavigationMenu = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-10 px-3">
           <User className="w-4 h-4 mr-2" />
-          <span>{userProfile?.email || 'Profile'}</span>
+          <span>{session?.user?.email || 'Profile'}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
