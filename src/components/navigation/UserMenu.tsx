@@ -20,7 +20,7 @@ export const UserMenu = ({ userProfile, handleSignOut, userEmail }: UserMenuProp
     <DropdownMenuTrigger asChild>
       <Button variant="ghost" className="h-10 px-3">
         <User className="w-4 h-4 mr-2" />
-        <span>{userEmail || 'Profile'}</span>
+        <span>{userProfile?.name || userEmail || 'Profile'}</span>
       </Button>
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
