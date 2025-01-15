@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
-import { Wrench, BookOpen, Users2, MessageSquare, Users } from "lucide-react";
-import { BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
+import { Wrench, BookOpen, Users2, MessageSquare, Users, BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
 
 export const NavLinks = () => {
   return (

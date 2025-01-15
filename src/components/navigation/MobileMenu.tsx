@@ -20,8 +20,8 @@ interface MobileMenuProps {
 export const MobileMenu = ({ isOpen, setIsOpen, session, handleSignOut }: MobileMenuProps) => (
   <Sheet open={isOpen} onOpenChange={setIsOpen}>
     <SheetTrigger asChild className="md:hidden">
-      <Button variant="ghost" size="icon">
-        <Menu className="h-4 w-4" />
+      <Button variant="ghost" size="icon" className="h-10 w-10">
+        <Menu className="h-5 w-5" />
       </Button>
     </SheetTrigger>
     <SheetContent side="right" className="w-[80vw] sm:w-[350px]">
@@ -36,17 +36,18 @@ export const MobileMenu = ({ isOpen, setIsOpen, session, handleSignOut }: Mobile
             onClick={handleSignOut} 
             className="mt-2 text-red-600"
           >
-            <LogIn className="h-4 w-4 mr-2" />
+            <LogIn className="w-4 h-4 mr-2" />
             Sign Out
           </Button>
         ) : (
-          <Button asChild variant="outline" className="mt-2">
-            <Link 
-              to="/auth/signin"
-              className="flex items-center gap-2 justify-center w-full"
-            >
-              <LogIn className="h-4 w-4" />
-              Sign In
+          <Button 
+            variant="outline" 
+            asChild 
+            className="mt-2"
+          >
+            <Link to="/auth/signin" className="flex items-center gap-2 justify-center">
+              <LogIn className="w-4 h-4 flex-shrink-0" />
+              <span>Sign In</span>
             </Link>
           </Button>
         )}

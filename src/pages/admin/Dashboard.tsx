@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Plus, Settings, FileText, Users } from "lucide-react";
+import { Plus, Settings, FileText } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -75,25 +75,10 @@ const AdminDashboard = () => {
       if (error) throw error;
       return data;
     },
-    enabled: isAdmin,
+    enabled: isAdmin, // Only fetch if user is admin
   });
 
-  // Fetch users for admin management
-  const { data: users, isLoading: isLoadingUsers } = useQuery({
-    queryKey: ["adminUsers"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-      return data;
-    },
-    enabled: isAdmin,
-  });
-
-  if (isLoading || isLoadingPosts || isLoadingUsers) {
+  if (isLoading || isLoadingPosts) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -141,36 +126,6 @@ const AdminDashboard = () => {
               ))}
               {(!blogPosts || blogPosts.length === 0) && (
                 <p className="text-muted-foreground text-sm">No blog posts yet</p>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Users className="mr-2 h-5 w-5" />
-              Users
-            </CardTitle>
-            <CardDescription>
-              Manage user accounts
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {users?.map((user) => (
-                <div
-                  key={user.id}
-                  className="flex items-center justify-between p-2 border rounded"
-                >
-                  <span className="truncate">{user.email}</span>
-                  <Button variant="ghost" size="sm">
-                    Manage
-                  </Button>
-                </div>
-              ))}
-              {(!users || users.length === 0) && (
-                <p className="text-muted-foreground text-sm">No users yet</p>
               )}
             </div>
           </CardContent>
