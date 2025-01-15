@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Json } from "@/integrations/supabase/types";
 
 interface FormData {
   project_name: string;
@@ -31,10 +32,17 @@ interface FormData {
   timeline: string;
 }
 
+interface TeamRole {
+  role: string;
+  count: number;
+}
+
 interface TeamRecommendation extends FormData {
   id: string;
   user_id: string | null;
-  recommended_roles: Array<{ role: string; count: number }>;
+  recommended_roles: TeamRole[];
+  created_at?: string;
+  updated_at?: string;
 }
 
 export const TeamRecommendationForm = () => {
@@ -64,13 +72,19 @@ export const TeamRecommendationForm = () => {
         throw error;
       }
 
-      console.log("Recommendations fetched:", data);
-      return data as TeamRecommendation[];
+      // Transform the data to ensure recommended_roles is properly typed
+      const transformedData: TeamRecommendation[] = (data || []).map((item) => ({
+        ...item,
+        recommended_roles: item.recommended_roles as TeamRole[],
+      }));
+
+      console.log("Recommendations fetched:", transformedData);
+      return transformedData;
     },
   });
 
-  const generateTeamRoles = (data: typeof formData) => {
-    const roles: { role: string; count: number }[] = [];
+  const generateTeamRoles = (data: typeof formData): TeamRole[] => {
+    const roles: TeamRole[] = [];
     
     switch (data.project_type) {
       case "web":
@@ -128,7 +142,7 @@ export const TeamRecommendationForm = () => {
         .single();
 
       if (error) throw error;
-      return data;
+      return data as TeamRecommendation;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["team-recommendations"] });
