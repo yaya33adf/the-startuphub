@@ -5,13 +5,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Plus } from "lucide-react";
+import { Loader2, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 export const BlogPostForm = () => {
   const [blogTitle, setBlogTitle] = useState("");
   const [blogContent, setBlogContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleBlogSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,6 +48,24 @@ export const BlogPostForm = () => {
     }
   };
 
+  const handleDelete = async (postId: string) => {
+    setIsDeleting(true);
+    try {
+      const { error } = await supabase
+        .from('blog_posts')
+        .delete()
+        .eq('id', postId);
+
+      if (error) throw error;
+      toast.success("Blog post deleted successfully!");
+    } catch (error) {
+      console.error('Error deleting blog post:', error);
+      toast.error("Failed to delete blog post");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -76,19 +95,39 @@ export const BlogPostForm = () => {
               required
             />
           </div>
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Creating...
-              </>
-            ) : (
-              <>
-                <Plus className="mr-2 h-4 w-4" />
-                Create Post
-              </>
-            )}
-          </Button>
+          <div className="flex justify-between items-center">
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating...
+                </>
+              ) : (
+                <>
+                  <Plus className="mr-2 h-4 w-4" />
+                  Create Post
+                </>
+              )}
+            </Button>
+            <Button 
+              type="button" 
+              variant="destructive"
+              onClick={() => handleDelete(/* postId */)}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete Post
+                </>
+              )}
+            </Button>
+          </div>
         </form>
       </CardContent>
     </Card>
