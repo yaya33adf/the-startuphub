@@ -34,6 +34,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
 
+interface UserMenuProps {
+  userProfile: any;
+  handleSignOut: () => Promise<void>;
+}
+
 export const NavigationMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [session, setSession] = useState<any>(null);
@@ -161,7 +166,7 @@ export const NavigationMenu = () => {
     </DropdownMenu>
   );
 
-  const UserMenu = () => (
+  const UserMenu = ({ userProfile, handleSignOut }: UserMenuProps) => (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-10 px-3">
