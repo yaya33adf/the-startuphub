@@ -1,32 +1,43 @@
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function AdminDashboard() {
+const AdminDashboard = () => {
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Users Management</h2>
-          <p className="text-muted-foreground">
-            Manage user accounts and permissions
-          </p>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <Card>
+          <CardHeader>
+            <CardTitle>User Management</CardTitle>
+            <CardDescription>Manage user accounts and permissions</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>Total users: Loading...</p>
+          </CardContent>
         </Card>
 
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Content Management</h2>
-          <p className="text-muted-foreground">
-            Manage blog posts and site content
-          </p>
+        <Card>
+          <CardHeader>
+            <CardTitle>Content Management</CardTitle>
+            <CardDescription>Manage blog posts and content</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>Published posts: Loading...</p>
+          </CardContent>
         </Card>
 
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4">Analytics</h2>
-          <p className="text-muted-foreground">
-            View site statistics and user analytics
-          </p>
+        <Card>
+          <CardHeader>
+            <CardTitle>Analytics</CardTitle>
+            <CardDescription>View site statistics and metrics</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p>Active users: Loading...</p>
+          </CardContent>
         </Card>
       </div>
     </div>
   );
-}
+};
+
+export default AdminDashboard;
