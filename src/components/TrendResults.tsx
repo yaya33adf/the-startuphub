@@ -31,7 +31,17 @@ export const TrendResults = memo(({ data }: TrendResultsProps) => {
     communitySize
   } = calculateTrendIndicators(data.score);
 
-  const platformData = preparePlatformData(data.metadata);
+  // Create platform data array with proper score access
+  const platformData = [
+    { name: 'GitHub', score: data.metadata.github?.score || 0 },
+    { name: 'Google', score: data.metadata.google_trends?.score || 0 },
+    { name: 'HN', score: data.metadata.hacker_news?.score || 0 },
+    { name: 'Stack Overflow', score: data.metadata.stack_overflow?.score || 0 },
+    { name: 'Wikipedia', score: data.metadata.wikipedia?.score || 0 },
+    { name: 'NPM', score: data.metadata.npm?.score || 0 },
+    { name: 'PyPI', score: data.metadata.pypi?.score || 0 }
+  ].sort((a, b) => b.score - a.score);
+
   const { insights } = sampleInsightsAndRecommendations;
 
   const handleExportPDF = async () => {
