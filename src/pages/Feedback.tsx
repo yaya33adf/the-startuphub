@@ -67,7 +67,10 @@ const Feedback = () => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error submitting idea:', error);
+        throw error;
+      }
       return data;
     },
     onSuccess: () => {
