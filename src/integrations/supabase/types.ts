@@ -270,6 +270,7 @@ export type Database = {
       }
       feedback: {
         Row: {
+          comment_text: string | null
           created_at: string | null
           feedback_text: string
           id: string
@@ -280,6 +281,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          comment_text?: string | null
           created_at?: string | null
           feedback_text: string
           id?: string
@@ -290,6 +292,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          comment_text?: string | null
           created_at?: string | null
           feedback_text?: string
           id?: string
