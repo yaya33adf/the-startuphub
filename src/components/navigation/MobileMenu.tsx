@@ -34,19 +34,19 @@ export const MobileMenu = ({ isOpen, setIsOpen, session, handleSignOut }: Mobile
           <Button 
             variant="outline" 
             onClick={handleSignOut} 
-            className="mt-2 text-red-600 flex items-center gap-2"
+            className="mt-2 text-red-600 flex items-center gap-2 h-10"
           >
-            <LogIn className="h-4 w-4" />
-            Sign Out
+            <LogIn className="h-5 w-5" />
+            <span className="font-medium">Sign Out</span>
           </Button>
         ) : (
           <Link to="/auth/signin" className="mt-2">
             <Button 
               variant="outline"
-              className="w-full flex items-center gap-2 justify-center"
+              className="w-full flex items-center gap-2 justify-center h-10"
             >
-              <LogIn className="h-4 w-4" />
-              <span>Sign In</span>
+              <LogIn className="h-5 w-5" />
+              <span className="font-medium">Sign In</span>
             </Button>
           </Link>
         )}

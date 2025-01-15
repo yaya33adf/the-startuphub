@@ -19,9 +19,13 @@ export const DesktopNav = ({ session, userProfile, handleSignOut }: DesktopNavPr
       />
     ) : (
       <Link to="/auth/signin">
-        <Button variant="outline" className="flex items-center gap-2 min-w-[100px]">
-          <LogIn className="h-4 w-4" />
-          <span>Sign In</span>
+        <Button 
+          variant="outline" 
+          size="default"
+          className="flex items-center gap-2 px-4 py-2 h-10 min-w-[120px]"
+        >
+          <LogIn className="h-5 w-5" />
+          <span className="font-medium">Sign In</span>
         </Button>
       </Link>
     )}
