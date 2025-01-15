@@ -51,7 +51,7 @@ export const PersonaForm = () => {
       interests: "",
       painPoints: "",
       goals: "",
-    } as FormValues, // Explicitly cast as FormValues to ensure all required fields are present
+    } satisfies FormValues,
   });
 
   const onSubmit = (data: FormValues) => {
@@ -241,4 +241,4 @@ export const PersonaForm = () => {
       </form>
     </Form>
   );
-};
+});
