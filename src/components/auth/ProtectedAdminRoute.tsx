@@ -2,27 +2,27 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
+import { Loader2 } from "lucide-react";
 
 interface ProtectedAdminRouteProps {
   children: React.ReactNode;
 }
 
 export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
-  const { session } = useSessionContext();
+  const { session, isLoading: sessionLoading } = useSessionContext();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkAdminStatus = async () => {
-      try {
-        if (!session?.user) {
-          setIsAdmin(false);
-          setLoading(false);
-          return;
-        }
+      if (!session?.user) {
+        setIsAdmin(false);
+        setIsLoading(false);
+        return;
+      }
 
+      try {
+        console.log("Checking admin status for user:", session.user.id);
         const { data: profile, error } = await supabase
           .from('profiles')
           .select('role')
@@ -30,45 +30,38 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
           .single();
 
         if (error) {
-          console.error('Error checking admin status:', error);
+          console.error("Error fetching profile:", error);
           setIsAdmin(false);
         } else {
+          console.log("Profile found:", profile);
           setIsAdmin(profile?.role === 'admin');
         }
       } catch (error) {
-        console.error('Error in checkAdminStatus:', error);
+        console.error("Error in checkAdminStatus:", error);
         setIsAdmin(false);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     checkAdminStatus();
   }, [session]);
 
-  if (loading) {
+  if (sessionLoading || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
   }
 
   if (!session) {
-    toast({
-      variant: "destructive",
-      title: "Access Denied",
-      description: "Please sign in to continue.",
-    });
+    console.log("No session found, redirecting to login");
     return <Navigate to="/auth/signin" replace />;
   }
 
   if (!isAdmin) {
-    toast({
-      variant: "destructive",
-      title: "Access Denied",
-      description: "You don't have permission to access this page.",
-    });
+    console.log("User is not admin, redirecting to home");
     return <Navigate to="/" replace />;
   }
 
