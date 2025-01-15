@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Tool, BookOpen, Users2, BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
+import { Wrench, BookOpen, Users2, BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
 
 export const NavLinks = () => {
   return (
@@ -9,7 +9,7 @@ export const NavLinks = () => {
         to="/tools"
         className="flex items-center gap-2 text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
       >
-        <Tool className="w-4 h-4" />
+        <Wrench className="w-4 h-4" />
         <span>Tools</span>
       </Link>
       <Link
