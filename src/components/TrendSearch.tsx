@@ -52,16 +52,41 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
       const result = await calculateTrendScores(searchQuery);
       console.log("Trend scores calculated:", result);
       
-      // Transform the metadata to match TrendData interface
+      // Safely transform the metadata to match TrendData interface
+      const baseMetadata = typeof result.metadata === 'object' && result.metadata !== null 
+        ? result.metadata 
+        : {};
+
       const transformedMetadata = {
-        ...(result.metadata || {}),
-        github: result.metadata?.github || { score: 0 },
-        google_trends: result.metadata?.google_trends || { score: 0 },
-        hacker_news: result.metadata?.hacker_news || { score: 0 },
-        stack_overflow: result.metadata?.stack_overflow || { score: 0 },
-        wikipedia: result.metadata?.wikipedia || { score: 0 },
-        npm: result.metadata?.npm || { score: 0 },
-        pypi: result.metadata?.pypi || { score: 0 }
+        ...baseMetadata,
+        github: { 
+          score: typeof baseMetadata?.github?.score === 'number' ? baseMetadata.github.score : 0,
+          metadata: baseMetadata?.github?.metadata
+        },
+        google_trends: {
+          score: typeof baseMetadata?.google_trends?.score === 'number' ? baseMetadata.google_trends.score : 0,
+          metadata: baseMetadata?.google_trends?.metadata
+        },
+        hacker_news: {
+          score: typeof baseMetadata?.hacker_news?.score === 'number' ? baseMetadata.hacker_news.score : 0,
+          metadata: baseMetadata?.hacker_news?.metadata
+        },
+        stack_overflow: {
+          score: typeof baseMetadata?.stack_overflow?.score === 'number' ? baseMetadata.stack_overflow.score : 0,
+          metadata: baseMetadata?.stack_overflow?.metadata
+        },
+        wikipedia: {
+          score: typeof baseMetadata?.wikipedia?.score === 'number' ? baseMetadata.wikipedia.score : 0,
+          metadata: baseMetadata?.wikipedia?.metadata
+        },
+        npm: {
+          score: typeof baseMetadata?.npm?.score === 'number' ? baseMetadata.npm.score : 0,
+          metadata: baseMetadata?.npm?.metadata
+        },
+        pypi: {
+          score: typeof baseMetadata?.pypi?.score === 'number' ? baseMetadata.pypi.score : 0,
+          metadata: baseMetadata?.pypi?.metadata
+        }
       };
       
       const trendData: TrendData = {
