@@ -13,11 +13,16 @@ const Index = () => {
 
   const handleSearchResults = (results: TrendData) => {
     setSearchResults(results);
-    console.log("Search results received on Index page:", results);
+    // Add more detailed logging
+    console.log("Search results received:", {
+      timestamp: new Date().toISOString(),
+      resultsLength: Object.keys(results).length,
+      results
+    });
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <StructuredData type="website" />
       <HeroSection 
         searchResults={searchResults} 
@@ -26,8 +31,8 @@ const Index = () => {
       <StatisticsSection />
       <HowItWorksSection />
       <FeaturedSideHustles />
-      <NewsletterSection />
       <FeaturesSection />
+      <NewsletterSection />
     </div>
   );
 };
