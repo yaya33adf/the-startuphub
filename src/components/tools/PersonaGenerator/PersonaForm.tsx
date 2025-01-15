@@ -51,7 +51,7 @@ export const PersonaForm = () => {
       interests: "",
       painPoints: "",
       goals: "",
-    } as FormValues,
+    } satisfies FormValues,
   });
 
   const onSubmit = (data: FormValues) => {
