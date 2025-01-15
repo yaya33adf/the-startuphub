@@ -46,16 +46,18 @@ export const CompetitorAnalysis = ({ data, competitors }: CompetitorAnalysisProp
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-4 rounded-lg shadow border">
-          <p className="font-semibold">{label}</p>
-          {payload.map((entry: any) => (
-            <div key={entry.name} className="flex items-center gap-2">
-              <div 
-                className="w-3 h-3 rounded-full" 
-                style={{ backgroundColor: entry.color }}
-              />
-              <span>{entry.name}: {entry.value}</span>
-            </div>
-          ))}
+          <p className="font-semibold mb-2">{label}</p>
+          <div className="space-y-1">
+            {payload.map((entry: any) => (
+              <div key={entry.name} className="flex items-center gap-2">
+                <div 
+                  className="w-3 h-3 rounded-full" 
+                  style={{ backgroundColor: entry.color }}
+                />
+                <span>{entry.name}: {entry.value}</span>
+              </div>
+            ))}
+          </div>
         </div>
       );
     }
@@ -76,16 +78,17 @@ export const CompetitorAnalysis = ({ data, competitors }: CompetitorAnalysisProp
           Export Data
         </Button>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-8">
         <div className="h-[300px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data}>
+            <LineChart data={data} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis 
                 dataKey="date" 
                 label={{ 
                   value: 'Time Period', 
-                  position: 'bottom' 
+                  position: 'bottom',
+                  offset: -5
                 }}
               />
               <YAxis 
@@ -93,11 +96,12 @@ export const CompetitorAnalysis = ({ data, competitors }: CompetitorAnalysisProp
                 label={{ 
                   value: 'Trend Score', 
                   angle: -90, 
-                  position: 'left' 
+                  position: 'left',
+                  offset: -5
                 }}
               />
               <Tooltip content={<CustomTooltip />} />
-              <Legend />
+              <Legend verticalAlign="bottom" height={36} />
               <Line 
                 type="monotone" 
                 dataKey="current" 
@@ -122,12 +126,12 @@ export const CompetitorAnalysis = ({ data, competitors }: CompetitorAnalysisProp
           </ResponsiveContainer>
         </div>
 
-        <div className="space-y-2">
-          <h4 className="font-medium">Score Comparison Table</h4>
+        <div className="space-y-4">
+          <h4 className="font-medium text-lg">Score Comparison Table</h4>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Period</TableHead>
+                <TableHead className="w-[100px]">Period</TableHead>
                 <TableHead>Your Search</TableHead>
                 {competitors.map((competitor) => (
                   <TableHead key={competitor}>{competitor}</TableHead>
@@ -140,9 +144,8 @@ export const CompetitorAnalysis = ({ data, competitors }: CompetitorAnalysisProp
                 const winner = getWinnerForPeriod(period);
                 return (
                   <TableRow key={period.date}>
-                    <TableCell>{period.date}</TableCell>
+                    <TableCell className="font-medium">{period.date}</TableCell>
                     <TableCell className={cn(
-                      "font-medium",
                       winner.name === 'Your Search' && "text-primary font-bold"
                     )}>
                       {period.current}
