@@ -82,24 +82,25 @@ export const NavigationMenu = () => {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
-      <div className="container flex h-16 items-center px-4 transition-all duration-200">
+      <div className="container flex h-16 items-center justify-between px-4 transition-all duration-200">
         <Logo />
-        <div className="flex flex-1 items-center justify-between">
-          {isMobile ? (
-            <MobileMenu 
-              isOpen={isOpen} 
-              setIsOpen={setIsOpen}
-              session={session}
-              handleSignOut={handleSignOut}
-            />
-          ) : (
+        {isMobile ? (
+          <MobileMenu 
+            isOpen={isOpen} 
+            setIsOpen={setIsOpen}
+            session={session}
+            handleSignOut={handleSignOut}
+          />
+        ) : (
+          <div className="flex items-center gap-4">
+            <NavLinks />
             <DesktopNav
               session={session}
               userProfile={userProfile}
               handleSignOut={handleSignOut}
             />
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </nav>
   );
