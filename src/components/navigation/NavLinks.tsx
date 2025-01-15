@@ -1,4 +1,4 @@
-import { Wrench, BookOpen, MessageSquare, DollarSign } from "lucide-react";
+import { Wrench, BookOpen, MessageSquare, DollarSign, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
@@ -13,6 +13,7 @@ export const NavLinks = ({ onClick = () => {} }: NavLinksProps) => {
     { to: "/blog", icon: BookOpen, label: "Blog" },
     { to: "/community", icon: MessageSquare, label: "Community" },
     { to: "/crowdfunding", icon: DollarSign, label: "Crowdfunding" },
+    { to: "/team", icon: Users, label: "Team" },
   ];
 
   return (
