@@ -89,7 +89,20 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
       }
     };
 
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) {
+        checkAdmin();
+      } else {
+        setIsAdmin(false);
+        setLoading(false);
+      }
+    });
+
     checkAdmin();
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [toast]);
 
   if (loading) {
