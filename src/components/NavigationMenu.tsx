@@ -42,16 +42,46 @@ export const NavigationMenu = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  console.log("Current session:", session); // Debug log
-  console.log("Current user profile:", userProfile); // Debug log
-
   useEffect(() => {
+    let mounted = true;
+
+    const fetchUserProfile = async (userId: string) => {
+      try {
+        console.log("Fetching profile for user:", userId);
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .single();
+
+        if (error) {
+          console.error('Error fetching user profile:', error);
+          throw error;
+        }
+        
+        if (mounted) {
+          console.log("Fetched profile:", data);
+          setUserProfile(data);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    };
+
     // Set up the initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log("Initial session check:", session); // Debug log
-      setSession(session);
-      if (session?.user?.id) {
-        fetchUserProfile(session.user.id);
+      if (mounted) {
+        console.log("Initial session check:", session);
+        setSession(session);
+        if (session?.user?.id) {
+          fetchUserProfile(session.user.id);
+        } else {
+          setLoading(false);
+        }
       }
     });
 
@@ -59,40 +89,23 @@ export const NavigationMenu = () => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      console.log("Auth state changed:", _event, session); // Debug log
-      setSession(session);
-      if (session?.user?.id) {
-        fetchUserProfile(session.user.id);
-      } else {
-        setUserProfile(null);
+      if (mounted) {
+        console.log("Auth state changed:", _event, session);
+        setSession(session);
+        if (session?.user?.id) {
+          fetchUserProfile(session.user.id);
+        } else {
+          setUserProfile(null);
+          setLoading(false);
+        }
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
-
-  const fetchUserProfile = async (userId: string) => {
-    try {
-      console.log("Fetching profile for user:", userId); // Debug log
-      const { data: profile, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-
-      if (error) {
-        console.error('Error fetching user profile:', error);
-        throw error;
-      }
-      
-      console.log("Fetched profile:", profile); // Debug log
-      setUserProfile(profile);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
-      setLoading(false);
-    }
-  };
 
   const handleSignOut = async () => {
     try {
@@ -213,7 +226,7 @@ export const NavigationMenu = () => {
           <div className="hidden md:flex items-center gap-1 overflow-x-auto flex-grow justify-end max-w-[calc(100%-200px)]">
             <NavLinks />
             {session ? (
-              <UserMenu />
+              <UserMenu userProfile={userProfile} handleSignOut={handleSignOut} />
             ) : (
               <Button variant="outline" asChild className="ml-2 h-10 px-3 py-2">
                 <Link to="/auth/signin" className="flex items-center gap-2 min-w-[100px] justify-center">
