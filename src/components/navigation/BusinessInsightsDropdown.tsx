@@ -1,4 +1,4 @@
-import { ChartLine, Globe, Lightbulb, Briefcase, DollarSign, Wrench } from "lucide-react";
+import { ChartLine, Globe, Lightbulb, Briefcase, DollarSign, Wrench, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -54,4 +54,4 @@ export const BusinessInsightsDropdown = ({ onClick = () => {} }: BusinessInsight
 };
 
 // Re-export icons for NavLinks
-export { Wrench, BookOpen, Users2 } from "lucide-react";
+export { Wrench, BookOpen, Users2, Users, MessageSquare } from "lucide-react";

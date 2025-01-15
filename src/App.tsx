@@ -21,6 +21,7 @@ import Community from "./pages/Community";
 import AdminDashboard from "./pages/admin/Dashboard";
 import Crowdfunding from "./pages/Crowdfunding";
 import Team from "./pages/Team";
+import Feedback from "./pages/Feedback";
 import { ProtectedAdminRoute } from "./components/auth/ProtectedAdminRoute";
 
 const queryClient = new QueryClient();
@@ -57,6 +58,7 @@ const App = () => (
                 <Route path="/community" element={<Community />} />
                 <Route path="/crowdfunding" element={<Crowdfunding />} />
                 <Route path="/team" element={<Team />} />
+                <Route path="/feedback" element={<Feedback />} />
                 <Route path="/auth/signin" element={<SignIn />} />
                 <Route path="/auth/signup" element={<SignUp />} />
                 <Route path="/auth/forgot-password" element={<ForgotPassword />} />
