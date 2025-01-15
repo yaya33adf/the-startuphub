@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom";
 import { DesktopNav } from "./navigation/DesktopNav";
 import { MobileMenu } from "./navigation/MobileMenu";
 import { Logo } from "./navigation/Logo";
-import { UserMenu } from "./navigation/UserMenu";
 import { NavLinks } from "./navigation/NavLinks";
 import { useMobile } from "@/hooks/use-mobile";
 import { supabase } from "@/integrations/supabase/client";
@@ -84,23 +83,23 @@ export const NavigationMenu = () => {
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
       <div className="container flex h-16 items-center justify-between px-4 transition-all duration-200">
         <Logo />
-        {isMobile ? (
-          <MobileMenu 
-            isOpen={isOpen} 
-            setIsOpen={setIsOpen}
-            session={session}
-            handleSignOut={handleSignOut}
-          />
-        ) : (
-          <div className="flex items-center gap-4">
-            <NavLinks />
+        <div className="flex items-center gap-4 flex-grow justify-end">
+          {!isMobile && <NavLinks />}
+          {isMobile ? (
+            <MobileMenu 
+              isOpen={isOpen} 
+              setIsOpen={setIsOpen}
+              session={session}
+              handleSignOut={handleSignOut}
+            />
+          ) : (
             <DesktopNav
               session={session}
               userProfile={userProfile}
               handleSignOut={handleSignOut}
             />
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </nav>
   );
