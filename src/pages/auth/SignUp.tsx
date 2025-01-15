@@ -6,17 +6,33 @@ import { supabase } from "@/integrations/supabase/client"
 
 export default function SignUp() {
   const [email, setEmail] = useState("")
+  const [name, setName] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (name === email) {
+      toast({
+        variant: "destructive",
+        title: "Invalid name",
+        description: "Your name cannot be the same as your email",
+      })
+      return
+    }
+
     try {
       setLoading(true)
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            name: name,
+          },
+        },
       })
 
       if (error) {
@@ -32,6 +48,7 @@ export default function SignUp() {
         })
         setEmail("")
         setPassword("")
+        setName("")
       }
     } catch (error) {
       console.error("Error:", error)
@@ -53,11 +70,18 @@ export default function SignUp() {
             Create an account
           </h1>
           <p className="text-sm text-muted-foreground">
-            Enter your email to create your account
+            Enter your details to create your account
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
           <Input
             type="email"
             placeholder="Email"
