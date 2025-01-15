@@ -75,7 +75,10 @@ export const TeamRecommendationForm = () => {
       // Transform the data to ensure recommended_roles is properly typed
       const transformedData: TeamRecommendation[] = (data || []).map((item) => ({
         ...item,
-        recommended_roles: item.recommended_roles as TeamRole[],
+        recommended_roles: (item.recommended_roles as any[] || []).map((role: any) => ({
+          role: role.role as string,
+          count: role.count as number,
+        })),
       }));
 
       console.log("Recommendations fetched:", transformedData);
@@ -129,20 +132,22 @@ export const TeamRecommendationForm = () => {
       }
 
       console.log("Generating team recommendation:", formData);
+      const recommendedRoles = generateTeamRoles(formData);
       const { data, error } = await supabase
         .from("team_recommendations")
-        .insert([
-          {
-            ...formData,
-            user_id: session.user.id,
-            recommended_roles: generateTeamRoles(formData),
-          },
-        ])
+        .insert({
+          ...formData,
+          user_id: session.user.id,
+          recommended_roles: recommendedRoles as unknown as Json,
+        })
         .select()
         .single();
 
       if (error) throw error;
-      return data as TeamRecommendation;
+      return {
+        ...data,
+        recommended_roles: recommendedRoles,
+      } as TeamRecommendation;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["team-recommendations"] });
@@ -323,4 +328,4 @@ export const TeamRecommendationForm = () => {
       )}
     </div>
   );
-};
+});
