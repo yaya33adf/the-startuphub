@@ -74,7 +74,9 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
         }
 
         console.log("Profile data:", profile);
-        setIsAdmin(profile?.role === 'admin');
+        const userIsAdmin = profile?.role === 'admin';
+        console.log("User is admin:", userIsAdmin);
+        setIsAdmin(userIsAdmin);
         
       } catch (error: any) {
         console.error("Error in checkAdmin:", error);
