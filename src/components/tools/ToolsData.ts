@@ -1,4 +1,4 @@
-import { QrCode, DollarSign, Receipt, FileSpreadsheet, BarChart3, Mail, Target, Users, CalendarDays, Shield } from "lucide-react";
+import { QrCode, DollarSign, Receipt, FileSpreadsheet, BarChart3, Mail, Target, Users, CalendarDays, Shield, Lightbulb } from "lucide-react";
 import { QRCodeGenerator } from "./QRCodeGenerator";
 import { CurrencyConverter } from "./CurrencyConverter";
 import { InvoiceGenerator } from "./InvoiceGenerator";
@@ -9,8 +9,16 @@ import { GoalTracker } from "./GoalTracker";
 import { TeamManagement } from "./TeamManagement";
 import { AppointmentScheduler } from "./AppointmentScheduler";
 import { BrandIdentityTool } from "./BrandIdentityTool";
+import { BusinessNameGenerator } from "./BusinessNameGenerator";
 
 export const tools = [
+  {
+    title: "Business Name Generator",
+    description: "Generate creative and unique business names based on your industry and keywords",
+    icon: Lightbulb,
+    component: BusinessNameGenerator,
+    active: true,
+  },
   {
     title: "Brand Identity Tool",
     description: "Create and manage your brand's visual identity",
