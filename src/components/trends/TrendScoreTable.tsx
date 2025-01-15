@@ -7,7 +7,7 @@ interface TrendScoreTableProps {
 }
 
 export const TrendScoreTable = ({ data }: TrendScoreTableProps) => {
-  console.log('TrendScoreTable data:', data); // Debug log to see incoming data
+  console.log('TrendScoreTable raw data:', data); // Debug log
 
   const {
     avgScore,
@@ -17,63 +17,74 @@ export const TrendScoreTable = ({ data }: TrendScoreTableProps) => {
     communitySize
   } = calculateTrendIndicators(data.score);
 
-  // Create platform data array with proper metadata access
+  // Create platform data array with proper score formatting
   const platformData = [
-    { name: 'GitHub', score: data.metadata?.github?.score || 0 },
-    { name: 'Google', score: data.metadata?.google_trends?.score || 0 },
-    { name: 'HN', score: data.metadata?.hacker_news?.score || 0 },
-    { name: 'Stack Overflow', score: data.metadata?.stack_overflow?.score || 0 },
-    { name: 'Wikipedia', score: data.metadata?.wikipedia?.score || 0 },
-    { name: 'NPM', score: data.metadata?.npm?.score || 0 },
-    { name: 'PyPI', score: data.metadata?.pypi?.score || 0 }
+    { name: 'GitHub', score: Math.round(data.metadata?.github?.score || 0) },
+    { name: 'Google Trends', score: Math.round(data.metadata?.google_trends?.score || 0) },
+    { name: 'Hacker News', score: Math.round(data.metadata?.hacker_news?.score || 0) },
+    { name: 'Stack Overflow', score: Math.round(data.metadata?.stack_overflow?.score || 0) },
+    { name: 'Wikipedia', score: Math.round(data.metadata?.wikipedia?.score || 0) },
+    { name: 'NPM', score: Math.round(data.metadata?.npm?.score || 0) },
+    { name: 'PyPI', score: Math.round(data.metadata?.pypi?.score || 0) }
   ].sort((a, b) => b.score - a.score);
 
-  console.log('Platform scores:', platformData); // Debug log to see processed scores
+  console.log('Processed platform scores:', platformData); // Debug log
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Metric</TableHead>
-          <TableHead>Value</TableHead>
+          <TableHead className="w-[200px]">Platform/Metric</TableHead>
+          <TableHead>Score</TableHead>
           <TableHead>Status</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
-          <TableCell className="font-medium">Overall Trend Score</TableCell>
-          <TableCell>{avgScore}/100</TableCell>
-          <TableCell>{avgScore > 70 ? "Strong" : avgScore > 50 ? "Moderate" : "Weak"}</TableCell>
+        <TableRow className="font-medium bg-muted/50">
+          <TableCell>Overall Trend Score</TableCell>
+          <TableCell>{Math.round(data.score)}/100</TableCell>
+          <TableCell>
+            {data.score > 70 ? "🔥 Strong" : data.score > 50 ? "📈 Moderate" : "📉 Weak"}
+          </TableCell>
         </TableRow>
-        <TableRow>
-          <TableCell className="font-medium">Interest Level</TableCell>
+        
+        {platformData.map((platform, index) => (
+          platform.score > 0 && (
+            <TableRow key={index}>
+              <TableCell>{platform.name}</TableCell>
+              <TableCell>{platform.score}/100</TableCell>
+              <TableCell>
+                {platform.score > 70 ? "🌟 High Impact" : 
+                 platform.score > 50 ? "⭐ Significant" : 
+                 platform.score > 30 ? "✨ Moderate" : "⚪ Low Impact"}
+              </TableCell>
+            </TableRow>
+          )
+        ))}
+
+        <TableRow className="bg-muted/30">
+          <TableCell>Interest Level</TableCell>
           <TableCell>{interestLevel}</TableCell>
           <TableCell>{interestLevel === "High" ? "🔥 Trending" : "📊 Stable"}</TableCell>
         </TableRow>
-        <TableRow>
-          <TableCell className="font-medium">Search Volume</TableCell>
+        
+        <TableRow className="bg-muted/30">
+          <TableCell>Search Volume</TableCell>
           <TableCell>{searchVolume}</TableCell>
           <TableCell>{searchVolume === "Growing" ? "📈 Increasing" : "➡️ Stable"}</TableCell>
         </TableRow>
-        <TableRow>
-          <TableCell className="font-medium">Growth Rate</TableCell>
+        
+        <TableRow className="bg-muted/30">
+          <TableCell>Growth Rate</TableCell>
           <TableCell>{growthRate}</TableCell>
           <TableCell>{parseFloat(growthRate) > 0 ? "📈 Positive" : "📉 Negative"}</TableCell>
         </TableRow>
-        <TableRow>
-          <TableCell className="font-medium">Community Size</TableCell>
+        
+        <TableRow className="bg-muted/30">
+          <TableCell>Community Size</TableCell>
           <TableCell>{communitySize}</TableCell>
           <TableCell>{communitySize === "Growing" ? "👥 Expanding" : "👤 Stable"}</TableCell>
         </TableRow>
-        {platformData.map((platform, index) => (
-          <TableRow key={index}>
-            <TableCell className="font-medium">{platform.name} Score</TableCell>
-            <TableCell>{platform.score}/100</TableCell>
-            <TableCell>
-              {platform.score > 70 ? "🌟 High" : platform.score > 50 ? "⭐ Medium" : "⚪ Low"}
-            </TableCell>
-          </TableRow>
-        ))}
       </TableBody>
     </Table>
   );
