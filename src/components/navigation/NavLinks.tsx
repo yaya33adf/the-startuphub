@@ -3,7 +3,7 @@ import { BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
 
 export const NavLinks = () => {
   return (
-    <>
+    <div className="flex items-center gap-6">
       <BusinessInsightsDropdown />
       <Link
         to="/tools"
@@ -29,6 +29,6 @@ export const NavLinks = () => {
       >
         Team
       </Link>
-    </>
+    </div>
   );
 };
