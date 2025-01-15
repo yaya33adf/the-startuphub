@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+import { BlogPostEditor } from "./BlogPostEditor";
+import { BlogPostActions } from "./BlogPostActions";
 
 export const BlogPostForm = () => {
   const [blogTitle, setBlogTitle] = useState("");
@@ -113,60 +110,18 @@ export const BlogPostForm = () => {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleBlogSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
-            <Input
-              id="title"
-              value={blogTitle}
-              onChange={(e) => setBlogTitle(e.target.value)}
-              placeholder="Enter blog title"
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="content">Content</Label>
-            <Textarea
-              id="content"
-              value={blogContent}
-              onChange={(e) => setBlogContent(e.target.value)}
-              placeholder="Write your blog content..."
-              className="min-h-[200px]"
-              required
-            />
-          </div>
-          <div className="flex justify-between items-center">
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Creating...
-                </>
-              ) : (
-                <>
-                  <Plus className="mr-2 h-4 w-4" />
-                  Create Post
-                </>
-              )}
-            </Button>
-            <Button 
-              type="button" 
-              variant="destructive"
-              onClick={() => handleDelete(currentPostId!)}
-              disabled={isDeleting || !currentPostId}
-            >
-              {isDeleting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Deleting...
-                </>
-              ) : (
-                <>
-                  <Trash2 className="mr-2 h-4 w-4" />
-                  Delete Post
-                </>
-              )}
-            </Button>
-          </div>
+          <BlogPostEditor
+            blogTitle={blogTitle}
+            setBlogTitle={setBlogTitle}
+            blogContent={blogContent}
+            setBlogContent={setBlogContent}
+          />
+          <BlogPostActions
+            isSubmitting={isSubmitting}
+            isDeleting={isDeleting}
+            currentPostId={currentPostId}
+            onDelete={handleDelete}
+          />
         </form>
       </CardContent>
     </Card>
