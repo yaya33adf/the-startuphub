@@ -16,7 +16,7 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   useEffect(() => {
     const checkAdminStatus = async () => {
       if (!session?.user) {
-        console.log("No session user found");
+        console.log("No session found, setting isAdmin to false");
         setIsAdmin(false);
         setIsLoading(false);
         return;
