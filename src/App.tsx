@@ -2,7 +2,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import Index from "./pages/Index";
 import SignIn from "./pages/auth/SignIn";
 import SignUp from "./pages/auth/SignUp";
@@ -19,6 +21,45 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import Crowdfunding from "./pages/Crowdfunding";
 
 const queryClient = new QueryClient();
+
+// Protected Route Component
+const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', session?.user?.id)
+        .single();
+      
+      setIsAdmin(profile?.role === 'admin');
+      setLoading(false);
+    };
+
+    checkAdmin();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return isAdmin ? <>{children}</> : <Navigate to="/auth/signin" replace />;
+};
+
+// 404 Page Component
+const NotFound = () => (
+  <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
+    <h1 className="text-4xl font-bold mb-4">404 - Page Not Found</h1>
+    <p className="text-gray-600 mb-8">The page you're looking for doesn't exist.</p>
+    <a href="/" className="text-blue-500 hover:text-blue-700 underline">
+      Go back home
+    </a>
+  </div>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -43,7 +84,15 @@ const App = () => (
               <Route path="/auth/signin" element={<SignIn />} />
               <Route path="/auth/signup" element={<SignUp />} />
               <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-              <Route path="/admin" element={<AdminDashboard />} />
+              <Route 
+                path="/admin/*" 
+                element={
+                  <ProtectedAdminRoute>
+                    <AdminDashboard />
+                  </ProtectedAdminRoute>
+                } 
+              />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
           <Footer />
