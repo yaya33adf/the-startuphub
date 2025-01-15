@@ -49,6 +49,9 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
       }
     };
 
+    // Reset loading state when session changes
+    setIsLoading(true);
+    
     // Only check admin status once session loading is complete
     if (!sessionLoading) {
       console.log("Session loading complete, checking admin status");
@@ -61,7 +64,8 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
     sessionLoading, 
     isLoading, 
     isAdmin, 
-    hasSession: !!session 
+    hasSession: !!session,
+    userId: session?.user?.id 
   });
 
   if (sessionLoading || isLoading) {
