@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import Index from "./pages/Index";
 import SignIn from "./pages/auth/SignIn";
 import SignUp from "./pages/auth/SignUp";
@@ -30,12 +31,26 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkAdmin = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      const { data: profile } = await supabase
+      console.log("Checking admin status for session:", session);
+      
+      if (!session?.user?.id) {
+        console.log("No session or user ID found");
+        setIsAdmin(false);
+        setLoading(false);
+        return;
+      }
+
+      const { data: profile, error } = await supabase
         .from('profiles')
         .select('role')
-        .eq('id', session?.user?.id)
+        .eq('id', session.user.id)
         .single();
       
+      if (error) {
+        console.error("Error fetching profile:", error);
+      }
+      
+      console.log("Profile data:", profile);
       setIsAdmin(profile?.role === 'admin');
       setLoading(false);
     };
@@ -63,42 +78,44 @@ const NotFound = () => (
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <div className="min-h-screen flex flex-col bg-background">
-          <header>
-            <NavigationMenu />
-          </header>
-          <main className="flex-1 w-full max-w-[100vw] overflow-x-hidden">
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/trends" element={<Trends />} />
-              <Route path="/markets" element={<Markets />} />
-              <Route path="/side-hustles" element={<SideHustles />} />
-              <Route path="/tools" element={<Tools />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/community" element={<Community />} />
-              <Route path="/crowdfunding" element={<Crowdfunding />} />
-              <Route path="/auth/signin" element={<SignIn />} />
-              <Route path="/auth/signup" element={<SignUp />} />
-              <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-              <Route 
-                path="/admin/*" 
-                element={
-                  <ProtectedAdminRoute>
-                    <AdminDashboard />
-                  </ProtectedAdminRoute>
-                } 
-              />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
-      </BrowserRouter>
-    </TooltipProvider>
+    <SessionContextProvider supabaseClient={supabase}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <div className="min-h-screen flex flex-col bg-background">
+            <header>
+              <NavigationMenu />
+            </header>
+            <main className="flex-1 w-full max-w-[100vw] overflow-x-hidden">
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/trends" element={<Trends />} />
+                <Route path="/markets" element={<Markets />} />
+                <Route path="/side-hustles" element={<SideHustles />} />
+                <Route path="/tools" element={<Tools />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/community" element={<Community />} />
+                <Route path="/crowdfunding" element={<Crowdfunding />} />
+                <Route path="/auth/signin" element={<SignIn />} />
+                <Route path="/auth/signup" element={<SignUp />} />
+                <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+                <Route 
+                  path="/admin/*" 
+                  element={
+                    <ProtectedAdminRoute>
+                      <AdminDashboard />
+                    </ProtectedAdminRoute>
+                  } 
+                />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </BrowserRouter>
+      </TooltipProvider>
+    </SessionContextProvider>
   </QueryClientProvider>
 );
 
