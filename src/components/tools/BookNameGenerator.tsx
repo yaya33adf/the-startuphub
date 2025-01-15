@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { BookOpen } from "lucide-react";
+import { BookOpen, RefreshCw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 const genres = [
@@ -60,6 +60,27 @@ export const BookNameGenerator = () => {
     }, 1000);
   };
 
+  const handleRefresh = () => {
+    setIsLoading(true);
+    const keywordsList = keywords.split(",").map(k => k.trim());
+    const variations = [
+      `The ${keywordsList[0]} Legacy`,
+      `${genre} Masters: ${keywordsList[0]}`,
+      `Secrets of ${keywordsList[0]}`,
+      `The ${genre} of ${keywordsList[0]}`,
+      `${keywordsList[0]} Unleashed`,
+    ];
+
+    setTimeout(() => {
+      setGeneratedTitles(variations);
+      setIsLoading(false);
+      toast({
+        title: "New Titles Generated",
+        description: "Fresh book title suggestions are ready!",
+      });
+    }, 1000);
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -101,7 +122,18 @@ export const BookNameGenerator = () => {
 
       {generatedTitles.length > 0 && (
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Generated Titles:</h3>
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold">Generated Titles:</h3>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleRefresh}
+              disabled={isLoading}
+            >
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Refresh Titles
+            </Button>
+          </div>
           <div className="grid gap-2">
             {generatedTitles.map((title, index) => (
               <div
