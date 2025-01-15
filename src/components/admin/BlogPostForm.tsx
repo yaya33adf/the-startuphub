@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,36 @@ export const BlogPostForm = () => {
   const [blogContent, setBlogContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [currentPostId, setCurrentPostId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCurrentPost = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const { data, error } = await supabase
+          .from('blog_posts')
+          .select('*')
+          .eq('author_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1)
+          .single();
+
+        if (error) throw error;
+        
+        if (data) {
+          setBlogTitle(data.title);
+          setBlogContent(data.content);
+          setCurrentPostId(data.id);
+        }
+      } catch (error) {
+        console.error('Error fetching blog post:', error);
+      }
+    };
+
+    fetchCurrentPost();
+  }, []);
 
   const handleBlogSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,6 +79,11 @@ export const BlogPostForm = () => {
   };
 
   const handleDelete = async (postId: string) => {
+    if (!postId) {
+      toast.error("No post selected for deletion");
+      return;
+    }
+
     setIsDeleting(true);
     try {
       const { error } = await supabase
@@ -57,7 +92,11 @@ export const BlogPostForm = () => {
         .eq('id', postId);
 
       if (error) throw error;
+      
       toast.success("Blog post deleted successfully!");
+      setBlogTitle("");
+      setBlogContent("");
+      setCurrentPostId(null);
     } catch (error) {
       console.error('Error deleting blog post:', error);
       toast.error("Failed to delete blog post");
@@ -112,8 +151,8 @@ export const BlogPostForm = () => {
             <Button 
               type="button" 
               variant="destructive"
-              onClick={() => handleDelete(/* postId */)}
-              disabled={isDeleting}
+              onClick={() => handleDelete(currentPostId!)}
+              disabled={isDeleting || !currentPostId}
             >
               {isDeleting ? (
                 <>
