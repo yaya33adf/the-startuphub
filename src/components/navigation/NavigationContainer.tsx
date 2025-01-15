@@ -16,11 +16,13 @@ export const NavigationContainer = ({ session, userProfile, handleSignOut }: Nav
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
-      <div className="container flex h-16 items-center px-4">
+    <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container flex h-16 items-center">
         <Logo />
-        <div className="flex items-center gap-4 ml-auto">
-          {!isMobile && <NavLinks />}
+        <div className="hidden md:flex items-center gap-6 mx-6 flex-1">
+          <NavLinks />
+        </div>
+        <div className="flex items-center ml-auto">
           {isMobile ? (
             <MobileMenu 
               isOpen={isOpen}
