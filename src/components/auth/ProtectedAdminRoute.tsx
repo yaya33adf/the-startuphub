@@ -36,10 +36,8 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
           console.error("Error fetching profile:", error);
           setIsAdmin(false);
         } else {
-          console.log("Full profile data:", profile);
-          const isUserAdmin = profile?.role === 'admin';
-          console.log("Is user admin?", isUserAdmin);
-          setIsAdmin(isUserAdmin);
+          console.log("Profile data:", profile);
+          setIsAdmin(profile?.role === 'admin');
         }
       } catch (error) {
         console.error("Error in checkAdminStatus:", error);
