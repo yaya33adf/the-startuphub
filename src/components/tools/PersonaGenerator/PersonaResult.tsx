@@ -45,7 +45,7 @@ export const PersonaResult = ({ persona, onReset }: PersonaResultProps) => {
             <p className="font-semibold">Gender:</p>
             <p className="capitalize">{persona.gender}</p>
           </div>
-        </div>
+        </CardContent>
       </Card>
 
       <Card>
