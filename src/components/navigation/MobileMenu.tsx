@@ -21,7 +21,7 @@ export const MobileMenu = ({ isOpen, setIsOpen, session, handleSignOut }: Mobile
   <Sheet open={isOpen} onOpenChange={setIsOpen}>
     <SheetTrigger asChild className="md:hidden">
       <Button variant="ghost" size="icon">
-        <Menu aria-hidden="true" />
+        <Menu className="h-4 w-4" />
       </Button>
     </SheetTrigger>
     <SheetContent side="right" className="w-[80vw] sm:w-[350px]">
@@ -36,16 +36,16 @@ export const MobileMenu = ({ isOpen, setIsOpen, session, handleSignOut }: Mobile
             onClick={handleSignOut} 
             className="mt-2 text-red-600"
           >
-            <LogIn aria-hidden="true" className="mr-2" />
+            <LogIn className="h-4 w-4 mr-2" />
             Sign Out
           </Button>
         ) : (
           <Button asChild variant="outline" className="mt-2">
             <Link 
               to="/auth/signin"
-              className="flex items-center gap-2 justify-center"
+              className="flex items-center gap-2 justify-center w-full"
             >
-              <LogIn aria-hidden="true" />
+              <LogIn className="h-4 w-4" />
               Sign In
             </Link>
           </Button>
