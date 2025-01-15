@@ -73,7 +73,6 @@ export const TrendResults = memo(({ data }: TrendResultsProps) => {
     setCompetitors(competitors.filter(c => c !== competitor));
   };
 
-  // Create competitor data with dynamic keys based on competitor names
   const competitorData = competitors.length > 0 ? [
     { 
       date: '2024-01', 
@@ -93,28 +92,28 @@ export const TrendResults = memo(({ data }: TrendResultsProps) => {
   ] : [];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 px-4 md:px-0">
       <TrendHeader onExport={handleExportPDF} />
-      <div ref={targetRef} className="bg-white p-6 rounded-lg shadow space-y-6">
+      <div ref={targetRef} className="bg-white p-4 md:p-6 rounded-lg shadow space-y-6">
         <TrendScoreTable data={data} />
         <TrendInsights />
         
-        {/* Competitor Analysis Section */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <h3 className="text-lg font-semibold">Competitor Analysis</h3>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Input
                 placeholder="Add competitor"
                 value={newCompetitor}
                 onChange={(e) => setNewCompetitor(e.target.value)}
-                className="w-48"
+                className="w-full sm:w-48"
                 disabled={competitors.length >= 3}
               />
               <Button
                 onClick={handleAddCompetitor}
                 disabled={competitors.length >= 3}
                 size="sm"
+                className="w-full sm:w-auto"
               >
                 <Plus className="w-4 h-4 mr-1" />
                 Add
@@ -123,7 +122,7 @@ export const TrendResults = memo(({ data }: TrendResultsProps) => {
           </div>
           
           {competitors.length > 0 && (
-            <div className="space-y-2">
+            <div className="space-y-4">
               <div className="flex gap-2 flex-wrap">
                 {competitors.map((competitor) => (
                   <Button
@@ -131,6 +130,7 @@ export const TrendResults = memo(({ data }: TrendResultsProps) => {
                     variant="secondary"
                     size="sm"
                     onClick={() => handleRemoveCompetitor(competitor)}
+                    className="text-sm"
                   >
                     {competitor} ×
                   </Button>

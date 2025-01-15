@@ -49,7 +49,7 @@ export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps
     return [...Array(5)].map((_, index) => (
       <Star
         key={index}
-        className={`w-4 h-4 ${
+        className={`w-3 h-3 md:w-4 md:h-4 ${
           index < Math.floor(score)
             ? 'text-yellow-400 fill-yellow-400'
             : 'text-gray-300'
@@ -59,49 +59,48 @@ export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps
   };
 
   return (
-    <section className="relative py-20 px-4 text-center bg-gradient-to-br from-secondary/30 via-accent/20 to-primary/10 min-h-[800px] overflow-hidden">
+    <section className="relative py-12 md:py-20 px-4 text-center bg-gradient-to-br from-secondary/30 via-accent/20 to-primary/10 min-h-[800px] overflow-hidden">
       <div className="max-w-4xl mx-auto">
         <GlobalTrendsHeader />
-        <div className="relative z-10 mb-12">
+        <div className="relative z-10 mb-8 md:mb-12">
           <AlternatingJourney />
         </div>
-        <p className="text-lg md:text-xl text-muted-foreground mb-8 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+        <p className="text-base md:text-xl text-muted-foreground mb-6 md:mb-8 animate-fade-in px-4" style={{ animationDelay: '0.2s' }}>
           Your comprehensive platform for tracking market trends, exploring opportunities, and discovering side hustles
         </p>
-        <div className="mb-8 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+        <div className="mb-6 md:mb-8 animate-fade-in" style={{ animationDelay: '0.4s' }}>
           <TrendSearch onSearchResults={onSearchResults} />
           {searchResults && <TrendResults data={searchResults} />}
         </div>
         <Button 
           size="lg" 
           asChild 
-          className="animate-fade-in hover:scale-105 transition-transform bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 mb-16" 
+          className="w-full sm:w-auto animate-fade-in hover:scale-105 transition-transform bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 mb-12 md:mb-16" 
           style={{ animationDelay: '0.6s' }}
         >
           <Link to="/trends">Explore Trends</Link>
         </Button>
 
-        {/* Trending Apps Showcase */}
-        <div className="mt-20">
-          <h2 className="text-3xl font-bold mb-12">Trending Apps & Websites</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="mt-16 md:mt-20">
+          <h2 className="text-2xl md:text-3xl font-bold mb-8 md:mb-12">Trending Apps & Websites</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {trendyApps.map((app, index) => (
               <Card key={index} className="group hover:shadow-lg transition-shadow duration-300">
                 <CardHeader className="p-0">
-                  <div className="relative h-48 overflow-hidden rounded-t-lg">
+                  <div className="relative h-40 md:h-48 overflow-hidden rounded-t-lg">
                     <img
                       src={app.image}
                       alt={app.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute top-2 right-2 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
+                    <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs md:text-sm">
                       {app.category}
                     </div>
                   </div>
                 </CardHeader>
-                <CardContent className="p-4">
-                  <CardTitle className="text-xl mb-2">{app.name}</CardTitle>
-                  <p className="text-muted-foreground text-sm mb-3">{app.description}</p>
+                <CardContent className="p-3 md:p-4">
+                  <CardTitle className="text-lg md:text-xl mb-2">{app.name}</CardTitle>
+                  <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{app.description}</p>
                   <div className="flex items-center gap-1">
                     {renderStars(app.score)}
                     <span className="ml-2 text-sm font-medium">{app.score}</span>

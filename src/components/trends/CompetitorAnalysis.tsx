@@ -1,45 +1,48 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { Button } from "@/components/ui/button";
-import { Download, Trophy } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { cn } from "@/lib/utils";
 
 interface CompetitorAnalysisProps {
   data: Array<{
     date: string;
     current: number;
-    [key: string]: number | string; // Allow dynamic competitor names
+    [key: string]: number | string;
   }>;
   competitors: string[];
 }
 
+const COLORS = ['#0EA5E9', '#9333EA', '#10B981', '#F59E0B'];
+
 export const CompetitorAnalysis = ({ data, competitors }: CompetitorAnalysisProps) => {
-  const handleExport = () => {
-    // TODO: Implement export functionality
-    console.log("Exporting competitor analysis data...");
+  const handleExportData = () => {
+    const csvContent = [
+      ['Period', 'Your Search', ...competitors],
+      ...data.map(period => [
+        period.date,
+        period.current,
+        ...competitors.map(competitor => period[competitor])
+      ])
+    ].map(row => row.join(',')).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'competitor-analysis.csv';
+    link.click();
   };
 
   const getWinnerForPeriod = (period: typeof data[0]) => {
-    const scores = [
-      { name: 'Your Search', score: period.current },
-      ...competitors.map(competitor => ({
-        name: competitor,
-        score: period[competitor] as number
-      }))
-    ].filter(item => item.score !== undefined);
-
-    return scores.reduce((max, current) => 
-      current.score > max.score ? current : max
-    );
-  };
-
-  // Generate unique colors for each competitor
-  const competitorColors = {
-    'Your Search': '#3b82f6', // Blue for current trend
-    [competitors[0]]: '#ef4444', // Red
-    [competitors[1]]: '#10b981', // Green
-    [competitors[2]]: '#f59e0b'  // Yellow
+    const scores = {
+      'Your Search': period.current,
+      ...Object.fromEntries(
+        competitors.map(competitor => [competitor, period[competitor]])
+      )
+    };
+    const winner = Object.entries(scores).reduce((a, b) => a[1] > b[1] ? a : b);
+    return { name: winner[0], score: winner[1] };
   };
 
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -67,58 +70,71 @@ export const CompetitorAnalysis = ({ data, competitors }: CompetitorAnalysisProp
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
-        <div>
-          <CardTitle>Trend Score Comparison</CardTitle>
-          <CardDescription>
-            Compare your search trend with competitors over time (0-100 scale)
-          </CardDescription>
-        </div>
-        <Button onClick={handleExport} variant="outline" size="sm">
-          <Download className="h-4 w-4 mr-2" />
+        <h3 className="font-semibold">Trend Score Comparison</h3>
+        <Button 
+          variant="outline" 
+          size="sm"
+          onClick={handleExportData}
+          className="hidden sm:flex"
+        >
+          <Download className="w-4 h-4 mr-2" />
           Export Data
         </Button>
       </CardHeader>
       <CardContent className="space-y-8">
-        <div className="h-[300px] w-full">
+        <div className="h-[300px] sm:h-[400px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
+            <LineChart 
+              data={data}
+              margin={{ 
+                top: 5, 
+                right: 5, 
+                bottom: 30,
+                left: 0
+              }}
+            >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis 
                 dataKey="date" 
                 label={{ 
                   value: 'Time Period', 
                   position: 'bottom',
-                  offset: -5
+                  offset: 20
                 }}
+                tick={{ fontSize: 12 }}
               />
               <YAxis 
                 domain={[0, 100]}
                 label={{ 
                   value: 'Trend Score', 
                   angle: -90, 
-                  position: 'left',
-                  offset: -5
+                  position: 'insideLeft',
+                  offset: 10
                 }}
+                tick={{ fontSize: 12 }}
               />
               <Tooltip content={<CustomTooltip />} />
-              <Legend verticalAlign="bottom" height={36} />
+              <Legend 
+                verticalAlign="bottom" 
+                height={36}
+                wrapperStyle={{ paddingTop: '20px' }}
+              />
               <Line 
                 type="monotone" 
                 dataKey="current" 
-                stroke={competitorColors['Your Search']}
-                name="Your Search" 
+                name="Your Search"
+                stroke={COLORS[0]}
                 strokeWidth={3}
                 dot={{ strokeWidth: 2 }}
               />
               {competitors.map((competitor, index) => (
-                <Line 
+                <Line
                   key={competitor}
-                  type="monotone" 
+                  type="monotone"
                   dataKey={competitor}
-                  stroke={competitorColors[competitor]}
                   name={competitor}
+                  stroke={COLORS[index + 1]}
                   strokeWidth={2}
-                  strokeDasharray={`${(index + 1) * 3} ${(index + 1) * 3}`}
                   dot={{ strokeWidth: 2 }}
                 />
               ))}
@@ -126,54 +142,55 @@ export const CompetitorAnalysis = ({ data, competitors }: CompetitorAnalysisProp
           </ResponsiveContainer>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 overflow-x-auto">
           <h4 className="font-medium text-lg">Score Comparison Table</h4>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]">Period</TableHead>
-                <TableHead>Your Search</TableHead>
-                {competitors.map((competitor) => (
-                  <TableHead key={competitor}>{competitor}</TableHead>
-                ))}
-                <TableHead>Winner</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.map((period) => {
-                const winner = getWinnerForPeriod(period);
-                return (
-                  <TableRow key={period.date}>
-                    <TableCell className="font-medium">{period.date}</TableCell>
-                    <TableCell className={cn(
-                      winner.name === 'Your Search' && "text-primary font-bold"
-                    )}>
-                      {period.current}
-                      {winner.name === 'Your Search' && (
-                        <Trophy className="h-4 w-4 inline ml-2 text-yellow-500" />
-                      )}
-                    </TableCell>
-                    {competitors.map((competitor) => (
-                      <TableCell 
-                        key={competitor}
-                        className={cn(
-                          winner.name === competitor && "text-primary font-bold"
-                        )}
-                      >
-                        {period[competitor]}
-                        {winner.name === competitor && (
-                          <Trophy className="h-4 w-4 inline ml-2 text-yellow-500" />
-                        )}
+          <div className="min-w-[600px]">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]">Period</TableHead>
+                  <TableHead>Your Search</TableHead>
+                  {competitors.map((competitor) => (
+                    <TableHead key={competitor}>{competitor}</TableHead>
+                  ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.map((period) => {
+                  const winner = getWinnerForPeriod(period);
+                  return (
+                    <TableRow key={period.date}>
+                      <TableCell className="font-medium">{period.date}</TableCell>
+                      <TableCell className={cn(
+                        winner.name === 'Your Search' && "text-primary font-bold"
+                      )}>
+                        {period.current}
                       </TableCell>
-                    ))}
-                    <TableCell className="font-medium">
-                      {winner.name}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+                      {competitors.map((competitor) => (
+                        <TableCell 
+                          key={competitor}
+                          className={cn(
+                            winner.name === competitor && "text-primary font-bold"
+                          )}
+                        >
+                          {period[competitor]}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={handleExportData}
+            className="w-full sm:hidden mt-4"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            Export Data
+          </Button>
         </div>
       </CardContent>
     </Card>
