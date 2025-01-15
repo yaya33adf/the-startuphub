@@ -51,7 +51,7 @@ export const PersonaForm = () => {
       interests: "",
       painPoints: "",
       goals: "",
-    } satisfies FormValues,
+    } as FormValues,
   });
 
   const onSubmit = (data: FormValues) => {
@@ -241,4 +241,4 @@ export const PersonaForm = () => {
       </form>
     </Form>
   );
-});
+};
