@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ProtectedAdminRouteProps {
   children: React.ReactNode;
@@ -9,85 +9,49 @@ interface ProtectedAdminRouteProps {
 
 export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
-    const checkAdmin = async () => {
+    const checkAdminStatus = async () => {
       try {
-        console.log("Starting admin check...");
         const { data: { session } } = await supabase.auth.getSession();
-        console.log("Current session:", session);
         
-        if (!session?.user?.id) {
-          console.log("No active session found");
+        if (!session) {
           setIsAdmin(false);
-          setLoading(false);
-          toast({
-            variant: "destructive",
-            title: "Access Denied",
-            description: "Please sign in to access the admin area"
-          });
+          setIsLoading(false);
           return;
         }
 
-        // Check profile and role
-        const { data: profile, error: profileError } = await supabase
+        const { data: profile, error } = await supabase
           .from('profiles')
-          .select('*')
+          .select('role')
           .eq('id', session.user.id)
           .single();
 
-        console.log("Profile query result:", { profile, profileError });
-
-        if (profileError) {
-          console.error("Error fetching profile:", profileError);
-          throw profileError;
-        }
-
-        const userIsAdmin = profile?.role === 'admin';
-        console.log("Is admin?", userIsAdmin, "Profile role:", profile?.role);
-        
-        if (!userIsAdmin) {
+        if (error) {
+          console.error('Error fetching profile:', error);
           toast({
             variant: "destructive",
-            title: "Access Denied",
-            description: "You need admin privileges to access this page"
+            title: "Error",
+            description: "Could not verify admin status",
           });
+          setIsAdmin(false);
+        } else {
+          setIsAdmin(profile?.role === 'admin');
         }
-        
-        setIsAdmin(userIsAdmin);
-        
       } catch (error) {
-        console.error("Error in checkAdmin:", error);
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to verify admin status"
-        });
+        console.error('Error in checkAdminStatus:', error);
         setIsAdmin(false);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        checkAdmin();
-      } else {
-        setIsAdmin(false);
-        setLoading(false);
-      }
-    });
-
-    checkAdmin();
-
-    return () => {
-      subscription.unsubscribe();
-    };
+    checkAdminStatus();
   }, [toast]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -96,6 +60,11 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   }
 
   if (!isAdmin) {
+    toast({
+      variant: "destructive",
+      title: "Access Denied",
+      description: "You need admin privileges to access this page",
+    });
     return <Navigate to="/" replace />;
   }
 
