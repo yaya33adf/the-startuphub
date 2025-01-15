@@ -1,27 +1,18 @@
-import { TrendData } from "@/types/trends";
-import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
-import { 
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Search, Globe, Calendar, Download } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useRef, memo } from "react";
-import { generatePDF } from "react-to-pdf";
+import { usePDF } from 'react-to-pdf';
 import { 
   calculateTrendIndicators,
   preparePlatformData,
-  sampleSegmentationData,
-  sampleSentimentData,
-  sampleCompetitorData,
-  samplePredictiveData,
   sampleInsightsAndRecommendations,
-  trendingItemsData
 } from "@/utils/trendDataUtils";
+import type { TrendData } from "@/types/trends";
 
 interface TrendResultsProps {
   data: TrendData;
@@ -30,6 +21,7 @@ interface TrendResultsProps {
 export const TrendResults = memo(({ data }: TrendResultsProps) => {
   const { toast } = useToast();
   const tableRef = useRef<HTMLDivElement>(null);
+  const { toPDF, targetRef } = usePDF({filename: 'trend-analysis-report.pdf'});
 
   const {
     avgScore,
@@ -40,14 +32,11 @@ export const TrendResults = memo(({ data }: TrendResultsProps) => {
   } = calculateTrendIndicators(data.score);
 
   const platformData = preparePlatformData(data.metadata);
-  const { insights, recommendations } = sampleInsightsAndRecommendations;
+  const { insights } = sampleInsightsAndRecommendations;
 
   const handleExportPDF = async () => {
     try {
-      await generatePDF({
-        element: tableRef.current,
-        filename: 'trend-analysis-report.pdf',
-      });
+      await toPDF();
       toast({
         title: "Report exported successfully",
         description: "Your trend analysis report has been downloaded as PDF",
@@ -72,7 +61,7 @@ export const TrendResults = memo(({ data }: TrendResultsProps) => {
         </Button>
       </div>
 
-      <div ref={tableRef} className="bg-white p-6 rounded-lg shadow">
+      <div ref={targetRef} className="bg-white p-6 rounded-lg shadow">
         <Table>
           <TableHeader>
             <TableRow>

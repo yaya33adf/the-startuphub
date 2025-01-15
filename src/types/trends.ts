@@ -33,5 +33,6 @@ export interface TrendData {
       score: number;
       metadata?: any;
     };
+    [key: string]: any;  // Allow additional properties
   };
 }
