@@ -7,13 +7,17 @@ import {
   Wrench, 
   BookOpen, 
   LogIn, 
+  LogOut,
   MessageSquare, 
   Menu, 
   TrendingUp, 
   DollarSign,
-  Briefcase 
+  Briefcase,
+  User
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Sheet,
   SheetContent,
@@ -26,10 +30,78 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import { useToast } from "@/components/ui/use-toast";
 
 export const NavigationMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [session, setSession] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [userProfile, setUserProfile] = useState<any>(null);
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Set up the initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session?.user?.id) {
+        fetchUserProfile(session.user.id);
+      }
+    });
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (session?.user?.id) {
+        fetchUserProfile(session.user.id);
+      } else {
+        setUserProfile(null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const fetchUserProfile = async (userId: string) => {
+    try {
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (error) throw error;
+      setUserProfile(profile);
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      
+      toast({
+        title: "Signed out successfully",
+        duration: 2000,
+      });
+      
+      navigate('/');
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error signing out",
+        description: error.message,
+      });
+    }
+  };
 
   const businessInsightsItems = [
     { to: "/trends", icon: ChartLine, label: "Trends" },
@@ -61,6 +133,34 @@ export const NavigationMenu = () => {
             </Link>
           </DropdownMenuItem>
         ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+
+  const UserMenu = () => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-10 px-3">
+          <User className="w-4 h-4 mr-2" />
+          <span>{userProfile?.email || 'Profile'}</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {userProfile?.role === 'admin' && (
+          <>
+            <DropdownMenuItem asChild>
+              <Link to="/admin" className="flex items-center gap-2">
+                <Wrench className="w-4 h-4" />
+                <span>Admin Dashboard</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+          </>
+        )}
+        <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
+          <LogOut className="w-4 h-4 mr-2" />
+          <span>Sign Out</span>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -101,12 +201,16 @@ export const NavigationMenu = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1 overflow-x-auto flex-grow justify-end max-w-[calc(100%-200px)]">
             <NavLinks />
-            <Button variant="outline" asChild className="ml-2 h-10 px-3 py-2">
-              <Link to="/auth/signin" className="flex items-center gap-2 min-w-[100px] justify-center">
-                <LogIn className="w-4 h-4 flex-shrink-0" />
-                <span className="whitespace-nowrap">Sign In</span>
-              </Link>
-            </Button>
+            {session ? (
+              <UserMenu />
+            ) : (
+              <Button variant="outline" asChild className="ml-2 h-10 px-3 py-2">
+                <Link to="/auth/signin" className="flex items-center gap-2 min-w-[100px] justify-center">
+                  <LogIn className="w-4 h-4 flex-shrink-0" />
+                  <span className="whitespace-nowrap">Sign In</span>
+                </Link>
+              </Button>
+            )}
           </div>
 
           {/* Mobile Navigation */}
@@ -122,12 +226,28 @@ export const NavigationMenu = () => {
               </SheetHeader>
               <div className="flex flex-col gap-2 mt-4">
                 <NavLinks onClick={() => setIsOpen(false)} />
-                <Button variant="outline" asChild onClick={() => setIsOpen(false)} className="mt-2">
-                  <Link to="/auth/signin" className="flex items-center gap-2 justify-center">
-                    <LogIn className="w-4 h-4 flex-shrink-0" />
-                    <span>Sign In</span>
-                  </Link>
-                </Button>
+                {session ? (
+                  <Button 
+                    variant="outline" 
+                    onClick={handleSignOut} 
+                    className="mt-2 text-red-600"
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </Button>
+                ) : (
+                  <Button 
+                    variant="outline" 
+                    asChild 
+                    onClick={() => setIsOpen(false)} 
+                    className="mt-2"
+                  >
+                    <Link to="/auth/signin" className="flex items-center gap-2 justify-center">
+                      <LogIn className="w-4 h-4 flex-shrink-0" />
+                      <span>Sign In</span>
+                    </Link>
+                  </Button>
+                )}
               </div>
             </SheetContent>
           </Sheet>
