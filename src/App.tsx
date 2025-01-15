@@ -44,42 +44,24 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
           return;
         }
 
-        // First check if user exists in profiles table
+        // Check profile and role
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
-          .select('role')
+          .select('*')
           .eq('id', session.user.id)
           .single();
 
+        console.log("Profile query result:", { profile, profileError });
+
         if (profileError) {
           console.error("Error fetching profile:", profileError);
-          if (profileError.code === 'PGRST116') {
-            console.log("Profile doesn't exist, creating one...");
-            const { error: insertError } = await supabase
-              .from('profiles')
-              .insert([
-                { 
-                  id: session.user.id,
-                  email: session.user.email,
-                  role: 'user'
-                }
-              ])
-              .single();
-            
-            if (insertError) {
-              console.error("Error creating profile:", insertError);
-              throw insertError;
-            }
-            setIsAdmin(false);
-          } else {
-            throw profileError;
-          }
-        } else {
-          console.log("Profile data:", profile);
-          const userIsAdmin = profile?.role === 'admin';
-          console.log("User is admin:", userIsAdmin);
-          setIsAdmin(userIsAdmin);
+          throw profileError;
         }
+
+        const userIsAdmin = profile?.role === 'admin';
+        console.log("User role:", profile?.role);
+        console.log("Is admin?", userIsAdmin);
+        setIsAdmin(userIsAdmin);
         
       } catch (error: any) {
         console.error("Error in checkAdmin:", error);
@@ -121,7 +103,6 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-// 404 Page Component
 const NotFound = () => (
   <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
     <h1 className="text-4xl font-bold mb-4">404 - Page Not Found</h1>
