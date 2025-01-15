@@ -1,7 +1,6 @@
 import { LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { NavLinks } from "./NavLinks";
 import { UserMenu } from "./UserMenu";
 
 interface DesktopNavProps {
@@ -11,8 +10,7 @@ interface DesktopNavProps {
 }
 
 export const DesktopNav = ({ session, userProfile, handleSignOut }: DesktopNavProps) => (
-  <div className="hidden md:flex items-center gap-1 overflow-x-auto flex-grow justify-end max-w-[calc(100%-200px)]">
-    <NavLinks />
+  <div className="flex items-center gap-4">
     {session ? (
       <UserMenu 
         userProfile={userProfile} 
@@ -20,10 +18,10 @@ export const DesktopNav = ({ session, userProfile, handleSignOut }: DesktopNavPr
         userEmail={session.user.email || ''}
       />
     ) : (
-      <Button variant="outline" asChild className="ml-2 h-10 px-3 py-2">
-        <Link to="/auth/signin" className="flex items-center gap-2 min-w-[100px] justify-center">
-          <LogIn className="w-4 h-4 flex-shrink-0" />
-          <span className="whitespace-nowrap">Sign In</span>
+      <Button variant="outline" asChild className="ml-2">
+        <Link to="/auth/signin" className="flex items-center gap-2">
+          <LogIn className="w-4 h-4" />
+          <span>Sign In</span>
         </Link>
       </Button>
     )}
