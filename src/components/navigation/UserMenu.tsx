@@ -15,12 +15,14 @@ interface UserMenuProps {
 }
 
 export function UserMenu({ userProfile, handleSignOut, userEmail }: UserMenuProps) {
+  const displayName = userProfile?.name || userEmail.split('@')[0];
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-10 px-3">
-          <User className="w-4 h-4 mr-2" />
-          <span>{userProfile?.name || userEmail || 'Profile'}</span>
+          <User className="h-4 w-4 mr-2" />
+          <span>{displayName}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
