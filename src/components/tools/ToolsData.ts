@@ -1,4 +1,4 @@
-import { QrCode, DollarSign, Receipt, FileSpreadsheet, BarChart3, Mail, Target, Users, CalendarDays, Shield, Lightbulb } from "lucide-react";
+import { QrCode, DollarSign, Receipt, FileSpreadsheet, BarChart3, Mail, Target, Users, CalendarDays, Shield, Lightbulb, BookOpen } from "lucide-react";
 import { QRCodeGenerator } from "./QRCodeGenerator";
 import { CurrencyConverter } from "./CurrencyConverter";
 import { InvoiceGenerator } from "./InvoiceGenerator";
@@ -10,8 +10,16 @@ import { TeamManagement } from "./TeamManagement";
 import { AppointmentScheduler } from "./AppointmentScheduler";
 import { BrandIdentityTool } from "./BrandIdentityTool";
 import { BusinessNameGenerator } from "./BusinessNameGenerator";
+import { BookNameGenerator } from "./BookNameGenerator";
 
 export const tools = [
+  {
+    title: "Book Name Generator",
+    description: "Generate creative book titles based on genres and keywords",
+    icon: BookOpen,
+    component: BookNameGenerator,
+    active: true,
+  },
   {
     title: "Business Name Generator",
     description: "Generate creative and unique business names based on your industry and keywords",
