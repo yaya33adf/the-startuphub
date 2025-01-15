@@ -52,7 +52,7 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
         // Check profile and role
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
-          .select('role')
+          .select('*')
           .eq('id', session.user.id)
           .single();
 
@@ -64,7 +64,7 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
         }
 
         const userIsAdmin = profile?.role === 'admin';
-        console.log("Is admin?", userIsAdmin);
+        console.log("Is admin?", userIsAdmin, "Profile role:", profile?.role);
         
         if (!userIsAdmin) {
           toast({
