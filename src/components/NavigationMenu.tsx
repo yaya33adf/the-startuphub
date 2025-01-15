@@ -79,11 +79,13 @@ export const NavigationMenu = () => {
               handleSignOut={handleSignOut}
             />
           )}
-          <UserMenu 
-            userProfile={userProfile} 
-            handleSignOut={handleSignOut}
-            userEmail={session?.user?.email || ''}
-          />
+          {session && (
+            <UserMenu 
+              userProfile={userProfile} 
+              handleSignOut={handleSignOut}
+              userEmail={session?.user?.email || ''}
+            />
+          )}
         </div>
       </div>
     </nav>
