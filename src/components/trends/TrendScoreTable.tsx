@@ -7,6 +7,8 @@ interface TrendScoreTableProps {
 }
 
 export const TrendScoreTable = ({ data }: TrendScoreTableProps) => {
+  console.log('TrendScoreTable data:', data); // Debug log to see incoming data
+
   const {
     avgScore,
     interestLevel,
@@ -15,16 +17,18 @@ export const TrendScoreTable = ({ data }: TrendScoreTableProps) => {
     communitySize
   } = calculateTrendIndicators(data.score);
 
-  // Create platform data array with proper score access
+  // Create platform data array with proper metadata access
   const platformData = [
-    { name: 'GitHub', score: data.metadata.github?.score || 0 },
-    { name: 'Google', score: data.metadata.google_trends?.score || 0 },
-    { name: 'HN', score: data.metadata.hacker_news?.score || 0 },
-    { name: 'Stack Overflow', score: data.metadata.stack_overflow?.score || 0 },
-    { name: 'Wikipedia', score: data.metadata.wikipedia?.score || 0 },
-    { name: 'NPM', score: data.metadata.npm?.score || 0 },
-    { name: 'PyPI', score: data.metadata.pypi?.score || 0 }
+    { name: 'GitHub', score: data.metadata?.github?.score || 0 },
+    { name: 'Google', score: data.metadata?.google_trends?.score || 0 },
+    { name: 'HN', score: data.metadata?.hacker_news?.score || 0 },
+    { name: 'Stack Overflow', score: data.metadata?.stack_overflow?.score || 0 },
+    { name: 'Wikipedia', score: data.metadata?.wikipedia?.score || 0 },
+    { name: 'NPM', score: data.metadata?.npm?.score || 0 },
+    { name: 'PyPI', score: data.metadata?.pypi?.score || 0 }
   ].sort((a, b) => b.score - a.score);
+
+  console.log('Platform scores:', platformData); // Debug log to see processed scores
 
   return (
     <Table>
