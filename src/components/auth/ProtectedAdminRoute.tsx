@@ -23,7 +23,9 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
       }
 
       try {
+        console.log("Session exists, checking admin status");
         console.log("Checking admin status for user:", session.user.id);
+        
         const { data: profile, error } = await supabase
           .from('profiles')
           .select('role')
@@ -34,7 +36,8 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
           console.error("Error fetching profile:", error);
           setIsAdmin(false);
         } else {
-          console.log("Profile role:", profile?.role);
+          console.log("Full profile data:", profile);
+          console.log("Is user admin?", profile?.role === 'admin');
           setIsAdmin(profile?.role === 'admin');
         }
       } catch (error) {
