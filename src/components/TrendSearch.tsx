@@ -52,40 +52,40 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
       const result = await calculateTrendScores(searchQuery);
       console.log("Trend scores calculated:", result);
       
-      // Ensure metadata is an object and create a type-safe version
+      // Type assertion for metadata
       const metadata = (typeof result.metadata === 'object' && result.metadata !== null) 
-        ? result.metadata as Record<string, any>
+        ? result.metadata as Record<string, { score?: number; metadata?: any }>
         : {};
 
       // Create a type-safe transformed metadata object
-      const transformedMetadata = {
+      const transformedMetadata: TrendData['metadata'] = {
         github: {
-          score: typeof metadata?.github?.score === 'number' ? metadata.github.score : 0,
-          metadata: metadata?.github?.metadata || null
+          score: metadata.github?.score ?? 0,
+          metadata: metadata.github?.metadata ?? null
         },
         google_trends: {
-          score: typeof metadata?.google_trends?.score === 'number' ? metadata.google_trends.score : 0,
-          metadata: metadata?.google_trends?.metadata || null
+          score: metadata.google_trends?.score ?? 0,
+          metadata: metadata.google_trends?.metadata ?? null
         },
         hacker_news: {
-          score: typeof metadata?.hacker_news?.score === 'number' ? metadata.hacker_news.score : 0,
-          metadata: metadata?.hacker_news?.metadata || null
+          score: metadata.hacker_news?.score ?? 0,
+          metadata: metadata.hacker_news?.metadata ?? null
         },
         stack_overflow: {
-          score: typeof metadata?.stack_overflow?.score === 'number' ? metadata.stack_overflow.score : 0,
-          metadata: metadata?.stack_overflow?.metadata || null
+          score: metadata.stack_overflow?.score ?? 0,
+          metadata: metadata.stack_overflow?.metadata ?? null
         },
         wikipedia: {
-          score: typeof metadata?.wikipedia?.score === 'number' ? metadata.wikipedia.score : 0,
-          metadata: metadata?.wikipedia?.metadata || null
+          score: metadata.wikipedia?.score ?? 0,
+          metadata: metadata.wikipedia?.metadata ?? null
         },
         npm: {
-          score: typeof metadata?.npm?.score === 'number' ? metadata.npm.score : 0,
-          metadata: metadata?.npm?.metadata || null
+          score: metadata.npm?.score ?? 0,
+          metadata: metadata.npm?.metadata ?? null
         },
         pypi: {
-          score: typeof metadata?.pypi?.score === 'number' ? metadata.pypi.score : 0,
-          metadata: metadata?.pypi?.metadata || null
+          score: metadata.pypi?.score ?? 0,
+          metadata: metadata.pypi?.metadata ?? null
         }
       };
       
