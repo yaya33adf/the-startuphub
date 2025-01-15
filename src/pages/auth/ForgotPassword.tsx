@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
@@ -10,26 +9,33 @@ export default function ForgotPassword() {
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
 
-  const handleResetPassword = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-    
     try {
+      setLoading(true)
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/reset-password`,
+        redirectTo: `${window.location.origin}/auth/update-password`,
       })
 
-      if (error) throw error
-      
-      toast({
-        title: "Check your email",
-        description: "We've sent you password reset instructions.",
-      })
-    } catch (error: any) {
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.message,
+        })
+      } else {
+        toast({
+          title: "Check your email",
+          description: "We've sent you a password reset link",
+        })
+        setEmail("")
+      }
+    } catch (error) {
+      console.error("Error:", error)
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message,
+        description: "An unexpected error occurred",
       })
     } finally {
       setLoading(false)
@@ -37,41 +43,38 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold">Reset your password</h2>
-          <p className="mt-2 text-muted-foreground">
-            Enter your email address and we'll send you a link to reset your password
+    <div className="flex min-h-[80vh] items-center justify-center">
+      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+        <div className="flex flex-col space-y-2 text-center">
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Forgot Password
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Enter your email to reset your password
           </p>
         </div>
 
-        <form onSubmit={handleResetPassword} className="mt-8 space-y-6">
-          <div>
-            <Input
-              type="email"
-              placeholder="Email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="space-y-4">
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Sending instructions..." : "Send reset instructions"}
-            </Button>
-
-            <div className="text-center">
-              <Link
-                to="/auth/signin"
-                className="text-sm text-primary hover:underline"
-              >
-                Back to sign in
-              </Link>
-            </div>
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Sending..." : "Send Reset Link"}
+          </Button>
         </form>
+
+        <div className="text-center text-sm">
+          <a
+            href="/auth/signin"
+            className="text-primary underline-offset-4 hover:underline"
+          >
+            Back to Sign In
+          </a>
+        </div>
       </div>
     </div>
   )

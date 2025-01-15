@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
@@ -10,31 +9,36 @@ export default function SignUp() {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
-  const navigate = useNavigate()
 
-  const handleSignUp = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-    
     try {
-      const { error } = await supabase.auth.signUp({
+      setLoading(true)
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
       })
 
-      if (error) throw error
-      
-      toast({
-        title: "Check your email!",
-        description: "We've sent you a verification link.",
-      })
-      
-      navigate("/auth/signin")
-    } catch (error: any) {
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Error signing up",
+          description: error.message,
+        })
+      } else {
+        toast({
+          title: "Check your email",
+          description: "We've sent you a confirmation link",
+        })
+        setEmail("")
+        setPassword("")
+      }
+    } catch (error) {
+      console.error("Error:", error)
       toast({
         variant: "destructive",
-        title: "Error signing up",
-        description: error.message,
+        title: "Error",
+        description: "An unexpected error occurred",
       })
     } finally {
       setLoading(false)
@@ -42,44 +46,46 @@ export default function SignUp() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold">Create a new account</h2>
-          <p className="mt-2 text-muted-foreground">
-            Or{" "}
-            <Link to="/auth/signin" className="text-primary hover:underline">
-              sign in to your account
-            </Link>
+    <div className="flex min-h-[80vh] items-center justify-center">
+      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+        <div className="flex flex-col space-y-2 text-center">
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Create an account
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Enter your email to create your account
           </p>
         </div>
 
-        <form onSubmit={handleSignUp} className="mt-8 space-y-6">
-          <div className="space-y-4">
-            <div>
-              <Input
-                type="email"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <Input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Creating account..." : "Create account"}
+            {loading ? "Creating account..." : "Create Account"}
           </Button>
         </form>
+
+        <div className="text-center text-sm">
+          Already have an account?{" "}
+          <a
+            href="/auth/signin"
+            className="text-primary underline-offset-4 hover:underline"
+          >
+            Sign in
+          </a>
+        </div>
       </div>
     </div>
   )

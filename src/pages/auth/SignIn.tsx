@@ -1,9 +1,9 @@
 import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 import { supabase } from "@/integrations/supabase/client"
+import { useNavigate } from "react-router-dom"
 
 export default function SignIn() {
   const [email, setEmail] = useState("")
@@ -12,115 +12,94 @@ export default function SignIn() {
   const { toast } = useToast()
   const navigate = useNavigate()
 
-  const handleSignIn = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-    
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      setLoading(true)
+      console.log("Attempting sign in with:", { email })
+      
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
-      if (error) throw error
-      
-      toast({
-        title: "Successfully signed in!",
-        description: "Welcome back!",
-      })
-      
-      navigate("/")
-    } catch (error: any) {
+      if (error) {
+        console.error("Sign in error:", error)
+        toast({
+          variant: "destructive",
+          title: "Error signing in",
+          description: error.message,
+        })
+      } else {
+        console.log("Sign in successful:", data)
+        toast({
+          title: "Welcome back!",
+          description: "You've successfully signed in",
+        })
+        navigate("/")
+      }
+    } catch (error) {
+      console.error("Unexpected error during sign in:", error)
       toast({
         variant: "destructive",
-        title: "Error signing in",
-        description: error.message,
+        title: "Error",
+        description: "An unexpected error occurred",
       })
     } finally {
       setLoading(false)
     }
   }
 
-  const handleGoogleSignIn = async () => {
-    try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`
-        }
-      })
-
-      if (error) throw error
-
-      // The user will be redirected to Google's login page
-    } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Error signing in with Google",
-        description: error.message,
-      })
-    }
-  }
-
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold">Sign in to your account</h2>
-          <p className="mt-2 text-muted-foreground">
-            Or{" "}
-            <Link to="/auth/signup" className="text-primary hover:underline">
-              create a new account
-            </Link>
+    <div className="flex min-h-[80vh] items-center justify-center">
+      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+        <div className="flex flex-col space-y-2 text-center">
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Welcome back
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Enter your credentials to sign in
           </p>
         </div>
 
-        <form onSubmit={handleSignIn} className="mt-8 space-y-6">
-          <div className="space-y-4">
-            <div>
-              <Input
-                type="email"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div>
-              <Input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <Link
-              to="/auth/forgot-password"
-              className="text-sm text-primary hover:underline"
-            >
-              Forgot your password?
-            </Link>
-          </div>
-
-          <div className="space-y-4">
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Signing in..." : "Sign in"}
-            </Button>
-
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full"
-              onClick={handleGoogleSignIn}
-            >
-              Sign in with Google
-            </Button>
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? "Signing in..." : "Sign In"}
+          </Button>
         </form>
+
+        <div className="text-center text-sm">
+          <a
+            href="/auth/forgot-password"
+            className="text-primary underline-offset-4 hover:underline"
+          >
+            Forgot password?
+          </a>
+        </div>
+
+        <div className="text-center text-sm">
+          Don't have an account?{" "}
+          <a
+            href="/auth/signup"
+            className="text-primary underline-offset-4 hover:underline"
+          >
+            Sign up
+          </a>
+        </div>
       </div>
     </div>
   )
