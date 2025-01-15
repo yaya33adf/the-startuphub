@@ -37,8 +37,9 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
           setIsAdmin(false);
         } else {
           console.log("Full profile data:", profile);
-          console.log("Is user admin?", profile?.role === 'admin');
-          setIsAdmin(profile?.role === 'admin');
+          const isUserAdmin = profile?.role === 'admin';
+          console.log("Is user admin?", isUserAdmin);
+          setIsAdmin(isUserAdmin);
         }
       } catch (error) {
         console.error("Error in checkAdminStatus:", error);
@@ -48,12 +49,20 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
       }
     };
 
+    // Only check admin status once session loading is complete
     if (!sessionLoading) {
+      console.log("Session loading complete, checking admin status");
       checkAdminStatus();
     }
   }, [session, sessionLoading]);
 
-  console.log("Loading state:", { sessionLoading, isLoading });
+  // Log current state for debugging
+  console.log("Current state:", { 
+    sessionLoading, 
+    isLoading, 
+    isAdmin, 
+    hasSession: !!session 
+  });
 
   if (sessionLoading || isLoading) {
     return (
