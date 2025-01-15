@@ -26,7 +26,7 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
         console.log("Checking admin status for user:", session.user.id);
         const { data: profile, error } = await supabase
           .from('profiles')
-          .select('*')
+          .select('role')
           .eq('id', session.user.id)
           .single();
 
@@ -34,10 +34,8 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
           console.error("Error fetching profile:", error);
           setIsAdmin(false);
         } else {
-          console.log("Full profile data:", profile);
-          const hasAdminRole = profile?.role === 'admin';
-          console.log("Is user admin?", hasAdminRole);
-          setIsAdmin(hasAdminRole);
+          console.log("Profile role:", profile?.role);
+          setIsAdmin(profile?.role === 'admin');
         }
       } catch (error) {
         console.error("Error in checkAdminStatus:", error);
@@ -47,14 +45,10 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
       }
     };
 
-    if (session?.user) {
-      console.log("Session exists, checking admin status");
+    if (!sessionLoading) {
       checkAdminStatus();
-    } else {
-      console.log("No session, skipping admin check");
-      setIsLoading(false);
     }
-  }, [session]);
+  }, [session, sessionLoading]);
 
   if (sessionLoading || isLoading) {
     console.log("Loading state:", { sessionLoading, isLoading });
