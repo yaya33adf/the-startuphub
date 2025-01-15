@@ -41,13 +41,18 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
           console.log("No active session found");
           setIsAdmin(false);
           setLoading(false);
+          toast({
+            variant: "destructive",
+            title: "Access Denied",
+            description: "Please sign in to access the admin area"
+          });
           return;
         }
 
         // Check profile and role
         const { data: profile, error: profileError } = await supabase
           .from('profiles')
-          .select('*')
+          .select('role')
           .eq('id', session.user.id)
           .single();
 
@@ -59,11 +64,19 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
         }
 
         const userIsAdmin = profile?.role === 'admin';
-        console.log("User role:", profile?.role);
         console.log("Is admin?", userIsAdmin);
+        
+        if (!userIsAdmin) {
+          toast({
+            variant: "destructive",
+            title: "Access Denied",
+            description: "You need admin privileges to access this page"
+          });
+        }
+        
         setIsAdmin(userIsAdmin);
         
-      } catch (error: any) {
+      } catch (error) {
         console.error("Error in checkAdmin:", error);
         toast({
           variant: "destructive",
@@ -72,7 +85,6 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
         });
         setIsAdmin(false);
       } finally {
-        console.log("Finishing admin check...");
         setLoading(false);
       }
     };
@@ -81,7 +93,6 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
   }, [toast]);
 
   if (loading) {
-    console.log("Still loading admin status...");
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -90,16 +101,9 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (!isAdmin) {
-    console.log("Access denied - not an admin");
-    toast({
-      variant: "destructive",
-      title: "Access Denied",
-      description: "You need admin privileges to access this page"
-    });
-    return <Navigate to="/auth/signin" replace />;
+    return <Navigate to="/" replace />;
   }
 
-  console.log("Access granted - user is admin");
   return <>{children}</>;
 };
 
@@ -138,7 +142,7 @@ const App = () => (
                 <Route path="/auth/signup" element={<SignUp />} />
                 <Route path="/auth/forgot-password" element={<ForgotPassword />} />
                 <Route 
-                  path="/admin/*" 
+                  path="/admin" 
                   element={
                     <ProtectedAdminRoute>
                       <AdminDashboard />
