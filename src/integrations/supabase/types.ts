@@ -268,6 +268,39 @@ export type Database = {
         }
         Relationships: []
       }
+      feedback: {
+        Row: {
+          created_at: string | null
+          feedback_text: string
+          id: string
+          idea_description: string
+          idea_title: string
+          rating: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          feedback_text: string
+          id?: string
+          idea_description: string
+          idea_title: string
+          rating?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          feedback_text?: string
+          id?: string
+          idea_description?: string
+          idea_title?: string
+          rating?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       goals: {
         Row: {
           completed: boolean | null
