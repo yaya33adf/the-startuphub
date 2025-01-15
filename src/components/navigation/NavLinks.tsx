@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
+import { Tool, BookOpen, Users2, BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
 
 export const NavLinks = () => {
   return (
@@ -7,27 +7,24 @@ export const NavLinks = () => {
       <BusinessInsightsDropdown />
       <Link
         to="/tools"
-        className="text-sm font-medium transition-colors hover:text-primary"
+        className="flex items-center gap-2 text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
       >
-        Tools
+        <Tool className="w-4 h-4" />
+        <span>Tools</span>
       </Link>
       <Link
         to="/blog"
-        className="text-sm font-medium transition-colors hover:text-primary"
+        className="flex items-center gap-2 text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
       >
-        Blog
+        <BookOpen className="w-4 h-4" />
+        <span>Blog</span>
       </Link>
       <Link
         to="/community"
-        className="text-sm font-medium transition-colors hover:text-primary"
+        className="flex items-center gap-2 text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
       >
-        Community
-      </Link>
-      <Link
-        to="/team"
-        className="text-sm font-medium transition-colors hover:text-primary"
-      >
-        Team
+        <Users2 className="w-4 h-4" />
+        <span>Community</span>
       </Link>
     </div>
   );

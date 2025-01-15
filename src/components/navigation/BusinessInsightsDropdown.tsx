@@ -23,15 +23,26 @@ export const BusinessInsightsDropdown = ({ onClick = () => {} }: BusinessInsight
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-10 px-3 py-2">
+        <Button 
+          variant="ghost" 
+          className="h-10 px-3 py-2 transition-all duration-200 hover:bg-accent/50 hover:text-accent-foreground hover:scale-105"
+        >
           <Briefcase className="w-4 h-4 mr-2" />
           <span>Business Insights</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
+      <DropdownMenuContent 
+        align="start"
+        className="w-56 animate-in fade-in-0 zoom-in-95"
+      >
         {businessInsightsItems.map((item) => (
-          <DropdownMenuItem key={item.to} asChild onClick={onClick}>
-            <Link to={item.to} className="flex items-center gap-2 w-full">
+          <DropdownMenuItem 
+            key={item.to} 
+            asChild 
+            onClick={onClick}
+            className="transition-colors duration-200 hover:bg-accent/50"
+          >
+            <Link to={item.to} className="flex items-center gap-2 w-full p-2">
               <item.icon className="w-4 h-4" />
               <span>{item.label}</span>
             </Link>
@@ -41,3 +52,6 @@ export const BusinessInsightsDropdown = ({ onClick = () => {} }: BusinessInsight
     </DropdownMenu>
   );
 };
+
+// Re-export icons for NavLinks
+export { Tool, BookOpen, Users2 } from "lucide-react";
