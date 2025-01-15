@@ -69,6 +69,45 @@ export const TeamRecommendationForm = () => {
     },
   });
 
+  const generateTeamRoles = (data: typeof formData) => {
+    const roles: { role: string; count: number }[] = [];
+    
+    switch (data.project_type) {
+      case "web":
+        roles.push(
+          { role: "Frontend Developer", count: data.project_size === "large" ? 2 : 1 },
+          { role: "Backend Developer", count: data.project_size === "large" ? 2 : 1 },
+          { role: "UI/UX Designer", count: 1 },
+          { role: "Project Manager", count: 1 }
+        );
+        break;
+      case "mobile":
+        roles.push(
+          { role: "Mobile Developer", count: data.project_size === "large" ? 3 : 2 },
+          { role: "UI/UX Designer", count: 1 },
+          { role: "QA Engineer", count: 1 },
+          { role: "Project Manager", count: 1 }
+        );
+        break;
+      case "marketing":
+        roles.push(
+          { role: "Marketing Manager", count: 1 },
+          { role: "Content Creator", count: data.project_size === "large" ? 2 : 1 },
+          { role: "Social Media Specialist", count: 1 },
+          { role: "Graphic Designer", count: 1 }
+        );
+        break;
+      default:
+        roles.push(
+          { role: "Project Manager", count: 1 },
+          { role: "Team Lead", count: 1 },
+          { role: "Team Member", count: data.project_size === "large" ? 3 : 2 }
+        );
+    }
+    
+    return roles;
+  };
+
   const generateRecommendationMutation = useMutation({
     mutationFn: async (formData: FormData) => {
       if (!session?.user?.id) {
@@ -115,47 +154,6 @@ export const TeamRecommendationForm = () => {
       });
     },
   });
-
-  const generateTeamRoles = (data: typeof formData) => {
-    // This is a simple example of role generation logic
-    // You could make this more sophisticated based on project requirements
-    const roles: { role: string; count: number }[] = [];
-    
-    switch (data.project_type) {
-      case "web":
-        roles.push(
-          { role: "Frontend Developer", count: data.project_size === "large" ? 2 : 1 },
-          { role: "Backend Developer", count: data.project_size === "large" ? 2 : 1 },
-          { role: "UI/UX Designer", count: 1 },
-          { role: "Project Manager", count: 1 }
-        );
-        break;
-      case "mobile":
-        roles.push(
-          { role: "Mobile Developer", count: data.project_size === "large" ? 3 : 2 },
-          { role: "UI/UX Designer", count: 1 },
-          { role: "QA Engineer", count: 1 },
-          { role: "Project Manager", count: 1 }
-        );
-        break;
-      case "marketing":
-        roles.push(
-          { role: "Marketing Manager", count: 1 },
-          { role: "Content Creator", count: data.project_size === "large" ? 2 : 1 },
-          { role: "Social Media Specialist", count: 1 },
-          { role: "Graphic Designer", count: 1 }
-        );
-        break;
-      default:
-        roles.push(
-          { role: "Project Manager", count: 1 },
-          { role: "Team Lead", count: 1 },
-          { role: "Team Member", count: data.project_size === "large" ? 3 : 2 }
-        );
-    }
-    
-    return roles;
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
