@@ -1,4 +1,4 @@
-import { QrCode, DollarSign, Receipt, FileSpreadsheet, BarChart3, Mail, Target, Users, CalendarDays, Shield } from "lucide-react";
+import { QrCode, DollarSign, Receipt, FileSpreadsheet, BarChart3, Mail, Target, Users, CalendarDays, Shield, User } from "lucide-react";
 import { QRCodeGenerator } from "./QRCodeGenerator";
 import { CurrencyConverter } from "./CurrencyConverter";
 import { InvoiceGenerator } from "./InvoiceGenerator";
@@ -9,8 +9,16 @@ import { GoalTracker } from "./GoalTracker";
 import { TeamManagement } from "./TeamManagement";
 import { AppointmentScheduler } from "./AppointmentScheduler";
 import { BrandIdentityTool } from "./BrandIdentityTool";
+import { PersonaGenerator } from "./PersonaGenerator";
 
 export const tools = [
+  {
+    title: "Make My Persona",
+    description: "Generate a customizable buyer persona document outlining demographics, psychographics, and more",
+    icon: User,
+    component: PersonaGenerator,
+    active: true,
+  },
   {
     title: "Brand Identity Tool",
     description: "Create and manage your brand's visual identity",
