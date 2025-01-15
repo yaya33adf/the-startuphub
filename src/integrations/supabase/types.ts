@@ -421,6 +421,77 @@ export type Database = {
         }
         Relationships: []
       }
+      startup_ratings: {
+        Row: {
+          created_at: string | null
+          id: string
+          rating: number
+          startup_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          rating: number
+          startup_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          rating?: number
+          startup_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "startup_ratings_startup_id_fkey"
+            columns: ["startup_id"]
+            isOneToOne: false
+            referencedRelation: "startups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      startups: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string
+          id: string
+          name: string
+          rating: number | null
+          total_ratings: number | null
+          updated_at: string | null
+          user_id: string | null
+          website_url: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description: string
+          id?: string
+          name: string
+          rating?: number | null
+          total_ratings?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string
+          id?: string
+          name?: string
+          rating?: number | null
+          total_ratings?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
       team_recommendations: {
         Row: {
           budget_range: string | null
