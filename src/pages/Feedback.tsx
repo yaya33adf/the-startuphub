@@ -22,6 +22,7 @@ const Feedback = () => {
     title: "",
     description: "",
   });
+  const [comments, setComments] = useState<{ [key: string]: string }>({});
   const { toast } = useToast();
   const session = useSession();
   const queryClient = useQueryClient();
@@ -60,8 +61,9 @@ const Feedback = () => {
             user_id: session.user.id,
             idea_title: ideaData.title,
             idea_description: ideaData.description,
-            feedback_text: '', // Initialize with empty string since it's required
-            rating: null
+            feedback_text: '',
+            rating: null,
+            comment_text: null
           }
         ])
         .select()
@@ -91,16 +93,28 @@ const Feedback = () => {
     },
   });
 
-  // Submit rating for an idea
-  const submitRatingMutation = useMutation({
-    mutationFn: async ({ ideaId, rating }: { ideaId: string; rating: number }) => {
+  // Submit rating and comment for an idea
+  const submitRatingAndCommentMutation = useMutation({
+    mutationFn: async ({ 
+      ideaId, 
+      rating, 
+      comment 
+    }: { 
+      ideaId: string; 
+      rating?: number; 
+      comment?: string;
+    }) => {
       if (!session?.user) {
         throw new Error("Authentication required");
       }
 
+      const updates: any = {};
+      if (rating !== undefined) updates.rating = rating;
+      if (comment !== undefined) updates.comment_text = comment;
+
       const { data, error } = await supabase
         .from('feedback')
-        .update({ rating })
+        .update(updates)
         .eq('id', ideaId)
         .select();
 
@@ -109,16 +123,17 @@ const Feedback = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['feedback'] });
+      setComments({});
       toast({
         title: "Success",
-        description: "Rating submitted successfully",
+        description: "Feedback submitted successfully",
       });
     },
     onError: (error) => {
-      console.error('Error submitting rating:', error);
+      console.error('Error submitting feedback:', error);
       toast({
         title: "Error",
-        description: "Failed to submit rating. Please try again.",
+        description: "Failed to submit feedback. Please try again.",
         variant: "destructive",
       });
     },
@@ -137,17 +152,17 @@ const Feedback = () => {
     submitIdeaMutation.mutate(newIdea);
   };
 
-  const handleRating = (ideaId: string, rating: number) => {
+  const handleRatingAndComment = (ideaId: string, rating?: number, comment?: string) => {
     if (!session) {
       toast({
         title: "Authentication required",
-        description: "Please sign in to rate ideas",
+        description: "Please sign in to provide feedback",
         variant: "destructive",
       });
       return;
     }
 
-    submitRatingMutation.mutate({ ideaId, rating });
+    submitRatingAndCommentMutation.mutate({ ideaId, rating, comment });
   };
 
   return (
@@ -225,26 +240,54 @@ const Feedback = () => {
               </CardHeader>
               <CardContent>
                 <p className="mb-4">{idea.idea_description}</p>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm font-medium">Rate this idea:</span>
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Button
-                      key={star}
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleRating(idea.id, star)}
-                      className={`${
-                        idea.rating >= star ? 'text-yellow-500' : 'text-gray-300'
-                      }`}
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-sm font-medium">Rate this idea:</span>
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Button
+                        key={star}
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleRatingAndComment(idea.id, star)}
+                        className={`${
+                          idea.rating >= star ? 'text-yellow-500' : 'text-gray-300'
+                        }`}
+                      >
+                        ★
+                      </Button>
+                    ))}
+                    {idea.rating && (
+                      <span className="text-sm text-gray-500">
+                        (Current rating: {idea.rating})
+                      </span>
+                    )}
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label htmlFor={`comment-${idea.id}`} className="text-sm font-medium">
+                      Add a tip or comment:
+                    </label>
+                    <Textarea
+                      id={`comment-${idea.id}`}
+                      value={comments[idea.id] || ''}
+                      onChange={(e) => setComments({ ...comments, [idea.id]: e.target.value })}
+                      placeholder="Share your thoughts or tips about this idea..."
+                      className="min-h-[80px]"
+                    />
+                    <Button 
+                      onClick={() => handleRatingAndComment(idea.id, undefined, comments[idea.id])}
+                      disabled={!comments[idea.id]}
                     >
-                      ★
+                      Submit Comment
                     </Button>
-                  ))}
-                  {idea.rating && (
-                    <span className="text-sm text-gray-500">
-                      (Current rating: {idea.rating})
-                    </span>
-                  )}
+                    
+                    {idea.comment_text && (
+                      <div className="mt-4 p-4 bg-muted rounded-lg">
+                        <h4 className="font-medium mb-2">Community Tips:</h4>
+                        <p className="text-sm">{idea.comment_text}</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </CardContent>
             </Card>
