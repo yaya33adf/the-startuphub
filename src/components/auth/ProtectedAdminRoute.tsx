@@ -16,7 +16,7 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   useEffect(() => {
     const checkAdminStatus = async () => {
       if (!session?.user) {
-        console.log("No session found, setting isAdmin to false");
+        console.log("No session found, redirecting to login");
         setIsAdmin(false);
         setIsLoading(false);
         return;
@@ -53,8 +53,9 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
     }
   }, [session, sessionLoading]);
 
+  console.log("Loading state:", { sessionLoading, isLoading });
+
   if (sessionLoading || isLoading) {
-    console.log("Loading state:", { sessionLoading, isLoading });
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
