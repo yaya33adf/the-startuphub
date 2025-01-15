@@ -18,8 +18,8 @@ export const DesktopNav = ({ session, userProfile, handleSignOut }: DesktopNavPr
         userEmail={session.user.email || ''}
       />
     ) : (
-      <Button variant="outline" asChild className="flex items-center gap-2">
-        <Link to="/auth/signin">
+      <Button asChild variant="outline">
+        <Link to="/auth/signin" className="flex items-center gap-2">
           <LogIn className="w-4 h-4" />
           <span>Sign In</span>
         </Link>
