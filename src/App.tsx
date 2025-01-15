@@ -33,11 +33,12 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const checkAdmin = async () => {
       try {
+        console.log("Starting admin check...");
         const { data: { session } } = await supabase.auth.getSession();
-        console.log("Checking admin status for session:", session);
+        console.log("Current session:", session);
         
         if (!session?.user?.id) {
-          console.log("No session or user ID found");
+          console.log("No active session found");
           setIsAdmin(false);
           setLoading(false);
           return;
@@ -52,8 +53,8 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
 
         if (profileError) {
           console.error("Error fetching profile:", profileError);
-          // If profile doesn't exist, create it
           if (profileError.code === 'PGRST116') {
+            console.log("Profile doesn't exist, creating one...");
             const { error: insertError } = await supabase
               .from('profiles')
               .insert([
@@ -62,21 +63,23 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
                   email: session.user.email,
                   role: 'user'
                 }
-              ]);
+              ])
+              .single();
             
             if (insertError) {
               console.error("Error creating profile:", insertError);
               throw insertError;
             }
+            setIsAdmin(false);
           } else {
             throw profileError;
           }
+        } else {
+          console.log("Profile data:", profile);
+          const userIsAdmin = profile?.role === 'admin';
+          console.log("User is admin:", userIsAdmin);
+          setIsAdmin(userIsAdmin);
         }
-
-        console.log("Profile data:", profile);
-        const userIsAdmin = profile?.role === 'admin';
-        console.log("User is admin:", userIsAdmin);
-        setIsAdmin(userIsAdmin);
         
       } catch (error: any) {
         console.error("Error in checkAdmin:", error);
@@ -87,6 +90,7 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
         });
         setIsAdmin(false);
       } finally {
+        console.log("Finishing admin check...");
         setLoading(false);
       }
     };
@@ -95,6 +99,7 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
   }, [toast]);
 
   if (loading) {
+    console.log("Still loading admin status...");
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -103,6 +108,7 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (!isAdmin) {
+    console.log("Access denied - not an admin");
     toast({
       variant: "destructive",
       title: "Access Denied",
@@ -111,6 +117,7 @@ const ProtectedAdminRoute = ({ children }: { children: React.ReactNode }) => {
     return <Navigate to="/auth/signin" replace />;
   }
 
+  console.log("Access granted - user is admin");
   return <>{children}</>;
 };
 
