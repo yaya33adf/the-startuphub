@@ -16,9 +16,10 @@ import { useToast } from "@/components/ui/use-toast";
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Verify admin status on component mount
+  // Verify admin status
   useEffect(() => {
     const checkAdminStatus = async () => {
       try {
@@ -47,7 +48,10 @@ const AdminDashboard = () => {
             title: "Access Denied",
             description: "You need admin privileges to access this page"
           });
+          return;
         }
+
+        setIsAdmin(true);
       } catch (error) {
         console.error("Error checking admin status:", error);
         navigate('/');
@@ -60,7 +64,7 @@ const AdminDashboard = () => {
   }, [navigate, toast]);
 
   // Fetch blog posts for admin management
-  const { data: blogPosts } = useQuery({
+  const { data: blogPosts, isLoading: isLoadingPosts } = useQuery({
     queryKey: ["adminBlogPosts"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -71,14 +75,19 @@ const AdminDashboard = () => {
       if (error) throw error;
       return data;
     },
+    enabled: isAdmin, // Only fetch if user is admin
   });
 
-  if (isLoading) {
+  if (isLoading || isLoadingPosts) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
       </div>
     );
+  }
+
+  if (!isAdmin) {
+    return null;
   }
 
   return (
@@ -115,6 +124,9 @@ const AdminDashboard = () => {
                   </Button>
                 </div>
               ))}
+              {(!blogPosts || blogPosts.length === 0) && (
+                <p className="text-muted-foreground text-sm">No blog posts yet</p>
+              )}
             </div>
           </CardContent>
         </Card>
