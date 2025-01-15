@@ -9,7 +9,8 @@ interface ChartSectionProps {
   platformData: Array<{ name: string; score: number }>;
   segmentationData: Array<{ name: string; value: number }>;
   sentimentData: Array<{ date: string; positive: number; neutral: number; negative: number }>;
-  competitorData: Array<{ date: string; current: number; competitor1: number; competitor2: number }>;
+  competitorData: Array<{ date: string; current: number; [key: string]: number | string }>;
+  competitors: string[];
   predictiveData: Array<{ date: string; actual: number | null; predicted: number | null }>;
   insights: string[];
   recommendations: Array<{ title: string; description: string }>;
@@ -20,6 +21,7 @@ export const ChartSection = ({
   segmentationData,
   sentimentData,
   competitorData,
+  competitors,
   predictiveData,
   insights,
   recommendations,
@@ -32,7 +34,10 @@ export const ChartSection = ({
       </div>
       
       <div className="grid gap-8 md:grid-cols-2">
-        <CompetitorAnalysis data={competitorData} />
+        <CompetitorAnalysis 
+          data={competitorData}
+          competitors={competitors}
+        />
         <PredictiveAnalysis data={predictiveData} confidenceScore={85} />
       </div>
       
