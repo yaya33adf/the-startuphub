@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { Wrench, BookOpen, Users2, MessageSquare, Users, BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
+import { Wrench, BookOpen, Users2, MessageSquare, Users, Rocket } from "lucide-react";
+import { BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
 
 export const NavLinks = () => {
   return (
@@ -25,6 +26,13 @@ export const NavLinks = () => {
       >
         <Users2 className="w-4 h-4" />
         <span>Community</span>
+      </Link>
+      <Link
+        to="/startups"
+        className="flex items-center gap-2 text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
+      >
+        <Rocket className="w-4 h-4" />
+        <span>Startups</span>
       </Link>
       <Link
         to="/feedback"
