@@ -34,21 +34,21 @@ export const MobileMenu = ({ isOpen, setIsOpen, session, handleSignOut }: Mobile
           <Button 
             variant="outline" 
             onClick={handleSignOut} 
-            className="mt-2 text-red-600 flex items-center gap-2 h-10"
+            className="mt-2 text-red-600"
           >
-            <LogIn className="h-5 w-5" />
-            <span className="font-medium">Sign Out</span>
+            <LogIn className="mr-2" aria-hidden="true" />
+            Sign Out
           </Button>
         ) : (
-          <Link to="/auth/signin" className="mt-2">
-            <Button 
-              variant="outline"
-              className="w-full flex items-center gap-2 justify-center h-10"
+          <Button asChild variant="outline" className="mt-2">
+            <Link 
+              to="/auth/signin"
+              className="flex items-center gap-2 w-full justify-center"
             >
-              <LogIn className="h-5 w-5" />
-              <span className="font-medium">Sign In</span>
-            </Button>
-          </Link>
+              <LogIn aria-hidden="true" />
+              Sign In
+            </Link>
+          </Button>
         )}
       </div>
     </SheetContent>
