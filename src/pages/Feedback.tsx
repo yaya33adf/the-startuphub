@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { IdeaForm } from "@/components/feedback/IdeaForm";
 import { IdeaCard } from "@/components/feedback/IdeaCard";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
 
 const Feedback = () => {
   // Fetch all feedback ideas
