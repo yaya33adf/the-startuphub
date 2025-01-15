@@ -94,31 +94,35 @@ export const NavigationMenu = () => {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
-      <div className="container flex h-16 items-center px-4 transition-all duration-200">
-        <Logo />
-        {isMobile ? (
-          <MobileMenu 
-            isOpen={isOpen} 
-            setIsOpen={setIsOpen}
-            session={session}
-            handleSignOut={handleSignOut}
-          />
-        ) : (
-          <DesktopNav
-            session={session}
-            userProfile={userProfile}
-            handleSignOut={handleSignOut}
-          />
-        )}
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <div className="w-full flex-1 md:w-auto md:flex-none" />
-          {session && (
-            <UserMenu 
-              userProfile={userProfile} 
+      <div className="container flex h-16 items-center justify-between transition-all duration-200 ease-in-out transform-gpu">
+        <div className="flex items-center gap-4 flex-shrink-0">
+          <Logo />
+        </div>
+        <div className="flex-1 flex items-center justify-end">
+          {isMobile ? (
+            <MobileMenu 
+              isOpen={isOpen} 
+              setIsOpen={setIsOpen}
+              session={session}
               handleSignOut={handleSignOut}
-              userEmail={session.user.email}
+            />
+          ) : (
+            <DesktopNav
+              session={session}
+              userProfile={userProfile}
+              handleSignOut={handleSignOut}
             />
           )}
+          <div className="flex items-center justify-end space-x-2">
+            <div className="w-full flex-1 md:w-auto md:flex-none" />
+            {session && (
+              <UserMenu 
+                userProfile={userProfile} 
+                handleSignOut={handleSignOut}
+                userEmail={session.user.email}
+              />
+            )}
+          </div>
         </div>
       </div>
     </nav>
