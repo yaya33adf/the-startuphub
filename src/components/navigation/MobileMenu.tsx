@@ -29,7 +29,7 @@ export const MobileMenu = ({ isOpen, setIsOpen, session, handleSignOut }: Mobile
         <SheetTitle>Menu</SheetTitle>
       </SheetHeader>
       <div className="flex flex-col gap-2 mt-4">
-        <NavLinks onClick={() => setIsOpen(false)} />
+        <NavLinks />
         {session ? (
           <Button 
             variant="outline" 
@@ -43,7 +43,6 @@ export const MobileMenu = ({ isOpen, setIsOpen, session, handleSignOut }: Mobile
           <Button 
             variant="outline" 
             asChild 
-            onClick={() => setIsOpen(false)} 
             className="mt-2"
           >
             <Link to="/auth/signin" className="flex items-center gap-2 justify-center">
