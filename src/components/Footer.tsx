@@ -1,4 +1,4 @@
-import { Github, Twitter } from "lucide-react";
+import { Github, Twitter, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
@@ -67,6 +67,13 @@ const Footer = () => {
           <div className="space-y-4">
             <h3 className="font-semibold text-lg text-primary">Connect</h3>
             <div className="flex space-x-4">
+              <Link
+                to="/contact"
+                className="text-muted-foreground hover:text-primary transition-colors"
+                title="Contact Us"
+              >
+                <MessageSquare className="h-5 w-5" />
+              </Link>
               <a
                 href="https://twitter.com"
                 target="_blank"

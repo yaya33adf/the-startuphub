@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import Index from "@/pages/Index";
 import Blog from "@/pages/Blog";
 import Community from "@/pages/Community";
+import Contact from "@/pages/Contact";
 import Crowdfunding from "@/pages/Crowdfunding";
 import Feedback from "@/pages/Feedback";
 import Markets from "@/pages/Markets";
@@ -33,6 +34,7 @@ function App() {
             <Route path="/" element={<Index />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/community" element={<Community />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/crowdfunding" element={<Crowdfunding />} />
             <Route path="/feedback" element={<Feedback />} />
             <Route path="/markets" element={<Markets />} />
