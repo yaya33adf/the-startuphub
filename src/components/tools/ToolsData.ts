@@ -11,8 +11,16 @@ import { AppointmentScheduler } from "./AppointmentScheduler";
 import { BrandIdentityTool } from "./BrandIdentityTool";
 import { BusinessNameGenerator } from "./BusinessNameGenerator";
 import { BookNameGenerator } from "./BookNameGenerator";
+import { PasswordGenerator } from "./PasswordGenerator";
 
 export const tools = [
+  {
+    title: "Password Generator",
+    description: "Generate secure passwords with customizable options",
+    icon: Shield,
+    component: PasswordGenerator,
+    active: true,
+  },
   {
     title: "Book Name Generator",
     description: "Generate creative book titles based on genres and keywords",
