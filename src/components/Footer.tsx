@@ -1,4 +1,4 @@
-import { Github, Twitter, Map } from "lucide-react";
+import { Github, Twitter } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
@@ -55,6 +55,11 @@ const Footer = () => {
                   Community
                 </Link>
               </li>
+              <li>
+                <Link to="/sitemap" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  Site Map
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -78,13 +83,6 @@ const Footer = () => {
               >
                 <Github className="h-5 w-5" />
               </a>
-              <Link
-                to="/sitemap"
-                className="text-muted-foreground hover:text-primary transition-colors"
-                title="Site Map"
-              >
-                <Map className="h-5 w-5" />
-              </Link>
             </div>
           </div>
         </div>
