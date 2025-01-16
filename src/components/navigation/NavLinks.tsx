@@ -1,29 +1,38 @@
 import { Link } from "react-router-dom";
-import { Wrench, BookOpen, Users2, MessageSquare, Users, Rocket } from "lucide-react";
-import { BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
+import { Button } from "@/components/ui/button";
 import { StartupsDropdown } from "./StartupsDropdown";
+import { ToolsDropdown } from "./ToolsDropdown";
+import { BarChart2, BookOpen } from "lucide-react";
 
-const navLinks = [
-  { to: "/tools", icon: Wrench, label: "Tools" },
-  { to: "/blog", icon: BookOpen, label: "Blog" },
-  { to: "/community", icon: Users2, label: "Community" },
-];
+interface NavLinksProps {
+  onClick?: () => void;
+}
 
-export const NavLinks = () => {
+export const NavLinks = ({ onClick = () => {} }: NavLinksProps) => {
   return (
-    <div className="flex items-center gap-6">
-      <BusinessInsightsDropdown />
-      <StartupsDropdown />
-      {navLinks.map(({ to, icon: Icon, label }) => (
-        <Link
-          key={to}
-          to={to}
-          className="flex items-center gap-2 text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
-        >
-          <Icon className="w-4 h-4" />
-          <span>{label}</span>
+    <>
+      <StartupsDropdown onClick={onClick} />
+      <ToolsDropdown onClick={onClick} />
+      <Button 
+        variant="ghost" 
+        asChild
+        className="h-10 px-3 py-2 transition-all duration-200 hover:bg-accent/50 hover:text-accent-foreground hover:scale-105"
+      >
+        <Link to="/markets" className="flex items-center gap-2" onClick={onClick}>
+          <BarChart2 className="w-4 h-4" />
+          <span>Markets</span>
         </Link>
-      ))}
-    </div>
+      </Button>
+      <Button 
+        variant="ghost" 
+        asChild
+        className="h-10 px-3 py-2 transition-all duration-200 hover:bg-accent/50 hover:text-accent-foreground hover:scale-105"
+      >
+        <Link to="/blog" className="flex items-center gap-2" onClick={onClick}>
+          <BookOpen className="w-4 h-4" />
+          <span>Blog</span>
+        </Link>
+      </Button>
+    </>
   );
 };
