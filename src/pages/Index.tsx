@@ -3,6 +3,7 @@ import type { TrendData } from "@/types/trends";
 import { HeroSection } from "@/components/home/HeroSection";
 import { StatisticsSection } from "@/components/home/StatisticsSection";
 import { HowItWorksSection } from "@/components/home/HowItWorksSection";
+import { CoreValuesSection } from "@/components/home/CoreValuesSection";
 import { FeaturedSideHustles } from "@/components/home/FeaturedSideHustles";
 import { NewsletterSection } from "@/components/home/NewsletterSection";
 import { FeaturesSection } from "@/components/home/FeaturesSection";
@@ -13,7 +14,6 @@ const Index = () => {
 
   const handleSearchResults = (results: TrendData) => {
     setSearchResults(results);
-    // Add more detailed logging
     console.log("Search results received:", {
       timestamp: new Date().toISOString(),
       resultsLength: Object.keys(results).length,
@@ -30,6 +30,7 @@ const Index = () => {
       />
       <StatisticsSection />
       <HowItWorksSection />
+      <CoreValuesSection />
       <FeaturedSideHustles />
       <FeaturesSection />
       <NewsletterSection />
