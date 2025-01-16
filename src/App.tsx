@@ -31,6 +31,7 @@ import About from "@/pages/About";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import Terms from "@/pages/Terms";
 import NotFound from "@/pages/NotFound";
+import Investors from "@/pages/Investors";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
               <Route path="/crowdfunding" element={<Crowdfunding />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/feedback" element={<Feedback />} />
+              <Route path="/investors" element={<Investors />} />
               <Route path="/markets" element={<Markets />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/side-hustles" element={<SideHustles />} />

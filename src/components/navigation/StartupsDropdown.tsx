@@ -1,4 +1,4 @@
-import { Rocket, MessageSquare, Users } from "lucide-react";
+import { Rocket, MessageSquare, Users, Wallet } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +15,7 @@ interface StartupsDropdownProps {
 export const StartupsDropdown = ({ onClick = () => {} }: StartupsDropdownProps) => {
   const startupsItems = [
     { to: "/startups", icon: Rocket, label: "Startups" },
+    { to: "/investors", icon: Wallet, label: "Investors" },
     { to: "/feedback", icon: MessageSquare, label: "Feedback" },
     { to: "/team", icon: Users, label: "Team" },
   ];
