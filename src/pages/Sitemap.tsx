@@ -54,6 +54,11 @@ const Sitemap = () => {
                   Crowdfunding
                 </a>
               </li>
+              <li>
+                <a href="/team" className="text-muted-foreground hover:text-primary transition-colors">
+                  Team Building
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -74,6 +79,11 @@ const Sitemap = () => {
               <li>
                 <a href="/feedback" className="text-muted-foreground hover:text-primary transition-colors">
                   Feedback
+                </a>
+              </li>
+              <li>
+                <a href="/auth/signin" className="text-muted-foreground hover:text-primary transition-colors">
+                  Sign In
                 </a>
               </li>
             </ul>
