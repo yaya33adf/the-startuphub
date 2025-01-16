@@ -2,9 +2,6 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PageSEO } from "@/components/seo/PageSEO";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Card,
   CardContent,
@@ -12,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -20,21 +18,31 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useToast } from "@/hooks/use-toast";
-import { Star, Link as LinkIcon, Plus } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
+import { Star, Plus } from "lucide-react";
 
-interface Startup {
-  id: string;
-  name: string;
-  description: string;
-  website_url?: string;
-  category?: string;
-  rating: number;
-  total_ratings: number;
-}
+const categories = [
+  "SaaS",
+  "E-commerce",
+  "FinTech",
+  "HealthTech",
+  "EdTech",
+  "AI/ML",
+  "Mobile Apps",
+  "Other",
+];
 
 const Startups = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
@@ -64,243 +72,199 @@ const Startups = () => {
         console.error("Error fetching startups:", error);
         throw error;
       }
-
+      
       console.log("Fetched startups:", data);
-      return data as Startup[];
+      return data;
     },
   });
 
-  const createStartupMutation = useMutation({
-    mutationFn: async (newStartup: Omit<Startup, "id" | "rating" | "total_ratings">) => {
+  const addStartupMutation = useMutation({
+    mutationFn: async () => {
+      console.log("Adding new startup:", { name, description, websiteUrl, category });
       if (!session?.user?.id) {
-        throw new Error("Must be logged in to create a startup");
+        throw new Error("User must be authenticated to add a startup");
       }
 
-      const { data, error } = await supabase
-        .from("startups")
-        .insert([{ ...newStartup, user_id: session.user.id }])
-        .select()
-        .single();
+      const { data, error } = await supabase.from("startups").insert([
+        {
+          name,
+          description,
+          website_url: websiteUrl,
+          category,
+          user_id: session.user.id,
+        },
+      ]);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error adding startup:", error);
+        throw error;
+      }
+
       return data;
     },
     onSuccess: () => {
+      console.log("Successfully added startup");
       queryClient.invalidateQueries({ queryKey: ["startups"] });
-      setIsOpen(false);
-      resetForm();
       toast({
         title: "Success",
-        description: "Your startup has been added successfully!",
+        description: "Startup added successfully",
       });
+      setName("");
+      setDescription("");
+      setWebsiteUrl("");
+      setCategory("");
     },
     onError: (error) => {
-      console.error("Error creating startup:", error);
+      console.error("Error in mutation:", error);
       toast({
         title: "Error",
-        description: "Failed to create startup. Please try again.",
+        description: "Failed to add startup. Please try again.",
         variant: "destructive",
       });
     },
   });
-
-  const rateStartupMutation = useMutation({
-    mutationFn: async ({ startupId, rating }: { startupId: string; rating: number }) => {
-      if (!session?.user?.id) {
-        throw new Error("Must be logged in to rate");
-      }
-
-      const { error } = await supabase
-        .from("startup_ratings")
-        .upsert(
-          {
-            startup_id: startupId,
-            user_id: session.user.id,
-            rating,
-          },
-          { onConflict: "startup_id,user_id" }
-        );
-
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["startups"] });
-      toast({
-        title: "Success",
-        description: "Rating submitted successfully!",
-      });
-    },
-    onError: (error) => {
-      console.error("Error rating startup:", error);
-      toast({
-        title: "Error",
-        description: "Failed to submit rating. Please try again.",
-        variant: "destructive",
-      });
-    },
-  });
-
-  const resetForm = () => {
-    setName("");
-    setDescription("");
-    setWebsiteUrl("");
-    setCategory("");
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    createStartupMutation.mutate({
-      name,
-      description,
-      website_url: websiteUrl,
-      category,
-    });
+    console.log("Submitting startup form");
+    addStartupMutation.mutate();
   };
 
-  const handleRate = (startupId: string, rating: number) => {
-    if (!session) {
-      toast({
-        title: "Authentication required",
-        description: "Please sign in to rate startups",
-        variant: "destructive",
-      });
-      return;
-    }
-    rateStartupMutation.mutate({ startupId, rating });
+  const renderStars = (rating: number) => {
+    return [...Array(5)].map((_, index) => (
+      <Star
+        key={index}
+        className={`w-4 h-4 ${
+          index < Math.floor(rating) ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
+        }`}
+      />
+    ));
   };
-
-  if (isLoading) {
-    return (
-      <div className="container mx-auto py-8 px-4">
-        <h1 className="text-4xl font-bold mb-8">Loading startups...</h1>
-      </div>
-    );
-  }
 
   return (
     <>
       <PageSEO 
-        title="Startup Directory & Launches"
-        description="Discover innovative startups, track launch progress, and connect with founders in our comprehensive startup directory."
+        title="Startup Directory & Reviews"
+        description="Discover innovative startups, read reviews, and connect with founders. Browse our curated list of emerging companies across various industries."
       />
       <div className="container mx-auto py-8 px-4">
-        <h1 className="text-4xl font-bold mb-8">Startup Launches</h1>
-        <div className="flex justify-between items-center mb-8">
-          <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild>
-              <Button>
-                <Plus className="w-4 h-4 mr-2" />
-                Add Startup
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Add New Startup</DialogTitle>
-                <DialogDescription>
-                  Share your startup with the community. Fill in the details below.
-                </DialogDescription>
-              </DialogHeader>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium mb-1">
-                    Startup Name
-                  </label>
-                  <Input
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="description" className="block text-sm font-medium mb-1">
-                    Description
-                  </label>
-                  <Textarea
-                    id="description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="website" className="block text-sm font-medium mb-1">
-                    Website URL
-                  </label>
-                  <Input
-                    id="website"
-                    type="url"
-                    value={websiteUrl}
-                    onChange={(e) => setWebsiteUrl(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="category" className="block text-sm font-medium mb-1">
-                    Category
-                  </label>
-                  <Input
-                    id="category"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                  />
-                </div>
-                <Button type="submit" className="w-full">
-                  Submit
-                </Button>
-              </form>
-            </DialogContent>
-          </Dialog>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {startups.map((startup) => (
-            <Card key={startup.id}>
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle>{startup.name}</CardTitle>
-                    {startup.category && (
-                      <CardDescription>{startup.category}</CardDescription>
-                    )}
-                  </div>
-                  {startup.website_url && (
-                    <a
-                      href={startup.website_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:text-primary/80"
-                    >
-                      <LinkIcon className="w-4 h-4" />
-                    </a>
-                  )}
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="mb-4">{startup.description}</p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Button
-                        key={star}
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleRate(startup.id, star)}
-                        className={`p-1 ${
-                          startup.rating >= star ? "text-yellow-500" : "text-gray-300"
-                        }`}
-                      >
-                        <Star className="w-4 h-4" />
-                      </Button>
+        <h1 className="text-4xl font-bold mb-8">Startup Directory</h1>
+        
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="mb-8">
+              <Plus className="w-4 h-4 mr-2" />
+              Add Startup
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add New Startup</DialogTitle>
+              <DialogDescription>
+                Share details about a startup to help others discover it
+              </DialogDescription>
+            </DialogHeader>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Label htmlFor="name">Startup Name</Label>
+                <Input
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  id="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="website">Website URL</Label>
+                <Input
+                  id="website"
+                  type="url"
+                  value={websiteUrl}
+                  onChange={(e) => setWebsiteUrl(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="category">Category</Label>
+                <Select value={category} onValueChange={setCategory} required>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {cat}
+                      </SelectItem>
                     ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button type="submit" disabled={addStartupMutation.isPending}>
+                {addStartupMutation.isPending ? "Adding..." : "Add Startup"}
+              </Button>
+            </form>
+          </DialogContent>
+        </Dialog>
+
+        {isLoading ? (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {[1, 2, 3].map((i) => (
+              <Card key={i} className="animate-pulse">
+                <CardHeader>
+                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                  <div className="h-3 bg-gray-100 rounded w-1/2"></div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <div className="h-3 bg-gray-100 rounded"></div>
+                    <div className="h-3 bg-gray-100 rounded w-5/6"></div>
                   </div>
-                  <span className="text-sm text-muted-foreground">
-                    {startup.total_ratings} ratings
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {startups.map((startup) => (
+              <Card key={startup.id}>
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    <span>{startup.name}</span>
+                    <div className="flex items-center">
+                      {renderStars(startup.rating || 0)}
+                      <span className="ml-2 text-sm text-muted-foreground">
+                        ({startup.total_ratings || 0})
+                      </span>
+                    </div>
+                  </CardTitle>
+                  <CardDescription>{startup.category}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground mb-4">{startup.description}</p>
+                  {startup.website_url && (
+                    <Button variant="outline" asChild className="w-full">
+                      <a
+                        href={startup.website_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Visit Website
+                      </a>
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );
