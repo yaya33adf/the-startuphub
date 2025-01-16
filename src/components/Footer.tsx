@@ -1,4 +1,4 @@
-import { Github, Twitter } from "lucide-react";
+import { Github, Twitter, Sitemap } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
@@ -78,6 +78,13 @@ const Footer = () => {
               >
                 <Github className="h-5 w-5" />
               </a>
+              <Link
+                to="/sitemap"
+                className="text-muted-foreground hover:text-primary transition-colors"
+                title="Site Map"
+              >
+                <Sitemap className="h-5 w-5" />
+              </Link>
             </div>
           </div>
         </div>
