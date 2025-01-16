@@ -8,6 +8,7 @@ import Blog from "@/pages/Blog";
 import Community from "@/pages/Community";
 import Contact from "@/pages/Contact";
 import Crowdfunding from "@/pages/Crowdfunding";
+import FAQ from "@/pages/FAQ";
 import Feedback from "@/pages/Feedback";
 import Markets from "@/pages/Markets";
 import SideHustles from "@/pages/SideHustles";
@@ -27,40 +28,41 @@ function App() {
   return (
     <HelmetProvider>
       <Router>
-      <div className="flex flex-col min-h-screen">
-        <NavigationMenu />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/community" element={<Community />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/crowdfunding" element={<Crowdfunding />} />
-            <Route path="/feedback" element={<Feedback />} />
-            <Route path="/markets" element={<Markets />} />
-            <Route path="/side-hustles" element={<SideHustles />} />
-            <Route path="/sitemap" element={<Sitemap />} />
-            <Route path="/startups" element={<Startups />} />
-            <Route path="/team" element={<Team />} />
-            <Route path="/tools" element={<Tools />} />
-            <Route path="/trends" element={<Trends />} />
-            <Route path="/auth/signin" element={<SignIn />} />
-            <Route path="/auth/signup" element={<SignUp />} />
-            <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-            <Route path="/auth/profile" element={<ProfileSettings />} />
-            <Route
-              path="/admin/*"
-              element={
-                <ProtectedAdminRoute>
-                  <Dashboard />
-                </ProtectedAdminRoute>
-              }
-            />
-          </Routes>
-        </main>
-        <Footer />
-        <Toaster />
-      </div>
+        <div className="flex flex-col min-h-screen">
+          <NavigationMenu />
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/community" element={<Community />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/crowdfunding" element={<Crowdfunding />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/feedback" element={<Feedback />} />
+              <Route path="/markets" element={<Markets />} />
+              <Route path="/side-hustles" element={<SideHustles />} />
+              <Route path="/sitemap" element={<Sitemap />} />
+              <Route path="/startups" element={<Startups />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/tools" element={<Tools />} />
+              <Route path="/trends" element={<Trends />} />
+              <Route path="/auth/signin" element={<SignIn />} />
+              <Route path="/auth/signup" element={<SignUp />} />
+              <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+              <Route path="/auth/profile" element={<ProfileSettings />} />
+              <Route
+                path="/admin/*"
+                element={
+                  <ProtectedAdminRoute>
+                    <Dashboard />
+                  </ProtectedAdminRoute>
+                }
+              />
+            </Routes>
+          </main>
+          <Footer />
+          <Toaster />
+        </div>
       </Router>
     </HelmetProvider>
   );

@@ -1,4 +1,4 @@
-import { Github, Twitter, MessageSquare } from "lucide-react";
+import { Github, Twitter, MessageSquare, HelpCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
@@ -73,6 +73,13 @@ const Footer = () => {
                 title="Contact Us"
               >
                 <MessageSquare className="h-5 w-5" />
+              </Link>
+              <Link
+                to="/faq"
+                className="text-muted-foreground hover:text-primary transition-colors"
+                title="FAQ"
+              >
+                <HelpCircle className="h-5 w-5" />
               </Link>
               <a
                 href="https://twitter.com"
