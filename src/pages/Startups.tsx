@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PageSEO } from "@/components/seo/PageSEO";
@@ -39,9 +39,17 @@ const Startups = () => {
   const [description, setDescription] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [category, setCategory] = useState("");
-  const session = useSession();
+  const [session, setSession] = useState<any>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setSession(session);
+    };
+    fetchSession();
+  }, []);
 
   const { data: startups = [], isLoading } = useQuery({
     queryKey: ["startups"],
