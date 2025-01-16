@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { StartupsDropdown } from "./StartupsDropdown";
 import { ToolsDropdown } from "./ToolsDropdown";
+import { BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
 import { BarChart2, BookOpen } from "lucide-react";
 
 interface NavLinksProps {
@@ -11,6 +12,7 @@ interface NavLinksProps {
 export const NavLinks = ({ onClick = () => {} }: NavLinksProps) => {
   return (
     <>
+      <BusinessInsightsDropdown onClick={onClick} />
       <StartupsDropdown onClick={onClick} />
       <ToolsDropdown onClick={onClick} />
       <Button 
