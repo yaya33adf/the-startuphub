@@ -1,8 +1,11 @@
 import { Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PageSEO } from "@/components/seo/PageSEO";
+import { useNavigate } from "react-router-dom";
 
 const Investors = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-background">
       <PageSEO 
@@ -118,6 +121,7 @@ const Investors = () => {
             variant="secondary" 
             size="lg"
             className="bg-white text-primary hover:bg-white/90"
+            onClick={() => navigate('/schedule-call')}
           >
             Schedule a Call
           </Button>

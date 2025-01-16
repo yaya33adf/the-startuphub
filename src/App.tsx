@@ -32,6 +32,7 @@ import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import Terms from "@/pages/Terms";
 import NotFound from "@/pages/NotFound";
 import Investors from "@/pages/Investors";
+import ScheduleCall from "@/pages/ScheduleCall";
 
 function App() {
   return (
@@ -50,6 +51,7 @@ function App() {
               <Route path="/faq" element={<FAQ />} />
               <Route path="/feedback" element={<Feedback />} />
               <Route path="/investors" element={<Investors />} />
+              <Route path="/schedule-call" element={<ScheduleCall />} />
               <Route path="/markets" element={<Markets />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/side-hustles" element={<SideHustles />} />
