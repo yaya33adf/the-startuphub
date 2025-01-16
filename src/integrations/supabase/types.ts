@@ -482,6 +482,8 @@ export type Database = {
           category: string | null
           created_at: string | null
           description: string
+          funding_amount: number | null
+          funding_type: string | null
           id: string
           name: string
           rating: number | null
@@ -494,6 +496,8 @@ export type Database = {
           category?: string | null
           created_at?: string | null
           description: string
+          funding_amount?: number | null
+          funding_type?: string | null
           id?: string
           name: string
           rating?: number | null
@@ -506,6 +510,8 @@ export type Database = {
           category?: string | null
           created_at?: string | null
           description?: string
+          funding_amount?: number | null
+          funding_type?: string | null
           id?: string
           name?: string
           rating?: number | null
