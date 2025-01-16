@@ -30,11 +30,6 @@ const QuickLinks = () => {
             Terms of Service
           </Link>
         </li>
-        <li>
-          <Link to="/sitemap" className="text-muted-foreground hover:text-primary transition-colors">
-            Sitemap
-          </Link>
-        </li>
       </ul>
     </div>
   );
