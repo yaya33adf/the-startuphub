@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 interface Note {
   id: string;
   content: string;
   created_at: string;
+  user_id: string;
 }
 
 export const NotesWidget = () => {
@@ -26,10 +27,16 @@ export const NotesWidget = () => {
     const { data, error } = await supabase
       .from("notes")
       .select("*")
+      .eq("user_id", user.user.id)
       .order("created_at", { ascending: false });
 
     if (error) {
       console.error("Error fetching notes:", error);
+      toast({
+        title: "Error fetching notes",
+        description: error.message,
+        variant: "destructive",
+      });
       return;
     }
 
@@ -54,12 +61,10 @@ export const NotesWidget = () => {
       return;
     }
 
-    const { error } = await supabase.from("notes").insert([
-      {
-        content: currentNote,
-        user_id: user.user.id,
-      },
-    ]);
+    const { error } = await supabase.from("notes").insert({
+      content: currentNote,
+      user_id: user.user.id,
+    });
 
     if (error) {
       toast({
