@@ -3,8 +3,9 @@ import { MarketSearch } from "@/components/search/MarketSearch";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Briefcase, Clock, DollarSign, TrendingUp, Trophy } from "lucide-react";
+import { Briefcase, Clock, DollarSign, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { PageSEO } from "@/components/seo/PageSEO";
 
 interface SideHustle {
   id: string;
@@ -45,32 +46,14 @@ const SideHustles = () => {
     // Implement search logic here
   };
 
-  if (error) {
-    return (
-      <div className="container mx-auto p-8">
-        <MarketSearch onSearch={handleSearch} />
-        <div className="text-center text-red-500 mt-8">
-          Error loading side hustles. Please try again later.
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="container mx-auto p-8">
-      <MarketSearch onSearch={handleSearch} />
-      
-      <div className="mt-8">
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold mb-4 flex items-center gap-2">
-            <Briefcase className="h-8 w-8" />
-            Top Side Hustles
-          </h2>
-          <p className="text-muted-foreground">
-            Discover trending opportunities to earn extra income, ranked by market demand and growth potential
-          </p>
-        </div>
-
+    <>
+      <PageSEO 
+        title="Side Hustles & Business Opportunities"
+        description="Find profitable side hustle ideas, explore business opportunities, and learn how to monetize your skills with our comprehensive guide."
+      />
+      <div className="container mx-auto p-8">
+        <h1 className="text-4xl font-bold mb-8">Top Side Hustles</h1>
         {isLoading ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[...Array(6)].map((_, i) => (
@@ -114,7 +97,7 @@ const SideHustles = () => {
 
                   <div>
                     <h4 className="font-semibold mb-2 flex items-center gap-2">
-                      <Trophy className="h-4 w-4" />
+                      <Briefcase className="h-4 w-4" />
                       Required Skills
                     </h4>
                     <div className="flex flex-wrap gap-2">
@@ -131,7 +114,7 @@ const SideHustles = () => {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

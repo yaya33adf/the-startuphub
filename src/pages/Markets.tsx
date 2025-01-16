@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { MarketSearch } from "@/components/search/MarketSearch";
 import { supabase } from "@/integrations/supabase/client";
+import { PageSEO } from "@/components/seo/PageSEO";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ComposedChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { Globe, TrendingUp, ChartBar, Lightbulb, DollarSign } from "lucide-react";
@@ -77,10 +78,13 @@ const Markets = () => {
   }));
 
   return (
-    <div className="p-8">
-      <MarketSearch onSearch={handleSearch} />
-
-      <div className="mt-8 grid gap-6">
+    <>
+      <PageSEO 
+        title="Market Analysis & Opportunities"
+        description="Analyze market trends, discover growth opportunities, and make data-driven decisions with our comprehensive market analysis tools."
+      />
+      <div className="p-8">
+        <h1 className="text-4xl font-bold mb-6">Market Analysis Dashboard</h1>
         {/* Market Overview Chart */}
         <Card>
           <CardHeader>
@@ -161,7 +165,7 @@ const Markets = () => {
           ))}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

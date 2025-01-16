@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useSession } from "@supabase/auth-helpers-react";
+import { PageSEO } from "@/components/seo/PageSEO";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -170,125 +170,131 @@ const Startups = () => {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold">Startup Launches</h1>
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="w-4 h-4 mr-2" />
-              Add Startup
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add New Startup</DialogTitle>
-              <DialogDescription>
-                Share your startup with the community. Fill in the details below.
-              </DialogDescription>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-1">
-                  Startup Name
-                </label>
-                <Input
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="description" className="block text-sm font-medium mb-1">
-                  Description
-                </label>
-                <Textarea
-                  id="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="website" className="block text-sm font-medium mb-1">
-                  Website URL
-                </label>
-                <Input
-                  id="website"
-                  type="url"
-                  value={websiteUrl}
-                  onChange={(e) => setWebsiteUrl(e.target.value)}
-                />
-              </div>
-              <div>
-                <label htmlFor="category" className="block text-sm font-medium mb-1">
-                  Category
-                </label>
-                <Input
-                  id="category"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                />
-              </div>
-              <Button type="submit" className="w-full">
-                Submit
+    <>
+      <PageSEO 
+        title="Startup Directory & Launches"
+        description="Discover innovative startups, track launch progress, and connect with founders in our comprehensive startup directory."
+      />
+      <div className="container mx-auto py-8 px-4">
+        <h1 className="text-4xl font-bold mb-8">Startup Launches</h1>
+        <div className="flex justify-between items-center mb-8">
+          <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="w-4 h-4 mr-2" />
+                Add Startup
               </Button>
-            </form>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {startups.map((startup) => (
-          <Card key={startup.id}>
-            <CardHeader>
-              <div className="flex justify-between items-start">
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Add New Startup</DialogTitle>
+                <DialogDescription>
+                  Share your startup with the community. Fill in the details below.
+                </DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <CardTitle>{startup.name}</CardTitle>
-                  {startup.category && (
-                    <CardDescription>{startup.category}</CardDescription>
+                  <label htmlFor="name" className="block text-sm font-medium mb-1">
+                    Startup Name
+                  </label>
+                  <Input
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="description" className="block text-sm font-medium mb-1">
+                    Description
+                  </label>
+                  <Textarea
+                    id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    required
+                  />
+                </div>
+                <div>
+                  <label htmlFor="website" className="block text-sm font-medium mb-1">
+                    Website URL
+                  </label>
+                  <Input
+                    id="website"
+                    type="url"
+                    value={websiteUrl}
+                    onChange={(e) => setWebsiteUrl(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="category" className="block text-sm font-medium mb-1">
+                    Category
+                  </label>
+                  <Input
+                    id="category"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                  />
+                </div>
+                <Button type="submit" className="w-full">
+                  Submit
+                </Button>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {startups.map((startup) => (
+            <Card key={startup.id}>
+              <CardHeader>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <CardTitle>{startup.name}</CardTitle>
+                    {startup.category && (
+                      <CardDescription>{startup.category}</CardDescription>
+                    )}
+                  </div>
+                  {startup.website_url && (
+                    <a
+                      href={startup.website_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:text-primary/80"
+                    >
+                      <LinkIcon className="w-4 h-4" />
+                    </a>
                   )}
                 </div>
-                {startup.website_url && (
-                  <a
-                    href={startup.website_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary hover:text-primary/80"
-                  >
-                    <LinkIcon className="w-4 h-4" />
-                  </a>
-                )}
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="mb-4">{startup.description}</p>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Button
-                      key={star}
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleRate(startup.id, star)}
-                      className={`p-1 ${
-                        startup.rating >= star ? "text-yellow-500" : "text-gray-300"
-                      }`}
-                    >
-                      <Star className="w-4 h-4" />
-                    </Button>
-                  ))}
+              </CardHeader>
+              <CardContent>
+                <p className="mb-4">{startup.description}</p>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Button
+                        key={star}
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleRate(startup.id, star)}
+                        className={`p-1 ${
+                          startup.rating >= star ? "text-yellow-500" : "text-gray-300"
+                        }`}
+                      >
+                        <Star className="w-4 h-4" />
+                      </Button>
+                    ))}
+                  </div>
+                  <span className="text-sm text-muted-foreground">
+                    {startup.total_ratings} ratings
+                  </span>
                 </div>
-                <span className="text-sm text-muted-foreground">
-                  {startup.total_ratings} ratings
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

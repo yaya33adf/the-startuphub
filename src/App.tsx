@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from "@/components/ui/toaster";
 import { NavigationMenu } from "@/components/NavigationMenu";
 import Footer from "@/components/Footer";
@@ -21,11 +22,10 @@ import ProfileSettings from "@/pages/auth/ProfileSettings";
 import Dashboard from "@/pages/admin/Dashboard";
 import ProtectedAdminRoute from "@/components/auth/ProtectedAdminRoute";
 
-import "./App.css";
-
 function App() {
   return (
-    <Router>
+    <HelmetProvider>
+      <Router>
       <div className="flex flex-col min-h-screen">
         <NavigationMenu />
         <main className="flex-grow">
@@ -59,7 +59,8 @@ function App() {
         <Footer />
         <Toaster />
       </div>
-    </Router>
+      </Router>
+    </HelmetProvider>
   );
 }
 

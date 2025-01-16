@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Search, DollarSign, Trophy, Users, Rocket } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { PageSEO } from "@/components/seo/PageSEO";
 
 const Crowdfunding = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -40,9 +41,13 @@ const Crowdfunding = () => {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <h1 className="text-4xl font-bold mb-8 text-center">Trending Crowdfunding Projects</h1>
-      
+    <>
+      <PageSEO 
+        title="Crowdfunding Projects"
+        description="Discover innovative crowdfunding projects, track funding progress, and find investment opportunities in trending startups."
+      />
+      <div className="container mx-auto py-8 px-4">
+        <h1 className="text-4xl font-bold mb-8 text-center">Trending Crowdfunding Projects</h1>
       <form onSubmit={handleSearch} className="max-w-2xl mx-auto mb-8">
         <div className="flex gap-2">
           <Input
@@ -111,7 +116,8 @@ const Crowdfunding = () => {
           ))}
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 };
 

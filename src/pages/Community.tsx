@@ -8,6 +8,7 @@ import { CommunityHeader } from "@/components/community/CommunityHeader";
 import { SearchBar } from "@/components/community/SearchBar";
 import { QuestionForm } from "@/components/community/QuestionForm";
 import { PostsList } from "@/components/community/PostsList";
+import { PageSEO } from "@/components/seo/PageSEO";
 
 const Community = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -55,19 +56,26 @@ const Community = () => {
   );
 
   return (
-    <div className="p-8">
-      <div className="flex items-center justify-between mb-6">
-        <CommunityHeader />
-        <div className="flex items-center space-x-4">
-          <SearchBar 
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-          />
-          <QuestionForm userId={session.user.id} />
+    <>
+      <PageSEO 
+        title="Community - Connect & Share"
+        description="Join our entrepreneurial community to share ideas, get feedback, and connect with like-minded business professionals."
+      />
+      <div className="p-8">
+        <h1 className="text-4xl font-bold mb-6">Community Hub</h1>
+        <div className="flex items-center justify-between mb-6">
+          <CommunityHeader />
+          <div className="flex items-center space-x-4">
+            <SearchBar 
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+            />
+            <QuestionForm userId={session.user.id} />
+          </div>
         </div>
+        <PostsList posts={filteredPosts} isLoading={isLoading} />
       </div>
-      <PostsList posts={filteredPosts} isLoading={isLoading} />
-    </div>
+    </>
   );
 };
 
