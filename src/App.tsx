@@ -3,6 +3,8 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from "@/components/ui/toaster";
 import { NavigationMenu } from "@/components/NavigationMenu";
 import Footer from "@/components/Footer";
+
+// Import existing pages
 import Index from "@/pages/Index";
 import Blog from "@/pages/Blog";
 import Community from "@/pages/Community";
@@ -24,6 +26,12 @@ import ProfileSettings from "@/pages/auth/ProfileSettings";
 import Dashboard from "@/pages/admin/Dashboard";
 import ProtectedAdminRoute from "@/components/auth/ProtectedAdminRoute";
 
+// Import new pages
+import About from "@/pages/About";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import Terms from "@/pages/Terms";
+import NotFound from "@/pages/NotFound";
+
 function App() {
   return (
     <HelmetProvider>
@@ -33,6 +41,7 @@ function App() {
           <main className="flex-grow">
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/about" element={<About />} />
               <Route path="/blog" element={<Blog />} />
               <Route path="/community" element={<Community />} />
               <Route path="/contact" element={<Contact />} />
@@ -40,10 +49,12 @@ function App() {
               <Route path="/faq" element={<FAQ />} />
               <Route path="/feedback" element={<Feedback />} />
               <Route path="/markets" element={<Markets />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/side-hustles" element={<SideHustles />} />
               <Route path="/sitemap" element={<Sitemap />} />
               <Route path="/startups" element={<Startups />} />
               <Route path="/team" element={<Team />} />
+              <Route path="/terms" element={<Terms />} />
               <Route path="/tools" element={<Tools />} />
               <Route path="/trends" element={<Trends />} />
               <Route path="/auth/signin" element={<SignIn />} />
@@ -58,6 +69,7 @@ function App() {
                   </ProtectedAdminRoute>
                 }
               />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
           <Footer />
