@@ -8,7 +8,7 @@ interface ProtectedAdminRouteProps {
   children: React.ReactNode;
 }
 
-export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
+const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   const { session, isLoading: sessionLoading } = useSessionContext();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -47,17 +47,14 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
       }
     };
 
-    // Reset loading state when session changes
     setIsLoading(true);
     
-    // Only check admin status once session loading is complete
     if (!sessionLoading) {
       console.log("Session loading complete, checking admin status");
       checkAdminStatus();
     }
   }, [session, sessionLoading]);
 
-  // Log current state for debugging
   console.log("Current state:", { 
     sessionLoading, 
     isLoading, 
@@ -87,3 +84,5 @@ export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   console.log("User is admin, rendering admin content");
   return <>{children}</>;
 };
+
+export default ProtectedAdminRoute;
