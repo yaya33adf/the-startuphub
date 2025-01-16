@@ -1,4 +1,4 @@
-import { QrCode, DollarSign, Receipt, FileSpreadsheet, BarChart3, Mail, Target, Users, CalendarDays, Shield, Lightbulb, BookOpen } from "lucide-react";
+import { QrCode, DollarSign, Receipt, FileSpreadsheet, BarChart3, Mail, Target, Users, CalendarDays, Shield, Lightbulb, BookOpen, StickyNote } from "lucide-react";
 import { QRCodeGenerator } from "./QRCodeGenerator";
 import { CurrencyConverter } from "./CurrencyConverter";
 import { InvoiceGenerator } from "./InvoiceGenerator";
@@ -12,8 +12,16 @@ import { BrandIdentityTool } from "./BrandIdentityTool";
 import { BusinessNameGenerator } from "./BusinessNameGenerator";
 import { BookNameGenerator } from "./BookNameGenerator";
 import { PasswordGenerator } from "./PasswordGenerator";
+import { NotesWidget } from "./NotesWidget";
 
 export const tools = [
+  {
+    title: "Notes Widget",
+    description: "Create and manage your notes easily",
+    icon: StickyNote,
+    component: NotesWidget,
+    active: true,
+  },
   {
     title: "Password Generator",
     description: "Generate secure passwords with customizable options",
