@@ -4,11 +4,20 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const CreateStartupForm = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [websiteUrl, setWebsiteUrl] = useState("");
+  const [investmentType, setInvestmentType] = useState("");
+  const [investmentAmount, setInvestmentAmount] = useState("");
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,6 +39,8 @@ export const CreateStartupForm = () => {
         description,
         website_url: websiteUrl,
         user_id: session.data.session.user.id,
+        funding_type: investmentType,
+        funding_amount: investmentAmount ? parseFloat(investmentAmount) : null,
       });
 
       if (error) throw error;
@@ -43,6 +54,8 @@ export const CreateStartupForm = () => {
       setName("");
       setDescription("");
       setWebsiteUrl("");
+      setInvestmentType("");
+      setInvestmentAmount("");
     } catch (error) {
       console.error("Error adding startup:", error);
       toast({
@@ -91,6 +104,38 @@ export const CreateStartupForm = () => {
           value={websiteUrl}
           onChange={(e) => setWebsiteUrl(e.target.value)}
           placeholder="https://example.com"
+        />
+      </div>
+      <div>
+        <label htmlFor="investmentType" className="block text-sm font-medium text-gray-700 mb-1">
+          Investment Type
+        </label>
+        <Select value={investmentType} onValueChange={setInvestmentType}>
+          <SelectTrigger id="investmentType">
+            <SelectValue placeholder="Select investment type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="pre-seed">Pre-Seed</SelectItem>
+            <SelectItem value="seed">Seed</SelectItem>
+            <SelectItem value="series-a">Series A</SelectItem>
+            <SelectItem value="series-b">Series B</SelectItem>
+            <SelectItem value="series-c">Series C</SelectItem>
+            <SelectItem value="growth">Growth</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div>
+        <label htmlFor="investmentAmount" className="block text-sm font-medium text-gray-700 mb-1">
+          Investment Amount Needed ($)
+        </label>
+        <Input
+          id="investmentAmount"
+          type="number"
+          min="0"
+          step="1000"
+          value={investmentAmount}
+          onChange={(e) => setInvestmentAmount(e.target.value)}
+          placeholder="Enter amount in USD"
         />
       </div>
       <Button type="submit" className="w-full">
