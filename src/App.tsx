@@ -1,89 +1,66 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { SessionContextProvider } from '@supabase/auth-helpers-react';
-import Index from "./pages/Index";
-import SignIn from "./pages/auth/SignIn";
-import SignUp from "./pages/auth/SignUp";
-import ForgotPassword from "./pages/auth/ForgotPassword";
-import ProfileSettings from "./pages/auth/ProfileSettings";
-import { NavigationMenu } from "./components/NavigationMenu";
-import Footer from "./components/Footer";
-import Trends from "./pages/Trends";
-import Markets from "./pages/Markets";
-import Blog from "./pages/Blog";
-import Tools from "./pages/Tools";
-import SideHustles from "./pages/SideHustles";
-import Community from "./pages/Community";
-import AdminDashboard from "./pages/admin/Dashboard";
-import Crowdfunding from "./pages/Crowdfunding";
-import Team from "./pages/Team";
-import Feedback from "./pages/Feedback";
-import Startups from "./pages/Startups";
-import { ProtectedAdminRoute } from "./components/auth/ProtectedAdminRoute";
+import { NavigationMenu } from "@/components/NavigationMenu";
+import Footer from "@/components/Footer";
+import Index from "@/pages/Index";
+import Blog from "@/pages/Blog";
+import Community from "@/pages/Community";
+import Crowdfunding from "@/pages/Crowdfunding";
+import Feedback from "@/pages/Feedback";
+import Markets from "@/pages/Markets";
+import SideHustles from "@/pages/SideHustles";
+import Sitemap from "@/pages/Sitemap";
+import Startups from "@/pages/Startups";
+import Team from "@/pages/Team";
+import Tools from "@/pages/Tools";
+import Trends from "@/pages/Trends";
+import SignIn from "@/pages/auth/SignIn";
+import SignUp from "@/pages/auth/SignUp";
+import ForgotPassword from "@/pages/auth/ForgotPassword";
+import ProfileSettings from "@/pages/auth/ProfileSettings";
+import Dashboard from "@/pages/admin/Dashboard";
+import ProtectedAdminRoute from "@/components/auth/ProtectedAdminRoute";
 
-const queryClient = new QueryClient();
+import "./App.css";
 
-const NotFound = () => (
-  <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
-    <h1 className="text-4xl font-bold mb-4">404 - Page Not Found</h1>
-    <p className="text-gray-600 mb-8">The page you're looking for doesn't exist.</p>
-    <a href="/" className="text-blue-500 hover:text-blue-700 underline">
-      Go back home
-    </a>
-  </div>
-);
-
-const App = () => {
+function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <SessionContextProvider supabaseClient={supabase}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter basename={import.meta.env.BASE_URL || '/'}>
-            <div className="min-h-screen flex flex-col bg-background">
-              <header>
-                <NavigationMenu />
-              </header>
-              <main className="flex-1 w-full max-w-[100vw] overflow-x-hidden">
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/trends" element={<Trends />} />
-                  <Route path="/markets" element={<Markets />} />
-                  <Route path="/side-hustles" element={<SideHustles />} />
-                  <Route path="/tools" element={<Tools />} />
-                  <Route path="/blog" element={<Blog />} />
-                  <Route path="/community" element={<Community />} />
-                  <Route path="/crowdfunding" element={<Crowdfunding />} />
-                  <Route path="/startups" element={<Startups />} />
-                  <Route path="/team" element={<Team />} />
-                  <Route path="/feedback" element={<Feedback />} />
-                  <Route path="/auth/signin" element={<SignIn />} />
-                  <Route path="/auth/signup" element={<SignUp />} />
-                  <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-                  <Route path="/auth/profile" element={<ProfileSettings />} />
-                  <Route 
-                    path="/admin/*" 
-                    element={
-                      <ProtectedAdminRoute>
-                        <AdminDashboard />
-                      </ProtectedAdminRoute>
-                    } 
-                  />
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </main>
-              <Footer />
-            </div>
-          </BrowserRouter>
-        </TooltipProvider>
-      </SessionContextProvider>
-    </QueryClientProvider>
+    <Router>
+      <div className="flex flex-col min-h-screen">
+        <NavigationMenu />
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/community" element={<Community />} />
+            <Route path="/crowdfunding" element={<Crowdfunding />} />
+            <Route path="/feedback" element={<Feedback />} />
+            <Route path="/markets" element={<Markets />} />
+            <Route path="/side-hustles" element={<SideHustles />} />
+            <Route path="/sitemap" element={<Sitemap />} />
+            <Route path="/startups" element={<Startups />} />
+            <Route path="/team" element={<Team />} />
+            <Route path="/tools" element={<Tools />} />
+            <Route path="/trends" element={<Trends />} />
+            <Route path="/auth/signin" element={<SignIn />} />
+            <Route path="/auth/signup" element={<SignUp />} />
+            <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+            <Route path="/auth/profile" element={<ProfileSettings />} />
+            <Route
+              path="/admin/*"
+              element={
+                <ProtectedAdminRoute>
+                  <Dashboard />
+                </ProtectedAdminRoute>
+              }
+            />
+          </Routes>
+        </main>
+        <Footer />
+        <Toaster />
+      </div>
+    </Router>
   );
-};
+}
 
 export default App;
