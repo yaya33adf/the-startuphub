@@ -112,7 +112,7 @@ export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps
             </div>
           </div>
 
-          <section className="relative py-20 md:py-32 px-4 text-center bg-gradient-to-r from-[#6a11cb] to-[#2575fc] min-h-[600px] overflow-hidden mt-16 rounded-xl">
+          <section className="relative py-20 md:py-32 px-4 text-center bg-gradient-to-br from-primary via-secondary to-accent min-h-[600px] overflow-hidden mt-16 rounded-xl">
             <div className="max-w-4xl mx-auto text-white">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
                 Empowering Innovators, Driving Global Impact
@@ -123,7 +123,7 @@ export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps
               <Button 
                 size="lg" 
                 asChild 
-                className="bg-white text-[#2575fc] hover:bg-white/90 hover:text-[#2575fc] transition-all duration-300 text-lg px-8 py-6 h-auto"
+                className="bg-white text-primary hover:bg-white/90 hover:text-primary/90 transition-all duration-300 text-lg px-8 py-6 h-auto"
               >
                 <Link to="/about">Learn More About Us</Link>
               </Button>
