@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -17,11 +17,13 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
   const [userProfile, setUserProfile] = useState<any>(null);
   const [profileFetched, setProfileFetched] = useState(false);
   const { toast } = useToast();
+  const fetchingRef = useRef(false);
 
   const fetchUserProfile = useCallback(async (userId: string) => {
-    if (!userId || profileFetched) return;
+    if (!userId || profileFetched || fetchingRef.current) return;
 
     try {
+      fetchingRef.current = true;
       console.log("Fetching profile for user:", userId);
       const { data: profile, error } = await supabase
         .from('profiles')
@@ -49,6 +51,7 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
       console.error("Error in fetchUserProfile:", error);
     } finally {
       setProfileFetched(true);
+      fetchingRef.current = false;
     }
   }, [toast, profileFetched]);
 
