@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { DesktopNav } from "./navigation/DesktopNav";
 import { MobileMenu } from "./navigation/MobileMenu";
@@ -14,7 +14,7 @@ export const NavigationMenu = () => {
   const location = useLocation();
 
   // Close mobile menu on route change
-  useMemo(() => {
+  useCallback(() => {
     setIsOpen(false);
   }, [location.pathname]);
 
