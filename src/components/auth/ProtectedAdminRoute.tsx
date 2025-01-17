@@ -14,11 +14,15 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
+
     const checkAdminStatus = async () => {
       if (!session?.user) {
         console.log("No session found, redirecting to login");
-        setIsAdmin(false);
-        setIsLoading(false);
+        if (mounted) {
+          setIsAdmin(false);
+          setIsLoading(false);
+        }
         return;
       }
 
@@ -34,16 +38,23 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
 
         if (error) {
           console.error("Error fetching profile:", error);
-          setIsAdmin(false);
+          if (mounted) {
+            setIsAdmin(false);
+            setIsLoading(false);
+          }
         } else {
           console.log("Profile data:", profile);
-          setIsAdmin(profile?.role === 'admin');
+          if (mounted) {
+            setIsAdmin(profile?.role === 'admin');
+            setIsLoading(false);
+          }
         }
       } catch (error) {
         console.error("Error in checkAdminStatus:", error);
-        setIsAdmin(false);
-      } finally {
-        setIsLoading(false);
+        if (mounted) {
+          setIsAdmin(false);
+          setIsLoading(false);
+        }
       }
     };
 
@@ -51,8 +62,13 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
       console.log("Session loading complete, checking admin status");
       checkAdminStatus();
     }
+
+    return () => {
+      mounted = false;
+    };
   }, [session, sessionLoading]);
 
+  // Debug logging
   console.log("Current state:", { 
     sessionLoading, 
     isLoading, 
