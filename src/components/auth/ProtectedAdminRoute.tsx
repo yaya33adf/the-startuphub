@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Loader2 } from "lucide-react";
 
 interface ProtectedAdminRouteProps {
@@ -12,15 +12,19 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   const { session, isLoading: sessionLoading } = useSessionContext();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [adminChecked, setAdminChecked] = useState(false);
+  const checkingRef = useRef(false);
 
   useEffect(() => {
     const checkAdminStatus = async () => {
-      if (sessionLoading || adminChecked) return;
+      if (sessionLoading || adminChecked || checkingRef.current) return;
+      
+      checkingRef.current = true;
       
       if (!session?.user) {
         console.log("No session found, redirecting to login");
         setIsAdmin(false);
         setAdminChecked(true);
+        checkingRef.current = false;
         return;
       }
 
@@ -43,6 +47,7 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
         setIsAdmin(false);
       } finally {
         setAdminChecked(true);
+        checkingRef.current = false;
       }
     };
 

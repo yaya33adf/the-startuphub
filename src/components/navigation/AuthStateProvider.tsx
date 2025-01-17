@@ -73,16 +73,25 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
   }, [toast]);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    let mounted = true;
+
+    const initializeAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!mounted) return;
+      
       setSession(session);
       if (session?.user) {
         fetchUserProfile(session.user.id);
       }
-    });
+    };
+
+    initializeAuth();
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!mounted) return;
+      
       setSession(session);
       if (session?.user) {
         setProfileFetched(false);
@@ -93,7 +102,10 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, [fetchUserProfile]);
 
   return children({ session, userProfile, handleSignOut });
