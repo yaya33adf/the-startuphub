@@ -15,9 +15,12 @@ interface AuthStateProviderProps {
 export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
   const [session, setSession] = useState<any>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
   const fetchUserProfile = useCallback(async (userId: string) => {
+    if (!userId || !isLoading) return;
+
     try {
       console.log("Fetching profile for user:", userId);
       const { data: profile, error } = await supabase
@@ -44,8 +47,10 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
       }
     } catch (error) {
       console.error("Error in fetchUserProfile:", error);
+    } finally {
+      setIsLoading(false);
     }
-  }, [toast]);
+  }, [toast, isLoading]);
 
   const handleSignOut = useCallback(async () => {
     try {
@@ -71,18 +76,22 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
       setSession(session);
       if (session?.user) {
         fetchUserProfile(session.user.id);
+      } else {
+        setIsLoading(false);
       }
     });
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      console.log("Auth state changed:", _event, session);
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("Auth state changed:", event, session);
       setSession(session);
       if (session?.user) {
+        setIsLoading(true);
         fetchUserProfile(session.user.id);
       } else {
         setUserProfile(null);
+        setIsLoading(false);
       }
     });
 

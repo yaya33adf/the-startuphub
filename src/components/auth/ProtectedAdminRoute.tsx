@@ -11,14 +11,16 @@ interface ProtectedAdminRouteProps {
 const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   const { session, isLoading: sessionLoading } = useSessionContext();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isChecking, setIsChecking] = useState(true);
 
   useEffect(() => {
     const checkAdminStatus = async () => {
+      if (sessionLoading) return;
+      
       if (!session?.user) {
         console.log("No session found, redirecting to login");
         setIsAdmin(false);
-        setIsLoading(false);
+        setIsChecking(false);
         return;
       }
 
@@ -40,17 +42,14 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
         console.error("Error in checkAdminStatus:", error);
         setIsAdmin(false);
       } finally {
-        setIsLoading(false);
+        setIsChecking(false);
       }
     };
 
-    // Only check admin status when session loading is complete and we haven't checked yet
-    if (!sessionLoading && isLoading) {
-      checkAdminStatus();
-    }
-  }, [sessionLoading]); // Remove session from dependencies to prevent loops
+    checkAdminStatus();
+  }, [session?.user?.id, sessionLoading]);
 
-  if (sessionLoading || isLoading) {
+  if (sessionLoading || isChecking) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
