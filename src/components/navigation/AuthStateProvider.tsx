@@ -15,11 +15,11 @@ interface AuthStateProviderProps {
 export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
   const [session, setSession] = useState<any>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [profileFetched, setProfileFetched] = useState(false);
   const { toast } = useToast();
 
   const fetchUserProfile = useCallback(async (userId: string) => {
-    if (!userId || !isLoading) return;
+    if (!userId || profileFetched) return;
 
     try {
       console.log("Fetching profile for user:", userId);
@@ -48,15 +48,16 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
     } catch (error) {
       console.error("Error in fetchUserProfile:", error);
     } finally {
-      setIsLoading(false);
+      setProfileFetched(true);
     }
-  }, [toast, isLoading]);
+  }, [toast, profileFetched]);
 
   const handleSignOut = useCallback(async () => {
     try {
       await supabase.auth.signOut();
       setSession(null);
       setUserProfile(null);
+      setProfileFetched(false);
       toast({
         title: "Signed out successfully",
         description: "You have been signed out of your account",
@@ -76,22 +77,19 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
       setSession(session);
       if (session?.user) {
         fetchUserProfile(session.user.id);
-      } else {
-        setIsLoading(false);
       }
     });
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log("Auth state changed:", event, session);
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       if (session?.user) {
-        setIsLoading(true);
+        setProfileFetched(false);
         fetchUserProfile(session.user.id);
       } else {
         setUserProfile(null);
-        setIsLoading(false);
+        setProfileFetched(false);
       }
     });
 
