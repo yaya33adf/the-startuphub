@@ -11,19 +11,20 @@ interface ProtectedAdminRouteProps {
 const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   const { session, isLoading: sessionLoading } = useSessionContext();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [adminChecked, setAdminChecked] = useState(false);
+  const mountedRef = useRef(true);
   const checkingRef = useRef(false);
 
   useEffect(() => {
     const checkAdminStatus = async () => {
-      if (sessionLoading || adminChecked || checkingRef.current) return;
+      if (sessionLoading || checkingRef.current || !mountedRef.current) return;
       
       checkingRef.current = true;
       
       if (!session?.user) {
         console.log("No session found, redirecting to login");
-        setIsAdmin(false);
-        setAdminChecked(true);
+        if (mountedRef.current) {
+          setIsAdmin(false);
+        }
         checkingRef.current = false;
         return;
       }
@@ -37,24 +38,33 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
 
         if (error) {
           console.error("Error fetching profile:", error);
-          setIsAdmin(false);
+          if (mountedRef.current) {
+            setIsAdmin(false);
+          }
         } else {
           console.log("Profile data:", profile);
-          setIsAdmin(profile?.role === 'admin');
+          if (mountedRef.current) {
+            setIsAdmin(profile?.role === 'admin');
+          }
         }
       } catch (error) {
         console.error("Error in checkAdminStatus:", error);
-        setIsAdmin(false);
+        if (mountedRef.current) {
+          setIsAdmin(false);
+        }
       } finally {
-        setAdminChecked(true);
         checkingRef.current = false;
       }
     };
 
     checkAdminStatus();
-  }, [session?.user?.id, sessionLoading, adminChecked]);
 
-  if (sessionLoading || !adminChecked) {
+    return () => {
+      mountedRef.current = false;
+    };
+  }, [session?.user?.id, sessionLoading]);
+
+  if (sessionLoading || isAdmin === null) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
