@@ -23,8 +23,6 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
       }
 
       try {
-        console.log("Checking admin status for user:", session.user.id);
-        
         const { data: profile, error } = await supabase
           .from('profiles')
           .select('role')
@@ -46,10 +44,11 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
       }
     };
 
-    if (!sessionLoading) {
+    // Only check admin status when session loading is complete and we haven't checked yet
+    if (!sessionLoading && isLoading) {
       checkAdminStatus();
     }
-  }, [session, sessionLoading]);
+  }, [sessionLoading]); // Remove session from dependencies to prevent loops
 
   if (sessionLoading || isLoading) {
     return (
