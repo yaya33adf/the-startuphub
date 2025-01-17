@@ -16,6 +16,7 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
   const [session, setSession] = useState<any>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
   const { toast } = useToast();
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const fetchUserProfile = useCallback(async (userId: string) => {
     try {
@@ -67,27 +68,52 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
   }, [toast]);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (session?.user) {
-        fetchUserProfile(session.user.id);
+    let mounted = true;
+
+    const initializeAuth = async () => {
+      try {
+        const { data: { session: initialSession } } = await supabase.auth.getSession();
+        if (mounted) {
+          setSession(initialSession);
+          if (initialSession?.user) {
+            await fetchUserProfile(initialSession.user.id);
+          }
+          setIsInitialized(true);
+        }
+      } catch (error) {
+        console.error("Error initializing auth:", error);
+        if (mounted) {
+          setIsInitialized(true);
+        }
       }
-    });
+    };
+
+    initializeAuth();
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      console.log("Auth state changed:", _event, session);
-      setSession(session);
-      if (session?.user) {
-        fetchUserProfile(session.user.id);
-      } else {
-        setUserProfile(null);
+    } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
+      console.log("Auth state changed:", event, currentSession?.user?.id);
+      
+      if (mounted) {
+        setSession(currentSession);
+        if (currentSession?.user) {
+          await fetchUserProfile(currentSession.user.id);
+        } else {
+          setUserProfile(null);
+        }
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, [fetchUserProfile]);
+
+  if (!isInitialized) {
+    return null;
+  }
 
   return children({ session, userProfile, handleSignOut });
 };

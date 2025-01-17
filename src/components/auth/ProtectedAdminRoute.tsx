@@ -42,12 +42,13 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
             setIsAdmin(false);
             setIsLoading(false);
           }
-        } else {
-          console.log("Profile data:", profile);
-          if (mounted) {
-            setIsAdmin(profile?.role === 'admin');
-            setIsLoading(false);
-          }
+          return;
+        }
+
+        console.log("Profile data:", profile);
+        if (mounted) {
+          setIsAdmin(profile?.role === 'admin');
+          setIsLoading(false);
         }
       } catch (error) {
         console.error("Error in checkAdminStatus:", error);
