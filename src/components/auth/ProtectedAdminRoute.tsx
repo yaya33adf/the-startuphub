@@ -17,24 +17,22 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
     let mounted = true;
 
     const checkAdminStatus = async () => {
-      if (!session?.user) {
-        console.log("No session found, redirecting to login");
-        if (mounted) {
-          setIsAdmin(false);
-          setIsLoading(false);
-        }
-        return;
-      }
-
       try {
-        console.log("Session exists, checking admin status");
+        if (!session?.user) {
+          console.log("No session found, redirecting to login");
+          if (mounted) {
+            setIsAdmin(false);
+            setIsLoading(false);
+          }
+          return;
+        }
+
         console.log("Checking admin status for user:", session.user.id);
-        
         const { data: profile, error } = await supabase
           .from('profiles')
           .select('role')
           .eq('id', session.user.id)
-          .single();
+          .maybeSingle();
 
         if (error) {
           console.error("Error fetching profile:", error);
@@ -45,7 +43,6 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
           return;
         }
 
-        console.log("Profile data:", profile);
         if (mounted) {
           setIsAdmin(profile?.role === 'admin');
           setIsLoading(false);
@@ -60,7 +57,6 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
     };
 
     if (!sessionLoading) {
-      console.log("Session loading complete, checking admin status");
       checkAdminStatus();
     }
 
@@ -68,15 +64,6 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
       mounted = false;
     };
   }, [session, sessionLoading]);
-
-  // Debug logging
-  console.log("Current state:", { 
-    sessionLoading, 
-    isLoading, 
-    isAdmin, 
-    hasSession: !!session,
-    userId: session?.user?.id 
-  });
 
   if (sessionLoading || isLoading) {
     return (
@@ -87,16 +74,13 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   }
 
   if (!session) {
-    console.log("No session found, redirecting to login");
     return <Navigate to="/auth/signin" replace />;
   }
 
   if (!isAdmin) {
-    console.log("User is not admin, redirecting to home");
     return <Navigate to="/" replace />;
   }
 
-  console.log("User is admin, rendering admin content");
   return <>{children}</>;
 };
 
