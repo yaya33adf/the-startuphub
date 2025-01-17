@@ -8,6 +8,9 @@ export const StatisticsCards = () => {
     queryKey: ['adminStats', 'users'],
     queryFn: async () => {
       console.log('Fetching total users count...');
+      const { data: { user } } = await supabase.auth.getUser();
+      console.log('Current user:', user);
+
       const { count, error } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true });
@@ -16,6 +19,7 @@ export const StatisticsCards = () => {
         console.error('Error fetching users:', error);
         throw error;
       }
+      console.log('Total users count:', count);
       return count || 0;
     }
   });
@@ -33,6 +37,7 @@ export const StatisticsCards = () => {
         console.error('Error fetching posts:', error);
         throw error;
       }
+      console.log('Published posts count:', count);
       return count || 0;
     }
   });
@@ -53,6 +58,7 @@ export const StatisticsCards = () => {
         console.error('Error fetching active users:', error);
         throw error;
       }
+      console.log('Active users count:', count);
       return count || 0;
     }
   });
@@ -71,7 +77,7 @@ export const StatisticsCards = () => {
               <p>Loading users...</p>
             </div>
           ) : (
-            <p>Total users: {totalUsers}</p>
+            <p className="text-2xl font-bold">Total users: {totalUsers}</p>
           )}
         </CardContent>
       </Card>
@@ -88,7 +94,7 @@ export const StatisticsCards = () => {
               <p>Loading posts...</p>
             </div>
           ) : (
-            <p>Published posts: {publishedPosts}</p>
+            <p className="text-2xl font-bold">Published posts: {publishedPosts}</p>
           )}
         </CardContent>
       </Card>
@@ -105,7 +111,7 @@ export const StatisticsCards = () => {
               <p>Loading analytics...</p>
             </div>
           ) : (
-            <p>Active users: {activeUsers}</p>
+            <p className="text-2xl font-bold">Active users: {activeUsers}</p>
           )}
         </CardContent>
       </Card>
