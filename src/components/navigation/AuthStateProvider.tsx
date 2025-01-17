@@ -15,8 +15,8 @@ interface AuthStateProviderProps {
 export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
   const [session, setSession] = useState<any>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
-  const { toast } = useToast();
   const [isInitialized, setIsInitialized] = useState(false);
+  const { toast } = useToast();
 
   const fetchUserProfile = useCallback(async (userId: string) => {
     try {
@@ -37,12 +37,8 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
         return;
       }
 
-      if (!profile) {
-        console.log("No profile found for user:", userId);
-      } else {
-        console.log("Profile found:", profile);
-        setUserProfile(profile);
-      }
+      console.log("Profile data received:", profile);
+      setUserProfile(profile);
     } catch (error) {
       console.error("Error in fetchUserProfile:", error);
     }
@@ -74,6 +70,7 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
       try {
         const { data: { session: initialSession } } = await supabase.auth.getSession();
         if (mounted) {
+          console.log("Initial session:", initialSession?.user?.id);
           setSession(initialSession);
           if (initialSession?.user) {
             await fetchUserProfile(initialSession.user.id);
@@ -90,9 +87,7 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
 
     initializeAuth();
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
       console.log("Auth state changed:", event, currentSession?.user?.id);
       
       if (mounted) {

@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useLocation } from "react-router-dom";
 import { DesktopNav } from "./navigation/DesktopNav";
 import { MobileMenu } from "./navigation/MobileMenu";
@@ -18,27 +18,29 @@ export const NavigationMenu = () => {
     setIsOpen(false);
   }, [location.pathname]);
 
-  const renderNavigation = useMemo(() => {
-    return ({ session, userProfile, handleSignOut }: any) => {
-      if (isMobile) {
-        return (
-          <MobileMenu 
-            isOpen={isOpen} 
-            setIsOpen={setIsOpen}
-            session={session}
-            handleSignOut={handleSignOut}
-          />
-        );
-      }
+  const handleMobileMenuToggle = useCallback((value: boolean) => {
+    setIsOpen(value);
+  }, []);
+
+  const renderNavigation = useCallback(({ session, userProfile, handleSignOut }: any) => {
+    if (isMobile) {
       return (
-        <DesktopNav
+        <MobileMenu 
+          isOpen={isOpen} 
+          setIsOpen={handleMobileMenuToggle}
           session={session}
-          userProfile={userProfile}
           handleSignOut={handleSignOut}
         />
       );
-    };
-  }, [isMobile, isOpen]);
+    }
+    return (
+      <DesktopNav
+        session={session}
+        userProfile={userProfile}
+        handleSignOut={handleSignOut}
+      />
+    );
+  }, [isMobile, isOpen, handleMobileMenuToggle]);
 
   return (
     <AuthStateProvider>
