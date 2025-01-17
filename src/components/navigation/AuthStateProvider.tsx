@@ -18,13 +18,22 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
   const { toast } = useToast();
   const mountedRef = useRef(true);
   const fetchingRef = useRef(false);
+  const authChangeRef = useRef(false);
 
   const fetchUserProfile = useCallback(async (userId: string) => {
-    if (!userId || fetchingRef.current || !mountedRef.current) return;
+    if (!userId || fetchingRef.current || !mountedRef.current) {
+      console.log("Skipping profile fetch:", { 
+        noUserId: !userId, 
+        alreadyFetching: fetchingRef.current, 
+        unmounted: !mountedRef.current 
+      });
+      return;
+    }
 
     try {
       fetchingRef.current = true;
-      console.log("Fetching profile for user:", userId);
+      console.log("Starting profile fetch for user:", userId);
+      
       const { data: profile, error } = await supabase
         .from('profiles')
         .select('*')
@@ -32,31 +41,20 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
         .maybeSingle();
 
       if (error) {
-        console.error("Error fetching user profile:", error);
-        if (mountedRef.current) {
-          toast({
-            title: "Error",
-            description: "Failed to fetch user profile",
-            variant: "destructive",
-          });
-        }
+        console.error("Error fetching profile:", error);
         return;
       }
 
-      if (!profile) {
-        console.log("No profile found for user:", userId);
-      } else {
-        console.log("Profile found:", profile);
-        if (mountedRef.current) {
-          setUserProfile(profile);
-        }
+      if (mountedRef.current) {
+        console.log("Setting profile:", profile);
+        setUserProfile(profile);
       }
     } catch (error) {
       console.error("Error in fetchUserProfile:", error);
     } finally {
       fetchingRef.current = false;
     }
-  }, [toast]);
+  }, []);
 
   const handleSignOut = useCallback(async () => {
     try {
@@ -83,28 +81,44 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
     console.log("Setting up auth state listener");
     
     const initializeAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (mountedRef.current) {
-        setSession(session);
-        if (session?.user) {
-          fetchUserProfile(session.user.id);
+      if (authChangeRef.current) return;
+      
+      try {
+        authChangeRef.current = true;
+        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        
+        if (mountedRef.current) {
+          console.log("Initial session:", currentSession?.user?.id);
+          setSession(currentSession);
+          if (currentSession?.user) {
+            await fetchUserProfile(currentSession.user.id);
+          }
         }
+      } finally {
+        authChangeRef.current = false;
       }
     };
 
     initializeAuth();
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (mountedRef.current) {
-        console.log("Auth state changed:", _event);
-        setSession(session);
-        if (session?.user) {
-          fetchUserProfile(session.user.id);
-        } else {
-          setUserProfile(null);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, newSession) => {
+      if (!mountedRef.current || authChangeRef.current) return;
+      
+      console.log("Auth state changed:", event);
+      authChangeRef.current = true;
+
+      try {
+        if (mountedRef.current) {
+          setSession(newSession);
+          
+          if (newSession?.user) {
+            await fetchUserProfile(newSession.user.id);
+          } else {
+            setUserProfile(null);
+          }
         }
+      } finally {
+        authChangeRef.current = false;
       }
     });
 
