@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { DesktopNav } from "./navigation/DesktopNav";
 import { MobileMenu } from "./navigation/MobileMenu";
@@ -13,44 +13,37 @@ export const NavigationMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
-  useEffect(() => {
+  // Close mobile menu on route change
+  useMemo(() => {
     setIsOpen(false);
   }, [location.pathname]);
-
-  const handleMobileMenuToggle = useCallback((value: boolean) => {
-    setIsOpen(value);
-  }, []);
-
-  const renderNavigation = useCallback(({ session, userProfile, handleSignOut }: any) => {
-    if (isMobile) {
-      return (
-        <MobileMenu 
-          isOpen={isOpen} 
-          setIsOpen={handleMobileMenuToggle}
-          session={session}
-          handleSignOut={handleSignOut}
-        />
-      );
-    }
-    return (
-      <DesktopNav
-        session={session}
-        userProfile={userProfile}
-        handleSignOut={handleSignOut}
-      />
-    );
-  }, [isMobile, isOpen, handleMobileMenuToggle]);
 
   return (
     <AuthStateProvider>
       {({ session, userProfile, handleSignOut }) => (
         <NavigationContainer>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 flex-shrink-0">
             <Logo />
           </div>
-          <div className="flex items-center justify-end w-full">
-            {renderNavigation({ session, userProfile, handleSignOut })}
+          <div className="flex-1 flex items-center justify-end overflow-hidden">
+            {useMemo(() => (
+              isMobile ? (
+                <MobileMenu 
+                  isOpen={isOpen} 
+                  setIsOpen={setIsOpen}
+                  session={session}
+                  handleSignOut={handleSignOut}
+                />
+              ) : (
+                <DesktopNav
+                  session={session}
+                  userProfile={userProfile}
+                  handleSignOut={handleSignOut}
+                />
+              )
+            ), [isMobile, isOpen, session, userProfile, handleSignOut])}
             <div className="flex items-center justify-end space-x-2">
+              <div className="w-full flex-1 md:w-auto md:flex-none" />
               {session && (
                 <UserMenu 
                   userProfile={userProfile} 

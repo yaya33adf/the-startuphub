@@ -12,10 +12,8 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     storageKey: 'supabase.auth.token',
-    storage: localStorage,
     autoRefreshToken: true,
-    detectSessionInUrl: false, // Disable automatic URL detection
-    flowType: 'pkce'
+    detectSessionInUrl: true
   }
 });
 
@@ -23,11 +21,3 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
 if (typeof window !== 'undefined') {
   (window as any).supabase = supabase;
 }
-
-// Add debug logging for auth state changes
-supabase.auth.onAuthStateChange((event, session) => {
-  console.log('Auth state changed:', event, session);
-  if (session?.user) {
-    console.log('User authenticated:', session.user.id);
-  }
-});

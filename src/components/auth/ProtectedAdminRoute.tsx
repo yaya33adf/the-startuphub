@@ -14,56 +14,54 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    let mounted = true;
-
     const checkAdminStatus = async () => {
-      try {
-        if (!session?.user) {
-          console.log("No session found, redirecting to login");
-          if (mounted) {
-            setIsAdmin(false);
-            setIsLoading(false);
-          }
-          return;
-        }
+      if (!session?.user) {
+        console.log("No session found, redirecting to login");
+        setIsAdmin(false);
+        setIsLoading(false);
+        return;
+      }
 
+      try {
+        console.log("Session exists, checking admin status");
         console.log("Checking admin status for user:", session.user.id);
+        
         const { data: profile, error } = await supabase
           .from('profiles')
           .select('role')
           .eq('id', session.user.id)
-          .maybeSingle();
+          .single();
 
         if (error) {
           console.error("Error fetching profile:", error);
-          if (mounted) {
-            setIsAdmin(false);
-            setIsLoading(false);
-          }
-          return;
-        }
-
-        if (mounted) {
+          setIsAdmin(false);
+        } else {
+          console.log("Profile data:", profile);
           setIsAdmin(profile?.role === 'admin');
-          setIsLoading(false);
         }
       } catch (error) {
         console.error("Error in checkAdminStatus:", error);
-        if (mounted) {
-          setIsAdmin(false);
-          setIsLoading(false);
-        }
+        setIsAdmin(false);
+      } finally {
+        setIsLoading(false);
       }
     };
 
+    setIsLoading(true);
+    
     if (!sessionLoading) {
+      console.log("Session loading complete, checking admin status");
       checkAdminStatus();
     }
-
-    return () => {
-      mounted = false;
-    };
   }, [session, sessionLoading]);
+
+  console.log("Current state:", { 
+    sessionLoading, 
+    isLoading, 
+    isAdmin, 
+    hasSession: !!session,
+    userId: session?.user?.id 
+  });
 
   if (sessionLoading || isLoading) {
     return (
@@ -74,13 +72,16 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   }
 
   if (!session) {
+    console.log("No session found, redirecting to login");
     return <Navigate to="/auth/signin" replace />;
   }
 
   if (!isAdmin) {
+    console.log("User is not admin, redirecting to home");
     return <Navigate to="/" replace />;
   }
 
+  console.log("User is admin, rendering admin content");
   return <>{children}</>;
 };
 

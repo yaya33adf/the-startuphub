@@ -15,7 +15,6 @@ interface AuthStateProviderProps {
 export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
   const [session, setSession] = useState<any>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
-  const [isInitialized, setIsInitialized] = useState(false);
   const { toast } = useToast();
 
   const fetchUserProfile = useCallback(async (userId: string) => {
@@ -37,8 +36,12 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
         return;
       }
 
-      console.log("Profile data received:", profile);
-      setUserProfile(profile);
+      if (!profile) {
+        console.log("No profile found for user:", userId);
+      } else {
+        console.log("Profile found:", profile);
+        setUserProfile(profile);
+      }
     } catch (error) {
       console.error("Error in fetchUserProfile:", error);
     }
@@ -64,51 +67,27 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
   }, [toast]);
 
   useEffect(() => {
-    let mounted = true;
-
-    const initializeAuth = async () => {
-      try {
-        const { data: { session: initialSession } } = await supabase.auth.getSession();
-        if (mounted) {
-          console.log("Initial session:", initialSession?.user?.id);
-          setSession(initialSession);
-          if (initialSession?.user) {
-            await fetchUserProfile(initialSession.user.id);
-          }
-          setIsInitialized(true);
-        }
-      } catch (error) {
-        console.error("Error initializing auth:", error);
-        if (mounted) {
-          setIsInitialized(true);
-        }
-      }
-    };
-
-    initializeAuth();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, currentSession) => {
-      console.log("Auth state changed:", event, currentSession?.user?.id);
-      
-      if (mounted) {
-        setSession(currentSession);
-        if (currentSession?.user) {
-          await fetchUserProfile(currentSession.user.id);
-        } else {
-          setUserProfile(null);
-        }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session?.user) {
+        fetchUserProfile(session.user.id);
       }
     });
 
-    return () => {
-      mounted = false;
-      subscription.unsubscribe();
-    };
-  }, [fetchUserProfile]);
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log("Auth state changed:", _event, session);
+      setSession(session);
+      if (session?.user) {
+        fetchUserProfile(session.user.id);
+      } else {
+        setUserProfile(null);
+      }
+    });
 
-  if (!isInitialized) {
-    return null;
-  }
+    return () => subscription.unsubscribe();
+  }, [fetchUserProfile]);
 
   return children({ session, userProfile, handleSignOut });
 };
