@@ -47,8 +47,6 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
       }
     };
 
-    setIsLoading(true);
-    
     if (!sessionLoading) {
       console.log("Session loading complete, checking admin status");
       checkAdminStatus();
