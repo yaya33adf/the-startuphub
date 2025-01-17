@@ -4,13 +4,10 @@ import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export const UserStatsCard = () => {
-  const { data: totalUsers, isLoading } = useQuery({
+  const { data: totalUsers, isLoading, error } = useQuery({
     queryKey: ['adminStats', 'users'],
     queryFn: async () => {
       console.log('Fetching total users count...');
-      const { data: { user } } = await supabase.auth.getUser();
-      console.log('Current user:', user);
-
       const { count, error } = await supabase
         .from('profiles')
         .select('*', { count: 'exact', head: true });
@@ -23,6 +20,18 @@ export const UserStatsCard = () => {
       return count || 0;
     }
   });
+
+  if (error) {
+    console.error('Error in UserStatsCard:', error);
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>User Management</CardTitle>
+          <CardDescription>Error loading user data</CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
 
   return (
     <Card>

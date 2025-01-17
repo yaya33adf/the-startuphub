@@ -4,7 +4,7 @@ import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export const ContentStatsCard = () => {
-  const { data: publishedPosts, isLoading } = useQuery({
+  const { data: publishedPosts, isLoading, error } = useQuery({
     queryKey: ['adminStats', 'posts'],
     queryFn: async () => {
       console.log('Fetching published posts count...');
@@ -21,6 +21,18 @@ export const ContentStatsCard = () => {
       return count || 0;
     }
   });
+
+  if (error) {
+    console.error('Error in ContentStatsCard:', error);
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Content Management</CardTitle>
+          <CardDescription>Error loading content data</CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
 
   return (
     <Card>

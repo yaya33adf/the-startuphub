@@ -4,7 +4,7 @@ import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export const AnalyticsStatsCard = () => {
-  const { data: activeUsers, isLoading } = useQuery({
+  const { data: activeUsers, isLoading, error } = useQuery({
     queryKey: ['adminStats', 'activeUsers'],
     queryFn: async () => {
       console.log('Fetching active users count...');
@@ -24,6 +24,18 @@ export const AnalyticsStatsCard = () => {
       return count || 0;
     }
   });
+
+  if (error) {
+    console.error('Error in AnalyticsStatsCard:', error);
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Analytics</CardTitle>
+          <CardDescription>Error loading analytics data</CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
 
   return (
     <Card>
