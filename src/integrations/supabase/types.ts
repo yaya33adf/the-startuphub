@@ -376,57 +376,6 @@ export type Database = {
         }
         Relationships: []
       }
-      schedule_calls: {
-        Row: {
-          additional_info: string | null
-          company_name: string | null
-          created_at: string | null
-          email: string
-          first_name: string
-          id: string
-          investment_preferences: string[] | null
-          investment_range: string
-          investor_type: string
-          last_name: string
-          phone: string
-          status: string | null
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          additional_info?: string | null
-          company_name?: string | null
-          created_at?: string | null
-          email: string
-          first_name: string
-          id?: string
-          investment_preferences?: string[] | null
-          investment_range: string
-          investor_type: string
-          last_name: string
-          phone: string
-          status?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          additional_info?: string | null
-          company_name?: string | null
-          created_at?: string | null
-          email?: string
-          first_name?: string
-          id?: string
-          investment_preferences?: string[] | null
-          investment_range?: string
-          investor_type?: string
-          last_name?: string
-          phone?: string
-          status?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
       side_hustles: {
         Row: {
           category: string
