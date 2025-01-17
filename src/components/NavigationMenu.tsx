@@ -18,6 +18,28 @@ export const NavigationMenu = () => {
     setIsOpen(false);
   }, [location.pathname]);
 
+  const renderNavigation = useMemo(() => {
+    return ({ session, userProfile, handleSignOut }: any) => {
+      if (isMobile) {
+        return (
+          <MobileMenu 
+            isOpen={isOpen} 
+            setIsOpen={setIsOpen}
+            session={session}
+            handleSignOut={handleSignOut}
+          />
+        );
+      }
+      return (
+        <DesktopNav
+          session={session}
+          userProfile={userProfile}
+          handleSignOut={handleSignOut}
+        />
+      );
+    };
+  }, [isMobile, isOpen]);
+
   return (
     <AuthStateProvider>
       {({ session, userProfile, handleSignOut }) => (
@@ -26,22 +48,7 @@ export const NavigationMenu = () => {
             <Logo />
           </div>
           <div className="flex-1 flex items-center justify-end overflow-hidden">
-            {useMemo(() => (
-              isMobile ? (
-                <MobileMenu 
-                  isOpen={isOpen} 
-                  setIsOpen={setIsOpen}
-                  session={session}
-                  handleSignOut={handleSignOut}
-                />
-              ) : (
-                <DesktopNav
-                  session={session}
-                  userProfile={userProfile}
-                  handleSignOut={handleSignOut}
-                />
-              )
-            ), [isMobile, isOpen, session, userProfile, handleSignOut])}
+            {renderNavigation({ session, userProfile, handleSignOut })}
             <div className="flex items-center justify-end space-x-2">
               <div className="w-full flex-1 md:w-auto md:flex-none" />
               {session && (
