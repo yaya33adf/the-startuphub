@@ -18,6 +18,7 @@ export const CreateStartupForm = () => {
   const [websiteUrl, setWebsiteUrl] = useState("");
   const [investmentType, setInvestmentType] = useState("");
   const [investmentAmount, setInvestmentAmount] = useState("");
+  const [hyperEmail, setHyperEmail] = useState("");
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -41,6 +42,7 @@ export const CreateStartupForm = () => {
         user_id: session.data.session.user.id,
         funding_type: investmentType,
         funding_amount: investmentAmount ? parseFloat(investmentAmount) : null,
+        hyper_email: hyperEmail,
       });
 
       if (error) throw error;
@@ -56,6 +58,7 @@ export const CreateStartupForm = () => {
       setWebsiteUrl("");
       setInvestmentType("");
       setInvestmentAmount("");
+      setHyperEmail("");
     } catch (error) {
       console.error("Error adding startup:", error);
       toast({
@@ -104,6 +107,18 @@ export const CreateStartupForm = () => {
           value={websiteUrl}
           onChange={(e) => setWebsiteUrl(e.target.value)}
           placeholder="https://example.com"
+        />
+      </div>
+      <div>
+        <label htmlFor="hyperEmail" className="block text-sm font-medium text-gray-700 mb-1">
+          Hyper Email
+        </label>
+        <Input
+          id="hyperEmail"
+          type="email"
+          value={hyperEmail}
+          onChange={(e) => setHyperEmail(e.target.value)}
+          placeholder="Enter hyper email"
         />
       </div>
       <div>

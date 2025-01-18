@@ -535,6 +535,7 @@ export type Database = {
           description: string
           funding_amount: number | null
           funding_type: string | null
+          hyper_email: string | null
           id: string
           name: string
           rating: number | null
@@ -549,6 +550,7 @@ export type Database = {
           description: string
           funding_amount?: number | null
           funding_type?: string | null
+          hyper_email?: string | null
           id?: string
           name: string
           rating?: number | null
@@ -563,6 +565,7 @@ export type Database = {
           description?: string
           funding_amount?: number | null
           funding_type?: string | null
+          hyper_email?: string | null
           id?: string
           name?: string
           rating?: number | null
