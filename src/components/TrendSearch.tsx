@@ -32,7 +32,8 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
   useEffect(() => {
     console.log("Session state updated:", {
       session: session?.user?.id,
-      isLoading: sessionLoading
+      isLoading: sessionLoading,
+      hasSession: !!session
     });
   }, [session, sessionLoading]);
 
@@ -51,7 +52,7 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
         description: "Please sign in to search trends",
         variant: "destructive",
       });
-      navigate("/auth/signin");
+      navigate("/auth/signin", { replace: true });
       return;
     }
 
