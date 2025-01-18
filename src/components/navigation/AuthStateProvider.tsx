@@ -42,6 +42,13 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
 
       if (error) {
         console.error("Error fetching profile:", error);
+        if (mountedRef.current) {
+          toast({
+            title: "Error",
+            description: "Failed to fetch user profile",
+            variant: "destructive",
+          });
+        }
         return;
       }
 
@@ -54,7 +61,7 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
     } finally {
       fetchingRef.current = false;
     }
-  }, []);
+  }, [toast]);
 
   const handleSignOut = useCallback(async () => {
     try {
