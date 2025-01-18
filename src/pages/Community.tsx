@@ -60,7 +60,7 @@ const Community = () => {
     }
   }, [session, isLoadingSession, navigate, toast]);
 
-  if (isLoadingSession) {
+  if (isLoadingSession || (!session && isLoadingSession)) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
