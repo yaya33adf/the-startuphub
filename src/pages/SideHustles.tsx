@@ -1,25 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { PageSEO } from "@/components/seo/PageSEO";
 import { MarketSearch } from "@/components/markets/MarketSearch";
+import { SideHustleHeader } from "@/components/side-hustles/SideHustleHeader";
+import { SideHustleResults } from "@/components/side-hustles/SideHustleResults";
 import { toast } from "@/hooks/use-toast";
-import { TrendResults } from "@/components/TrendResults";
 import type { TrendData } from "@/types/trends";
-
-interface SideHustle {
-  id: string;
-  name: string;
-  description: string;
-  category: string;
-  monthly_earnings_min: number;
-  monthly_earnings_max: number;
-  time_commitment: string;
-  difficulty: string;
-  skills: string[];
-  platforms: string[];
-  trend_score: number;
-}
 
 const SideHustles = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -51,7 +37,7 @@ const SideHustles = () => {
       }
 
       console.log("Fetched side hustles:", data);
-      return data as SideHustle[];
+      return data;
     },
   });
 
@@ -79,101 +65,28 @@ const SideHustles = () => {
   };
 
   return (
-    <>
-      <PageSEO 
-        title="Side Hustles & Business Opportunities"
-        description="Find profitable side hustle ideas, explore business opportunities, and learn how to monetize your skills with our comprehensive guide."
+    <div className="container mx-auto p-8">
+      <SideHustleHeader />
+
+      <MarketSearch
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        country={country}
+        setCountry={setCountry}
+        period={period}
+        setPeriod={setPeriod}
+        onSearch={handleSearch}
+        onTrendResults={handleTrendResults}
+        buttonText="Explore Side Hustles"
       />
-      <div className="container mx-auto p-8">
-        <h1 className="text-4xl font-bold mb-4">Side Hustles</h1>
-        <p className="text-muted-foreground mb-8">
-          Discover profitable side business opportunities and start earning extra income
-        </p>
 
-        <MarketSearch
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          country={country}
-          setCountry={setCountry}
-          period={period}
-          setPeriod={setPeriod}
-          onSearch={handleSearch}
-          onTrendResults={handleTrendResults}
-          buttonText="Explore Side Hustles"
-        />
-
-        {trendResults && (
-          <div className="mt-8">
-            <TrendResults data={trendResults} />
-          </div>
-        )}
-
-        {isLoading ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {[...Array(6)].map((_, i) => (
-              <Card key={i} className="w-full">
-                <CardHeader>
-                  <Skeleton className="h-8 w-3/4" />
-                </CardHeader>
-                <CardContent>
-                  <Skeleton className="h-4 w-full mb-2" />
-                  <Skeleton className="h-4 w-2/3" />
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        ) : error ? (
-          <div className="bg-red-50 p-6 rounded-lg">
-            <h2 className="text-red-600 text-lg font-semibold">Error Loading Side Hustles</h2>
-            <p className="text-red-500">There was an error loading the side hustles. Please try again later.</p>
-          </div>
-        ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {sideHustles?.map((hustle) => (
-              <Card key={hustle.id} className="w-full hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-xl">{hustle.name}</CardTitle>
-                    <Badge variant="secondary" className="flex items-center gap-1">
-                      <TrendingUp className="h-4 w-4" />
-                      <span>{hustle.trend_score}</span>
-                    </Badge>
-                  </div>
-                  <CardDescription className="mt-2">{hustle.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <DollarSign className="h-4 w-4" />
-                    <span>
-                      ${hustle.monthly_earnings_min?.toLocaleString()} - ${hustle.monthly_earnings_max?.toLocaleString()}/month
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Clock className="h-4 w-4" />
-                    <span>{hustle.time_commitment}</span>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold mb-2 flex items-center gap-2">
-                      <Briefcase className="h-4 w-4" />
-                      Required Skills
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {hustle.skills?.map((skill, index) => (
-                        <Badge key={index} variant="outline">
-                          {skill}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        )}
-      </div>
-    </>
+      <SideHustleResults 
+        trendResults={trendResults}
+        sideHustles={sideHustles}
+        isLoading={isLoading}
+        error={error as Error}
+      />
+    </div>
   );
 };
 
