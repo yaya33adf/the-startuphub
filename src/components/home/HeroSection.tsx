@@ -1,8 +1,6 @@
 import { TrendSearch } from "@/components/TrendSearch";
 import type { TrendData } from "@/types/trends";
 import { TrendResults } from "@/components/TrendResults";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import AlternatingJourney from "./AlternatingJourney";
 import GlobalTrendsHeader from "./GlobalTrendsHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -73,14 +71,6 @@ export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps
             <TrendSearch onSearchResults={onSearchResults} />
             {searchResults && <TrendResults data={searchResults} />}
           </div>
-          <Button 
-            size="lg" 
-            asChild 
-            className="w-full sm:w-auto animate-fade-in hover:scale-105 transition-transform bg-gradient-to-r from-secondary to-primary hover:from-secondary/90 hover:to-primary/90 mb-12 md:mb-16" 
-            style={{ animationDelay: '0.6s' }}
-          >
-            <Link to="/trends">Explore Trends</Link>
-          </Button>
 
           <div className="mt-16 md:mt-20">
             <h2 className="text-2xl md:text-3xl font-bold mb-8 md:mb-12">Trending Apps & Websites</h2>
@@ -120,13 +110,6 @@ export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps
               <p className="text-lg md:text-xl lg:text-2xl mb-12 text-white/90">
                 Our mission is to connect, inspire, and accelerate entrepreneurs through a centralized hub of resources, mentorship, and opportunities.
               </p>
-              <Button 
-                size="lg" 
-                asChild 
-                className="bg-white text-primary hover:bg-white/90 hover:text-primary/90 transition-all duration-300 text-lg px-8 py-6 h-auto"
-              >
-                <Link to="/about">Learn More About Us</Link>
-              </Button>
             </div>
           </section>
         </div>

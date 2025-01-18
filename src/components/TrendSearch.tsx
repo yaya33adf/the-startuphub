@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { calculateTrendScores } from "@/services/trendService";
 import { useSessionContext } from "@supabase/auth-helpers-react";
@@ -29,12 +29,16 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
   const { session, isLoading: sessionLoading } = useSessionContext();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    console.log("Session state updated:", {
+      session: session?.user?.id,
+      isLoading: sessionLoading
+    });
+  }, [session, sessionLoading]);
+
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log("Current session state:", session);
-    console.log("Session loading state:", sessionLoading);
-
     if (sessionLoading) {
       console.log("Session is still loading, waiting...");
       return;
@@ -51,8 +55,6 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
       return;
     }
 
-    console.log("Starting trend search for:", searchQuery);
-    
     if (!searchQuery.trim()) {
       toast({
         title: "Search query required",
@@ -64,7 +66,7 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
 
     setIsLoading(true);
     try {
-      console.log("Calculating trend scores...");
+      console.log("Starting trend search for:", searchQuery);
       const result = await calculateTrendScores(searchQuery);
       console.log("Trend scores calculated:", result);
       
