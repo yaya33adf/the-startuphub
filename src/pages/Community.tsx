@@ -56,14 +56,15 @@ const Community = () => {
     enabled: !!session?.user?.id,
     staleTime: 30000,
     retry: 1,
-    onError: (error) => {
-      console.error("Query error:", error);
-      toast({
-        title: "Error",
-        description: "Failed to load community posts",
-        variant: "destructive",
-      });
-    },
+    meta: {
+      onError: () => {
+        toast({
+          title: "Error",
+          description: "Failed to load community posts",
+          variant: "destructive",
+        });
+      }
+    }
   });
 
   // Handle loading state
