@@ -16,17 +16,24 @@ const Community = () => {
   const { session, isLoading: isLoadingSession } = useSessionContext();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [isInitialized, setIsInitialized] = useState(false);
 
   console.log("Community - Session state:", { 
     isLoadingSession, 
     hasSession: !!session,
-    userId: session?.user?.id 
+    userId: session?.user?.id,
+    isInitialized
   });
 
   const { data: posts = [], isLoading: isLoadingPosts, error } = useQuery({
     queryKey: ["communityPosts"],
     queryFn: async () => {
       console.log("Fetching community posts...");
+      if (!session?.user?.id) {
+        console.log("No session found, skipping fetch");
+        return [];
+      }
+
       const { data, error } = await supabase
         .from("community_posts")
         .select(`
@@ -45,22 +52,26 @@ const Community = () => {
       console.log("Fetched community posts:", data);
       return data || [];
     },
-    enabled: !isLoadingSession && !!session,
+    enabled: !!session?.user?.id && isInitialized,
   });
 
   useEffect(() => {
-    if (!isLoadingSession && !session) {
-      console.log("No session found, redirecting to login");
-      toast({
-        title: "Authentication required",
-        description: "Please sign in to access the community features",
-        variant: "destructive",
-      });
-      navigate("/auth/signin");
+    if (!isLoadingSession) {
+      if (!session) {
+        console.log("No session found, redirecting to login");
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to access the community features",
+          variant: "destructive",
+        });
+        navigate("/auth/signin");
+      } else {
+        setIsInitialized(true);
+      }
     }
   }, [session, isLoadingSession, navigate, toast]);
 
-  if (isLoadingSession || (!session && isLoadingSession)) {
+  if (isLoadingSession || !isInitialized) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
