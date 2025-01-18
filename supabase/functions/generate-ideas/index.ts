@@ -31,26 +31,52 @@ serve(async (req) => {
         messages: [
           {
             role: "system",
-            content: "You are a creative business idea generator. Generate 5 unique and innovative business ideas based on the given keyword. Format your response as a JSON array with objects containing 'title' and 'description' properties."
+            content: "You are a creative business idea generator. Generate exactly 5 unique and innovative business ideas based on the given keyword. Your response must be a valid JSON array of objects, where each object has a 'title' and 'description' property. Example format: [{\"title\": \"Idea 1\", \"description\": \"Description 1\"}, ...]"
           },
           {
             role: "user",
-            content: `Generate 5 innovative business ideas related to: ${keyword}`
+            content: `Generate 5 business ideas related to: ${keyword}`
           }
         ],
+        temperature: 0.7,
+        max_tokens: 1000
       }),
     })
 
-    const data = await openAIResponse.json()
-    console.log('OpenAI response:', data)
-
-    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-      throw new Error('Invalid response from OpenAI')
+    if (!openAIResponse.ok) {
+      const errorData = await openAIResponse.text()
+      console.error('OpenAI API error:', errorData)
+      throw new Error(`OpenAI API error: ${errorData}`)
     }
 
-    // Parse the response content as JSON
-    const ideas = JSON.parse(data.choices[0].message.content)
-    console.log('Parsed ideas:', ideas)
+    const data = await openAIResponse.json()
+    console.log('OpenAI response:', JSON.stringify(data))
+
+    if (!data.choices?.[0]?.message?.content) {
+      console.error('Invalid OpenAI response structure:', data)
+      throw new Error('Invalid response structure from OpenAI')
+    }
+
+    let ideas
+    try {
+      ideas = JSON.parse(data.choices[0].message.content)
+      console.log('Successfully parsed ideas:', ideas)
+      
+      if (!Array.isArray(ideas) || ideas.length === 0) {
+        throw new Error('Response is not a valid array of ideas')
+      }
+
+      // Validate each idea has the required structure
+      ideas.forEach((idea, index) => {
+        if (!idea.title || !idea.description) {
+          throw new Error(`Idea at index ${index} is missing required fields`)
+        }
+      })
+    } catch (parseError) {
+      console.error('Error parsing OpenAI response:', parseError)
+      console.error('Raw content:', data.choices[0].message.content)
+      throw new Error('Failed to parse OpenAI response as JSON')
+    }
 
     return new Response(
       JSON.stringify({ ideas }),
@@ -64,7 +90,10 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in generate-ideas function:', error)
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error.message,
+        details: error.stack
+      }),
       { 
         status: 500,
         headers: { 
