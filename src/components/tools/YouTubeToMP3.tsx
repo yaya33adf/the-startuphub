@@ -33,18 +33,20 @@ export const YouTubeToMP3 = () => {
       console.log("Conversion response:", data);
 
       if (data.downloadUrl) {
+        // Create a temporary anchor element to trigger download
+        const link = document.createElement('a');
+        link.href = data.downloadUrl;
+        link.target = '_blank';
+        link.download = `${data.title || 'youtube-audio'}.mp3`;
+        
+        // Append to document, click, and remove
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
         toast({
           title: "Success",
-          description: "Conversion completed! Click to download.",
-          action: (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => window.open(data.downloadUrl, '_blank')}
-            >
-              Download MP3
-            </Button>
-          ),
+          description: "Your download should begin shortly.",
         });
       }
     } catch (error) {
