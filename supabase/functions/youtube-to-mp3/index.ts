@@ -35,7 +35,7 @@ serve(async (req) => {
       setTimeout(() => reject(new Error('Conversion timeout - video may be too long')), TIMEOUT_DURATION)
     });
 
-    // API call with better options
+    // API call with better options and proper headers
     const options = {
       method: 'GET',
       headers: {
@@ -45,7 +45,7 @@ serve(async (req) => {
     }
 
     const apiUrl = `https://youtube-mp3-download1.p.rapidapi.com/dl?id=${encodeURIComponent(url)}`
-    console.log('Calling conversion API:', apiUrl)
+    console.log('Calling conversion API with URL:', apiUrl)
 
     // Race between the API call and timeout
     const response = await Promise.race([
@@ -55,6 +55,9 @@ serve(async (req) => {
 
     if (!response.ok) {
       console.error('API response not ok:', response.status, response.statusText);
+      if (response.status === 403) {
+        throw new Error('API authentication failed. Please check the API key configuration.');
+      }
       throw new Error(`API returned ${response.status}: ${response.statusText}`);
     }
 
@@ -77,12 +80,12 @@ serve(async (req) => {
     )
   } catch (error) {
     console.error('Error processing request:', error)
-    const errorMessage = error.message || 'Failed to convert video. Please try a shorter video or try again later.';
+    const errorMessage = error instanceof Error ? error.message : 'Failed to convert video. Please try again later.';
     
     return new Response(
       JSON.stringify({ 
         error: errorMessage,
-        details: error.stack 
+        details: error instanceof Error ? error.stack : undefined
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
