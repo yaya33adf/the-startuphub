@@ -77,6 +77,8 @@ const Community = () => {
       )
   );
 
+  console.log("Filtered posts:", filteredPosts);
+
   if (!session) {
     return null;
   }
