@@ -26,16 +26,19 @@ const Markets = () => {
 
         if (searchQuery) {
           console.log("Applying search filter:", searchQuery);
-          // Using ilike for case-insensitive search on both name and description
-          query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`);
-          console.log("Search filter applied with OR condition");
+          query = query.or('name.ilike.%' + searchQuery + '%,description.ilike.%' + searchQuery + '%');
+          console.log("Search filter applied");
         }
 
-        const { data, error, count } = await query
+        const { data, error } = await query
           .order('trend_score', { ascending: false })
           .limit(10);
 
-        console.log("Query executed, full response:", { data, error, count });
+        console.log("Query executed, results:", { 
+          resultCount: data?.length || 0,
+          firstResult: data?.[0],
+          error 
+        });
 
         if (error) {
           console.error("Supabase error fetching market data:", error);
