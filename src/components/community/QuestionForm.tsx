@@ -20,6 +20,7 @@ interface QuestionFormProps {
 }
 
 export const QuestionForm = ({ userId }: QuestionFormProps) => {
+  const [open, setOpen] = useState(false);
   const [newQuestion, setNewQuestion] = useState({
     title: "",
     content: "",
@@ -29,24 +30,36 @@ export const QuestionForm = ({ userId }: QuestionFormProps) => {
 
   const handleSubmitQuestion = async () => {
     try {
+      console.log("Submitting question:", newQuestion);
+      
+      if (!newQuestion.title.trim() || !newQuestion.content.trim()) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Title and content are required.",
+        });
+        return;
+      }
+
       const { error } = await supabase.from("community_posts").insert([
         {
-          title: newQuestion.title,
-          content: newQuestion.content,
-          tags: newQuestion.tags.split(",").map((tag) => tag.trim()),
+          title: newQuestion.title.trim(),
+          content: newQuestion.content.trim(),
+          tags: newQuestion.tags.split(",").map((tag) => tag.trim()).filter(Boolean),
           author_id: userId,
         },
       ]);
 
       if (error) throw error;
 
-      // Reset form
-      setNewQuestion({ title: "", content: "", tags: "" });
-      
       toast({
         title: "Success",
         description: "Your question has been posted successfully",
       });
+
+      // Reset form and close dialog
+      setNewQuestion({ title: "", content: "", tags: "" });
+      setOpen(false);
     } catch (error) {
       console.error("Error submitting question:", error);
       toast({
@@ -58,14 +71,14 @@ export const QuestionForm = ({ userId }: QuestionFormProps) => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
           <Plus className="w-4 h-4 mr-2" />
           Ask Question
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Ask a Question</DialogTitle>
           <DialogDescription>
@@ -93,6 +106,7 @@ export const QuestionForm = ({ userId }: QuestionFormProps) => {
                 setNewQuestion({ ...newQuestion, content: e.target.value })
               }
               placeholder="Provide more details about your question..."
+              className="min-h-[100px]"
             />
           </div>
           <div>
@@ -103,10 +117,12 @@ export const QuestionForm = ({ userId }: QuestionFormProps) => {
               onChange={(e) =>
                 setNewQuestion({ ...newQuestion, tags: e.target.value })
               }
-              placeholder="Add tags separated by commas"
+              placeholder="Add tags separated by commas (e.g., startup, funding, marketing)"
             />
           </div>
-          <Button onClick={handleSubmitQuestion}>Submit Question</Button>
+          <Button onClick={handleSubmitQuestion} className="w-full">
+            Submit Question
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
