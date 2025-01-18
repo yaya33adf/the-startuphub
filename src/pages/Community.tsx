@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSession } from "@supabase/auth-helpers-react";
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -13,55 +13,23 @@ import { Loader2 } from "lucide-react";
 
 const Community = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const session = useSession();
+  const { session, isLoading: isLoadingSession } = useSessionContext();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [isAuthChecking, setIsAuthChecking] = useState(true);
-  const authCheckRef = useRef(false);
 
   useEffect(() => {
-    const checkSession = async () => {
-      // Prevent multiple simultaneous checks
-      if (authCheckRef.current) return;
-      authCheckRef.current = true;
+    if (!isLoadingSession && !session) {
+      console.log("No session found, redirecting to login");
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to access the community features",
+        variant: "destructive",
+      });
+      navigate("/auth/signin");
+    }
+  }, [session, isLoadingSession, navigate, toast]);
 
-      try {
-        const { data: { session: currentSession } } = await supabase.auth.getSession();
-        console.log("Auth check - Current session:", currentSession);
-
-        if (!currentSession && !isAuthChecking) {
-          console.log("No session found, redirecting to login");
-          toast({
-            title: "Authentication required",
-            description: "Please sign in to access the community features",
-            variant: "destructive",
-          });
-          navigate("/auth/signin");
-        }
-      } catch (error) {
-        console.error("Error checking session:", error);
-      } finally {
-        setIsAuthChecking(false);
-        authCheckRef.current = false;
-      }
-    };
-
-    checkSession();
-
-    // Set up auth state listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log("Auth state changed:", event, session?.user?.id);
-      if (!session && !isAuthChecking) {
-        navigate("/auth/signin");
-      }
-    });
-
-    return () => {
-      subscription?.unsubscribe();
-    };
-  }, [navigate, toast, isAuthChecking]);
-
-  const { data: posts = [], isLoading, error } = useQuery({
+  const { data: posts = [], isLoading: isLoadingPosts, error } = useQuery({
     queryKey: ["communityPosts"],
     queryFn: async () => {
       console.log("Fetching community posts...");
@@ -83,7 +51,7 @@ const Community = () => {
       console.log("Fetched community posts:", data);
       return data || [];
     },
-    enabled: !!session && !isAuthChecking, // Only fetch when auth is ready and we have a session
+    enabled: !!session && !isLoadingSession,
   });
 
   if (error) {
@@ -106,8 +74,7 @@ const Community = () => {
 
   console.log("Filtered posts:", filteredPosts);
 
-  // Show loading state while checking auth
-  if (isAuthChecking) {
+  if (isLoadingSession) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
@@ -115,7 +82,6 @@ const Community = () => {
     );
   }
 
-  // Don't render anything if no session
   if (!session) {
     return null;
   }
@@ -139,7 +105,7 @@ const Community = () => {
             {session && <QuestionForm userId={session.user.id} />}
           </div>
           
-          <PostsList posts={filteredPosts} isLoading={isLoading} />
+          <PostsList posts={filteredPosts} isLoading={isLoadingPosts} />
         </div>
       </div>
     </>

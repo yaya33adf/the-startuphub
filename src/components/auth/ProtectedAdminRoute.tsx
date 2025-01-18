@@ -3,33 +3,32 @@ import { useSessionContext } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect, useRef } from "react";
 import { Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface ProtectedAdminRouteProps {
   children: React.ReactNode;
 }
 
 const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
-  const { session, isLoading: sessionLoading } = useSessionContext();
+  const { session } = useSessionContext();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const mountedRef = useRef(true);
+  const [isChecking, setIsChecking] = useState(true);
   const checkingRef = useRef(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     const checkAdminStatus = async () => {
-      if (sessionLoading || checkingRef.current || !mountedRef.current) return;
-      
+      if (checkingRef.current) return;
       checkingRef.current = true;
-      
-      if (!session?.user) {
-        console.log("No session found, redirecting to login");
-        if (mountedRef.current) {
-          setIsAdmin(false);
-        }
-        checkingRef.current = false;
-        return;
-      }
 
       try {
+        if (!session?.user) {
+          console.log("No session found, redirecting to login");
+          setIsAdmin(false);
+          setIsChecking(false);
+          return;
+        }
+
         const { data: profile, error } = await supabase
           .from('profiles')
           .select('role')
@@ -38,33 +37,29 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
 
         if (error) {
           console.error("Error fetching profile:", error);
-          if (mountedRef.current) {
-            setIsAdmin(false);
-          }
+          toast({
+            title: "Error",
+            description: "Failed to verify admin status",
+            variant: "destructive",
+          });
+          setIsAdmin(false);
         } else {
           console.log("Profile data:", profile);
-          if (mountedRef.current) {
-            setIsAdmin(profile?.role === 'admin');
-          }
+          setIsAdmin(profile?.role === 'admin');
         }
       } catch (error) {
         console.error("Error in checkAdminStatus:", error);
-        if (mountedRef.current) {
-          setIsAdmin(false);
-        }
+        setIsAdmin(false);
       } finally {
+        setIsChecking(false);
         checkingRef.current = false;
       }
     };
 
     checkAdminStatus();
+  }, [session, toast]);
 
-    return () => {
-      mountedRef.current = false;
-    };
-  }, [session?.user?.id, sessionLoading]);
-
-  if (sessionLoading || isAdmin === null) {
+  if (isChecking) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
@@ -73,16 +68,18 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   }
 
   if (!session) {
-    console.log("No session found, redirecting to login");
     return <Navigate to="/auth/signin" replace />;
   }
 
   if (!isAdmin) {
-    console.log("User is not admin, redirecting to home");
+    toast({
+      title: "Access Denied",
+      description: "You need admin privileges to access this page",
+      variant: "destructive",
+    });
     return <Navigate to="/" replace />;
   }
 
-  console.log("User is admin, rendering admin content");
   return <>{children}</>;
 };
 
