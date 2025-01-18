@@ -9,6 +9,7 @@ import { SearchBar } from "@/components/community/SearchBar";
 import { QuestionForm } from "@/components/community/QuestionForm";
 import { PostsList } from "@/components/community/PostsList";
 import { PageSEO } from "@/components/seo/PageSEO";
+import { useEffect } from "react";
 
 const Community = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -16,16 +17,24 @@ const Community = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  // Redirect to login if not authenticated
-  if (!session) {
-    toast({
-      title: "Authentication required",
-      description: "Please sign in to access the community features",
-      variant: "destructive",
-    });
-    navigate("/auth/signin");
-    return null;
-  }
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session: currentSession } } = await supabase.auth.getSession();
+      console.log("Current session in Community:", currentSession);
+      
+      if (!currentSession) {
+        console.log("No session found, redirecting to login");
+        toast({
+          title: "Authentication required",
+          description: "Please sign in to access the community features",
+          variant: "destructive",
+        });
+        navigate("/auth/signin");
+      }
+    };
+
+    checkSession();
+  }, [navigate, toast]);
 
   const { data: posts, isLoading } = useQuery({
     queryKey: ["communityPosts"],
@@ -44,7 +53,12 @@ const Community = () => {
       console.log("Fetched community posts:", data);
       return data;
     },
+    enabled: !!session, // Only fetch if there's a session
   });
+
+  if (!session) {
+    return null; // Don't render anything while checking session
+  }
 
   const filteredPosts = posts?.filter(
     (post) =>
