@@ -86,6 +86,7 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
 
   useEffect(() => {
     console.log("Setting up auth state listener");
+    let authSubscription: { data: { subscription: any } } | null = null;
     
     const initializeAuth = async () => {
       if (authChangeRef.current) return;
@@ -106,33 +107,42 @@ export const AuthStateProvider = ({ children }: AuthStateProviderProps) => {
       }
     };
 
-    initializeAuth();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, newSession) => {
-      if (!mountedRef.current || authChangeRef.current) return;
-      
-      console.log("Auth state changed:", event);
-      authChangeRef.current = true;
-
+    const setupAuthListener = async () => {
       try {
-        if (mountedRef.current) {
-          setSession(newSession);
+        authSubscription = supabase.auth.onAuthStateChange(async (event, newSession) => {
+          if (!mountedRef.current || authChangeRef.current) return;
           
-          if (newSession?.user) {
-            await fetchUserProfile(newSession.user.id);
-          } else {
-            setUserProfile(null);
+          console.log("Auth state changed:", event);
+          authChangeRef.current = true;
+
+          try {
+            if (mountedRef.current) {
+              setSession(newSession);
+              
+              if (newSession?.user) {
+                await fetchUserProfile(newSession.user.id);
+              } else {
+                setUserProfile(null);
+              }
+            }
+          } finally {
+            authChangeRef.current = false;
           }
-        }
-      } finally {
-        authChangeRef.current = false;
+        });
+      } catch (error) {
+        console.error("Error setting up auth listener:", error);
       }
-    });
+    };
+
+    initializeAuth();
+    setupAuthListener();
 
     return () => {
       console.log("Cleaning up auth state listener");
       mountedRef.current = false;
-      subscription.unsubscribe();
+      if (authSubscription?.data?.subscription) {
+        authSubscription.data.subscription.unsubscribe();
+      }
     };
   }, [fetchUserProfile]);
 
