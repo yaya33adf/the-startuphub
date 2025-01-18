@@ -11,6 +11,11 @@ interface MarketResultsProps {
 }
 
 export const MarketResults = ({ trendResults, marketData, isLoading, error }: MarketResultsProps) => {
+  // Remove duplicates by creating a Set of market names and filtering
+  const uniqueMarketData = marketData.filter((market, index, self) =>
+    index === self.findIndex((m) => m.name === market.name)
+  );
+
   if (error) {
     return (
       <div className="mt-8 bg-red-50 p-6 rounded-lg">
@@ -38,7 +43,7 @@ export const MarketResults = ({ trendResults, marketData, isLoading, error }: Ma
       )}
       <div className="mt-8">
         <MarketChart 
-          data={marketData.map(market => ({
+          data={uniqueMarketData.map(market => ({
             name: market.name,
             trendScore: market.trend_score || 0,
             potentialEarnings: market.monthly_earnings_max || 0,
@@ -46,7 +51,7 @@ export const MarketResults = ({ trendResults, marketData, isLoading, error }: Ma
         />
       </div>
       <div className="mt-8">
-        <MarketCards markets={marketData} />
+        <MarketCards markets={uniqueMarketData} />
       </div>
     </>
   );
