@@ -1,21 +1,53 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { PageSEO } from "@/components/seo/PageSEO";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { useState } from "react";
+import { Plus, User } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { User } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const Community = () => {
   const [open, setOpen] = useState(false);
+  const [session, setSession] = useState<any>(null);
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [newQuestion, setNewQuestion] = useState({
     title: "",
     content: "",
     tags: "",
   });
+
+  useEffect(() => {
+    // Check authentication status
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleAskQuestion = () => {
+    if (!session) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to ask a question",
+        variant: "destructive",
+      });
+      navigate("/auth/signin");
+      return;
+    }
+    setOpen(true);
+  };
 
   const handleSubmitQuestion = () => {
     // This will be implemented later when we add the backend integration
@@ -35,7 +67,7 @@ const Community = () => {
             <h1 className="text-3xl font-bold">Community Questions</h1>
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
-                <Button>
+                <Button onClick={handleAskQuestion}>
                   <Plus className="w-4 h-4 mr-2" />
                   Ask Question
                 </Button>
