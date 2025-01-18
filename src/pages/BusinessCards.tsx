@@ -2,8 +2,8 @@ import { PageSEO } from "@/components/seo/PageSEO";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
-import { generatePDF } from "@react-pdf/renderer";
 import { useToast } from "@/components/ui/use-toast";
+import * as htmlToImage from 'html-to-image';
 
 const BusinessCards = () => {
   const { toast } = useToast();
@@ -94,61 +94,30 @@ const BusinessCards = () => {
         throw new Error("Template element not found");
       }
 
-      // Create a new window for the print dialog
-      const printWindow = window.open('', '', 'width=600,height=600');
-      if (!printWindow) {
-        throw new Error("Could not open print window");
-      }
+      // Convert the element to a PNG image
+      const dataUrl = await htmlToImage.toPng(templateElement, {
+        quality: 1.0,
+        pixelRatio: 2,
+        backgroundColor: '#ffffff'
+      });
 
-      // Add the template styles
-      printWindow.document.write(`
-        <html>
-          <head>
-            <title>Business Card</title>
-            <style>
-              body { margin: 0; }
-              .business-card {
-                width: 3.5in;
-                height: 2in;
-                margin: 0 auto;
-                padding: 0.25in;
-                box-sizing: border-box;
-              }
-              .content {
-                height: 100%;
-                font-family: monospace;
-              }
-            </style>
-          </head>
-          <body>
-            <div class="business-card">
-              ${templateElement.innerHTML}
-            </div>
-          </body>
-        </html>
-      `);
+      // Create a download link
+      const link = document.createElement('a');
+      link.download = `business-card-${templateId}.png`;
+      link.href = dataUrl;
+      link.click();
 
-      // Trigger print dialog
-      printWindow.document.close();
-      printWindow.focus();
-      
-      // Small delay to ensure styles are loaded
-      setTimeout(() => {
-        printWindow.print();
-        printWindow.close();
-        
-        toast({
-          title: "Ready to print!",
-          description: "Your business card template has been prepared for printing.",
-        });
-      }, 250);
+      toast({
+        title: "Download successful!",
+        description: "Your business card has been downloaded as a PNG image.",
+      });
 
     } catch (error) {
       console.error("Download error:", error);
       toast({
         variant: "destructive",
         title: "Download failed",
-        description: "There was an error preparing your business card for download.",
+        description: "There was an error creating your business card image.",
       });
     }
   };
