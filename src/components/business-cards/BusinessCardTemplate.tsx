@@ -15,13 +15,13 @@ export const BusinessCardTemplate = ({ template, onDownload }: BusinessCardTempl
       {/* Business Card Preview */}
       <div 
         id={`template-${template.id}`}
-        className={`w-full h-full border-2 ${template.accentColor} flex flex-col justify-between p-4 backdrop-blur-sm bg-opacity-90`}
+        className={`w-full h-full border-2 ${template.accentColor} flex flex-col justify-between p-4 backdrop-blur-sm bg-opacity-90 hover:bg-opacity-95 transition-all duration-300`}
       >
         <div className={`${template.textColor}`}>
-          <h3 className="text-lg font-bold font-mono">STARTUP NAME</h3>
-          <p className="text-sm opacity-80 font-mono">INNOVATIVE SOLUTIONS</p>
+          <h3 className="text-lg font-bold font-mono tracking-wide">STARTUP NAME</h3>
+          <p className="text-sm opacity-80 font-mono tracking-wider">INNOVATIVE SOLUTIONS</p>
         </div>
-        <div className={`${template.textColor} text-sm opacity-80 space-y-1`}>
+        <div className={`${template.textColor} text-sm opacity-80 space-y-1.5`}>
           <p className="font-mono">John Developer</p>
           <p className="font-mono">Lead Innovation Officer</p>
           <p className="font-mono">contact@startup.tech</p>
@@ -33,7 +33,7 @@ export const BusinessCardTemplate = ({ template, onDownload }: BusinessCardTempl
         <Button 
           variant="secondary" 
           onClick={() => onDownload(template.id)}
-          className="gap-2"
+          className="gap-2 hover:scale-105 transition-transform"
         >
           <Download className="w-4 h-4" />
           Download Template
