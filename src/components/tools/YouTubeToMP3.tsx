@@ -21,6 +21,11 @@ export const YouTubeToMP3 = () => {
     }
 
     setIsConverting(true);
+    toast({
+      title: "Converting",
+      description: "This may take a few minutes for longer videos...",
+    });
+
     try {
       console.log("Starting conversion for URL:", url);
       
@@ -53,7 +58,7 @@ export const YouTubeToMP3 = () => {
       console.error("Conversion error:", error);
       toast({
         title: "Error",
-        description: error.message || "Failed to convert video. Please try again.",
+        description: error.message || "Failed to convert video. Please try a shorter video or try again later.",
         variant: "destructive",
       });
     } finally {

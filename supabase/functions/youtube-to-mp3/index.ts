@@ -5,7 +5,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-const TIMEOUT_DURATION = 30000; // 30 seconds timeout
+const TIMEOUT_DURATION = 120000; // 2 minutes timeout for longer videos
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -32,7 +32,7 @@ serve(async (req) => {
 
     // Create a timeout promise
     const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('Conversion timed out. Please try again.')), TIMEOUT_DURATION)
+      setTimeout(() => reject(new Error('Conversion is taking longer than expected. For longer videos, please try again or use a shorter video.')), TIMEOUT_DURATION)
     });
 
     // API call with better options
@@ -71,9 +71,9 @@ serve(async (req) => {
     )
   } catch (error) {
     console.error('Error processing request:', error)
-    const errorMessage = error.message === 'Conversion timed out. Please try again.'
+    const errorMessage = error.message.includes('taking longer than expected')
       ? error.message
-      : 'Failed to convert video. Please try a different video or try again later.';
+      : 'Failed to convert video. Please try a shorter video or try again later.';
     
     return new Response(
       JSON.stringify({ error: errorMessage }),
