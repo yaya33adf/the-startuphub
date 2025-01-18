@@ -20,10 +20,10 @@ interface PostsListProps {
 }
 
 export const PostsList = ({ posts, isLoading }: PostsListProps) => {
-  console.log("PostsList - posts:", posts);
-  console.log("PostsList - isLoading:", isLoading);
+  console.log("PostsList - Rendering with props:", { posts, isLoading });
 
   if (isLoading) {
+    console.log("PostsList - Showing loading state");
     return (
       <div className="space-y-4">
         {[1, 2, 3].map((i) => (
@@ -45,6 +45,7 @@ export const PostsList = ({ posts, isLoading }: PostsListProps) => {
   }
 
   if (!posts || posts.length === 0) {
+    console.log("PostsList - No posts available");
     return (
       <Card className="p-6 text-center">
         <p className="text-muted-foreground">
@@ -54,6 +55,7 @@ export const PostsList = ({ posts, isLoading }: PostsListProps) => {
     );
   }
 
+  console.log("PostsList - Rendering posts:", posts);
   return (
     <div className="space-y-4">
       {posts.map((post) => (
