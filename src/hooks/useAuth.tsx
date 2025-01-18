@@ -15,19 +15,20 @@ export const useAuth = () => {
       }
 
       try {
-        console.log("Fetching profile for user:", session.user.id);
+        console.log("Starting profile fetch for user:", session.user.id);
+        
         const { data, error } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', session.user.id)
-          .single();
+          .maybeSingle();
 
         if (error) {
           console.error("Error fetching profile:", error);
-          throw error;
+          return;
         }
 
-        console.log("Profile data:", data);
+        console.log("Setting profile:", data);
         setProfile(data);
       } catch (error) {
         console.error("Error in fetchProfile:", error);

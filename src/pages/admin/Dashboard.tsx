@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 import { StatisticsCards } from "@/components/admin/StatisticsCards";
 import { BlogPostForm } from "@/components/admin/BlogPostForm";
 import { SiteSettings } from "@/components/admin/SiteSettings";
@@ -9,7 +9,7 @@ import { Loader2 } from "lucide-react";
 const AdminDashboard = () => {
   const { user, profile, isLoading } = useAuth();
   const navigate = useNavigate();
-  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     console.log("Dashboard - Auth state:", { user, profile, isLoading });
