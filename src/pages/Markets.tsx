@@ -20,24 +20,37 @@ const Markets = () => {
       try {
         let query = supabase
           .from("trend_scores")
-          .select("*");
+          .select("*")
+          .order('total_score', { ascending: false });
 
         if (searchQuery) {
           console.log("Applying search filter:", searchQuery);
           query = query.ilike('query', `%${searchQuery}%`);
         }
 
-        const { data, error } = await query
-          .order('total_score', { ascending: false })
-          .limit(10);
+        const { data, error } = await query.limit(10);
 
         if (error) {
           console.error("Error fetching market data:", error);
           throw error;
         }
 
-        console.log("Successfully fetched market opportunities:", data);
-        return data;
+        // Transform the data for market cards
+        const transformedData = data.map(score => ({
+          id: score.id,
+          name: score.query,
+          description: "Market opportunity based on trend analysis",
+          trend_score: score.total_score || 0,
+          monthly_earnings_min: 1000, // Sample earnings range
+          monthly_earnings_max: 5000,
+          category: "Market Trend",
+          difficulty: "Medium",
+          skills: ["Research", "Analysis", "Marketing"],
+          platforms: ["Online", "Digital"],
+        }));
+
+        console.log("Successfully fetched market opportunities:", transformedData);
+        return transformedData;
       } catch (err) {
         console.error("Unexpected error in market data fetch:", err);
         throw err;
@@ -54,6 +67,36 @@ const Markets = () => {
     });
     refetch();
   };
+
+  // Sample market data when no search is performed
+  const sampleMarkets = !searchQuery ? [
+    {
+      id: '1',
+      name: "AI Development",
+      description: "Artificial Intelligence and Machine Learning solutions",
+      trend_score: 95,
+      monthly_earnings_min: 5000,
+      monthly_earnings_max: 15000,
+    },
+    {
+      id: '2',
+      name: "Sustainable Energy",
+      description: "Green energy and sustainability solutions",
+      trend_score: 88,
+      monthly_earnings_min: 3000,
+      monthly_earnings_max: 10000,
+    },
+    {
+      id: '3',
+      name: "Digital Health",
+      description: "Healthcare technology and telemedicine",
+      trend_score: 92,
+      monthly_earnings_min: 4000,
+      monthly_earnings_max: 12000,
+    }
+  ] : [];
+
+  const displayData = marketData || sampleMarkets;
 
   return (
     <>
@@ -89,12 +132,12 @@ const Markets = () => {
           </div>
         ) : (
           <>
-            <MarketChart data={marketData?.map(market => ({
-              name: market.query,
-              trendScore: market.total_score || 0,
-              potentialEarnings: market.total_score || 0, // Using total_score as potential earnings for now
+            <MarketChart data={displayData.map(market => ({
+              name: market.name,
+              trendScore: market.trend_score || 0,
+              potentialEarnings: market.monthly_earnings_max || 0,
             })) || []} />
-            <MarketCards markets={marketData || []} />
+            <MarketCards markets={displayData} />
           </>
         )}
       </div>

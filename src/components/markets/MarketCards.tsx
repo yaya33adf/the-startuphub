@@ -1,8 +1,17 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Lightbulb, DollarSign } from "lucide-react";
 
+interface Market {
+  id: string;
+  name: string;
+  description?: string;
+  trend_score: number;
+  monthly_earnings_min?: number;
+  monthly_earnings_max?: number;
+}
+
 interface MarketCardsProps {
-  markets: any[];
+  markets: Market[];
 }
 
 export const MarketCards = ({ markets }: MarketCardsProps) => {
