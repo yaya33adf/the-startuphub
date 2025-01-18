@@ -74,28 +74,19 @@ const Community = () => {
         description="Join our entrepreneurial community to share ideas, get feedback, and connect with like-minded business professionals."
       />
       <div className="container mx-auto px-4 py-8">
-        <div className="space-y-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-              <h1 className="text-4xl font-bold mb-2">Community Hub</h1>
-              <p className="text-muted-foreground">
-                Share your questions and connect with other entrepreneurs
-              </p>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-              <SearchBar 
-                searchQuery={searchQuery}
-                onSearchChange={setSearchQuery}
-                placeholder="Search discussions..."
-              />
-              {session && <QuestionForm userId={session.user.id} />}
-            </div>
+        <div className="max-w-7xl mx-auto space-y-8">
+          <CommunityHeader />
+          
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <SearchBar 
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              placeholder="Search discussions..."
+            />
+            {session && <QuestionForm userId={session.user.id} />}
           </div>
           
-          <div className="grid gap-6">
-            <CommunityHeader />
-            <PostsList posts={filteredPosts} isLoading={isLoading} />
-          </div>
+          <PostsList posts={filteredPosts} isLoading={isLoading} />
         </div>
       </div>
     </>

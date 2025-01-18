@@ -1,10 +1,14 @@
+import { ThumbsUp, MessageCircle, Share2, Bookmark } from "lucide-react";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Avatar } from "@/components/ui/avatar";
 
 interface Post {
   id: string;
@@ -50,10 +54,14 @@ export const PostsList = ({ posts, isLoading }: PostsListProps) => {
     console.log("PostsList - No posts available to display");
     return (
       <Card className="p-8 text-center">
-        <CardContent>
-          <p className="text-lg text-muted-foreground">
-            Be the first to start a discussion! Share your thoughts and questions with the community.
-          </p>
+        <CardContent className="flex flex-col items-center space-y-4">
+          <MessageCircle className="w-12 h-12 text-muted-foreground" />
+          <div>
+            <h3 className="text-lg font-semibold">No discussions yet</h3>
+            <p className="text-muted-foreground">
+              Be the first to start a discussion! Share your thoughts and questions with the community.
+            </p>
+          </div>
         </CardContent>
       </Card>
     );
@@ -65,14 +73,19 @@ export const PostsList = ({ posts, isLoading }: PostsListProps) => {
       {posts.map((post) => (
         <Card key={post.id} className="hover:shadow-md transition-shadow">
           <CardHeader>
-            <CardTitle className="text-xl">{post.title}</CardTitle>
-            <CardDescription className="text-sm">
-              Posted on {new Date(post.created_at).toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
-            </CardDescription>
+            <div className="flex items-center space-x-4">
+              <Avatar />
+              <div>
+                <CardTitle className="text-xl">{post.title}</CardTitle>
+                <CardDescription className="text-sm">
+                  Posted on {new Date(post.created_at).toLocaleDateString(undefined, {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </CardDescription>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             <p className="mb-4 text-gray-700 line-clamp-3">{post.content}</p>
@@ -81,7 +94,7 @@ export const PostsList = ({ posts, isLoading }: PostsListProps) => {
                 {post.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="px-3 py-1 bg-secondary text-secondary-foreground rounded-full text-xs font-medium"
+                    className="px-3 py-1 bg-accent text-accent-foreground rounded-full text-xs font-medium"
                   >
                     {tag}
                   </span>
@@ -89,6 +102,26 @@ export const PostsList = ({ posts, isLoading }: PostsListProps) => {
               </div>
             )}
           </CardContent>
+          <CardFooter className="border-t pt-4">
+            <div className="flex justify-between w-full">
+              <Button variant="ghost" size="sm" className="text-muted-foreground">
+                <ThumbsUp className="w-4 h-4 mr-2" />
+                Like
+              </Button>
+              <Button variant="ghost" size="sm" className="text-muted-foreground">
+                <MessageCircle className="w-4 h-4 mr-2" />
+                Comment
+              </Button>
+              <Button variant="ghost" size="sm" className="text-muted-foreground">
+                <Share2 className="w-4 h-4 mr-2" />
+                Share
+              </Button>
+              <Button variant="ghost" size="sm" className="text-muted-foreground">
+                <Bookmark className="w-4 h-4 mr-2" />
+                Save
+              </Button>
+            </div>
+          </CardFooter>
         </Card>
       ))}
     </div>
