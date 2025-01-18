@@ -3,6 +3,7 @@ import { Youtube, Download, AudioWaveform } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export const YouTubeToMP3 = () => {
   const [url, setUrl] = useState("");
@@ -21,17 +22,36 @@ export const YouTubeToMP3 = () => {
 
     setIsConverting(true);
     try {
-      // Here we would integrate with a YouTube to MP3 conversion service
-      // For now, we'll just show a demo message
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      toast({
-        title: "Demo Mode",
-        description: "This is a demo. In production, this would convert the YouTube video to MP3.",
+      console.log("Starting conversion for URL:", url);
+      
+      const { data, error } = await supabase.functions.invoke('youtube-to-mp3', {
+        body: { url }
       });
+
+      if (error) throw error;
+
+      console.log("Conversion response:", data);
+
+      if (data.downloadUrl) {
+        toast({
+          title: "Success",
+          description: "Conversion completed! Click to download.",
+          action: (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => window.open(data.downloadUrl, '_blank')}
+            >
+              Download MP3
+            </Button>
+          ),
+        });
+      }
     } catch (error) {
+      console.error("Conversion error:", error);
       toast({
         title: "Error",
-        description: "Failed to convert video. Please try again.",
+        description: error.message || "Failed to convert video. Please try again.",
         variant: "destructive",
       });
     } finally {
