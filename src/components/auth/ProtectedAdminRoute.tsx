@@ -12,15 +12,18 @@ interface ProtectedAdminRouteProps {
 const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   const { session, isLoading: isLoadingSession } = useSessionContext();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const [isCheckingAdmin, setIsCheckingAdmin] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
     const checkAdminStatus = async () => {
-      if (!session?.user?.id) return;
+      if (!session?.user?.id || isCheckingAdmin) return;
 
       try {
+        setIsCheckingAdmin(true);
         console.log("Checking admin status for user:", session.user.id);
+        
         const { data: profile, error } = await supabase
           .from("profiles")
           .select("role")
@@ -52,6 +55,8 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
           variant: "destructive",
         });
         navigate("/");
+      } finally {
+        setIsCheckingAdmin(false);
       }
     };
 
@@ -68,9 +73,9 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
         checkAdminStatus();
       }
     }
-  }, [session, isLoadingSession, navigate, toast]);
+  }, [session, isLoadingSession, navigate, toast, isCheckingAdmin]);
 
-  if (isLoadingSession || (session && isAdmin === null)) {
+  if (isLoadingSession || isCheckingAdmin) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
