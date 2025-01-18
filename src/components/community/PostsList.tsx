@@ -1,4 +1,4 @@
-import { ThumbsUp, MessageCircle, Share2, Bookmark } from "lucide-react";
+import { ThumbsUp, MessageCircle, Share2, Bookmark, User } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -8,7 +8,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface Post {
   id: string;
@@ -16,6 +16,9 @@ interface Post {
   content: string;
   created_at: string;
   tags?: string[];
+  users?: {
+    name: string | null;
+  } | null;
 }
 
 interface PostsListProps {
@@ -74,11 +77,15 @@ export const PostsList = ({ posts, isLoading }: PostsListProps) => {
         <Card key={post.id} className="hover:shadow-md transition-shadow">
           <CardHeader>
             <div className="flex items-center space-x-4">
-              <Avatar />
+              <Avatar>
+                <AvatarFallback>
+                  <User className="w-4 h-4" />
+                </AvatarFallback>
+              </Avatar>
               <div>
                 <CardTitle className="text-xl">{post.title}</CardTitle>
                 <CardDescription className="text-sm">
-                  Posted on {new Date(post.created_at).toLocaleDateString(undefined, {
+                  Posted by {post.users?.name || 'Anonymous'} on {new Date(post.created_at).toLocaleDateString(undefined, {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric'

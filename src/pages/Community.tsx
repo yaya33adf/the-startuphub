@@ -35,13 +35,13 @@ const Community = () => {
     checkSession();
   }, [navigate, toast]);
 
-  const { data: posts = [], isLoading } = useQuery({
+  const { data: posts = [], isLoading, error } = useQuery({
     queryKey: ["communityPosts"],
     queryFn: async () => {
       console.log("Fetching community posts...");
       const { data, error } = await supabase
         .from("community_posts")
-        .select("*")
+        .select("*, users(name)")
         .order("created_at", { ascending: false });
 
       if (error) {
@@ -53,6 +53,15 @@ const Community = () => {
       return data || [];
     },
   });
+
+  if (error) {
+    console.error("Error in community posts query:", error);
+    toast({
+      title: "Error",
+      description: "Failed to load community posts. Please try again later.",
+      variant: "destructive",
+    });
+  }
 
   const filteredPosts = posts.filter(
     (post) =>
