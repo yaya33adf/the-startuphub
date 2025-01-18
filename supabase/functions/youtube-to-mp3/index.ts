@@ -18,6 +18,8 @@ serve(async (req) => {
       )
     }
 
+    console.log('Processing YouTube URL:', url);
+
     // Here we would integrate with a YouTube conversion service
     // For demo, we'll simulate a conversion with a delay
     await new Promise(resolve => setTimeout(resolve, 2000))
@@ -32,6 +34,7 @@ serve(async (req) => {
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   } catch (error) {
+    console.error('Error processing request:', error);
     return new Response(
       JSON.stringify({ error: error.message }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
