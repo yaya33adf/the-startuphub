@@ -66,16 +66,34 @@ const Crowdfunding = () => {
         // Type guard to check if metadata is an object with the expected structure
         const metadata = typeof results.metadata === 'object' && results.metadata !== null ? results.metadata : {};
         
+        // Helper function to safely extract score from metadata
+        const extractScore = (key: string): { score: number; metadata?: any } => {
+          if (
+            typeof metadata === 'object' && 
+            key in metadata && 
+            metadata[key] && 
+            typeof metadata[key] === 'object' && 
+            'score' in metadata[key] && 
+            typeof metadata[key].score === 'number'
+          ) {
+            return {
+              score: metadata[key].score,
+              metadata: metadata[key].metadata
+            };
+          }
+          return { score: 0 };
+        };
+        
         const trendData: TrendData = {
           score: results.score,
           metadata: {
-            github: typeof metadata === 'object' && 'github' in metadata ? metadata.github : { score: 0 },
-            google_trends: typeof metadata === 'object' && 'google_trends' in metadata ? metadata.google_trends : { score: 0 },
-            hacker_news: typeof metadata === 'object' && 'hacker_news' in metadata ? metadata.hacker_news : { score: 0 },
-            stack_overflow: typeof metadata === 'object' && 'stack_overflow' in metadata ? metadata.stack_overflow : { score: 0 },
-            wikipedia: typeof metadata === 'object' && 'wikipedia' in metadata ? metadata.wikipedia : { score: 0 },
-            npm: typeof metadata === 'object' && 'npm' in metadata ? metadata.npm : { score: 0 },
-            pypi: typeof metadata === 'object' && 'pypi' in metadata ? metadata.pypi : { score: 0 }
+            github: extractScore('github'),
+            google_trends: extractScore('google_trends'),
+            hacker_news: extractScore('hacker_news'),
+            stack_overflow: extractScore('stack_overflow'),
+            wikipedia: extractScore('wikipedia'),
+            npm: extractScore('npm'),
+            pypi: extractScore('pypi')
           }
         };
         
