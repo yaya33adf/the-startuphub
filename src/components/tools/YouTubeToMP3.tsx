@@ -33,8 +33,6 @@ export const YouTubeToMP3 = () => {
         body: { url }
       });
 
-      console.log("Conversion response:", data);
-
       if (error) {
         console.error("Supabase function error:", error);
         throw new Error(error.message || "Failed to convert video");
@@ -78,6 +76,7 @@ export const YouTubeToMP3 = () => {
       });
     } finally {
       setIsConverting(false);
+      setUrl(""); // Reset URL after conversion attempt
     }
   };
 
