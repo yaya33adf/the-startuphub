@@ -19,6 +19,8 @@ interface Post {
   users?: {
     name: string | null;
   } | null;
+  likes?: number;
+  comments?: number;
 }
 
 interface PostsListProps {
@@ -113,11 +115,11 @@ export const PostsList = ({ posts, isLoading }: PostsListProps) => {
             <div className="flex justify-between w-full">
               <Button variant="ghost" size="sm" className="text-muted-foreground">
                 <ThumbsUp className="w-4 h-4 mr-2" />
-                Like
+                {post.likes || 0} Likes
               </Button>
               <Button variant="ghost" size="sm" className="text-muted-foreground">
                 <MessageCircle className="w-4 h-4 mr-2" />
-                Comment
+                {post.comments || 0} Comments
               </Button>
               <Button variant="ghost" size="sm" className="text-muted-foreground">
                 <Share2 className="w-4 h-4 mr-2" />
