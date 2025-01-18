@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Search, DollarSign, Trophy, Users, Rocket } from "lucide-react";
+import { Rocket } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PageSEO } from "@/components/seo/PageSEO";
@@ -63,16 +63,19 @@ const Crowdfunding = () => {
       console.log("Trend results:", results);
       
       if (results) {
+        // Type guard to check if metadata is an object with the expected structure
+        const metadata = typeof results.metadata === 'object' && results.metadata !== null ? results.metadata : {};
+        
         const trendData: TrendData = {
           score: results.score,
           metadata: {
-            github: results.metadata.github || { score: 0 },
-            google_trends: results.metadata.google_trends || { score: 0 },
-            hacker_news: results.metadata.hacker_news || { score: 0 },
-            stack_overflow: results.metadata.stack_overflow || { score: 0 },
-            wikipedia: results.metadata.wikipedia || { score: 0 },
-            npm: results.metadata.npm || { score: 0 },
-            pypi: results.metadata.pypi || { score: 0 }
+            github: typeof metadata === 'object' && 'github' in metadata ? metadata.github : { score: 0 },
+            google_trends: typeof metadata === 'object' && 'google_trends' in metadata ? metadata.google_trends : { score: 0 },
+            hacker_news: typeof metadata === 'object' && 'hacker_news' in metadata ? metadata.hacker_news : { score: 0 },
+            stack_overflow: typeof metadata === 'object' && 'stack_overflow' in metadata ? metadata.stack_overflow : { score: 0 },
+            wikipedia: typeof metadata === 'object' && 'wikipedia' in metadata ? metadata.wikipedia : { score: 0 },
+            npm: typeof metadata === 'object' && 'npm' in metadata ? metadata.npm : { score: 0 },
+            pypi: typeof metadata === 'object' && 'pypi' in metadata ? metadata.pypi : { score: 0 }
           }
         };
         
@@ -126,7 +129,6 @@ const Crowdfunding = () => {
                   <div className="flex items-center justify-between mb-2">
                     <CardTitle className="text-xl">{company.name}</CardTitle>
                     <div className="flex items-center gap-1 text-green-600">
-                      <Trophy className="w-5 h-5" />
                       <span className="font-bold">{company.score}</span>
                     </div>
                   </div>
