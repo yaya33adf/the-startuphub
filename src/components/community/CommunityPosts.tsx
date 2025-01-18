@@ -44,9 +44,8 @@ export const CommunityPosts = ({ userId }: CommunityPostsProps) => {
     },
     enabled: !!userId,
     staleTime: 30000, // Cache data for 30 seconds
-    gcTime: 1000 * 60 * 5, // Keep in cache for 5 minutes (renamed from cacheTime)
-    refetchOnWindowFocus: false, // Prevent refetch on window focus
-    refetchOnMount: false, // Prevent refetch on component mount
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
     retry: 1,
     meta: {
       errorMessage: "Failed to load community posts"
