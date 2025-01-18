@@ -1,38 +1,20 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Users } from "lucide-react";
+import { BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
 import { StartupsDropdown } from "./StartupsDropdown";
 import { ToolsDropdown } from "./ToolsDropdown";
-import { BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
-import { BarChart2, BookOpen } from "lucide-react";
 
-interface NavLinksProps {
-  onClick?: () => void;
-}
-
-export const NavLinks = ({ onClick = () => {} }: NavLinksProps) => {
+export const NavLinks = () => {
   return (
     <>
-      <BusinessInsightsDropdown onClick={onClick} />
-      <StartupsDropdown onClick={onClick} />
-      <ToolsDropdown onClick={onClick} />
-      <Button 
-        variant="ghost" 
-        asChild
-        className="h-10 px-3 py-2 transition-all duration-200 hover:bg-accent/50 hover:text-accent-foreground hover:scale-105"
-      >
-        <Link to="/markets" className="flex items-center gap-2" onClick={onClick}>
-          <BarChart2 className="w-4 h-4" />
-          <span>Markets</span>
-        </Link>
-      </Button>
-      <Button 
-        variant="ghost" 
-        asChild
-        className="h-10 px-3 py-2 transition-all duration-200 hover:bg-accent/50 hover:text-accent-foreground hover:scale-105"
-      >
-        <Link to="/blog" className="flex items-center gap-2" onClick={onClick}>
-          <BookOpen className="w-4 h-4" />
-          <span>Blog</span>
+      <BusinessInsightsDropdown />
+      <StartupsDropdown />
+      <ToolsDropdown />
+      <Button variant="ghost" asChild className="h-10 px-3 py-2">
+        <Link to="/community" className="flex items-center gap-2">
+          <Users className="h-4 w-4" />
+          <span>Community</span>
         </Link>
       </Button>
     </>
