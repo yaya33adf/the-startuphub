@@ -41,7 +41,12 @@ const Community = () => {
       console.log("Fetching community posts...");
       const { data, error } = await supabase
         .from("community_posts")
-        .select("*, users(name)")
+        .select(`
+          *,
+          users (
+            name
+          )
+        `)
         .order("created_at", { ascending: false });
 
       if (error) {
