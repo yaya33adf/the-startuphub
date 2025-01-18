@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { DesktopNav } from "./navigation/DesktopNav";
 import { MobileMenu } from "./navigation/MobileMenu";
@@ -13,8 +13,8 @@ export const NavigationMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
-  // Close mobile menu on route change
-  useMemo(() => {
+  // Close mobile menu on route change using useEffect instead of useMemo
+  useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
 
@@ -26,22 +26,20 @@ export const NavigationMenu = () => {
             <Logo />
           </div>
           <div className="flex-1 flex items-center justify-end overflow-hidden">
-            {useMemo(() => (
-              isMobile ? (
-                <MobileMenu 
-                  isOpen={isOpen} 
-                  setIsOpen={setIsOpen}
-                  session={session}
-                  handleSignOut={handleSignOut}
-                />
-              ) : (
-                <DesktopNav
-                  session={session}
-                  userProfile={userProfile}
-                  handleSignOut={handleSignOut}
-                />
-              )
-            ), [isMobile, isOpen, session, userProfile, handleSignOut])}
+            {isMobile ? (
+              <MobileMenu 
+                isOpen={isOpen} 
+                setIsOpen={setIsOpen}
+                session={session}
+                handleSignOut={handleSignOut}
+              />
+            ) : (
+              <DesktopNav
+                session={session}
+                userProfile={userProfile}
+                handleSignOut={handleSignOut}
+              />
+            )}
             <div className="flex items-center justify-end space-x-2">
               <div className="w-full flex-1 md:w-auto md:flex-none" />
               {session && (
