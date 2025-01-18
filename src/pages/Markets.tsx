@@ -1,21 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
-import { MarketSearch } from "@/components/search/MarketSearch";
 import { supabase } from "@/integrations/supabase/client";
 import { PageSEO } from "@/components/seo/PageSEO";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ComposedChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { Globe, TrendingUp, ChartBar, Lightbulb, DollarSign } from "lucide-react";
+import { Globe, TrendingUp, ChartBar, Lightbulb, DollarSign, Search } from "lucide-react";
 import { SearchBar } from "@/components/community/SearchBar";
 import { LocationPeriodSelect } from "@/components/search/LocationPeriodSelect";
 import { useState } from "react";
 import { toast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
 
 const Markets = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [country, setCountry] = useState("global");
   const [period, setPeriod] = useState("7d");
 
-  const { data: marketData, isLoading, error } = useQuery({
+  const { data: marketData, isLoading, error, refetch } = useQuery({
     queryKey: ["marketOpportunities", searchQuery, country, period],
     queryFn: async () => {
       console.log("Fetching market opportunities with filters:", { searchQuery, country, period });
@@ -45,12 +45,23 @@ const Markets = () => {
     },
   });
 
+  const handleSearch = () => {
+    console.log("Triggering search with:", { searchQuery, country, period });
+    refetch();
+  };
+
   // Handle loading state
   if (isLoading) {
     return (
       <div className="p-8">
         <div className="flex flex-col gap-4 mb-8">
-          <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+          <div className="flex gap-4">
+            <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+            <Button onClick={handleSearch}>
+              <Search className="w-4 h-4 mr-2" />
+              Search
+            </Button>
+          </div>
           <div className="flex flex-col md:flex-row gap-4">
             <LocationPeriodSelect
               country={country}
@@ -79,7 +90,13 @@ const Markets = () => {
     return (
       <div className="p-8">
         <div className="flex flex-col gap-4 mb-8">
-          <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+          <div className="flex gap-4">
+            <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+            <Button onClick={handleSearch}>
+              <Search className="w-4 h-4 mr-2" />
+              Search
+            </Button>
+          </div>
           <div className="flex flex-col md:flex-row gap-4">
             <LocationPeriodSelect
               country={country}
@@ -121,7 +138,13 @@ const Markets = () => {
         
         {/* Search and Filter Section */}
         <div className="flex flex-col gap-4 mb-8">
-          <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+          <div className="flex gap-4">
+            <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+            <Button onClick={handleSearch}>
+              <Search className="w-4 h-4 mr-2" />
+              Search
+            </Button>
+          </div>
           <div className="flex flex-col md:flex-row gap-4">
             <LocationPeriodSelect
               country={country}
