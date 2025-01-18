@@ -17,17 +17,11 @@ const Community = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  useEffect(() => {
-    if (!isLoadingSession && !session) {
-      console.log("No session found, redirecting to login");
-      toast({
-        title: "Authentication required",
-        description: "Please sign in to access the community features",
-        variant: "destructive",
-      });
-      navigate("/auth/signin");
-    }
-  }, [session, isLoadingSession, navigate, toast]);
+  console.log("Community - Session state:", { 
+    isLoadingSession, 
+    hasSession: !!session,
+    userId: session?.user?.id 
+  });
 
   const { data: posts = [], isLoading: isLoadingPosts, error } = useQuery({
     queryKey: ["communityPosts"],
@@ -51,28 +45,20 @@ const Community = () => {
       console.log("Fetched community posts:", data);
       return data || [];
     },
-    enabled: !!session && !isLoadingSession,
+    enabled: !isLoadingSession && !!session,
   });
 
-  if (error) {
-    console.error("Error in community posts query:", error);
-    toast({
-      title: "Error",
-      description: "Failed to load community posts. Please try again later.",
-      variant: "destructive",
-    });
-  }
-
-  const filteredPosts = posts.filter(
-    (post) =>
-      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.tags?.some((tag) =>
-        tag.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-  );
-
-  console.log("Filtered posts:", filteredPosts);
+  useEffect(() => {
+    if (!isLoadingSession && !session) {
+      console.log("No session found, redirecting to login");
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to access the community features",
+        variant: "destructive",
+      });
+      navigate("/auth/signin");
+    }
+  }, [session, isLoadingSession, navigate, toast]);
 
   if (isLoadingSession) {
     return (
@@ -85,6 +71,17 @@ const Community = () => {
   if (!session) {
     return null;
   }
+
+  const filteredPosts = posts.filter(
+    (post) =>
+      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      post.tags?.some((tag) =>
+        tag.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+  );
+
+  console.log("Filtered posts:", filteredPosts);
 
   return (
     <>

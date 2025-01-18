@@ -1,65 +1,76 @@
-import { Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSessionContext } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useState, useEffect, useRef } from "react";
-import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
 
 interface ProtectedAdminRouteProps {
   children: React.ReactNode;
 }
 
 const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
-  const { session } = useSessionContext();
+  const { session, isLoading: isLoadingSession } = useSessionContext();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [isChecking, setIsChecking] = useState(true);
-  const checkingRef = useRef(false);
+  const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
     const checkAdminStatus = async () => {
-      if (checkingRef.current) return;
-      checkingRef.current = true;
+      if (!session?.user?.id) return;
 
       try {
-        if (!session?.user) {
-          console.log("No session found, redirecting to login");
-          setIsAdmin(false);
-          setIsChecking(false);
-          return;
-        }
-
+        console.log("Checking admin status for user:", session.user.id);
         const { data: profile, error } = await supabase
-          .from('profiles')
-          .select('role')
-          .eq('id', session.user.id)
-          .single();
+          .from("profiles")
+          .select("role")
+          .eq("id", session.user.id)
+          .maybeSingle();
 
         if (error) {
-          console.error("Error fetching profile:", error);
+          console.error("Error checking admin status:", error);
+          throw error;
+        }
+
+        const isUserAdmin = profile?.role === "admin";
+        console.log("User admin status:", isUserAdmin);
+        setIsAdmin(isUserAdmin);
+
+        if (!isUserAdmin) {
           toast({
-            title: "Error",
-            description: "Failed to verify admin status",
+            title: "Access Denied",
+            description: "You do not have permission to access this area",
             variant: "destructive",
           });
-          setIsAdmin(false);
-        } else {
-          console.log("Profile data:", profile);
-          setIsAdmin(profile?.role === 'admin');
+          navigate("/");
         }
       } catch (error) {
         console.error("Error in checkAdminStatus:", error);
-        setIsAdmin(false);
-      } finally {
-        setIsChecking(false);
-        checkingRef.current = false;
+        toast({
+          title: "Error",
+          description: "Failed to verify admin status",
+          variant: "destructive",
+        });
+        navigate("/");
       }
     };
 
-    checkAdminStatus();
-  }, [session, toast]);
+    if (!isLoadingSession) {
+      if (!session) {
+        console.log("No session found, redirecting to login");
+        toast({
+          title: "Authentication Required",
+          description: "Please sign in to access the admin area",
+          variant: "destructive",
+        });
+        navigate("/auth/signin");
+      } else {
+        checkAdminStatus();
+      }
+    }
+  }, [session, isLoadingSession, navigate, toast]);
 
-  if (isChecking) {
+  if (isLoadingSession || (session && isAdmin === null)) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
@@ -67,17 +78,8 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
     );
   }
 
-  if (!session) {
-    return <Navigate to="/auth/signin" replace />;
-  }
-
-  if (!isAdmin) {
-    toast({
-      title: "Access Denied",
-      description: "You need admin privileges to access this page",
-      variant: "destructive",
-    });
-    return <Navigate to="/" replace />;
+  if (!session || !isAdmin) {
+    return null;
   }
 
   return <>{children}</>;
