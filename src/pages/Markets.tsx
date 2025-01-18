@@ -91,8 +91,8 @@ const Markets = () => {
           <>
             <MarketChart data={marketData?.map(market => ({
               name: market.query,
-              trendScore: market.total_score,
-              potentialEarnings: market.metadata?.estimated_earnings || 0,
+              trendScore: market.total_score || 0,
+              potentialEarnings: market.total_score || 0, // Using total_score as potential earnings for now
             })) || []} />
             <MarketCards markets={marketData || []} />
           </>

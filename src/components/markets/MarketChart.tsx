@@ -3,7 +3,11 @@ import { ComposedChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
 import { TrendingUp } from "lucide-react";
 
 interface MarketChartProps {
-  data: any[];
+  data: Array<{
+    name: string;
+    trendScore: number;
+    potentialEarnings: number;
+  }>;
 }
 
 export const MarketChart = ({ data }: MarketChartProps) => {
@@ -15,7 +19,7 @@ export const MarketChart = ({ data }: MarketChartProps) => {
           Market Trends & Potential
         </CardTitle>
         <CardDescription>
-          Top market opportunities by trend score and earnings potential
+          Top market opportunities by trend score and total score
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -44,7 +48,7 @@ export const MarketChart = ({ data }: MarketChartProps) => {
                 type="monotone"
                 dataKey="potentialEarnings"
                 stroke="#2563eb"
-                name="Potential Earnings"
+                name="Potential Score"
               />
             </ComposedChart>
           </ResponsiveContainer>
