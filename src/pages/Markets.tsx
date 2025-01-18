@@ -17,16 +17,17 @@ const Markets = () => {
     queryFn: async () => {
       console.log("Fetching market opportunities with filters:", { searchQuery, country, period });
       
-      const query = supabase
+      let query = supabase
         .from("side_hustles")
-        .select("*")
-        .order("trend_score", { ascending: false });
+        .select("*");
 
       if (searchQuery) {
-        query.ilike("name", `%${searchQuery}%`);
+        query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`);
       }
 
-      const { data, error } = await query.limit(10);
+      const { data, error } = await query
+        .order("trend_score", { ascending: false })
+        .limit(10);
 
       if (error) {
         console.error("Error fetching market data:", error);
@@ -41,7 +42,7 @@ const Markets = () => {
       console.log("Fetched market opportunities:", data);
       return data;
     },
-    enabled: true, // This ensures the query runs on mount
+    enabled: true,
   });
 
   const handleSearch = () => {
