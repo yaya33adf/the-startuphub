@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "@supabase/auth-helpers-react";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { CommunityHeader } from "@/components/community/CommunityHeader";
@@ -13,31 +13,45 @@ import { Loader2 } from "lucide-react";
 
 const Community = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const session = useSession();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [initialCheckDone, setInitialCheckDone] = useState(false);
 
   useEffect(() => {
+    let mounted = true;
+
     const checkSession = async () => {
       console.log("Checking session state...");
-      const { data: { session: currentSession } } = await supabase.auth.getSession();
-      console.log("Current session state:", currentSession);
-      
-      if (!currentSession && !isCheckingAuth) {
-        console.log("No session found and initial check complete, redirecting to login");
-        toast({
-          title: "Authentication required",
-          description: "Please sign in to access the community features",
-          variant: "destructive",
-        });
-        navigate("/auth/signin");
+      try {
+        const { data: { session: currentSession } } = await supabase.auth.getSession();
+        console.log("Current session state:", currentSession);
+        
+        if (mounted) {
+          if (!currentSession && initialCheckDone) {
+            console.log("No session found and initial check complete, redirecting to login");
+            toast({
+              title: "Authentication required",
+              description: "Please sign in to access the community features",
+              variant: "destructive",
+            });
+            navigate("/auth/signin");
+          }
+          if (!initialCheckDone) {
+            setInitialCheckDone(true);
+          }
+        }
+      } catch (error) {
+        console.error("Error checking session:", error);
       }
-      setIsCheckingAuth(false);
     };
 
     checkSession();
-  }, [navigate, toast, isCheckingAuth]);
+
+    return () => {
+      mounted = false;
+    };
+  }, [navigate, toast, initialCheckDone]);
 
   const { data: posts = [], isLoading, error } = useQuery({
     queryKey: ["communityPosts"],
@@ -61,6 +75,7 @@ const Community = () => {
       console.log("Fetched community posts:", data);
       return data || [];
     },
+    enabled: !!session, // Only fetch posts when session exists
   });
 
   if (error) {
@@ -83,17 +98,12 @@ const Community = () => {
 
   console.log("Filtered posts:", filteredPosts);
 
-  if (isCheckingAuth) {
+  if (!initialCheckDone || (!session && initialCheckDone)) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
-  }
-
-  // Only show content if we have a session
-  if (!session) {
-    return null;
   }
 
   return (
