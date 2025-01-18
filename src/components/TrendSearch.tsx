@@ -26,11 +26,19 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
   const [timeframe, setTimeframe] = useState("7d");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const { session } = useSessionContext();
+  const { session, isLoading: sessionLoading } = useSessionContext();
   const navigate = useNavigate();
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    console.log("Current session state:", session);
+    console.log("Session loading state:", sessionLoading);
+
+    if (sessionLoading) {
+      console.log("Session is still loading, waiting...");
+      return;
+    }
     
     if (!session?.user) {
       console.log("No session found, redirecting to login");
