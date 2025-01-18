@@ -44,7 +44,7 @@ export const CommunityPosts = ({ userId }: CommunityPostsProps) => {
     },
     enabled: !!userId,
     staleTime: 30000, // Cache data for 30 seconds
-    cacheTime: 1000 * 60 * 5, // Keep in cache for 5 minutes
+    gcTime: 1000 * 60 * 5, // Keep in cache for 5 minutes (renamed from cacheTime)
     refetchOnWindowFocus: false, // Prevent refetch on window focus
     refetchOnMount: false, // Prevent refetch on component mount
     retry: 1,
