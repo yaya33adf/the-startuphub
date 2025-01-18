@@ -140,10 +140,12 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
       });
 
       if (error) {
-        // Check if the error is related to OpenAI quota
-        if (error.message?.includes('insufficient_quota') || error.message?.includes('exceeded your current quota')) {
+        const errorMessage = error.message || '';
+        // Check for OpenAI quota errors
+        if (errorMessage.toLowerCase().includes('insufficient_quota') || 
+            errorMessage.toLowerCase().includes('exceeded your current quota')) {
           toast({
-            title: "OpenAI API Quota Exceeded",
+            title: "OpenAI API Limit Reached",
             description: "The API quota has been exceeded. Please try again later or check the billing details.",
             variant: "destructive",
           });

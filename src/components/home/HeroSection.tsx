@@ -82,7 +82,21 @@ export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps
         body: { keyword }
       });
 
-      if (error) throw error;
+      if (error) {
+        const errorMessage = error.message || '';
+        // Check for OpenAI quota errors
+        if (errorMessage.toLowerCase().includes('insufficient_quota') || 
+            errorMessage.toLowerCase().includes('exceeded your current quota')) {
+          toast({
+            title: "OpenAI API Limit Reached",
+            description: "The API quota has been exceeded. Please try again later or check the billing details.",
+            variant: "destructive",
+          });
+          console.error('OpenAI quota exceeded:', error);
+          return;
+        }
+        throw error;
+      }
 
       setGeneratedIdeas(data.ideas);
       toast({
