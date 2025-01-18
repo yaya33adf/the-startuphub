@@ -57,7 +57,10 @@ const Community = () => {
     staleTime: 30000,
     retry: 1,
     meta: {
-      onError: () => {
+      errorMessage: "Failed to load community posts"
+    },
+    onSettled: (data, error) => {
+      if (error) {
         toast({
           title: "Error",
           description: "Failed to load community posts",
