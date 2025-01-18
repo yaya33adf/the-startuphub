@@ -18,27 +18,23 @@ const Markets = () => {
       console.log("Starting market opportunities fetch with filters:", { searchQuery, country, period });
       
       try {
-        // Build the base query
-        let queryBuilder = supabase
+        let query = supabase
           .from("side_hustles")
           .select("*");
 
         console.log("Initial query created");
 
-        // Add search filter if query exists
         if (searchQuery) {
           console.log("Applying search filter:", searchQuery);
-          const searchCondition = `name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`;
-          queryBuilder = queryBuilder.or(searchCondition);
-          console.log("Search filter applied:", searchCondition);
+          query = query.ilike('name', `%${searchQuery}%`);
+          console.log("Search filter applied to name");
         }
 
-        // Execute query with ordering and limit
-        const { data, error } = await queryBuilder
+        const { data, error } = await query
           .order('trend_score', { ascending: false })
           .limit(10);
 
-        console.log("Query executed, response data:", data?.length || 0, "results");
+        console.log("Query executed, number of results:", data?.length || 0);
 
         if (error) {
           console.error("Supabase error fetching market data:", error);
