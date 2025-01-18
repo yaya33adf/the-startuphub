@@ -36,8 +36,8 @@ serve(async (req) => {
       setTimeout(() => reject(new Error('Conversion timeout - video may be too long')), TIMEOUT_DURATION)
     });
 
-    // API call with better options and proper headers
-    const options = {
+    // Test the API key first with a simple request
+    const testOptions = {
       method: 'GET',
       headers: {
         'X-RapidAPI-Key': rapidApiKey,
@@ -45,12 +45,21 @@ serve(async (req) => {
       }
     }
 
-    const apiUrl = `https://youtube-mp3-download1.p.rapidapi.com/dl?id=${encodeURIComponent(url)}`
+    // Extract video ID from URL
+    const videoId = url.includes('youtube.com') ? 
+      new URL(url).searchParams.get('v') : 
+      url.split('/').pop()?.split('?')[0];
+
+    if (!videoId) {
+      throw new Error('Could not extract video ID from URL');
+    }
+
+    const apiUrl = `https://youtube-mp3-download1.p.rapidapi.com/dl?id=${videoId}`
     console.log('Calling conversion API...')
 
     // Race between the API call and timeout
     const response = await Promise.race([
-      fetch(apiUrl, options),
+      fetch(apiUrl, testOptions),
       timeoutPromise
     ]);
 
@@ -66,7 +75,7 @@ serve(async (req) => {
     }
 
     const data = await response.json()
-    console.log('Conversion API response received')
+    console.log('Conversion API response received:', JSON.stringify(data))
 
     if (!data || data.status === 'fail' || !data.link) {
       console.error('Invalid API response:', data)
