@@ -26,15 +26,16 @@ const Markets = () => {
 
         if (searchQuery) {
           console.log("Applying search filter:", searchQuery);
-          query = query.ilike('name', `%${searchQuery}%`);
-          console.log("Search filter applied to name");
+          // Using ilike for case-insensitive search on both name and description
+          query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`);
+          console.log("Search filter applied with OR condition");
         }
 
-        const { data, error } = await query
+        const { data, error, count } = await query
           .order('trend_score', { ascending: false })
           .limit(10);
 
-        console.log("Query executed, number of results:", data?.length || 0);
+        console.log("Query executed, full response:", { data, error, count });
 
         if (error) {
           console.error("Supabase error fetching market data:", error);
@@ -47,7 +48,11 @@ const Markets = () => {
         }
 
         if (!data || data.length === 0) {
-          console.log("No data returned from query");
+          console.log("No results found for the search criteria");
+          toast({
+            title: "No Results",
+            description: "No markets found matching your search criteria. Try different keywords.",
+          });
           return [];
         }
         
