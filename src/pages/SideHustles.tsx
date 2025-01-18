@@ -2,13 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Briefcase, Clock, DollarSign, TrendingUp, Search } from "lucide-react";
+import { Briefcase, Clock, DollarSign, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { PageSEO } from "@/components/seo/PageSEO";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { MarketSearch } from "@/components/markets/MarketSearch";
 import { toast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 interface SideHustle {
   id: string;
@@ -26,11 +25,13 @@ interface SideHustle {
 
 const SideHustles = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [country, setCountry] = useState("global");
+  const [period, setPeriod] = useState("7d");
 
   const { data: sideHustles, isLoading, error, refetch } = useQuery({
-    queryKey: ["sideHustles", searchQuery],
+    queryKey: ["sideHustles", searchQuery, country, period],
     queryFn: async () => {
-      console.log("Fetching side hustles with search:", searchQuery);
+      console.log("Fetching side hustles with search:", searchQuery, "country:", country, "period:", period);
       let query = supabase
         .from("side_hustles")
         .select("*");
@@ -52,12 +53,29 @@ const SideHustles = () => {
   });
 
   const handleSearch = () => {
-    console.log("Searching side hustles:", searchQuery);
+    console.log("Exploring side hustles:", searchQuery);
+    if (!searchQuery && !country) {
+      toast({
+        title: "Please enter search criteria",
+        description: "Enter a side hustle idea or select a region to explore opportunities",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     toast({
-      title: "Searching Side Hustles",
-      description: searchQuery ? `Looking for "${searchQuery}"` : "Showing all side hustles",
+      title: "Exploring Side Hustles",
+      description: `Looking for opportunities in ${country === 'global' ? 'Global' : country} market`,
     });
     refetch();
+  };
+
+  const handleNewSideHustle = () => {
+    // This would typically open a form or modal for submitting a new side hustle
+    toast({
+      title: "New Side Hustle",
+      description: "This feature will allow submitting new side hustle ideas. Coming soon!",
+    });
   };
 
   return (
@@ -72,21 +90,15 @@ const SideHustles = () => {
           Discover profitable side business opportunities and start earning extra income
         </p>
 
-        <div className="flex gap-4 mb-8">
-          <div className="flex-1">
-            <Input
-              type="text"
-              placeholder="Search side hustles..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full"
-            />
-          </div>
-          <Button onClick={handleSearch} className="bg-primary hover:bg-primary/90">
-            <Search className="w-4 h-4 mr-2" />
-            Search Side Hustles
-          </Button>
-        </div>
+        <MarketSearch
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          country={country}
+          setCountry={setCountry}
+          period={period}
+          setPeriod={setPeriod}
+          onSearch={handleSearch}
+        />
 
         {isLoading ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
