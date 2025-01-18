@@ -15,9 +15,9 @@ export const PostsList = ({ posts, isLoading }: PostsListProps) => {
   if (isLoading) {
     console.log("PostsList - Rendering loading state");
     return (
-      <div className="space-y-6">
-        {[1, 2, 3].map((i) => (
-          <PostSkeleton key={i} />
+      <div className="space-y-6" data-testid="posts-loading">
+        {Array.from({ length: 3 }, (_, i) => (
+          <PostSkeleton key={`skeleton-${i}`} />
         ))}
       </div>
     );
@@ -25,14 +25,20 @@ export const PostsList = ({ posts, isLoading }: PostsListProps) => {
 
   if (!posts || posts.length === 0) {
     console.log("PostsList - No posts available to display");
-    return <EmptyPosts />;
+    return <EmptyPosts data-testid="empty-posts" />;
   }
 
   console.log("PostsList - Rendering posts list:", posts);
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-testid="posts-list">
       {posts.map((post) => (
-        <PostCard key={post.id} post={post} />
+        <PostCard 
+          key={post.id} 
+          post={{
+            ...post,
+            users: post.users || { name: 'Anonymous' }
+          }} 
+        />
       ))}
     </div>
   );

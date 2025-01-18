@@ -11,8 +11,17 @@ import { PostInteractions } from "./PostInteractions";
 import type { Post } from "./types";
 
 export const PostCard = ({ post }: { post: Post }) => {
+  console.log("PostCard - Rendering post:", post);
+  
+  const authorName = post.users?.name || 'Anonymous';
+  const formattedDate = new Date(post.created_at).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card className="hover:shadow-md transition-shadow" data-testid="post-card">
       <CardHeader>
         <div className="flex items-center space-x-4">
           <Avatar>
@@ -23,11 +32,7 @@ export const PostCard = ({ post }: { post: Post }) => {
           <div>
             <CardTitle className="text-xl">{post.title}</CardTitle>
             <CardDescription className="text-sm">
-              Posted by {post.users?.name || 'Anonymous'} on {new Date(post.created_at).toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
+              Posted by {authorName} on {formattedDate}
             </CardDescription>
           </div>
         </div>
@@ -38,7 +43,7 @@ export const PostCard = ({ post }: { post: Post }) => {
           <div className="flex flex-wrap gap-2">
             {post.tags.map((tag, index) => (
               <span
-                key={index}
+                key={`${post.id}-tag-${index}`}
                 className="px-3 py-1 bg-accent text-accent-foreground rounded-full text-xs font-medium"
               >
                 {tag}
@@ -47,7 +52,10 @@ export const PostCard = ({ post }: { post: Post }) => {
           </div>
         )}
       </CardContent>
-      <PostInteractions likes={post.likes || 0} comments={post.comments || 0} />
+      <PostInteractions 
+        likes={post.likes || 0} 
+        comments={post.comments || 0} 
+      />
     </Card>
   );
 };
