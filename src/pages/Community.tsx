@@ -35,7 +35,7 @@ const Community = () => {
     checkSession();
   }, [navigate, toast]);
 
-  const { data: posts, isLoading } = useQuery({
+  const { data: posts = [], isLoading } = useQuery({
     queryKey: ["communityPosts"],
     queryFn: async () => {
       console.log("Fetching community posts...");
@@ -50,14 +50,10 @@ const Community = () => {
       }
       
       console.log("Fetched community posts:", data);
-      return data;
+      return data || [];
     },
     enabled: !!session,
   });
-
-  if (!session) {
-    return null;
-  }
 
   const filteredPosts = posts?.filter(
     (post) =>
@@ -67,6 +63,10 @@ const Community = () => {
         tag.toLowerCase().includes(searchQuery.toLowerCase())
       )
   );
+
+  if (!session) {
+    return null;
+  }
 
   return (
     <>
@@ -89,13 +89,13 @@ const Community = () => {
                 onSearchChange={setSearchQuery}
                 placeholder="Search discussions..."
               />
-              <QuestionForm userId={session.user.id} />
+              {session && <QuestionForm userId={session.user.id} />}
             </div>
           </div>
           
           <div className="grid gap-6">
             <CommunityHeader />
-            <PostsList posts={filteredPosts || []} isLoading={isLoading} />
+            <PostsList posts={filteredPosts} isLoading={isLoading} />
           </div>
         </div>
       </div>
