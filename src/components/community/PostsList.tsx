@@ -20,22 +20,24 @@ interface PostsListProps {
 }
 
 export const PostsList = ({ posts, isLoading }: PostsListProps) => {
-  console.log("PostsList - Rendering with props:", { posts, isLoading });
+  console.log("PostsList - Component mounted");
+  console.log("PostsList - Current props:", { posts, isLoading });
 
   if (isLoading) {
-    console.log("PostsList - Showing loading state");
+    console.log("PostsList - Rendering loading state");
     return (
-      <div className="space-y-4">
+      <div className="space-y-6">
         {[1, 2, 3].map((i) => (
           <Card key={i} className="animate-pulse">
             <CardHeader>
-              <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-              <div className="h-3 bg-gray-100 rounded w-1/4 mt-2"></div>
+              <div className="h-5 bg-gray-200 rounded w-3/4"></div>
+              <div className="h-3 bg-gray-100 rounded w-1/3 mt-3"></div>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <div className="h-4 bg-gray-100 rounded"></div>
                 <div className="h-4 bg-gray-100 rounded w-5/6"></div>
+                <div className="h-4 bg-gray-100 rounded w-4/6"></div>
               </div>
             </CardContent>
           </Card>
@@ -45,35 +47,41 @@ export const PostsList = ({ posts, isLoading }: PostsListProps) => {
   }
 
   if (!posts || posts.length === 0) {
-    console.log("PostsList - No posts available");
+    console.log("PostsList - No posts available to display");
     return (
-      <Card className="p-6 text-center">
-        <p className="text-muted-foreground">
-          No questions have been asked yet. Be the first to start a discussion!
-        </p>
+      <Card className="p-8 text-center">
+        <CardContent>
+          <p className="text-lg text-muted-foreground">
+            Be the first to start a discussion! Share your thoughts and questions with the community.
+          </p>
+        </CardContent>
       </Card>
     );
   }
 
-  console.log("PostsList - Rendering posts:", posts);
+  console.log("PostsList - Rendering posts list:", posts);
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {posts.map((post) => (
-        <Card key={post.id}>
+        <Card key={post.id} className="hover:shadow-md transition-shadow">
           <CardHeader>
-            <CardTitle>{post.title}</CardTitle>
-            <CardDescription>
-              Posted {new Date(post.created_at).toLocaleDateString()}
+            <CardTitle className="text-xl">{post.title}</CardTitle>
+            <CardDescription className="text-sm">
+              Posted on {new Date(post.created_at).toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <p className="mb-4 text-gray-700">{post.content}</p>
+            <p className="mb-4 text-gray-700 line-clamp-3">{post.content}</p>
             {post.tags && post.tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {post.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="px-2 py-1 bg-secondary text-secondary-foreground rounded-full text-xs"
+                    className="px-3 py-1 bg-secondary text-secondary-foreground rounded-full text-xs font-medium"
                   >
                     {tag}
                   </span>
