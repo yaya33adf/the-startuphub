@@ -7,10 +7,6 @@ import type { TrendData } from "@/types/trends";
 import { SearchHeader } from "./search/SearchHeader";
 import { SearchForm } from "./search/SearchForm";
 import { PopularSearches } from "./search/PopularSearches";
-import { GeneratedIdeas } from "./search/GeneratedIdeas";
-import { supabase } from "@/integrations/supabase/client";
-import { Button } from "./ui/button";
-import { Lightbulb } from "lucide-react";
 
 interface TrendSearchProps {
   onSearchResults: (results: TrendData) => void;
@@ -29,8 +25,6 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
   const [region, setRegion] = useState("worldwide");
   const [timeframe, setTimeframe] = useState("7d");
   const [isLoading, setIsLoading] = useState(false);
-  const [isGeneratingIdeas, setIsGeneratingIdeas] = useState(false);
-  const [generatedIdeas, setGeneratedIdeas] = useState<Array<{ title: string; description: string }>>([]);
   const { toast } = useToast();
   const session = useSession();
   const navigate = useNavigate();
@@ -123,55 +117,6 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
     }
   };
 
-  const generateIdeas = async () => {
-    if (!searchQuery.trim()) {
-      toast({
-        title: "Search query required",
-        description: "Please enter a keyword to generate ideas.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsGeneratingIdeas(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('generate-ideas', {
-        body: { keyword: searchQuery }
-      });
-
-      if (error) {
-        const errorMessage = error.message || '';
-        // Check for OpenAI quota errors
-        if (errorMessage.toLowerCase().includes('insufficient_quota') || 
-            errorMessage.toLowerCase().includes('exceeded your current quota')) {
-          toast({
-            title: "OpenAI API Limit Reached",
-            description: "The API quota has been exceeded. Please try again later or check the billing details.",
-            variant: "destructive",
-          });
-          console.error('OpenAI quota exceeded:', error);
-          return;
-        }
-        throw error;
-      }
-
-      setGeneratedIdeas(data.ideas);
-      toast({
-        title: "Ideas Generated",
-        description: "Check out your new business ideas below!",
-      });
-    } catch (error) {
-      console.error('Error generating ideas:', error);
-      toast({
-        title: "Error generating ideas",
-        description: error instanceof Error ? error.message : "An unexpected error occurred",
-        variant: "destructive",
-      });
-    } finally {
-      setIsGeneratingIdeas(false);
-    }
-  };
-
   const handlePopularSearch = (query: string) => {
     setSearchQuery(query);
     handleSearch(new Event('submit') as any);
@@ -189,21 +134,6 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
         onTimeframeChange={setTimeframe}
         onSubmit={handleSearch}
         isLoading={isLoading}
-      />
-      <div className="flex justify-center">
-        <Button
-          onClick={generateIdeas}
-          disabled={isGeneratingIdeas || !searchQuery.trim()}
-          className="w-full md:w-auto"
-        >
-          <Lightbulb className={`w-4 h-4 mr-2 ${isGeneratingIdeas ? 'animate-spin' : ''}`} />
-          {isGeneratingIdeas ? "Generating Ideas..." : "Generate Ideas"}
-        </Button>
-      </div>
-      <GeneratedIdeas
-        ideas={generatedIdeas}
-        isLoading={isGeneratingIdeas}
-        onRefresh={generateIdeas}
       />
       <PopularSearches 
         searches={popularSearches}

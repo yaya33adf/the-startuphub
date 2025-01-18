@@ -6,10 +6,7 @@ import { Link } from "react-router-dom";
 import AlternatingJourney from "./AlternatingJourney";
 import GlobalTrendsHeader from "./GlobalTrendsHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Star, Lightbulb } from "lucide-react";
-import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
+import { Star } from "lucide-react";
 
 interface HeroSectionProps {
   searchResults: TrendData | null;
@@ -48,11 +45,6 @@ const trendyApps = [
 ];
 
 export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps) => {
-  const [keyword, setKeyword] = useState("");
-  const [isGeneratingIdeas, setIsGeneratingIdeas] = useState(false);
-  const [generatedIdeas, setGeneratedIdeas] = useState<Array<{ title: string; description: string }>>([]);
-  const { toast } = useToast();
-
   const renderStars = (score: number) => {
     return [...Array(5)].map((_, index) => (
       <Star
@@ -64,55 +56,6 @@ export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps
         }`}
       />
     ));
-  };
-
-  const generateIdeas = async () => {
-    if (!keyword.trim()) {
-      toast({
-        title: "Keyword required",
-        description: "Please enter a keyword to generate ideas.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsGeneratingIdeas(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('generate-ideas', {
-        body: { keyword }
-      });
-
-      if (error) {
-        const errorMessage = error.message || '';
-        // Check for OpenAI quota errors
-        if (errorMessage.toLowerCase().includes('insufficient_quota') || 
-            errorMessage.toLowerCase().includes('exceeded your current quota')) {
-          toast({
-            title: "OpenAI API Limit Reached",
-            description: "The API quota has been exceeded. Please try again later or check the billing details.",
-            variant: "destructive",
-          });
-          console.error('OpenAI quota exceeded:', error);
-          return;
-        }
-        throw error;
-      }
-
-      setGeneratedIdeas(data.ideas);
-      toast({
-        title: "Ideas Generated",
-        description: "Check out your new business ideas below!",
-      });
-    } catch (error) {
-      console.error('Error generating ideas:', error);
-      toast({
-        title: "Error generating ideas",
-        description: error instanceof Error ? error.message : "An unexpected error occurred",
-        variant: "destructive",
-      });
-    } finally {
-      setIsGeneratingIdeas(false);
-    }
   };
 
   return (
@@ -130,44 +73,6 @@ export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps
             <TrendSearch onSearchResults={onSearchResults} />
             {searchResults && <TrendResults data={searchResults} />}
           </div>
-
-          {/* New Ideas Generation Section */}
-          <div className="mt-12 mb-8 space-y-6">
-            <h2 className="text-2xl md:text-3xl font-bold">Generate Business Ideas</h2>
-            <div className="flex gap-4">
-              <input
-                type="text"
-                placeholder="Enter a keyword..."
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-                className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <Button
-                onClick={generateIdeas}
-                disabled={isGeneratingIdeas || !keyword.trim()}
-                className="min-w-[200px]"
-              >
-                <Lightbulb className={`w-4 h-4 mr-2 ${isGeneratingIdeas ? 'animate-spin' : ''}`} />
-                {isGeneratingIdeas ? "Generating Ideas..." : "Generate Ideas"}
-              </Button>
-            </div>
-
-            {generatedIdeas.length > 0 && (
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {generatedIdeas.map((idea, index) => (
-                  <Card key={index} className="hover:shadow-lg transition-shadow">
-                    <CardHeader>
-                      <CardTitle className="text-lg">{idea.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground">{idea.description}</p>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
-          </div>
-
           <Button 
             size="lg" 
             asChild 
