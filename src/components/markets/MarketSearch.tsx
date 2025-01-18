@@ -22,13 +22,29 @@ export const MarketSearch = ({
   setPeriod,
   onSearch,
 }: MarketSearchProps) => {
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      onSearch();
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4 mb-8">
       <div className="flex gap-4">
-        <SearchBar searchQuery={searchQuery} onSearchChange={onSearchChange} />
-        <Button onClick={onSearch}>
+        <div className="flex-1">
+          <SearchBar 
+            searchQuery={searchQuery} 
+            onSearchChange={onSearchChange}
+            onKeyPress={handleKeyPress}
+            placeholder="Search market opportunities..."
+          />
+        </div>
+        <Button 
+          onClick={onSearch}
+          className="bg-primary hover:bg-primary/90"
+        >
           <Search className="w-4 h-4 mr-2" />
-          Search
+          Explore Markets
         </Button>
       </div>
       <div className="flex flex-col md:flex-row gap-4">
