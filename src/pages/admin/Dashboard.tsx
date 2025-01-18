@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 import { StatisticsCards } from "@/components/admin/StatisticsCards";
 import { BlogPostForm } from "@/components/admin/BlogPostForm";
 import { SiteSettings } from "@/components/admin/SiteSettings";
