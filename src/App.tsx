@@ -33,6 +33,7 @@ import Terms from "@/pages/Terms";
 import NotFound from "@/pages/NotFound";
 import Investors from "@/pages/Investors";
 import ScheduleCall from "@/pages/ScheduleCall";
+import BusinessCards from "@/pages/BusinessCards";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
               <Route path="/" element={<Index />} />
               <Route path="/about" element={<About />} />
               <Route path="/blog" element={<Blog />} />
+              <Route path="/business-cards" element={<BusinessCards />} />
               <Route path="/community" element={<Community />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/crowdfunding" element={<Crowdfunding />} />
