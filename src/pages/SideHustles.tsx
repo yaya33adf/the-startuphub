@@ -1,13 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Briefcase, Clock, DollarSign, TrendingUp } from "lucide-react";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { PageSEO } from "@/components/seo/PageSEO";
 import { MarketSearch } from "@/components/markets/MarketSearch";
 import { toast } from "@/hooks/use-toast";
-import { useState } from "react";
+import { TrendResults } from "@/components/TrendResults";
+import type { TrendData } from "@/types/trends";
 
 interface SideHustle {
   id: string;
@@ -27,6 +25,7 @@ const SideHustles = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [country, setCountry] = useState("global");
   const [period, setPeriod] = useState("7d");
+  const [trendResults, setTrendResults] = useState<TrendData | null>(null);
 
   const { data: sideHustles, isLoading, error, refetch } = useQuery({
     queryKey: ["sideHustles", searchQuery, country, period],
@@ -74,6 +73,11 @@ const SideHustles = () => {
     refetch();
   };
 
+  const handleTrendResults = (results: TrendData) => {
+    console.log("Received trend results:", results);
+    setTrendResults(results);
+  };
+
   return (
     <>
       <PageSEO 
@@ -94,8 +98,15 @@ const SideHustles = () => {
           period={period}
           setPeriod={setPeriod}
           onSearch={handleSearch}
+          onTrendResults={handleTrendResults}
           buttonText="Explore Side Hustles"
         />
+
+        {trendResults && (
+          <div className="mt-8">
+            <TrendResults data={trendResults} />
+          </div>
+        )}
 
         {isLoading ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

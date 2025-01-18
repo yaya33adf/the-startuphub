@@ -6,11 +6,14 @@ import { toast } from "@/hooks/use-toast";
 import { MarketSearch } from "@/components/markets/MarketSearch";
 import { MarketChart } from "@/components/markets/MarketChart";
 import { MarketCards } from "@/components/markets/MarketCards";
+import { TrendResults } from "@/components/TrendResults";
+import type { TrendData } from "@/types/trends";
 
 const Markets = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [country, setCountry] = useState("global");
   const [period, setPeriod] = useState("7d");
+  const [trendResults, setTrendResults] = useState<TrendData | null>(null);
 
   const { data: marketData, isLoading, error, refetch } = useQuery({
     queryKey: ["marketOpportunities", searchQuery, country, period],
@@ -41,7 +44,7 @@ const Markets = () => {
           name: score.query,
           description: "Market opportunity based on trend analysis",
           trend_score: score.total_score || 0,
-          monthly_earnings_min: 1000, // Sample earnings range
+          monthly_earnings_min: 1000,
           monthly_earnings_max: 5000,
           category: "Market Trend",
           difficulty: "Medium",
@@ -68,7 +71,12 @@ const Markets = () => {
     refetch();
   };
 
-  // Sample market data only shown when no search has been performed and no results exist
+  const handleTrendResults = (results: TrendData) => {
+    console.log("Received trend results:", results);
+    setTrendResults(results);
+  };
+
+  // Sample market data for initial view
   const sampleMarkets = [
     {
       id: '1',
@@ -119,6 +127,7 @@ const Markets = () => {
           period={period}
           setPeriod={setPeriod}
           onSearch={handleSearch}
+          onTrendResults={handleTrendResults}
         />
 
         {error ? (
@@ -133,12 +142,21 @@ const Markets = () => {
           </div>
         ) : (
           <>
-            <MarketChart data={displayData.map(market => ({
-              name: market.name,
-              trendScore: market.trend_score || 0,
-              potentialEarnings: market.monthly_earnings_max || 0,
-            })) || []} />
-            <MarketCards markets={displayData} />
+            {trendResults && (
+              <div className="mt-8">
+                <TrendResults data={trendResults} />
+              </div>
+            )}
+            <div className="mt-8">
+              <MarketChart data={displayData.map(market => ({
+                name: market.name,
+                trendScore: market.trend_score || 0,
+                potentialEarnings: market.monthly_earnings_max || 0,
+              })) || []} />
+            </div>
+            <div className="mt-8">
+              <MarketCards markets={displayData} />
+            </div>
           </>
         )}
       </div>
