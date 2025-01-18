@@ -26,29 +26,12 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
   const [timeframe, setTimeframe] = useState("7d");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const { session, isLoading: sessionLoading } = useSessionContext();
+  const { session } = useSessionContext();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!sessionLoading && !session) {
-      console.log("No active session, redirecting to login");
-      navigate("/auth/signin", { replace: true });
-    }
-  }, [session, sessionLoading, navigate]);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (sessionLoading) {
-      console.log("Session is still loading, please wait...");
-      return;
-    }
-
-    if (!session?.user) {
-      console.log("No authenticated session found");
-      navigate("/auth/signin", { replace: true });
-      return;
-    }
+    console.log("Search initiated with session:", !!session);
 
     if (!searchQuery.trim()) {
       toast({
