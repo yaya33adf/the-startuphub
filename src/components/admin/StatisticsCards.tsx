@@ -17,7 +17,9 @@ export const StatisticsCards = () => {
         throw error;
       }
       return count || 0;
-    }
+    },
+    staleTime: 30000, // Consider data fresh for 30 seconds
+    refetchOnWindowFocus: false
   });
 
   const { data: publishedPosts, isLoading: loadingPosts } = useQuery({
@@ -34,7 +36,9 @@ export const StatisticsCards = () => {
         throw error;
       }
       return count || 0;
-    }
+    },
+    staleTime: 30000,
+    refetchOnWindowFocus: false
   });
 
   const { data: activeUsers, isLoading: loadingActive } = useQuery({
@@ -54,7 +58,9 @@ export const StatisticsCards = () => {
         throw error;
       }
       return count || 0;
-    }
+    },
+    staleTime: 30000,
+    refetchOnWindowFocus: false
   });
 
   return (
