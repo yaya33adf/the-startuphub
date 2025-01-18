@@ -5,6 +5,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+const TIMEOUT_DURATION = 30000; // 30 seconds timeout
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -28,7 +30,12 @@ serve(async (req) => {
       throw new Error('RAPID_API_KEY is not configured')
     }
 
-    // First, get video ID and start conversion
+    // Create a timeout promise
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Conversion timed out. Please try again.')), TIMEOUT_DURATION)
+    });
+
+    // API call with better options
     const options = {
       method: 'GET',
       headers: {
@@ -40,9 +47,13 @@ serve(async (req) => {
     const apiUrl = `https://youtube-mp3-download1.p.rapidapi.com/dl?id=${encodeURIComponent(url)}`
     console.log('Calling conversion API:', apiUrl)
 
-    const response = await fetch(apiUrl, options)
-    const data = await response.json()
+    // Race between the API call and timeout
+    const response = await Promise.race([
+      fetch(apiUrl, options),
+      timeoutPromise
+    ]);
 
+    const data = await response.json()
     console.log('Conversion API response:', data)
 
     if (!response.ok || data.status === 'fail') {
@@ -60,10 +71,12 @@ serve(async (req) => {
     )
   } catch (error) {
     console.error('Error processing request:', error)
+    const errorMessage = error.message === 'Conversion timed out. Please try again.'
+      ? error.message
+      : 'Failed to convert video. Please try a different video or try again later.';
+    
     return new Response(
-      JSON.stringify({ 
-        error: error.message || 'Failed to convert video. Please try again.' 
-      }),
+      JSON.stringify({ error: errorMessage }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
     )
   }
