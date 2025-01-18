@@ -8,11 +8,14 @@ import { PageSEO } from "@/components/seo/PageSEO";
 import { useToast } from "@/components/ui/use-toast";
 import { MarketSearch } from "@/components/markets/MarketSearch";
 import { calculateTrendScores } from "@/services/trendService";
+import { TrendResults } from "@/components/TrendResults";
+import type { TrendData } from "@/types/trends";
 
 const Crowdfunding = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [country, setCountry] = useState("global");
   const [period, setPeriod] = useState("7d");
+  const [trendResults, setTrendResults] = useState<TrendData | null>(null);
   const { toast } = useToast();
 
   const { data: companies = [], isLoading, refetch } = useQuery({
@@ -56,13 +59,14 @@ const Crowdfunding = () => {
     }
 
     try {
-      const trendResults = await calculateTrendScores(searchQuery);
-      console.log("Trend results:", trendResults);
+      const results = await calculateTrendScores(searchQuery);
+      console.log("Trend results:", results);
       
-      if (trendResults) {
+      if (results) {
+        setTrendResults(results);
         toast({
           title: "Market Analysis Complete",
-          description: `Trend score for "${searchQuery}": ${trendResults.score}/100`,
+          description: `Trend score for "${searchQuery}": ${results.score}/100`,
         });
       }
       
@@ -97,10 +101,12 @@ const Crowdfunding = () => {
           buttonText="Explore Projects"
         />
 
+        {trendResults && <TrendResults data={trendResults} />}
+
         {isLoading ? (
           <div className="text-center">Loading projects...</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
             {companies.map((company) => (
               <Card key={company.id} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
