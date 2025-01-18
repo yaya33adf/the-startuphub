@@ -5,20 +5,38 @@ import { PageSEO } from "@/components/seo/PageSEO";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ComposedChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { Globe, TrendingUp, ChartBar, Lightbulb, DollarSign } from "lucide-react";
+import { SearchBar } from "@/components/community/SearchBar";
+import { LocationPeriodSelect } from "@/components/search/LocationPeriodSelect";
+import { useState } from "react";
+import { toast } from "@/components/ui/use-toast";
 
 const Markets = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [country, setCountry] = useState("global");
+  const [period, setPeriod] = useState("7d");
+
   const { data: marketData, isLoading, error } = useQuery({
-    queryKey: ["marketOpportunities"],
+    queryKey: ["marketOpportunities", searchQuery, country, period],
     queryFn: async () => {
-      console.log("Fetching market opportunities...");
-      const { data, error } = await supabase
+      console.log("Fetching market opportunities with filters:", { searchQuery, country, period });
+      const query = supabase
         .from("side_hustles")
         .select("*")
-        .order("trend_score", { ascending: false })
-        .limit(10);
+        .order("trend_score", { ascending: false });
+
+      if (searchQuery) {
+        query.ilike("name", `%${searchQuery}%`);
+      }
+
+      const { data, error } = await query.limit(10);
 
       if (error) {
         console.error("Error fetching market data:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch market data. Please try again.",
+          variant: "destructive",
+        });
         throw error;
       }
       
@@ -27,16 +45,21 @@ const Markets = () => {
     },
   });
 
-  const handleSearch = async (query: string, region: string, timeframe: string) => {
-    console.log("Searching markets with:", { query, region, timeframe });
-    // Implement search logic here
-  };
-
   // Handle loading state
   if (isLoading) {
     return (
       <div className="p-8">
-        <MarketSearch onSearch={handleSearch} />
+        <div className="flex flex-col gap-4 mb-8">
+          <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+          <div className="flex flex-col md:flex-row gap-4">
+            <LocationPeriodSelect
+              country={country}
+              setCountry={setCountry}
+              period={period}
+              setPeriod={setPeriod}
+            />
+          </div>
+        </div>
         <div className="mt-8 space-y-4">
           <Card>
             <CardHeader>
@@ -55,7 +78,17 @@ const Markets = () => {
   if (error) {
     return (
       <div className="p-8">
-        <MarketSearch onSearch={handleSearch} />
+        <div className="flex flex-col gap-4 mb-8">
+          <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+          <div className="flex flex-col md:flex-row gap-4">
+            <LocationPeriodSelect
+              country={country}
+              setCountry={setCountry}
+              period={period}
+              setPeriod={setPeriod}
+            />
+          </div>
+        </div>
         <Card className="mt-8 bg-red-50">
           <CardHeader>
             <CardTitle className="text-red-600">Error Loading Market Data</CardTitle>
@@ -85,6 +118,20 @@ const Markets = () => {
       />
       <div className="p-8">
         <h1 className="text-4xl font-bold mb-6">Market Analysis Dashboard</h1>
+        
+        {/* Search and Filter Section */}
+        <div className="flex flex-col gap-4 mb-8">
+          <SearchBar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+          <div className="flex flex-col md:flex-row gap-4">
+            <LocationPeriodSelect
+              country={country}
+              setCountry={setCountry}
+              period={period}
+              setPeriod={setPeriod}
+            />
+          </div>
+        </div>
+
         {/* Market Overview Chart */}
         <Card>
           <CardHeader>
@@ -131,7 +178,7 @@ const Markets = () => {
         </Card>
 
         {/* Market Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
           {marketData?.map((market) => (
             <Card key={market.id} className="flex flex-col">
               <CardHeader>
