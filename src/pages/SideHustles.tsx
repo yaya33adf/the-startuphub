@@ -1,11 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { MarketSearch } from "@/components/search/MarketSearch";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Briefcase, Clock, DollarSign, TrendingUp } from "lucide-react";
+import { Briefcase, Clock, DollarSign, TrendingUp, Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { PageSEO } from "@/components/seo/PageSEO";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import { toast } from "@/hooks/use-toast";
 
 interface SideHustle {
   id: string;
@@ -22,14 +25,21 @@ interface SideHustle {
 }
 
 const SideHustles = () => {
-  const { data: sideHustles, isLoading, error } = useQuery({
-    queryKey: ["sideHustles"],
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const { data: sideHustles, isLoading, error, refetch } = useQuery({
+    queryKey: ["sideHustles", searchQuery],
     queryFn: async () => {
-      console.log("Fetching side hustles...");
-      const { data, error } = await supabase
+      console.log("Fetching side hustles with search:", searchQuery);
+      let query = supabase
         .from("side_hustles")
-        .select("*")
-        .order("trend_score", { ascending: false });
+        .select("*");
+
+      if (searchQuery) {
+        query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%,category.ilike.%${searchQuery}%`);
+      }
+
+      const { data, error } = await query.order("trend_score", { ascending: false });
 
       if (error) {
         console.error("Error fetching side hustles:", error);
@@ -41,9 +51,13 @@ const SideHustles = () => {
     },
   });
 
-  const handleSearch = async (query: string, region: string, timeframe: string) => {
-    console.log("Searching side hustles with:", { query, region, timeframe });
-    // Implement search logic here
+  const handleSearch = () => {
+    console.log("Searching side hustles:", searchQuery);
+    toast({
+      title: "Searching Side Hustles",
+      description: searchQuery ? `Looking for "${searchQuery}"` : "Showing all side hustles",
+    });
+    refetch();
   };
 
   return (
@@ -53,7 +67,27 @@ const SideHustles = () => {
         description="Find profitable side hustle ideas, explore business opportunities, and learn how to monetize your skills with our comprehensive guide."
       />
       <div className="container mx-auto p-8">
-        <h1 className="text-4xl font-bold mb-8">Top Side Hustles</h1>
+        <h1 className="text-4xl font-bold mb-4">Side Hustles</h1>
+        <p className="text-muted-foreground mb-8">
+          Discover profitable side business opportunities and start earning extra income
+        </p>
+
+        <div className="flex gap-4 mb-8">
+          <div className="flex-1">
+            <Input
+              type="text"
+              placeholder="Search side hustles..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full"
+            />
+          </div>
+          <Button onClick={handleSearch} className="bg-primary hover:bg-primary/90">
+            <Search className="w-4 h-4 mr-2" />
+            Search Side Hustles
+          </Button>
+        </div>
+
         {isLoading ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[...Array(6)].map((_, i) => (
@@ -67,6 +101,11 @@ const SideHustles = () => {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        ) : error ? (
+          <div className="bg-red-50 p-6 rounded-lg">
+            <h2 className="text-red-600 text-lg font-semibold">Error Loading Side Hustles</h2>
+            <p className="text-red-500">There was an error loading the side hustles. Please try again later.</p>
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
