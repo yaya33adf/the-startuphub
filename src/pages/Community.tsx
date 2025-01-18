@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { CommunityHeader } from "@/components/community/CommunityHeader";
 import { SearchBar } from "@/components/community/SearchBar";
 import { QuestionForm } from "@/components/community/QuestionForm";
