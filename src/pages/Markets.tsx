@@ -18,30 +18,27 @@ const Markets = () => {
       console.log("Starting market opportunities fetch with filters:", { searchQuery, country, period });
       
       try {
-        const query = supabase
+        // Build the base query
+        let queryBuilder = supabase
           .from("side_hustles")
           .select("*");
 
-        // Log the base query
         console.log("Initial query created");
 
         // Add search filter if query exists
         if (searchQuery) {
           console.log("Applying search filter:", searchQuery);
-          // Split the conditions for better readability and debugging
-          const nameFilter = `name.ilike.%${searchQuery}%`;
-          const descFilter = `description.ilike.%${searchQuery}%`;
-          query.or(`${nameFilter},${descFilter}`);
-          console.log("Search filters applied:", { nameFilter, descFilter });
+          const searchCondition = `name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`;
+          queryBuilder = queryBuilder.or(searchCondition);
+          console.log("Search filter applied:", searchCondition);
         }
 
         // Execute query with ordering and limit
-        const { data, error } = await query
+        const { data, error } = await queryBuilder
           .order('trend_score', { ascending: false })
           .limit(10);
 
-        // Log the response
-        console.log("Query executed, response:", { data, error });
+        console.log("Query executed, response data:", data?.length || 0, "results");
 
         if (error) {
           console.error("Supabase error fetching market data:", error);
@@ -53,13 +50,12 @@ const Markets = () => {
           throw error;
         }
 
-        // Ensure we have data
-        if (!data) {
+        if (!data || data.length === 0) {
           console.log("No data returned from query");
           return [];
         }
         
-        console.log("Successfully fetched market opportunities:", data.length, "results");
+        console.log("Successfully fetched market opportunities:", data);
         return data;
       } catch (err) {
         console.error("Unexpected error in market data fetch:", err);
