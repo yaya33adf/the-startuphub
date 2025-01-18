@@ -68,8 +68,8 @@ const Markets = () => {
     refetch();
   };
 
-  // Sample market data when no search is performed
-  const sampleMarkets = !searchQuery ? [
+  // Sample market data only shown when no search has been performed and no results exist
+  const sampleMarkets = [
     {
       id: '1',
       name: "AI Development",
@@ -94,9 +94,10 @@ const Markets = () => {
       monthly_earnings_min: 4000,
       monthly_earnings_max: 12000,
     }
-  ] : [];
+  ];
 
-  const displayData = marketData || sampleMarkets;
+  // Only show sample markets if no search has been performed and no results exist
+  const displayData = marketData?.length ? marketData : (!searchQuery ? sampleMarkets : []);
 
   return (
     <>
