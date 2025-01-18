@@ -36,64 +36,80 @@ serve(async (req) => {
       setTimeout(() => reject(new Error('Conversion timeout - video may be too long')), TIMEOUT_DURATION)
     });
 
-    // Test the API key first with a simple request
-    const testOptions = {
+    // Extract video ID from URL
+    let videoId;
+    try {
+      if (url.includes('youtube.com')) {
+        videoId = new URL(url).searchParams.get('v');
+      } else if (url.includes('youtu.be')) {
+        videoId = url.split('/').pop()?.split('?')[0];
+      }
+
+      if (!videoId) {
+        throw new Error('Could not extract video ID from URL');
+      }
+      console.log('Extracted video ID:', videoId);
+    } catch (error) {
+      console.error('Error extracting video ID:', error);
+      throw new Error('Invalid YouTube URL format');
+    }
+
+    // Set up API request
+    const options = {
       method: 'GET',
       headers: {
         'X-RapidAPI-Key': rapidApiKey,
         'X-RapidAPI-Host': 'youtube-mp3-download1.p.rapidapi.com'
       }
-    }
+    };
 
-    // Extract video ID from URL
-    const videoId = url.includes('youtube.com') ? 
-      new URL(url).searchParams.get('v') : 
-      url.split('/').pop()?.split('?')[0];
+    const apiUrl = `https://youtube-mp3-download1.p.rapidapi.com/dl?id=${videoId}`;
+    console.log('Initiating API request to:', apiUrl);
 
-    if (!videoId) {
-      throw new Error('Could not extract video ID from URL');
-    }
+    // Make the API request with timeout
+    try {
+      const response = await Promise.race([
+        fetch(apiUrl, options),
+        timeoutPromise
+      ]);
 
-    const apiUrl = `https://youtube-mp3-download1.p.rapidapi.com/dl?id=${videoId}`
-    console.log('Calling conversion API...')
+      if (!response.ok) {
+        console.error('API response not ok:', response.status, response.statusText);
+        const responseText = await response.text();
+        console.error('API error response:', responseText);
 
-    // Race between the API call and timeout
-    const response = await Promise.race([
-      fetch(apiUrl, testOptions),
-      timeoutPromise
-    ]);
-
-    if (!response.ok) {
-      console.error('API response not ok:', response.status, response.statusText)
-      const responseText = await response.text()
-      console.error('API response body:', responseText)
-      
-      if (response.status === 403) {
-        throw new Error('API authentication failed. Please verify the API key is valid and has sufficient credits.')
+        if (response.status === 401 || response.status === 403) {
+          throw new Error('RapidAPI key is invalid or has expired. Please check your API key.');
+        } else if (response.status === 429) {
+          throw new Error('RapidAPI rate limit exceeded. Please try again later.');
+        }
+        throw new Error(`API returned ${response.status}: ${response.statusText}`);
       }
-      throw new Error(`API returned ${response.status}: ${response.statusText}`)
+
+      const data = await response.json();
+      console.log('API response received:', JSON.stringify(data));
+
+      if (!data || data.status === 'fail' || !data.link) {
+        console.error('Invalid API response:', data);
+        throw new Error(data.msg || 'Invalid response from conversion service');
+      }
+
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: 'Conversion completed',
+          downloadUrl: data.link,
+          title: data.title
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    } catch (error) {
+      console.error('API request failed:', error);
+      throw error; // Re-throw to be caught by outer try-catch
     }
-
-    const data = await response.json()
-    console.log('Conversion API response received:', JSON.stringify(data))
-
-    if (!data || data.status === 'fail' || !data.link) {
-      console.error('Invalid API response:', data)
-      throw new Error(data.msg || 'Invalid response from conversion service')
-    }
-
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: 'Conversion completed',
-        downloadUrl: data.link,
-        title: data.title
-      }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
   } catch (error) {
-    console.error('Error processing request:', error)
-    const errorMessage = error instanceof Error ? error.message : 'Failed to convert video. Please try again later.'
+    console.error('Error processing request:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to convert video';
     
     return new Response(
       JSON.stringify({ 
@@ -104,6 +120,6 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
         status: 500 
       }
-    )
+    );
   }
 })
