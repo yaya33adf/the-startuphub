@@ -1,4 +1,4 @@
-import { QrCode, DollarSign, Receipt, FileSpreadsheet, BarChart3, Mail, Target, Users, CalendarDays, Shield, Lightbulb, BookOpen, StickyNote, Youtube } from "lucide-react";
+import { QrCode, DollarSign, Receipt, FileSpreadsheet, BarChart3, Mail, Target, Users, CalendarDays, Shield, Lightbulb, BookOpen, StickyNote } from "lucide-react";
 import { QRCodeGenerator } from "./QRCodeGenerator";
 import { CurrencyConverter } from "./CurrencyConverter";
 import { InvoiceGenerator } from "./InvoiceGenerator";
@@ -13,16 +13,8 @@ import { BusinessNameGenerator } from "./BusinessNameGenerator";
 import { BookNameGenerator } from "./BookNameGenerator";
 import { PasswordGenerator } from "./PasswordGenerator";
 import { NotesWidget } from "./NotesWidget";
-import { YouTubeToMP3 } from "./YouTubeToMP3";
 
 export const tools = [
-  {
-    title: "YouTube to MP3",
-    description: "Convert YouTube videos to MP3 audio files",
-    icon: Youtube,
-    component: YouTubeToMP3,
-    active: true,
-  },
   {
     title: "Notes Widget",
     description: "Create and manage your notes easily",
