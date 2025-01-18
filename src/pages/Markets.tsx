@@ -18,18 +18,30 @@ const Markets = () => {
       console.log("Starting market opportunities fetch with filters:", { searchQuery, country, period });
       
       try {
-        let query = supabase
+        const query = supabase
           .from("side_hustles")
           .select("*");
 
+        // Log the base query
+        console.log("Initial query created");
+
+        // Add search filter if query exists
         if (searchQuery) {
           console.log("Applying search filter:", searchQuery);
-          query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`);
+          // Split the conditions for better readability and debugging
+          const nameFilter = `name.ilike.%${searchQuery}%`;
+          const descFilter = `description.ilike.%${searchQuery}%`;
+          query.or(`${nameFilter},${descFilter}`);
+          console.log("Search filters applied:", { nameFilter, descFilter });
         }
 
+        // Execute query with ordering and limit
         const { data, error } = await query
-          .order("trend_score", { ascending: false })
+          .order('trend_score', { ascending: false })
           .limit(10);
+
+        // Log the response
+        console.log("Query executed, response:", { data, error });
 
         if (error) {
           console.error("Supabase error fetching market data:", error);
@@ -40,9 +52,15 @@ const Markets = () => {
           });
           throw error;
         }
+
+        // Ensure we have data
+        if (!data) {
+          console.log("No data returned from query");
+          return [];
+        }
         
-        console.log("Successfully fetched market opportunities:", data);
-        return data || []; // Ensure we always return an array
+        console.log("Successfully fetched market opportunities:", data.length, "results");
+        return data;
       } catch (err) {
         console.error("Unexpected error in market data fetch:", err);
         throw err;
