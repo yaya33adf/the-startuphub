@@ -32,7 +32,7 @@ serve(async (req) => {
 
     // Create a timeout promise
     const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('Conversion is taking longer than expected. For longer videos, please try again or use a shorter video.')), TIMEOUT_DURATION)
+      setTimeout(() => reject(new Error('Conversion timeout - video may be too long')), TIMEOUT_DURATION)
     });
 
     // API call with better options
@@ -53,11 +53,17 @@ serve(async (req) => {
       timeoutPromise
     ]);
 
+    if (!response.ok) {
+      console.error('API response not ok:', response.status, response.statusText);
+      throw new Error(`API returned ${response.status}: ${response.statusText}`);
+    }
+
     const data = await response.json()
     console.log('Conversion API response:', data)
 
-    if (!response.ok || data.status === 'fail') {
-      throw new Error(data.msg || 'Failed to convert video')
+    if (!data || data.status === 'fail' || !data.link) {
+      console.error('Invalid API response:', data);
+      throw new Error(data.msg || 'Invalid response from conversion service');
     }
 
     return new Response(
@@ -71,13 +77,17 @@ serve(async (req) => {
     )
   } catch (error) {
     console.error('Error processing request:', error)
-    const errorMessage = error.message.includes('taking longer than expected')
-      ? error.message
-      : 'Failed to convert video. Please try a shorter video or try again later.';
+    const errorMessage = error.message || 'Failed to convert video. Please try a shorter video or try again later.';
     
     return new Response(
-      JSON.stringify({ error: errorMessage }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+      JSON.stringify({ 
+        error: errorMessage,
+        details: error.stack 
+      }),
+      { 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
+        status: 500 
+      }
     )
   }
 })

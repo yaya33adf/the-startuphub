@@ -33,32 +33,47 @@ export const YouTubeToMP3 = () => {
         body: { url }
       });
 
-      if (error) throw error;
-
       console.log("Conversion response:", data);
 
-      if (data.downloadUrl) {
-        // Create a temporary anchor element to trigger download
-        const link = document.createElement('a');
-        link.href = data.downloadUrl;
-        link.target = '_blank';
-        link.download = `${data.title || 'youtube-audio'}.mp3`;
-        
-        // Append to document, click, and remove
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-
-        toast({
-          title: "Success",
-          description: "Your download should begin shortly.",
-        });
+      if (error) {
+        console.error("Supabase function error:", error);
+        throw new Error(error.message || "Failed to convert video");
       }
+
+      if (!data || !data.downloadUrl) {
+        throw new Error("Invalid response from conversion service");
+      }
+
+      // Create a temporary anchor element to trigger download
+      const link = document.createElement('a');
+      link.href = data.downloadUrl;
+      link.target = '_blank';
+      link.download = `${data.title || 'youtube-audio'}.mp3`;
+      
+      // Append to document, click, and remove
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      toast({
+        title: "Success",
+        description: "Your download should begin shortly.",
+      });
     } catch (error) {
       console.error("Conversion error:", error);
+      
+      // Extract error message from various possible formats
+      let errorMessage = "Failed to convert video. Please try a shorter video or try again later.";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (typeof error === 'object' && error !== null) {
+        // @ts-ignore
+        errorMessage = error.message || error.error || errorMessage;
+      }
+
       toast({
         title: "Error",
-        description: error.message || "Failed to convert video. Please try a shorter video or try again later.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
