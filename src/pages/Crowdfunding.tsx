@@ -63,7 +63,20 @@ const Crowdfunding = () => {
       console.log("Trend results:", results);
       
       if (results) {
-        setTrendResults(results);
+        const trendData: TrendData = {
+          score: results.score,
+          metadata: {
+            github: results.metadata.github || { score: 0 },
+            google_trends: results.metadata.google_trends || { score: 0 },
+            hacker_news: results.metadata.hacker_news || { score: 0 },
+            stack_overflow: results.metadata.stack_overflow || { score: 0 },
+            wikipedia: results.metadata.wikipedia || { score: 0 },
+            npm: results.metadata.npm || { score: 0 },
+            pypi: results.metadata.pypi || { score: 0 }
+          }
+        };
+        
+        setTrendResults(trendData);
         toast({
           title: "Market Analysis Complete",
           description: `Trend score for "${searchQuery}": ${results.score}/100`,
