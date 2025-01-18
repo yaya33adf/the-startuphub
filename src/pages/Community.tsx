@@ -59,14 +59,14 @@ const Community = () => {
     meta: {
       errorMessage: "Failed to load community posts"
     },
-    onSettled: (data, error) => {
-      if (error) {
-        toast({
-          title: "Error",
-          description: "Failed to load community posts",
-          variant: "destructive",
-        });
-      }
+    gcTime: 0,
+    throwOnError: true,
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to load community posts",
+        variant: "destructive",
+      });
     }
   });
 
