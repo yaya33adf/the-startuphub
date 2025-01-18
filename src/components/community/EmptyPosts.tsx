@@ -2,6 +2,7 @@ import { MessageCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 export const EmptyPosts = () => {
+  console.log("EmptyPosts - Rendering empty state");
   return (
     <Card className="p-8 text-center">
       <CardContent className="flex flex-col items-center space-y-4">

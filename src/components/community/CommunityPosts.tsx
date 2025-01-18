@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { SearchBar } from "./SearchBar";
 import { QuestionForm } from "./QuestionForm";
 import { PostsList } from "./PostsList";
+import { useToast } from "@/hooks/use-toast";
 import type { Post } from "./types";
 
 interface CommunityPostsProps {
@@ -12,11 +13,12 @@ interface CommunityPostsProps {
 
 export const CommunityPosts = ({ userId }: CommunityPostsProps) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const { toast } = useToast();
 
   const { data: posts = [], isLoading: isLoadingPosts } = useQuery({
     queryKey: ["communityPosts"],
     queryFn: async () => {
-      console.log("Fetching community posts...");
+      console.log("Fetching community posts for user:", userId);
       const { data, error } = await supabase
         .from("community_posts")
         .select(`
@@ -29,6 +31,11 @@ export const CommunityPosts = ({ userId }: CommunityPostsProps) => {
 
       if (error) {
         console.error("Error fetching posts:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load community posts. Please try again.",
+          variant: "destructive",
+        });
         throw error;
       }
 
@@ -53,6 +60,8 @@ export const CommunityPosts = ({ userId }: CommunityPostsProps) => {
         tag.toLowerCase().includes(searchQuery.toLowerCase())
       )
   );
+
+  console.log("Filtered posts:", filteredPosts);
 
   return (
     <div className="space-y-8">
