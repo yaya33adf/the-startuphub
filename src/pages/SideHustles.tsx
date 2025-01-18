@@ -40,6 +40,10 @@ const SideHustles = () => {
         query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%,category.ilike.%${searchQuery}%`);
       }
 
+      if (country !== "global") {
+        query = query.eq("region", country);
+      }
+
       const { data, error } = await query.order("trend_score", { ascending: false });
 
       if (error) {
@@ -54,7 +58,7 @@ const SideHustles = () => {
 
   const handleSearch = () => {
     console.log("Exploring side hustles:", searchQuery);
-    if (!searchQuery && !country) {
+    if (!searchQuery && country === "global") {
       toast({
         title: "Please enter search criteria",
         description: "Enter a side hustle idea or select a region to explore opportunities",
@@ -68,14 +72,6 @@ const SideHustles = () => {
       description: `Looking for opportunities in ${country === 'global' ? 'Global' : country} market`,
     });
     refetch();
-  };
-
-  const handleNewSideHustle = () => {
-    // This would typically open a form or modal for submitting a new side hustle
-    toast({
-      title: "New Side Hustle",
-      description: "This feature will allow submitting new side hustle ideas. Coming soon!",
-    });
   };
 
   return (
@@ -98,6 +94,7 @@ const SideHustles = () => {
           period={period}
           setPeriod={setPeriod}
           onSearch={handleSearch}
+          buttonText="Explore Side Hustles"
         />
 
         {isLoading ? (

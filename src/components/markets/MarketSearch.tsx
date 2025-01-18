@@ -11,6 +11,7 @@ interface MarketSearchProps {
   period: string;
   setPeriod: (value: string) => void;
   onSearch: () => void;
+  buttonText?: string;
 }
 
 export const MarketSearch = ({
@@ -21,6 +22,7 @@ export const MarketSearch = ({
   period,
   setPeriod,
   onSearch,
+  buttonText = "Explore Markets"
 }: MarketSearchProps) => {
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -44,7 +46,7 @@ export const MarketSearch = ({
           className="bg-primary hover:bg-primary/90"
         >
           <Search className="w-4 h-4 mr-2" />
-          Explore Markets
+          {buttonText}
         </Button>
       </div>
       <div className="flex flex-col md:flex-row gap-4">
