@@ -18,14 +18,14 @@ const Community = () => {
   const { toast } = useToast();
   const [isInitialized, setIsInitialized] = useState(false);
 
-  console.log("Community - Session state:", { 
+  console.log("Community - Component mounted with session:", { 
     isLoadingSession, 
     hasSession: !!session,
     userId: session?.user?.id,
     isInitialized
   });
 
-  const { data: posts = [], isLoading: isLoadingPosts, error } = useQuery({
+  const { data: posts = [], isLoading: isLoadingPosts } = useQuery({
     queryKey: ["communityPosts"],
     queryFn: async () => {
       console.log("Fetching community posts...");
@@ -53,6 +53,8 @@ const Community = () => {
       return data || [];
     },
     enabled: !!session?.user?.id && isInitialized,
+    retry: 1,
+    staleTime: 30000,
   });
 
   useEffect(() => {
@@ -60,7 +62,7 @@ const Community = () => {
       if (!session) {
         console.log("No session found, redirecting to login");
         toast({
-          title: "Authentication required",
+          title: "Authentication Required",
           description: "Please sign in to access the community features",
           variant: "destructive",
         });
@@ -91,8 +93,6 @@ const Community = () => {
         tag.toLowerCase().includes(searchQuery.toLowerCase())
       )
   );
-
-  console.log("Filtered posts:", filteredPosts);
 
   return (
     <>
