@@ -52,10 +52,9 @@ const Community = () => {
       console.log("Fetched community posts:", data);
       return data || [];
     },
-    enabled: !!session,
   });
 
-  const filteredPosts = posts?.filter(
+  const filteredPosts = posts.filter(
     (post) =>
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       post.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
