@@ -12,16 +12,16 @@ interface ProtectedAdminRouteProps {
 const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   const { session, isLoading: isLoadingSession } = useSessionContext();
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-  const [isCheckingAdmin, setIsCheckingAdmin] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
+    let isMounted = true;
+
     const checkAdminStatus = async () => {
-      if (!session?.user?.id || isCheckingAdmin) return;
+      if (!session?.user?.id) return;
 
       try {
-        setIsCheckingAdmin(true);
         console.log("Checking admin status for user:", session.user.id);
         
         const { data: profile, error } = await supabase
@@ -34,6 +34,8 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
           console.error("Error checking admin status:", error);
           throw error;
         }
+
+        if (!isMounted) return;
 
         const isUserAdmin = profile?.role === "admin";
         console.log("User admin status:", isUserAdmin);
@@ -49,14 +51,14 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
         }
       } catch (error) {
         console.error("Error in checkAdminStatus:", error);
-        toast({
-          title: "Error",
-          description: "Failed to verify admin status",
-          variant: "destructive",
-        });
-        navigate("/");
-      } finally {
-        setIsCheckingAdmin(false);
+        if (isMounted) {
+          toast({
+            title: "Error",
+            description: "Failed to verify admin status",
+            variant: "destructive",
+          });
+          navigate("/");
+        }
       }
     };
 
@@ -73,9 +75,13 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
         checkAdminStatus();
       }
     }
-  }, [session, isLoadingSession, navigate, toast, isCheckingAdmin]);
 
-  if (isLoadingSession || isCheckingAdmin) {
+    return () => {
+      isMounted = false;
+    };
+  }, [session, isLoadingSession, navigate, toast]);
+
+  if (isLoadingSession || isAdmin === null) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />

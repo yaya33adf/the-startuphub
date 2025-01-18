@@ -16,24 +16,25 @@ const Community = () => {
   const { session, isLoading: isLoadingSession } = useSessionContext();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [isInitialized, setIsInitialized] = useState(false);
 
-  console.log("Community - Component mounted with session:", { 
-    isLoadingSession, 
-    hasSession: !!session,
-    userId: session?.user?.id,
-    isInitialized
-  });
+  // Authentication check
+  useEffect(() => {
+    if (!isLoadingSession && !session) {
+      console.log("No active session, redirecting to login");
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to access the community features",
+        variant: "destructive",
+      });
+      navigate("/auth/signin");
+    }
+  }, [session, isLoadingSession, navigate, toast]);
 
+  // Fetch posts with React Query
   const { data: posts = [], isLoading: isLoadingPosts } = useQuery({
     queryKey: ["communityPosts"],
     queryFn: async () => {
       console.log("Fetching community posts...");
-      if (!session?.user?.id) {
-        console.log("No session found, skipping fetch");
-        return [];
-      }
-
       const { data, error } = await supabase
         .from("community_posts")
         .select(`
@@ -45,35 +46,28 @@ const Community = () => {
         .order("created_at", { ascending: false });
 
       if (error) {
-        console.error("Error fetching community posts:", error);
+        console.error("Error fetching posts:", error);
         throw error;
       }
-      
-      console.log("Fetched community posts:", data);
+
+      console.log("Successfully fetched posts:", data);
       return data || [];
     },
-    enabled: !!session?.user?.id && isInitialized,
-    retry: 1,
+    enabled: !!session?.user?.id,
     staleTime: 30000,
+    retry: 1,
+    onError: (error) => {
+      console.error("Query error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load community posts",
+        variant: "destructive",
+      });
+    },
   });
 
-  useEffect(() => {
-    if (!isLoadingSession) {
-      if (!session) {
-        console.log("No session found, redirecting to login");
-        toast({
-          title: "Authentication Required",
-          description: "Please sign in to access the community features",
-          variant: "destructive",
-        });
-        navigate("/auth/signin");
-      } else {
-        setIsInitialized(true);
-      }
-    }
-  }, [session, isLoadingSession, navigate, toast]);
-
-  if (isLoadingSession || !isInitialized) {
+  // Handle loading state
+  if (isLoadingSession) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
@@ -81,10 +75,7 @@ const Community = () => {
     );
   }
 
-  if (!session) {
-    return null;
-  }
-
+  // Filter posts based on search query
   const filteredPosts = posts.filter(
     (post) =>
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
