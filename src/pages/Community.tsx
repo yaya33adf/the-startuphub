@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "@supabase/auth-helpers-react";
@@ -9,7 +9,6 @@ import { SearchBar } from "@/components/community/SearchBar";
 import { QuestionForm } from "@/components/community/QuestionForm";
 import { PostsList } from "@/components/community/PostsList";
 import { PageSEO } from "@/components/seo/PageSEO";
-import { useEffect } from "react";
 
 const Community = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -53,11 +52,11 @@ const Community = () => {
       console.log("Fetched community posts:", data);
       return data;
     },
-    enabled: !!session, // Only fetch if there's a session
+    enabled: !!session,
   });
 
   if (!session) {
-    return null; // Don't render anything while checking session
+    return null;
   }
 
   const filteredPosts = posts?.filter(
@@ -75,19 +74,30 @@ const Community = () => {
         title="Community - Connect & Share"
         description="Join our entrepreneurial community to share ideas, get feedback, and connect with like-minded business professionals."
       />
-      <div className="p-8">
-        <h1 className="text-4xl font-bold mb-6">Community Hub</h1>
-        <div className="flex items-center justify-between mb-6">
-          <CommunityHeader />
-          <div className="flex items-center space-x-4">
-            <SearchBar 
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-            />
-            <QuestionForm userId={session.user.id} />
+      <div className="container mx-auto px-4 py-8">
+        <div className="space-y-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h1 className="text-4xl font-bold mb-2">Community Hub</h1>
+              <p className="text-muted-foreground">
+                Share your questions and connect with other entrepreneurs
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+              <SearchBar 
+                searchQuery={searchQuery}
+                onSearchChange={setSearchQuery}
+                placeholder="Search discussions..."
+              />
+              <QuestionForm userId={session.user.id} />
+            </div>
+          </div>
+          
+          <div className="grid gap-6">
+            <CommunityHeader />
+            <PostsList posts={filteredPosts || []} isLoading={isLoading} />
           </div>
         </div>
-        <PostsList posts={filteredPosts} isLoading={isLoading} />
       </div>
     </>
   );
