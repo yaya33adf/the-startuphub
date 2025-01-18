@@ -33,20 +33,23 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
     console.log("Session state updated:", {
       session: session?.user?.id,
       isLoading: sessionLoading,
-      hasSession: !!session
+      hasSession: !!session,
+      authenticated: session?.user?.aud === 'authenticated'
     });
   }, [session, sessionLoading]);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (sessionLoading) {
-      console.log("Session is still loading, waiting...");
-      return;
-    }
+    console.log("Starting search process...");
+    console.log("Current session state:", {
+      sessionLoading,
+      hasSession: !!session,
+      userId: session?.user?.id
+    });
     
     if (!session?.user) {
-      console.log("No session found, redirecting to login");
+      console.log("No authenticated session found, redirecting to login");
       toast({
         title: "Authentication required",
         description: "Please sign in to search trends",
@@ -70,6 +73,10 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
       console.log("Starting trend search for:", searchQuery);
       const result = await calculateTrendScores(searchQuery);
       console.log("Trend scores calculated:", result);
+      
+      if (!result) {
+        throw new Error("No results returned from trend calculation");
+      }
       
       const metadata = (typeof result.metadata === 'object' && result.metadata !== null) 
         ? result.metadata as Record<string, { score?: number; metadata?: any }>
@@ -111,6 +118,7 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
         metadata: transformedMetadata
       };
       
+      console.log("Sending trend results to parent:", trendData);
       onSearchResults(trendData);
       
       toast({
@@ -131,7 +139,8 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
 
   const handlePopularSearch = (query: string) => {
     setSearchQuery(query);
-    handleSearch(new Event('submit') as any);
+    const event = new Event('submit') as any;
+    handleSearch(event);
   };
 
   return (
