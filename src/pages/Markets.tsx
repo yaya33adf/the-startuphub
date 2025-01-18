@@ -15,38 +15,44 @@ const Markets = () => {
   const { data: marketData, isLoading, error, refetch } = useQuery({
     queryKey: ["marketOpportunities", searchQuery, country, period],
     queryFn: async () => {
-      console.log("Fetching market opportunities with filters:", { searchQuery, country, period });
+      console.log("Starting market opportunities fetch with filters:", { searchQuery, country, period });
       
-      let query = supabase
-        .from("side_hustles")
-        .select("*");
+      try {
+        let query = supabase
+          .from("side_hustles")
+          .select("*");
 
-      if (searchQuery) {
-        query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`);
+        if (searchQuery) {
+          console.log("Applying search filter:", searchQuery);
+          query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`);
+        }
+
+        const { data, error } = await query
+          .order("trend_score", { ascending: false })
+          .limit(10);
+
+        if (error) {
+          console.error("Supabase error fetching market data:", error);
+          toast({
+            title: "Error",
+            description: "Failed to fetch market data. Please try again.",
+            variant: "destructive",
+          });
+          throw error;
+        }
+        
+        console.log("Successfully fetched market opportunities:", data);
+        return data || []; // Ensure we always return an array
+      } catch (err) {
+        console.error("Unexpected error in market data fetch:", err);
+        throw err;
       }
-
-      const { data, error } = await query
-        .order("trend_score", { ascending: false })
-        .limit(10);
-
-      if (error) {
-        console.error("Error fetching market data:", error);
-        toast({
-          title: "Error",
-          description: "Failed to fetch market data. Please try again.",
-          variant: "destructive",
-        });
-        throw error;
-      }
-      
-      console.log("Fetched market opportunities:", data);
-      return data;
     },
     enabled: true,
   });
 
   const handleSearch = () => {
-    console.log("Triggering search with:", { searchQuery, country, period });
+    console.log("Triggering market search with:", { searchQuery, country, period });
     toast({
       title: "Exploring Markets",
       description: `Searching for "${searchQuery || 'all markets'}" in ${country}`,
@@ -55,6 +61,7 @@ const Markets = () => {
   };
 
   if (error) {
+    console.error("Error in Markets component:", error);
     return (
       <div className="p-8">
         <MarketSearch
@@ -104,8 +111,8 @@ const Markets = () => {
               potentialEarnings: market.monthly_earnings_min && market.monthly_earnings_max
                 ? (market.monthly_earnings_min + market.monthly_earnings_max) / 2
                 : 0,
-            }))} />
-            <MarketCards markets={marketData} />
+            })) || []} />
+            <MarketCards markets={marketData || []} />
           </>
         )}
       </div>
