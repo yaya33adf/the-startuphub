@@ -11,9 +11,11 @@ interface MarketResultsProps {
 }
 
 export const MarketResults = ({ trendResults, marketData, isLoading, error }: MarketResultsProps) => {
-  // Remove duplicates by creating a Set of market names and filtering
+  // Remove duplicates by creating a Set of market names and categories
   const uniqueMarketData = marketData.filter((market, index, self) =>
-    index === self.findIndex((m) => m.name === market.name)
+    index === self.findIndex((m) => 
+      m.name === market.name && m.category === market.category
+    )
   );
 
   if (error) {
