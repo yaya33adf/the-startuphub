@@ -38,5 +38,5 @@ export const productivityTools: Tool[] = [
     component: NotesWidget,
     active: true,
     path: "/tools/notes"
-  },
+  }
 ];

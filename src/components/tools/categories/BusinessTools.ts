@@ -1,24 +1,16 @@
-import { 
-  BookOpen, 
-  DollarSign, 
-  Mail, 
-  FileText, 
-  Lightbulb, 
-  TrendingUp 
-} from "lucide-react";
+import { BarChart3, Calculator, CreditCard, DollarSign, FileSpreadsheet, Target } from "lucide-react";
 import { Tool } from "../types/ToolTypes";
 import { BusinessNameGenerator } from "../BusinessNameGenerator";
 import { CurrencyConverter } from "../CurrencyConverter";
-import { EmailCampaignManager } from "../EmailCampaignManager";
+import { ExpenseTracker } from "../ExpenseTracker";
 import { InvoiceGenerator } from "../InvoiceGenerator";
-import { StartupIdeaGenerator } from "../StartupIdeaGenerator";
 import { SalesAnalytics } from "../SalesAnalytics";
 
 export const businessTools: Tool[] = [
   {
     title: "Business Name Generator",
     description: "Generate unique business names",
-    icon: BookOpen,
+    icon: FileSpreadsheet,
     component: BusinessNameGenerator,
     active: true,
     path: "/tools/business-name-generator"
@@ -32,33 +24,25 @@ export const businessTools: Tool[] = [
     path: "/tools/currency-converter"
   },
   {
-    title: "Email Campaign Manager",
-    description: "Create and manage email campaigns",
-    icon: Mail,
-    component: EmailCampaignManager,
+    title: "Expense Tracker",
+    description: "Track business expenses",
+    icon: Calculator,
+    component: ExpenseTracker,
     active: true,
-    path: "/tools/email-campaign-manager"
+    path: "/tools/expense-tracker"
   },
   {
     title: "Invoice Generator",
-    description: "Generate professional invoices",
-    icon: FileText,
+    description: "Create professional invoices",
+    icon: CreditCard,
     component: InvoiceGenerator,
     active: true,
     path: "/tools/invoice-generator"
   },
   {
-    title: "Startup Idea Generator",
-    description: "Generate innovative startup ideas",
-    icon: Lightbulb,
-    component: StartupIdeaGenerator,
-    active: true,
-    path: "/tools/startup-idea-generator"
-  },
-  {
     title: "Sales Analytics",
-    description: "Track and analyze sales data",
-    icon: TrendingUp,
+    description: "Analyze sales performance",
+    icon: BarChart3,
     component: SalesAnalytics,
     active: true,
     path: "/tools/sales-analytics"
