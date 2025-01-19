@@ -1,4 +1,4 @@
-import { Settings } from "lucide-react";
+import { Wrench } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +24,7 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
           variant="ghost" 
           className="h-10 px-3 py-2 transition-all duration-200 hover:bg-accent/50 hover:text-accent-foreground hover:scale-105"
         >
-          <Settings className="w-4 h-4 mr-2" />
+          <Wrench className="w-4 h-4 mr-2" />
           <span>Tools</span>
         </Button>
       </DropdownMenuTrigger>
@@ -40,7 +40,6 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
             className="transition-colors duration-200 hover:bg-accent/50"
           >
             <Link to={tool.path || "/tools"} className="flex items-center gap-2 w-full p-2">
-              <tool.icon className="w-4 h-4" />
               <span>{tool.title}</span>
             </Link>
           </DropdownMenuItem>
