@@ -1,4 +1,4 @@
-import { QrCode, DollarSign, Receipt, FileSpreadsheet, BarChart3, Mail, Target, Users, CalendarDays, Shield, Lightbulb, BookOpen, StickyNote } from "lucide-react";
+import { QrCode, DollarSign, Receipt, FileSpreadsheet, BarChart3, Mail, Target, Users, CalendarDays, Shield, Lightbulb, BookOpen, StickyNote, Shuffle } from "lucide-react";
 import { QRCodeGenerator } from "./QRCodeGenerator";
 import { CurrencyConverter } from "./CurrencyConverter";
 import { InvoiceGenerator } from "./InvoiceGenerator";
@@ -13,8 +13,16 @@ import { BusinessNameGenerator } from "./BusinessNameGenerator";
 import { BookNameGenerator } from "./BookNameGenerator";
 import { PasswordGenerator } from "./PasswordGenerator";
 import { NotesWidget } from "./NotesWidget";
+import { StartupIdeaGenerator } from "./StartupIdeaGenerator";
 
 export const tools = [
+  {
+    title: "Startup Idea Generator",
+    description: "Generate creative startup ideas by combining industries, technologies, and target markets",
+    icon: Shuffle,
+    component: StartupIdeaGenerator,
+    active: true,
+  },
   {
     title: "Notes Widget",
     description: "Create and manage your notes easily",
