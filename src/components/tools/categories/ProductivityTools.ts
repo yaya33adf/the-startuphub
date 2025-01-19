@@ -12,6 +12,7 @@ export const productivityTools: Tool[] = [
     icon: Target,
     component: GoalTracker,
     active: true,
+    path: "/tools/goal-tracker"
   },
   {
     title: "Team Management",
@@ -19,6 +20,7 @@ export const productivityTools: Tool[] = [
     icon: Users,
     component: TeamManagement,
     active: true,
+    path: "/tools/team-management"
   },
   {
     title: "Appointment Scheduler",
@@ -27,6 +29,7 @@ export const productivityTools: Tool[] = [
     component: AppointmentScheduler,
     active: true,
     fullWidth: true,
+    path: "/tools/appointment-scheduler"
   },
   {
     title: "Notes Widget",
@@ -34,5 +37,6 @@ export const productivityTools: Tool[] = [
     icon: StickyNote,
     component: NotesWidget,
     active: true,
+    path: "/tools/notes"
   },
 ];
