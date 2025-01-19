@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Github, Twitter, MessageSquare, HelpCircle } from "lucide-react";
+import { Twitter, MessageSquare, HelpCircle, Linkedin } from "lucide-react";
 
 const SocialLinks = () => {
   return (
@@ -29,12 +29,12 @@ const SocialLinks = () => {
           <Twitter className="h-5 w-5" />
         </a>
         <a
-          href="https://github.com"
+          href="https://www.linkedin.com/company/106166249/admin/dashboard/"
           target="_blank"
           rel="noopener noreferrer"
           className="text-muted-foreground hover:text-primary transition-colors"
         >
-          <Github className="h-5 w-5" />
+          <Linkedin className="h-5 w-5" />
         </a>
       </div>
     </div>
