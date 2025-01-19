@@ -10,21 +10,20 @@ interface ToolCardProps {
   title: string;
   description: string;
   icon: LucideIcon;
-  component?: React.ComponentType;
   active: boolean;
   fullWidth?: boolean;
   path?: string;
 }
 
-export const ToolCard = ({ title, description, icon: Icon, component: Component, active, fullWidth, path }: ToolCardProps) => {
-  const [keyword, setKeyword] = useState("");
+export const ToolCard = ({ 
+  title, 
+  description, 
+  icon: Icon, 
+  active, 
+  fullWidth, 
+  path 
+}: ToolCardProps) => {
   const navigate = useNavigate();
-
-  const handleSearch = () => {
-    if (path && path === "/startup-ideas" && keyword.trim()) {
-      navigate(`${path}?keyword=${encodeURIComponent(keyword.trim())}`);
-    }
-  };
 
   const cardContent = (
     <Card className="hover:shadow-lg transition-shadow h-full">
@@ -41,28 +40,18 @@ export const ToolCard = ({ title, description, icon: Icon, component: Component,
       </CardHeader>
       <CardContent>
         <CardDescription className="mb-4">{description}</CardDescription>
-        {title === "Startup Ideas Generator" ? (
-          <div className="flex gap-2">
-            <Input
-              type="text"
-              placeholder="Enter keyword"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              className="flex-1"
-            />
-            <Button onClick={handleSearch}>Generate</Button>
-          </div>
-        ) : null}
-        {Component && <Component />}
       </CardContent>
     </Card>
   );
 
-  if (path) {
+  if (path && active) {
     return (
-      <div className={`block ${fullWidth ? 'md:col-span-2 lg:col-span-3' : ''}`}>
+      <Link 
+        to={path} 
+        className={`block ${fullWidth ? 'md:col-span-2 lg:col-span-3' : ''}`}
+      >
         {cardContent}
-      </div>
+      </Link>
     );
   }
 

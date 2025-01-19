@@ -36,6 +36,11 @@ import ProfileSettings from "@/pages/auth/ProfileSettings";
 import Dashboard from "@/pages/admin/Dashboard";
 import { ProtectedAdminRoute } from "@/components/auth/ProtectedAdminRoute";
 
+// Tool pages
+import BusinessNameGeneratorPage from "@/pages/tools/BusinessNameGeneratorPage";
+import CurrencyConverterPage from "@/pages/tools/CurrencyConverterPage";
+import StartupIdeaGeneratorPage from "@/pages/tools/StartupIdeaGeneratorPage";
+
 import "./App.css";
 
 function App() {
@@ -83,6 +88,11 @@ function App() {
                   </ProtectedAdminRoute>
                 }
               />
+
+              {/* Tool routes */}
+              <Route path="/tools/business-name-generator" element={<BusinessNameGeneratorPage />} />
+              <Route path="/tools/currency-converter" element={<CurrencyConverterPage />} />
+              <Route path="/tools/startup-idea-generator" element={<StartupIdeaGeneratorPage />} />
 
               {/* 404 route */}
               <Route path="*" element={<NotFound />} />
