@@ -36,6 +36,11 @@ export const BusinessTools = () => {
             Crowdfunding - Investment Opportunities
           </Link>
         </li>
+        <li>
+          <Link to="/business-cards" className="text-muted-foreground hover:text-primary transition-colors">
+            Business Cards - Professional Design Templates
+          </Link>
+        </li>
       </ul>
     </Card>
   );
