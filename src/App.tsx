@@ -23,8 +23,6 @@ import SignIn from "@/pages/auth/SignIn";
 import SignUp from "@/pages/auth/SignUp";
 import ForgotPassword from "@/pages/auth/ForgotPassword";
 import ProfileSettings from "@/pages/auth/ProfileSettings";
-import Dashboard from "@/pages/admin/Dashboard";
-import ProtectedAdminRoute from "@/components/auth/ProtectedAdminRoute";
 
 // Import new pages
 import About from "@/pages/About";
@@ -67,14 +65,6 @@ function App() {
               <Route path="/auth/signup" element={<SignUp />} />
               <Route path="/auth/forgot-password" element={<ForgotPassword />} />
               <Route path="/auth/profile" element={<ProfileSettings />} />
-              <Route
-                path="/admin/*"
-                element={
-                  <ProtectedAdminRoute>
-                    <Dashboard />
-                  </ProtectedAdminRoute>
-                }
-              />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
