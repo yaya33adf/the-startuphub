@@ -7,7 +7,7 @@ interface ProtectedAdminRouteProps {
   children: React.ReactNode;
 }
 
-const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
+export const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -49,5 +49,3 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
 
   return <>{children}</>;
 };
-
-export default ProtectedAdminRoute;

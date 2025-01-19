@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { NavigationMenu } from "@/components/NavigationMenu";
-import { Footer } from "@/components/Footer";
+import Footer from "@/components/Footer";
 import { HelmetProvider } from "react-helmet-async";
 import Index from "@/pages/Index";
 import About from "@/pages/About";
