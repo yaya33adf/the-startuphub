@@ -1,98 +1,16 @@
 import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { AppointmentForm } from "./appointment/AppointmentForm";
 import { AppointmentsList } from "./appointment/AppointmentsList";
-import { Appointment, AppointmentFormData } from "./appointment/types";
+import { AppointmentFormData } from "./appointment/types";
+import { useAppointments } from "@/hooks/useAppointments";
 
 export const AppointmentScheduler = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const { toast } = useToast();
-  const queryClient = useQueryClient();
-
-  // Fetch appointments
-  const { data: appointments, isLoading } = useQuery({
-    queryKey: ["appointments"],
-    queryFn: async () => {
-      console.log("Fetching appointments...");
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        console.error("No authenticated user found");
-        toast({
-          title: "Error",
-          description: "Please sign in to view appointments",
-          variant: "destructive",
-        });
-        return [];
-      }
-
-      const { data, error } = await supabase
-        .from("appointments")
-        .select("*")
-        .eq('user_id', user.id)
-        .order("start_time", { ascending: true });
-
-      if (error) {
-        console.error("Error fetching appointments:", error);
-        toast({
-          title: "Error",
-          description: "Failed to fetch appointments",
-          variant: "destructive",
-        });
-        throw error;
-      }
-
-      console.log("Appointments fetched:", data);
-      return data as Appointment[];
-    },
-  });
-
-  // Create appointment mutation
-  const createAppointment = useMutation({
-    mutationFn: async (appointment: Omit<Appointment, "id">) => {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        toast({
-          title: "Error",
-          description: "Please sign in to create appointments",
-          variant: "destructive",
-        });
-        throw new Error("No authenticated user found");
-      }
-
-      const { data, error } = await supabase
-        .from("appointments")
-        .insert([{ ...appointment, user_id: user.id }])
-        .select()
-        .single();
-
-      if (error) {
-        console.error("Error creating appointment:", error);
-        throw error;
-      }
-      return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["appointments"] });
-      toast({
-        title: "Success",
-        description: "Appointment scheduled successfully",
-      });
-    },
-    onError: (error) => {
-      console.error("Error creating appointment:", error);
-      toast({
-        title: "Error",
-        description: "Failed to schedule appointment",
-        variant: "destructive",
-      });
-    },
-  });
+  const { appointments, isLoading, createAppointment } = useAppointments();
 
   const handleSubmit = (formData: AppointmentFormData) => {
     if (!selectedDate) {
