@@ -40,8 +40,11 @@ import { ProtectedAdminRoute } from "@/components/auth/ProtectedAdminRoute";
 import BusinessNameGeneratorPage from "@/pages/tools/BusinessNameGeneratorPage";
 import CurrencyConverterPage from "@/pages/tools/CurrencyConverterPage";
 import StartupIdeaGeneratorPage from "@/pages/tools/StartupIdeaGeneratorPage";
-
-import "./App.css";
+import SalesAnalyticsPage from "@/pages/tools/SalesAnalyticsPage";
+import TeamManagementPage from "@/pages/tools/TeamManagementPage";
+import EmailCampaignPage from "@/pages/tools/EmailCampaignPage";
+import InvoiceGeneratorPage from "@/pages/tools/InvoiceGeneratorPage";
+import GoalTrackerPage from "@/pages/tools/GoalTrackerPage";
 
 function App() {
   return (
@@ -93,6 +96,11 @@ function App() {
               <Route path="/tools/business-name-generator" element={<BusinessNameGeneratorPage />} />
               <Route path="/tools/currency-converter" element={<CurrencyConverterPage />} />
               <Route path="/tools/startup-idea-generator" element={<StartupIdeaGeneratorPage />} />
+              <Route path="/tools/sales-analytics" element={<SalesAnalyticsPage />} />
+              <Route path="/tools/team-management" element={<TeamManagementPage />} />
+              <Route path="/tools/email-campaign-manager" element={<EmailCampaignPage />} />
+              <Route path="/tools/invoice-generator" element={<InvoiceGeneratorPage />} />
+              <Route path="/tools/goal-tracker" element={<GoalTrackerPage />} />
 
               {/* 404 route */}
               <Route path="*" element={<NotFound />} />
