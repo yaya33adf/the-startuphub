@@ -1,6 +1,5 @@
-import { Lightbulb, BookOpen, Shield, Shuffle } from "lucide-react";
+import { BookOpen, Shield, Shuffle } from "lucide-react";
 import { Tool } from "../types/ToolTypes";
-import { BusinessNameGenerator } from "../BusinessNameGenerator";
 import { BookNameGenerator } from "../BookNameGenerator";
 import { BrandIdentityTool } from "../BrandIdentityTool";
 import { StartupIdeaGenerator } from "../StartupIdeaGenerator";
@@ -11,13 +10,6 @@ export const creativeTools: Tool[] = [
     description: "Generate creative startup ideas by combining industries, technologies, and target markets",
     icon: Shuffle,
     component: StartupIdeaGenerator,
-    active: true,
-  },
-  {
-    title: "Business Name Generator",
-    description: "Generate creative and unique business names based on your industry and keywords",
-    icon: Lightbulb,
-    component: BusinessNameGenerator,
     active: true,
   },
   {
