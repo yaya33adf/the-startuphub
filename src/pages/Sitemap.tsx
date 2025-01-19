@@ -6,6 +6,7 @@ import { CommunitySupport } from "@/components/sitemap/CommunitySupport";
 import { AccountSettings } from "@/components/sitemap/AccountSettings";
 import { InvestorsSection } from "@/components/sitemap/InvestorsSection";
 import { LegalSection } from "@/components/sitemap/LegalSection";
+import { TemplatesSection } from "@/components/sitemap/TemplatesSection";
 
 const Sitemap = () => {
   return (
@@ -26,6 +27,7 @@ const Sitemap = () => {
           <AccountSettings />
           <InvestorsSection />
           <LegalSection />
+          <TemplatesSection />
         </div>
       </div>
     </div>
