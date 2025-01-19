@@ -2,6 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script type="text/javascript">
+      (
+        function() {
+          var sbSiteSecret = 'df8533fa-4d7f-4275-a4e2-b964b342ff1b';
+          window.sitebehaviourTrackingSecret = sbSiteSecret;
+          var scriptElement = document.createElement('script');
+          scriptElement.async = true;
+          scriptElement.id = 'site-behaviour-script-v2';
+          scriptElement.src = 'https://sitebehaviour-cdn.fra1.cdn.digitaloceanspaces.com/index.min.js?sitebehaviour-secret=' + sbSiteSecret;
+          document.head.appendChild(scriptElement); 
+        }
+      )()
+</script>
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-site-verification" content="OuNZ2s3yrqfBT-AqYfHoOx-P2VjtzipGqz6q007QYWA" />
