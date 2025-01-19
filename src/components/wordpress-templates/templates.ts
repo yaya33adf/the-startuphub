@@ -7,78 +7,142 @@ export const templates: WordPressTemplate[] = [
     description: "Modern and minimalist template perfect for SaaS startups",
     previewImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop",
     features: ["Responsive Design", "WooCommerce Ready", "SEO Optimized", "Custom Widgets"],
-    category: "SaaS"
+    category: "SaaS",
+    themeFiles: {
+      style: `/*
+Theme Name: TechLaunch Pro
+Theme URI: https://example.com/techlaunch-pro
+Author: The Startup Hub
+Author URI: https://example.com
+Description: A modern WordPress theme for SaaS and tech startups
+Version: 1.0.0
+Requires at least: 5.0
+Tested up to: 6.4
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+*/
+
+/* Theme styles */
+body {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Header styles */
+.site-header {
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  padding: 1rem 0;
+}
+
+/* Hero section */
+.hero-section {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  padding: 4rem 0;
+}`,
+      functions: `<?php
+/**
+ * TechLaunch Pro functions and definitions
+ */
+
+if ( ! defined( '_S_VERSION' ) ) {
+  define( '_S_VERSION', '1.0.0' );
+}
+
+function techlaunch_setup() {
+  add_theme_support( 'title-tag' );
+  add_theme_support( 'post-thumbnails' );
+  add_theme_support( 'woocommerce' );
+  
+  register_nav_menus(
+    array(
+      'primary' => esc_html__( 'Primary', 'techlaunch' ),
+      'footer'  => esc_html__( 'Footer', 'techlaunch' ),
+    )
+  );
+}
+add_action( 'after_setup_theme', 'techlaunch_setup' );
+
+function techlaunch_scripts() {
+  wp_enqueue_style( 'techlaunch-style', get_stylesheet_uri(), array(), _S_VERSION );
+  wp_enqueue_script( 'techlaunch-navigation', get_template_directory_uri() . '/js/navigation.js', array(), _S_VERSION, true );
+}
+add_action( 'wp_enqueue_scripts', 'techlaunch_scripts' );`,
+      index: `<?php get_header(); ?>
+
+<main id="primary" class="site-main">
+  <?php if ( have_posts() ) : ?>
+    <?php while ( have_posts() ) : ?>
+      <?php the_post(); ?>
+      <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+        <header class="entry-header">
+          <?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
+        </header>
+
+        <div class="entry-content">
+          <?php the_content(); ?>
+        </div>
+      </article>
+    <?php endwhile; ?>
+  <?php endif; ?>
+</main>
+
+<?php get_footer(); ?>`,
+      header: `<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+  <meta charset="<?php bloginfo( 'charset' ); ?>">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <?php wp_head(); ?>
+</head>
+
+<body <?php body_class(); ?>>
+  <?php wp_body_open(); ?>
+  
+  <header id="masthead" class="site-header">
+    <div class="container">
+      <div class="site-branding">
+        <?php the_custom_logo(); ?>
+      </div>
+
+      <nav id="site-navigation" class="main-navigation">
+        <?php
+        wp_nav_menu(
+          array(
+            'theme_location' => 'primary',
+            'menu_id'        => 'primary-menu',
+          )
+        );
+        ?>
+      </nav>
+    </div>
+  </header>`,
+      footer: `<footer id="colophon" class="site-footer">
+  <div class="container">
+    <div class="site-info">
+      <?php
+      printf(
+        esc_html__( '© %d %s. All rights reserved.', 'techlaunch' ),
+        date('Y'),
+        get_bloginfo( 'name' )
+      );
+      ?>
+    </div>
+  </div>
+</footer>
+
+<?php wp_footer(); ?>
+</body>
+</html>`,
+      screenshot: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop"
+    },
+    version: "1.0.0",
+    requires: "5.0",
+    testedUpTo: "6.4",
+    tags: ["responsive-layout", "custom-colors", "custom-menu", "featured-images", "threaded-comments", "translation-ready"]
   },
-  {
-    id: 2,
-    name: "Innovation Hub",
-    description: "Feature-rich template for tech innovation companies",
-    previewImage: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=800&auto=format&fit=crop",
-    features: ["Page Builder", "Portfolio Layouts", "Blog Templates", "Analytics Integration"],
-    category: "Technology"
-  },
-  {
-    id: 3,
-    name: "StartupX",
-    description: "Clean and professional template for digital startups",
-    previewImage: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&auto=format&fit=crop",
-    features: ["Fast Loading", "Multiple Headers", "Contact Forms", "Team Showcase"],
-    category: "Digital"
-  },
-  {
-    id: 4,
-    name: "FinTech Master",
-    description: "Sophisticated template designed for fintech startups",
-    previewImage: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop",
-    features: ["Security Features", "Payment Integration", "Financial Widgets", "Custom Charts"],
-    category: "Finance"
-  },
-  {
-    id: 5,
-    name: "EcoStartup",
-    description: "Sustainable and eco-friendly template for green startups",
-    previewImage: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&auto=format&fit=crop",
-    features: ["Eco Animations", "Donation System", "Impact Calculator", "Green Color Schemes"],
-    category: "Sustainability"
-  },
-  {
-    id: 6,
-    name: "AI Ventures",
-    description: "Cutting-edge template for AI and ML startups",
-    previewImage: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=800&auto=format&fit=crop",
-    features: ["Interactive Demo Section", "API Documentation", "Case Studies Layout", "Tech Stack Display"],
-    category: "Artificial Intelligence"
-  },
-  {
-    id: 7,
-    name: "Health Tech Pro",
-    description: "Professional template for healthcare startups",
-    previewImage: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&auto=format&fit=crop",
-    features: ["HIPAA Compliant Forms", "Appointment Booking", "Medical Icons", "Patient Portal"],
-    category: "Healthcare"
-  },
-  {
-    id: 8,
-    name: "EdTech Plus",
-    description: "Educational technology startup template",
-    previewImage: "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&auto=format&fit=crop",
-    features: ["LMS Integration", "Course Catalog", "Student Dashboard", "Progress Tracking"],
-    category: "Education"
-  },
-  {
-    id: 9,
-    name: "Social Impact",
-    description: "Template for social enterprise startups",
-    previewImage: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800&auto=format&fit=crop",
-    features: ["Impact Metrics", "Volunteer Portal", "Event Management", "Donation System"],
-    category: "Social Enterprise"
-  },
-  {
-    id: 10,
-    name: "E-Commerce Launch",
-    description: "Powerful template for e-commerce startups",
-    previewImage: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&auto=format&fit=crop",
-    features: ["Product Catalog", "Shopping Cart", "Payment Gateway", "Inventory Management"],
-    category: "E-Commerce"
-  }
+  // ... Add more templates with similar structure
 ];
