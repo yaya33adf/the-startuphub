@@ -5,7 +5,7 @@ const SocialLinks = () => {
   return (
     <div className="space-y-4">
       <h3 className="font-semibold text-lg text-primary">Connect</h3>
-      <div className="flex space-x-4">
+      <div className="flex flex-wrap gap-3">
         <Link
           to="/contact"
           className="text-muted-foreground hover:text-primary transition-colors"
