@@ -39,7 +39,7 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
             onClick={onClick}
             className="transition-colors duration-200 hover:bg-accent/50"
           >
-            <Link to="/tools" className="flex items-center gap-2 w-full p-2">
+            <Link to={tool.path || "/tools"} className="flex items-center gap-2 w-full p-2">
               <tool.icon className="w-4 h-4" />
               <span>{tool.title}</span>
             </Link>

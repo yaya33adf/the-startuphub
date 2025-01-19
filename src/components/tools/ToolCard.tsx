@@ -1,10 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, XCircle, LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 interface ToolCardProps {
   title: string;
@@ -23,8 +19,6 @@ export const ToolCard = ({
   fullWidth, 
   path 
 }: ToolCardProps) => {
-  const navigate = useNavigate();
-
   const cardContent = (
     <Card className="hover:shadow-lg transition-shadow h-full">
       <CardHeader>
