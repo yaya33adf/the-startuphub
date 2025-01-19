@@ -11,6 +11,7 @@ export const creativeTools: Tool[] = [
     icon: Shuffle,
     component: StartupIdeaGenerator,
     active: true,
+    path: "/tools/startup-idea-generator"
   },
   {
     title: "Book Name Generator",
@@ -18,6 +19,7 @@ export const creativeTools: Tool[] = [
     icon: BookOpen,
     component: BookNameGenerator,
     active: true,
+    path: "/tools/book-name-generator"
   },
   {
     title: "Brand Identity Tool",
@@ -25,5 +27,6 @@ export const creativeTools: Tool[] = [
     icon: Shield,
     component: BrandIdentityTool,
     active: true,
-  },
+    path: "/tools/brand-identity"
+  }
 ];

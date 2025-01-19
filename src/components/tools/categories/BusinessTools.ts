@@ -1,4 +1,4 @@
-import { BarChart3, Calculator, CreditCard, DollarSign, FileSpreadsheet, Target } from "lucide-react";
+import { BarChart3, Calculator, CreditCard, DollarSign, FileSpreadsheet } from "lucide-react";
 import { Tool } from "../types/ToolTypes";
 import { BusinessNameGenerator } from "../BusinessNameGenerator";
 import { CurrencyConverter } from "../CurrencyConverter";

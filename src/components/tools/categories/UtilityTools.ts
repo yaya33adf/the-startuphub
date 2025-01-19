@@ -10,6 +10,7 @@ export const utilityTools: Tool[] = [
     icon: QrCode,
     component: QRCodeGenerator,
     active: true,
+    path: "/tools/qr-code-generator"
   },
   {
     title: "Currency Converter",
@@ -17,5 +18,6 @@ export const utilityTools: Tool[] = [
     icon: DollarSign,
     component: CurrencyConverter,
     active: true,
-  },
+    path: "/tools/currency-converter"
+  }
 ];
