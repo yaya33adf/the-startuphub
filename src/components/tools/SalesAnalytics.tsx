@@ -1,4 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   BarChart, 
   Bar, 
@@ -17,11 +17,12 @@ import {
   TrendingUp, 
   TrendingDown, 
   DollarSign, 
-  BarChart3 
+  BarChart3,
+  AlertCircle
 } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export const SalesAnalytics = () => {
-  // Sample data - in a real app, this would come from your backend
   const [timeframe, setTimeframe] = useState<'daily' | 'weekly' | 'monthly'>('daily');
   
   const data = {
@@ -54,54 +55,84 @@ export const SalesAnalytics = () => {
       value: "$12,345",
       trend: "up",
       percentage: "+12.5%",
-      icon: DollarSign
+      icon: DollarSign,
+      insight: "Sales are growing steadily. Consider increasing inventory for top-selling items."
     },
     {
       title: "Average Order",
       value: "$85.50",
       trend: "up",
       percentage: "+5.2%",
-      icon: BarChart3
+      icon: BarChart3,
+      insight: "Higher average orders suggest successful upselling. Continue bundle promotions."
     },
     {
       title: "Conversion Rate",
       value: "3.2%",
       trend: "down",
       percentage: "-0.8%",
-      icon: TrendingDown
+      icon: TrendingDown,
+      insight: "Declining conversions - review your checkout process and consider A/B testing."
     }
   ];
 
+  // Helper function to get insights based on timeframe
+  const getTimeframeInsights = () => {
+    switch(timeframe) {
+      case 'daily':
+        return "Daily view helps identify peak sales hours and staff accordingly. Your best performing day is Monday - consider running promotions on slower days.";
+      case 'weekly':
+        return "Weekly trends show consistent performance. Week 1 had highest sales - analyze what marketing campaigns were active then.";
+      case 'monthly':
+        return "Monthly view reveals seasonal patterns. April shows strongest performance - plan inventory and promotions for similar peak seasons.";
+    }
+  };
+
   return (
     <div className="w-full space-y-6">
-      {/* Key Metrics */}
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold mb-2">How to Use This Tool</h2>
+        <p className="text-muted-foreground mb-4">
+          This analytics dashboard helps you make data-driven decisions for your business. 
+          Track sales performance, identify trends, and get actionable insights to grow your revenue.
+        </p>
+        <Alert>
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Pro tip: Switch between timeframes to identify patterns and optimize your business strategy.
+          </AlertDescription>
+        </Alert>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {metrics.map((metric) => (
           <Card key={metric.title} className="w-full">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium">{metric.title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between mb-2">
                 <div>
-                  <p className="text-sm text-muted-foreground">{metric.title}</p>
                   <p className="text-2xl font-bold">{metric.value}</p>
+                  <div className="flex items-center mt-1">
+                    {metric.trend === 'up' ? (
+                      <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
+                    ) : (
+                      <TrendingDown className="h-4 w-4 text-red-500 mr-1" />
+                    )}
+                    <span className={metric.trend === 'up' ? 'text-green-500' : 'text-red-500'}>
+                      {metric.percentage}
+                    </span>
+                  </div>
                 </div>
                 <metric.icon className="h-8 w-8 text-primary opacity-75" />
               </div>
-              <div className="mt-2 flex items-center">
-                {metric.trend === 'up' ? (
-                  <TrendingUp className="h-4 w-4 text-green-500 mr-1" />
-                ) : (
-                  <TrendingDown className="h-4 w-4 text-red-500 mr-1" />
-                )}
-                <span className={metric.trend === 'up' ? 'text-green-500' : 'text-red-500'}>
-                  {metric.percentage}
-                </span>
-              </div>
+              <p className="text-sm text-muted-foreground">{metric.insight}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      {/* Time Frame Selector */}
       <div className="flex gap-2">
         <Button 
           variant={timeframe === 'daily' ? 'default' : 'outline'}
@@ -123,8 +154,11 @@ export const SalesAnalytics = () => {
         </Button>
       </div>
 
-      {/* Sales Chart */}
       <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Sales & Profit Analysis</CardTitle>
+          <p className="text-sm text-muted-foreground">{getTimeframeInsights()}</p>
+        </CardHeader>
         <CardContent className="p-6">
           <div className="h-[400px] w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -144,6 +178,21 @@ export const SalesAnalytics = () => {
               </ComposedChart>
             </ResponsiveContainer>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Recommended Actions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="list-disc pl-4 space-y-2">
+            <li>Review your pricing strategy during peak sales periods (Mondays and early week)</li>
+            <li>Investigate the successful factors behind Week 1's performance</li>
+            <li>Plan marketing campaigns for lower-performing periods</li>
+            <li>Set up inventory alerts based on sales patterns</li>
+            <li>Consider customer loyalty programs to improve conversion rates</li>
+          </ul>
         </CardContent>
       </Card>
     </div>
