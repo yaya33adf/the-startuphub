@@ -1,71 +1,66 @@
-import { Tool } from "../types/ToolTypes";
 import { 
-  Lightbulb, 
+  BookOpen, 
   DollarSign, 
-  Target,
-  BarChart,
-  Users,
-  Mail,
-  Receipt,
-  Building
+  Mail, 
+  FileText, 
+  Lightbulb, 
+  TrendingUp 
 } from "lucide-react";
+import { Tool } from "../types/ToolTypes";
+import { BusinessNameGenerator } from "../BusinessNameGenerator";
+import { CurrencyConverter } from "../CurrencyConverter";
+import { EmailCampaignManager } from "../EmailCampaignManager";
+import { InvoiceGenerator } from "../InvoiceGenerator";
+import { StartupIdeaGenerator } from "../StartupIdeaGenerator";
+import { SalesAnalytics } from "../SalesAnalytics";
 
 export const businessTools: Tool[] = [
   {
     title: "Business Name Generator",
-    description: "Generate creative and unique business names for your startup or company.",
-    icon: Building,
+    description: "Generate unique business names",
+    icon: BookOpen,
+    component: BusinessNameGenerator,
     active: true,
     path: "/tools/business-name-generator"
   },
   {
     title: "Currency Converter",
-    description: "Convert currencies with real-time exchange rates.",
+    description: "Convert between different currencies",
     icon: DollarSign,
+    component: CurrencyConverter,
     active: true,
     path: "/tools/currency-converter"
   },
   {
-    title: "Startup Idea Generator",
-    description: "Generate innovative startup ideas based on industry trends and technologies.",
-    icon: Lightbulb,
-    active: true,
-    path: "/tools/startup-idea-generator",
-    fullWidth: true
-  },
-  {
-    title: "Sales Analytics",
-    description: "Track and analyze your sales performance with detailed metrics and charts.",
-    icon: BarChart,
-    active: true,
-    path: "/tools/sales-analytics"
-  },
-  {
-    title: "Team Management",
-    description: "Manage your team members, assignments, and track progress.",
-    icon: Users,
-    active: true,
-    path: "/tools/team-management"
-  },
-  {
     title: "Email Campaign Manager",
-    description: "Create and manage email marketing campaigns.",
+    description: "Create and manage email campaigns",
     icon: Mail,
+    component: EmailCampaignManager,
     active: true,
     path: "/tools/email-campaign-manager"
   },
   {
     title: "Invoice Generator",
-    description: "Create professional invoices for your business.",
-    icon: Receipt,
+    description: "Generate professional invoices",
+    icon: FileText,
+    component: InvoiceGenerator,
     active: true,
     path: "/tools/invoice-generator"
   },
   {
-    title: "Goal Tracker",
-    description: "Set and track your business goals and objectives.",
-    icon: Target,
+    title: "Startup Idea Generator",
+    description: "Generate innovative startup ideas",
+    icon: Lightbulb,
+    component: StartupIdeaGenerator,
     active: true,
-    path: "/tools/goal-tracker"
+    path: "/tools/startup-idea-generator"
+  },
+  {
+    title: "Sales Analytics",
+    description: "Track and analyze sales data",
+    icon: TrendingUp,
+    component: SalesAnalytics,
+    active: true,
+    path: "/tools/sales-analytics"
   }
 ];
