@@ -16,10 +16,17 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
   const { toast } = useToast();
 
   useEffect(() => {
-    let isMounted = true;
-
     const checkAdminStatus = async () => {
-      if (!session?.user?.id) return;
+      if (!session?.user?.id) {
+        console.log("No session found, redirecting to login");
+        toast({
+          title: "Authentication Required",
+          description: "Please sign in to access the admin area",
+          variant: "destructive",
+        });
+        navigate("/auth/signin");
+        return;
+      }
 
       try {
         console.log("Checking admin status for user:", session.user.id);
@@ -28,14 +35,12 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
           .from("profiles")
           .select("role")
           .eq("id", session.user.id)
-          .maybeSingle();
+          .single();
 
         if (error) {
           console.error("Error checking admin status:", error);
           throw error;
         }
-
-        if (!isMounted) return;
 
         const isUserAdmin = profile?.role === "admin";
         console.log("User admin status:", isUserAdmin);
@@ -51,34 +56,18 @@ const ProtectedAdminRoute = ({ children }: ProtectedAdminRouteProps) => {
         }
       } catch (error) {
         console.error("Error in checkAdminStatus:", error);
-        if (isMounted) {
-          toast({
-            title: "Error",
-            description: "Failed to verify admin status",
-            variant: "destructive",
-          });
-          navigate("/");
-        }
+        toast({
+          title: "Error",
+          description: "Failed to verify admin status",
+          variant: "destructive",
+        });
+        navigate("/");
       }
     };
 
     if (!isLoadingSession) {
-      if (!session) {
-        console.log("No session found, redirecting to login");
-        toast({
-          title: "Authentication Required",
-          description: "Please sign in to access the admin area",
-          variant: "destructive",
-        });
-        navigate("/auth/signin");
-      } else {
-        checkAdminStatus();
-      }
+      checkAdminStatus();
     }
-
-    return () => {
-      isMounted = false;
-    };
   }, [session, isLoadingSession, navigate, toast]);
 
   if (isLoadingSession || isAdmin === null) {
