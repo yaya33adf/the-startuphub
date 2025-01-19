@@ -41,16 +41,27 @@ export const AppointmentScheduler = () => {
       
       if (!user) {
         console.error("No authenticated user found");
+        toast({
+          title: "Error",
+          description: "Please sign in to view appointments",
+          variant: "destructive",
+        });
         return [];
       }
 
       const { data, error } = await supabase
         .from("appointments")
         .select("*")
+        .eq('user_id', user.id)
         .order("start_time", { ascending: true });
 
       if (error) {
         console.error("Error fetching appointments:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch appointments",
+          variant: "destructive",
+        });
         throw error;
       }
 
@@ -65,6 +76,11 @@ export const AppointmentScheduler = () => {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
+        toast({
+          title: "Error",
+          description: "Please sign in to create appointments",
+          variant: "destructive",
+        });
         throw new Error("No authenticated user found");
       }
 
@@ -74,7 +90,10 @@ export const AppointmentScheduler = () => {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error creating appointment:", error);
+        throw error;
+      }
       return data;
     },
     onSuccess: () => {
