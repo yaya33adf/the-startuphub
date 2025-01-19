@@ -14,8 +14,8 @@ interface ToolsDropdownProps {
 }
 
 export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
-  // Filter only active tools
-  const activeTools = tools.filter(tool => tool.active);
+  // Filter only active tools and ensure unique paths
+  const activeTools = tools.filter(tool => tool.active && tool.path);
 
   return (
     <DropdownMenu>
@@ -34,12 +34,12 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
       >
         {activeTools.map((tool) => (
           <DropdownMenuItem 
-            key={tool.title} 
+            key={tool.path} // Using path as key since it's unique
             asChild 
             onClick={onClick}
             className="transition-colors duration-200 hover:bg-accent/50"
           >
-            <Link to={tool.path || "/tools"} className="flex items-center gap-2 w-full p-2">
+            <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
               <tool.icon className="w-4 h-4" />
               <span>{tool.title}</span>
             </Link>
