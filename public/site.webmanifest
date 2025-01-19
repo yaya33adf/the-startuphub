@@ -1,6 +1,7 @@
 {
-  "name": "Startup Hub",
+  "name": "Startup Hub - Market Trends & Business Opportunities",
   "short_name": "Startup Hub",
+  "description": "Your comprehensive platform for tracking market trends, exploring opportunities, and discovering side hustles",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -15,5 +16,8 @@
   ],
   "theme_color": "#ffffff",
   "background_color": "#ffffff",
-  "display": "standalone"
+  "display": "standalone",
+  "start_url": "/",
+  "orientation": "any",
+  "categories": ["business", "productivity", "finance"]
 }

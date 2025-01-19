@@ -1,12 +1,14 @@
 import { WebsiteSchema } from "@/components/seo/schemas/WebsiteSchema";
 import { PageSEO } from "@/components/seo/PageSEO";
+import { Card } from "@/components/ui/card";
+import { Link } from "react-router-dom";
 
 const Sitemap = () => {
   return (
     <div className="min-h-screen bg-background">
       <PageSEO 
-        title="Site Map - The Startup Hub"
-        description="Navigate through all sections and pages of The Startup Hub platform."
+        title="Site Map - Complete Website Navigation Guide"
+        description="Navigate through all sections of The Startup Hub platform including business tools, market analysis, side hustles, and community features."
       />
       <WebsiteSchema />
       
@@ -15,151 +17,151 @@ const Sitemap = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Main Navigation */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-primary">Main Pages</h2>
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold text-primary mb-4">Main Pages</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/" className="text-muted-foreground hover:text-primary transition-colors">
-                  Home
-                </a>
+                <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">
+                  Home - Business Opportunities & Market Trends
+                </Link>
               </li>
               <li>
-                <a href="/about" className="text-muted-foreground hover:text-primary transition-colors">
-                  About Us
-                </a>
+                <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">
+                  About Us - Our Mission & Vision
+                </Link>
               </li>
               <li>
-                <a href="/blog" className="text-muted-foreground hover:text-primary transition-colors">
-                  Blog
-                </a>
+                <Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors">
+                  Blog - Business Insights & Analysis
+                </Link>
               </li>
               <li>
-                <a href="/contact" className="text-muted-foreground hover:text-primary transition-colors">
-                  Contact
-                </a>
+                <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">
+                  Contact - Get in Touch
+                </Link>
               </li>
             </ul>
-          </div>
+          </Card>
 
           {/* Business Tools & Resources */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-primary">Business Tools & Resources</h2>
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold text-primary mb-4">Business Tools & Resources</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/tools" className="text-muted-foreground hover:text-primary transition-colors">
-                  Tools
-                </a>
+                <Link to="/tools" className="text-muted-foreground hover:text-primary transition-colors">
+                  Business Tools - Essential Management Resources
+                </Link>
               </li>
               <li>
-                <a href="/markets" className="text-muted-foreground hover:text-primary transition-colors">
-                  Markets
-                </a>
+                <Link to="/markets" className="text-muted-foreground hover:text-primary transition-colors">
+                  Market Analysis - Trends & Opportunities
+                </Link>
               </li>
               <li>
-                <a href="/trends" className="text-muted-foreground hover:text-primary transition-colors">
-                  Trends
-                </a>
+                <Link to="/trends" className="text-muted-foreground hover:text-primary transition-colors">
+                  Trend Analysis - Real-time Market Insights
+                </Link>
               </li>
               <li>
-                <a href="/side-hustles" className="text-muted-foreground hover:text-primary transition-colors">
-                  Side Hustles
-                </a>
+                <Link to="/side-hustles" className="text-muted-foreground hover:text-primary transition-colors">
+                  Side Hustles - Extra Income Opportunities
+                </Link>
               </li>
               <li>
-                <a href="/startups" className="text-muted-foreground hover:text-primary transition-colors">
-                  Startups
-                </a>
+                <Link to="/startups" className="text-muted-foreground hover:text-primary transition-colors">
+                  Startup Directory - Innovative Companies
+                </Link>
               </li>
               <li>
-                <a href="/crowdfunding" className="text-muted-foreground hover:text-primary transition-colors">
-                  Crowdfunding
-                </a>
+                <Link to="/crowdfunding" className="text-muted-foreground hover:text-primary transition-colors">
+                  Crowdfunding - Investment Opportunities
+                </Link>
               </li>
             </ul>
-          </div>
+          </Card>
 
           {/* Community & Support */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-primary">Community & Support</h2>
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold text-primary mb-4">Community & Support</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/community" className="text-muted-foreground hover:text-primary transition-colors">
-                  Community
-                </a>
+                <Link to="/community" className="text-muted-foreground hover:text-primary transition-colors">
+                  Community - Connect & Collaborate
+                </Link>
               </li>
               <li>
-                <a href="/feedback" className="text-muted-foreground hover:text-primary transition-colors">
-                  Feedback
-                </a>
+                <Link to="/feedback" className="text-muted-foreground hover:text-primary transition-colors">
+                  Feedback - Share Your Ideas
+                </Link>
               </li>
               <li>
-                <a href="/faq" className="text-muted-foreground hover:text-primary transition-colors">
-                  FAQ
-                </a>
+                <Link to="/faq" className="text-muted-foreground hover:text-primary transition-colors">
+                  FAQ - Common Questions
+                </Link>
               </li>
               <li>
-                <a href="/team" className="text-muted-foreground hover:text-primary transition-colors">
-                  Team
-                </a>
+                <Link to="/team" className="text-muted-foreground hover:text-primary transition-colors">
+                  Team Building - Grow Your Business
+                </Link>
               </li>
             </ul>
-          </div>
+          </Card>
 
           {/* Account & Settings */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-primary">Account & Settings</h2>
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold text-primary mb-4">Account & Settings</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/auth/signin" className="text-muted-foreground hover:text-primary transition-colors">
-                  Sign In
-                </a>
+                <Link to="/auth/signin" className="text-muted-foreground hover:text-primary transition-colors">
+                  Sign In - Access Your Account
+                </Link>
               </li>
               <li>
-                <a href="/auth/signup" className="text-muted-foreground hover:text-primary transition-colors">
-                  Sign Up
-                </a>
+                <Link to="/auth/signup" className="text-muted-foreground hover:text-primary transition-colors">
+                  Sign Up - Join Our Platform
+                </Link>
               </li>
               <li>
-                <a href="/auth/profile" className="text-muted-foreground hover:text-primary transition-colors">
-                  Profile Settings
-                </a>
+                <Link to="/auth/profile" className="text-muted-foreground hover:text-primary transition-colors">
+                  Profile Settings - Manage Your Account
+                </Link>
               </li>
             </ul>
-          </div>
+          </Card>
 
           {/* For Investors */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-primary">For Investors</h2>
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold text-primary mb-4">For Investors</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/investors" className="text-muted-foreground hover:text-primary transition-colors">
-                  Investors
-                </a>
+                <Link to="/investors" className="text-muted-foreground hover:text-primary transition-colors">
+                  Investors Hub - Investment Opportunities
+                </Link>
               </li>
               <li>
-                <a href="/schedule-call" className="text-muted-foreground hover:text-primary transition-colors">
-                  Schedule Call
-                </a>
+                <Link to="/schedule-call" className="text-muted-foreground hover:text-primary transition-colors">
+                  Schedule Call - Connect with Our Team
+                </Link>
               </li>
             </ul>
-          </div>
+          </Card>
 
           {/* Legal */}
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-primary">Legal</h2>
+          <Card className="p-6">
+            <h2 className="text-xl font-semibold text-primary mb-4">Legal Information</h2>
             <ul className="space-y-2">
               <li>
-                <a href="/privacy-policy" className="text-muted-foreground hover:text-primary transition-colors">
-                  Privacy Policy
-                </a>
+                <Link to="/privacy-policy" className="text-muted-foreground hover:text-primary transition-colors">
+                  Privacy Policy - Data Protection
+                </Link>
               </li>
               <li>
-                <a href="/terms" className="text-muted-foreground hover:text-primary transition-colors">
-                  Terms of Service
-                </a>
+                <Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors">
+                  Terms of Service - Usage Guidelines
+                </Link>
               </li>
             </ul>
-          </div>
+          </Card>
         </div>
       </div>
     </div>
