@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { Target, Check, Trash2 } from "lucide-react";
+import { Check, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -218,7 +218,6 @@ export const GoalTracker = () => {
 
       {goals.length === 0 && (
         <div className="text-center text-gray-500 py-8">
-          <Target className="mx-auto h-12 w-12 mb-2 text-gray-400" />
           <p>No goals added yet. Start by adding a new goal above!</p>
         </div>
       )}
