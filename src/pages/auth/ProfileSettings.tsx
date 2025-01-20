@@ -17,6 +17,14 @@ import { PasswordUpdate } from "@/components/profile-settings/PasswordUpdate";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "lucide-react";
 
+interface Profile {
+  id: string;
+  email: string | null;
+  name: string | null;
+  user_type: string | null;
+  avatar_url: string | null;
+}
+
 export default function ProfileSettings() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
@@ -105,11 +113,12 @@ export default function ProfileSettings() {
         return;
       }
 
-      const updates = {
+      const updates: Partial<Profile> = {
         id: session.user.id,
         email,
         user_type: userType,
-        name
+        name,
+        avatar_url: avatarUrl
       };
 
       console.log("Updating profile with data:", updates);
