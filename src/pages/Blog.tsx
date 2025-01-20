@@ -64,9 +64,11 @@ const Blog = () => {
               <div key={post.id} className="border rounded-lg p-4">
                 <h2 className="text-2xl font-semibold">{post.title}</h2>
                 <p className="text-gray-600">{post.excerpt}</p>
-                <div className="mt-2">
-                  <img src={post.image_url} alt={post.title} className="w-full h-48 object-cover rounded-md" />
-                </div>
+                {post.image_url && (
+                  <div className="mt-2">
+                    <img src={post.image_url} alt={post.title} className="w-full h-48 object-cover rounded-md" />
+                  </div>
+                )}
                 <div className="mt-4">
                   <span className="text-sm text-gray-500">{post.read_time} min read</span>
                 </div>
