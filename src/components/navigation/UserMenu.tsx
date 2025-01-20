@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User } from "lucide-react";
+import { User, Building2, Briefcase } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface UserMenuProps {
@@ -30,6 +30,11 @@ export function UserMenu({ userProfile, handleSignOut, userEmail }: UserMenuProp
   // If user is authenticated, show the dropdown menu
   const displayName = userProfile?.name || userEmail.split('@')[0];
   const avatarUrl = userProfile?.avatar_url;
+  const userType = userProfile?.user_type;
+  
+  const UserTypeIcon = userType === 'startup' ? Building2 : 
+                      userType === 'investor' ? Briefcase : 
+                      null;
   
   return (
     <DropdownMenu>
@@ -45,6 +50,9 @@ export function UserMenu({ userProfile, handleSignOut, userEmail }: UserMenuProp
             <User className="h-4 w-4 mr-2" />
           )}
           <span>{displayName}</span>
+          {UserTypeIcon && (
+            <UserTypeIcon className="h-4 w-4 ml-2 text-muted-foreground" />
+          )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
