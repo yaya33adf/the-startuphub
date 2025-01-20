@@ -8,5 +8,5 @@ export const authRoutes: RouteObject[] = [
   { path: "/signin", element: <SignIn /> },
   { path: "/signup", element: <SignUp /> },
   { path: "/forgot-password", element: <ForgotPassword /> },
-  { path: "/profile-settings", element: <ProfileSettings /> },
+  { path: "/profile", element: <ProfileSettings /> },
 ];

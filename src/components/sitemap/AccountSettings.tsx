@@ -24,4 +24,4 @@ export const AccountSettings = () => {
       </ul>
     </Card>
   );
-};
+}
