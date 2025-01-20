@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -11,11 +10,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { EmailInput } from "@/components/profile-settings/EmailInput";
-import { UserTypeSelect } from "@/components/profile-settings/UserTypeSelect";
+import { AvatarUpload } from "@/components/profile-settings/AvatarUpload";
+import { ProfileForm } from "@/components/profile-settings/ProfileForm";
 import { PasswordUpdate } from "@/components/profile-settings/PasswordUpdate";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User } from "lucide-react";
 
 interface Profile {
   id: string;
@@ -23,7 +20,6 @@ interface Profile {
   name: string | null;
   user_type: string | null;
   avatar_url: string | null;
-  role: string | null;
   created_at?: string | null;
   updated_at?: string | null;
 }
@@ -79,31 +75,6 @@ export default function ProfileSettings() {
     }
   }
 
-  async function uploadAvatar(file: File) {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
-
-      const fileExt = file.name.split('.').pop();
-      const filePath = `${session.user.id}-${Math.random()}.${fileExt}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('avatars')
-        .getPublicUrl(filePath);
-
-      return publicUrl;
-    } catch (error) {
-      console.error('Error uploading avatar:', error);
-      throw error;
-    }
-  }
-
   async function updateProfile() {
     try {
       setLoading(true);
@@ -152,39 +123,6 @@ export default function ProfileSettings() {
     }
   }
 
-  const handleAvatarChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    try {
-      const file = event.target.files?.[0];
-      if (!file) return;
-
-      const publicUrl = await uploadAvatar(file);
-      if (publicUrl) {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) return;
-
-        const { error } = await supabase
-          .from('profiles')
-          .update({ avatar_url: publicUrl })
-          .eq('id', session.user.id);
-
-        if (error) throw error;
-
-        setAvatarUrl(publicUrl);
-        toast({
-          title: "Success",
-          description: "Profile picture updated successfully",
-        });
-      }
-    } catch (error) {
-      console.error('Error updating avatar:', error);
-      toast({
-        title: "Error",
-        description: "Failed to update profile picture",
-        variant: "destructive",
-      });
-    }
-  };
-
   return (
     <div className="container max-w-2xl py-8">
       <Card>
@@ -195,44 +133,18 @@ export default function ProfileSettings() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="flex flex-col items-center space-y-4">
-            <Avatar className="h-24 w-24">
-              <AvatarImage src={avatarUrl || undefined} />
-              <AvatarFallback>
-                <User className="h-12 w-12" />
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex items-center space-x-4">
-              <Input
-                type="file"
-                accept="image/*"
-                onChange={handleAvatarChange}
-                className="w-full max-w-xs"
-              />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <label htmlFor="name" className="text-sm font-medium">
-              Display Name
-            </label>
-            <Input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter your display name"
-            />
-          </div>
-          
-          <EmailInput 
-            email={email} 
-            onEmailChange={setEmail} 
+          <AvatarUpload 
+            avatarUrl={avatarUrl} 
+            onAvatarChange={setAvatarUrl} 
           />
-          
-          <UserTypeSelect 
-            userType={userType} 
-            onUserTypeChange={setUserType} 
+
+          <ProfileForm
+            name={name}
+            email={email}
+            userType={userType}
+            onNameChange={setName}
+            onEmailChange={setEmail}
+            onUserTypeChange={setUserType}
           />
 
           <PasswordUpdate />
