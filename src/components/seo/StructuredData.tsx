@@ -16,6 +16,8 @@ interface StructuredDataProps {
     datePublished: string;
     dateModified: string;
     authorName: string;
+    category?: string;
+    tags?: string[];
   };
   faqData?: Array<{
     question: string;
