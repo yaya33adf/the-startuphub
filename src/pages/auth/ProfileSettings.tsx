@@ -87,8 +87,9 @@ export default function ProfileSettings() {
         return;
       }
 
-      const updates: Partial<Profile> = {
-        id: session.user.id,
+      // Create updates object with required id field
+      const updates = {
+        id: session.user.id, // Ensure id is always included
         email,
         user_type: userType,
         name,
