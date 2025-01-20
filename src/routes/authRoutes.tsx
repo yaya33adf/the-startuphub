@@ -5,8 +5,8 @@ import ForgotPassword from "@/pages/auth/ForgotPassword";
 import ProfileSettings from "@/pages/auth/ProfileSettings";
 
 export const authRoutes: RouteObject[] = [
-  { path: "/signin", element: <SignIn /> },
-  { path: "/signup", element: <SignUp /> },
-  { path: "/forgot-password", element: <ForgotPassword /> },
-  { path: "/profile", element: <ProfileSettings /> },
+  { path: "/auth/signin", element: <SignIn /> },
+  { path: "/auth/signup", element: <SignUp /> },
+  { path: "/auth/forgot-password", element: <ForgotPassword /> },
+  { path: "/auth/profile", element: <ProfileSettings /> },
 ];
