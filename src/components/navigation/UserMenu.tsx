@@ -29,16 +29,28 @@ export function UserMenu({ userProfile, handleSignOut, userEmail }: UserMenuProp
 
   // If user is authenticated, show the dropdown menu
   const displayName = userProfile?.name || userEmail.split('@')[0];
+  const avatarUrl = userProfile?.avatar_url;
   
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="h-10 px-3">
-          <User className="h-4 w-4 mr-2" />
+          {avatarUrl ? (
+            <img
+              src={avatarUrl}
+              alt={displayName}
+              className="h-6 w-6 rounded-full mr-2"
+            />
+          ) : (
+            <User className="h-4 w-4 mr-2" />
+          )}
           <span>{displayName}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        <DropdownMenuItem asChild>
+          <Link to="/auth/profile">Profile Settings</Link>
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={handleSignOut}>
           Sign Out
         </DropdownMenuItem>
