@@ -12,6 +12,11 @@ export const CommunitySupport = () => {
           </Link>
         </li>
         <li>
+          <Link to="/events" className="text-muted-foreground hover:text-primary transition-colors">
+            Events - Community Gatherings & Meetups
+          </Link>
+        </li>
+        <li>
           <Link to="/feedback" className="text-muted-foreground hover:text-primary transition-colors">
             Feedback - Share Your Ideas
           </Link>
