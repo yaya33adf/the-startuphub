@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { Upload, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { LogoUploader } from "./LogoUploader";
+import type { LogoFile } from "./types/siteSettings";
 
 export const SiteSettings = () => {
-  const [logoFile, setLogoFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [logoFile, setLogoFile] = useState<LogoFile>({
+    file: null,
+    previewUrl: null
+  });
   const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export const SiteSettings = () => {
         if (data?.value && typeof data.value === 'object' && 'url' in data.value) {
           const value = data.value as { url: string };
           console.log('Current logo URL:', value.url);
-          setPreviewUrl(value.url);
+          setLogoFile(prev => ({ ...prev, previewUrl: value.url }));
         }
       } catch (error) {
         console.error('Error in fetchCurrentLogo:', error);
@@ -58,11 +58,10 @@ export const SiteSettings = () => {
 
     try {
       setIsUploading(true);
-      setLogoFile(file);
-      
-      // Create a preview URL
-      const objectUrl = URL.createObjectURL(file);
-      setPreviewUrl(objectUrl);
+      setLogoFile({
+        file,
+        previewUrl: URL.createObjectURL(file)
+      });
 
       const fileExt = file.name.split('.').pop();
       const fileName = `site-logo-${Date.now()}.${fileExt}`;
@@ -95,9 +94,8 @@ export const SiteSettings = () => {
       toast.success("Logo updated successfully!");
       console.log('Logo updated successfully:', publicUrl);
       
-      // Clean up the preview URL
-      URL.revokeObjectURL(objectUrl);
-      setPreviewUrl(publicUrl);
+      // Update preview URL to the permanent URL
+      setLogoFile(prev => ({ ...prev, previewUrl: publicUrl }));
     } catch (error) {
       console.error('Error uploading logo:', error);
       toast.error("Failed to upload logo");
@@ -114,51 +112,11 @@ export const SiteSettings = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div>
-            <Label htmlFor="logo">Site Logo</Label>
-            <div className="mt-2 space-y-4">
-              {previewUrl && (
-                <div className="w-20 h-20 rounded-lg border overflow-hidden">
-                  <img 
-                    src={previewUrl} 
-                    alt="Current logo" 
-                    className="w-full h-full object-contain"
-                  />
-                </div>
-              )}
-              <Button
-                variant="outline"
-                onClick={() => document.getElementById('logo-upload')?.click()}
-                className="w-full"
-                disabled={isUploading}
-              >
-                {isUploading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Uploading...
-                  </>
-                ) : (
-                  <>
-                    <Upload className="mr-2 h-4 w-4" />
-                    Upload Logo
-                  </>
-                )}
-              </Button>
-              <Input
-                id="logo-upload"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleLogoUpload}
-                disabled={isUploading}
-              />
-            </div>
-            {logoFile && (
-              <p className="text-sm text-muted-foreground mt-2">
-                Selected: {logoFile.name}
-              </p>
-            )}
-          </div>
+          <LogoUploader 
+            logoFile={logoFile}
+            isUploading={isUploading}
+            onLogoUpload={handleLogoUpload}
+          />
         </div>
       </CardContent>
     </Card>
