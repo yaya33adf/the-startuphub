@@ -116,12 +116,13 @@ export default function ProfileSettings() {
         return;
       }
 
-      const updates = {
+      const updates: Profile = {
         id: session.user.id,
         email,
         user_type: userType,
         name,
         avatar_url: avatarUrl,
+        role: null, // Preserve existing role
         updated_at: new Date().toISOString()
       };
 
