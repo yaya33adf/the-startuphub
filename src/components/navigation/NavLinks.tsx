@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Users, CreditCard, LayoutTemplate, Layout, Calendar, MessageSquare, Blossom } from "lucide-react";
+import { Users, CreditCard, LayoutTemplate, Layout, Calendar, MessageSquare, Flower } from "lucide-react";
 import { BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
 import { StartupsDropdown } from "./StartupsDropdown";
 import { ToolsDropdown } from "./ToolsDropdown";
@@ -99,7 +99,7 @@ export const NavLinks = ({ onClick = () => {} }: NavLinksProps) => {
             className="transition-colors duration-200 hover:bg-accent/50"
           >
             <Link to="/blossom-word-game" className="flex items-center gap-2 w-full p-2">
-              <Blossom className="w-4 h-4" />
+              <Flower className="w-4 h-4" />
               <span>Blossom Word Game</span>
             </Link>
           </DropdownMenuItem>
