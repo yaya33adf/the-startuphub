@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { ImageIcon } from "lucide-react";
+import { ImageIcon, Loader2 } from "lucide-react";
 
 interface BlogPostEditorProps {
   blogTitle: string;
@@ -12,6 +12,7 @@ interface BlogPostEditorProps {
   setBlogContent: (content: string) => void;
   onImageUpload: (file: File) => Promise<void>;
   imageUrl: string | null;
+  isUploading: boolean;
 }
 
 export const BlogPostEditor = ({
@@ -21,21 +22,12 @@ export const BlogPostEditor = ({
   setBlogContent,
   onImageUpload,
   imageUrl,
+  isUploading,
 }: BlogPostEditorProps) => {
-  const [isUploading, setIsUploading] = useState(false);
-
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    try {
-      setIsUploading(true);
-      await onImageUpload(file);
-    } catch (error) {
-      console.error('Error uploading image:', error);
-    } finally {
-      setIsUploading(false);
-    }
+    await onImageUpload(file);
   };
 
   return (
@@ -61,8 +53,17 @@ export const BlogPostEditor = ({
             disabled={isUploading}
             onClick={() => document.getElementById('image-upload')?.click()}
           >
-            <ImageIcon className="w-4 h-4 mr-2" />
-            {isUploading ? 'Uploading...' : 'Upload Image'}
+            {isUploading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Uploading...
+              </>
+            ) : (
+              <>
+                <ImageIcon className="w-4 h-4 mr-2" />
+                Upload Image
+              </>
+            )}
           </Button>
           <input
             id="image-upload"
@@ -70,6 +71,7 @@ export const BlogPostEditor = ({
             accept="image/*"
             className="hidden"
             onChange={handleImageChange}
+            disabled={isUploading}
           />
         </div>
         {imageUrl && (

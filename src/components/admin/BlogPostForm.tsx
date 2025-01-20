@@ -10,6 +10,7 @@ export const BlogPostForm = () => {
   const [blogContent, setBlogContent] = useState("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentPostId, setCurrentPostId] = useState<string | null>(null);
 
@@ -27,7 +28,10 @@ export const BlogPostForm = () => {
           .limit(1)
           .single();
 
-        if (error) throw error;
+        if (error) {
+          console.error('Error fetching blog post:', error);
+          return;
+        }
         
         if (data) {
           setBlogTitle(data.title);
@@ -37,6 +41,7 @@ export const BlogPostForm = () => {
         }
       } catch (error) {
         console.error('Error fetching blog post:', error);
+        toast.error("Failed to fetch blog post");
       }
     };
 
@@ -44,6 +49,7 @@ export const BlogPostForm = () => {
   }, []);
 
   const handleImageUpload = async (file: File) => {
+    setIsUploading(true);
     try {
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random()}.${fileExt}`;
@@ -64,14 +70,19 @@ export const BlogPostForm = () => {
     } catch (error) {
       console.error('Error uploading image:', error);
       toast.error("Failed to upload image");
-      throw error;
+    } finally {
+      setIsUploading(false);
     }
   };
 
   const handleBlogSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    if (!blogTitle.trim() || !blogContent.trim()) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
 
+    setIsSubmitting(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
@@ -83,8 +94,8 @@ export const BlogPostForm = () => {
       const { error } = await supabase
         .from('blog_posts')
         .insert({
-          title: blogTitle,
-          content: blogContent,
+          title: blogTitle.trim(),
+          content: blogContent.trim(),
           author_id: user.id,
           status: 'draft',
           image_url: imageUrl
@@ -112,7 +123,6 @@ export const BlogPostForm = () => {
 
     setIsDeleting(true);
     try {
-      // Delete the associated image if it exists
       if (imageUrl) {
         const imagePath = imageUrl.split('/').pop();
         if (imagePath) {
@@ -157,6 +167,7 @@ export const BlogPostForm = () => {
             setBlogContent={setBlogContent}
             onImageUpload={handleImageUpload}
             imageUrl={imageUrl}
+            isUploading={isUploading}
           />
           <BlogPostActions
             isSubmitting={isSubmitting}
