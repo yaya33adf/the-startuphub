@@ -16,11 +16,6 @@ export const AccountSettings = () => {
             Sign Up - Join Our Platform
           </Link>
         </li>
-        <li>
-          <Link to="/auth/profile" className="text-muted-foreground hover:text-primary transition-colors">
-            Profile Settings - Manage Your Account
-          </Link>
-        </li>
       </ul>
     </Card>
   );

@@ -39,9 +39,6 @@ export function UserMenu({ userProfile, handleSignOut, userEmail }: UserMenuProp
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuItem asChild>
-          <Link to="/auth/profile">Profile Settings</Link>
-        </DropdownMenuItem>
         <DropdownMenuItem onClick={handleSignOut}>
           Sign Out
         </DropdownMenuItem>
