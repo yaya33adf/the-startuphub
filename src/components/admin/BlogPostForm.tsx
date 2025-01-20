@@ -12,6 +12,7 @@ export const BlogPostForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
   const [currentPostId, setCurrentPostId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -152,6 +153,25 @@ export const BlogPostForm = () => {
     }
   };
 
+  const handlePublish = async (postId: string) => {
+    setIsPublishing(true);
+    try {
+      const { error } = await supabase
+        .from('blog_posts')
+        .update({ status: 'published' })
+        .eq('id', postId);
+
+      if (error) throw error;
+
+      toast.success("Blog post published successfully!");
+    } catch (error) {
+      console.error('Error publishing blog post:', error);
+      toast.error("Failed to publish blog post");
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -172,8 +192,10 @@ export const BlogPostForm = () => {
           <BlogPostActions
             isSubmitting={isSubmitting}
             isDeleting={isDeleting}
+            isPublishing={isPublishing}
             currentPostId={currentPostId}
             onDelete={handleDelete}
+            onPublish={handlePublish}
           />
         </form>
       </CardContent>

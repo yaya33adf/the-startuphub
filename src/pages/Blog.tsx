@@ -1,5 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
 import { BookOpen } from "lucide-react";
 import { PageSEO } from "@/components/seo/PageSEO";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Card,
   CardContent,
@@ -9,6 +11,30 @@ import {
 } from "@/components/ui/card";
 
 const Blog = () => {
+  const { data: posts, isLoading } = useQuery({
+    queryKey: ["published-blog-posts"],
+    queryFn: async () => {
+      console.log("Fetching published blog posts");
+      const { data, error } = await supabase
+        .from("blog_posts")
+        .select(`
+          *,
+          users:author_id (
+            name
+          )
+        `)
+        .eq("status", "published")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching blog posts:", error);
+        throw error;
+      }
+
+      return data;
+    },
+  });
+
   return (
     <>
       <PageSEO 
@@ -20,24 +46,43 @@ const Blog = () => {
           <BookOpen className="w-6 h-6" />
           <h1 className="text-2xl font-bold">Blog</h1>
         </div>
-        <Card className="max-w-2xl mx-auto">
-          <CardHeader>
-            <CardTitle className="text-center text-2xl">Coming Soon!</CardTitle>
-            <CardDescription className="text-center">
-              Our blog is currently under development. Stay tuned for expert insights on business trends, 
-              market analysis, and entrepreneurial guidance.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="text-center text-muted-foreground">
-            <p>We're working hard to bring you valuable content that will help you:</p>
-            <ul className="mt-4 space-y-2">
-              <li>• Stay ahead of market trends</li>
-              <li>• Learn from successful entrepreneurs</li>
-              <li>• Discover growth opportunities</li>
-              <li>• Access expert business insights</li>
-            </ul>
-          </CardContent>
-        </Card>
+
+        {isLoading ? (
+          <div className="text-center">Loading posts...</div>
+        ) : !posts?.length ? (
+          <Card className="max-w-2xl mx-auto">
+            <CardHeader>
+              <CardTitle className="text-center text-2xl">No Posts Yet</CardTitle>
+              <CardDescription className="text-center">
+                Check back soon for expert insights on business trends, 
+                market analysis, and entrepreneurial guidance.
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        ) : (
+          <div className="grid gap-6 max-w-4xl mx-auto">
+            {posts.map((post) => (
+              <Card key={post.id}>
+                <CardHeader>
+                  <CardTitle>{post.title}</CardTitle>
+                  <CardDescription>
+                    By {post.users?.name || 'Anonymous'} • {new Date(post.created_at).toLocaleDateString()}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {post.image_url && (
+                    <img 
+                      src={post.image_url} 
+                      alt={post.title}
+                      className="w-full h-48 object-cover rounded-md mb-4"
+                    />
+                  )}
+                  <p className="text-muted-foreground">{post.excerpt || post.content.slice(0, 200)}...</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
     </>
   );
