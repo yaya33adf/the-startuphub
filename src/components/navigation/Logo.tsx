@@ -4,6 +4,14 @@ import { memo, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 
+interface SiteLogoValue {
+  url: string;
+}
+
+interface SiteSettingsPayload {
+  value: SiteLogoValue;
+}
+
 export const Logo = memo(() => {
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
 
@@ -23,7 +31,7 @@ export const Logo = memo(() => {
         }
 
         if (data?.value && typeof data.value === 'object') {
-          const value = data.value as { url: string };
+          const value = data.value as SiteLogoValue;
           if ('url' in value) {
             console.log('Logo URL updated:', value.url);
             setLogoUrl(value.url);
@@ -48,10 +56,10 @@ export const Logo = memo(() => {
           table: 'site_settings',
           filter: 'key=eq.site_logo'
         },
-        (payload: RealtimePostgresChangesPayload<{ value: { url: string } }>) => {
+        (payload: RealtimePostgresChangesPayload<SiteSettingsPayload>) => {
           console.log('Logo settings changed, payload:', payload);
-          if (payload.new && 'value' in payload.new && typeof payload.new.value === 'object') {
-            const newValue = payload.new.value as { url: string };
+          if (payload.new && 'value' in payload.new) {
+            const newValue = payload.new.value as SiteLogoValue;
             if ('url' in newValue) {
               console.log('Setting new logo URL:', newValue.url);
               setLogoUrl(newValue.url);
