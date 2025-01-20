@@ -1,6 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 
+interface SiteLogoValue {
+  url: string;
+}
+
 export const OrganizationSchema: FC = () => {
   const [logoUrl, setLogoUrl] = useState<string>(`${window.location.origin}/og-image.png`);
 
@@ -11,13 +15,14 @@ export const OrganizationSchema: FC = () => {
           .from('site_settings')
           .select('value')
           .eq('key', 'site_logo')
-          .single();
+          .maybeSingle();
 
         if (error) throw error;
         
-        if (data?.value?.url) {
-          setLogoUrl(data.value.url);
-          console.log('Site logo fetched successfully:', data.value.url);
+        if (data?.value && typeof data.value === 'object' && 'url' in data.value) {
+          const value = data.value as SiteLogoValue;
+          setLogoUrl(value.url);
+          console.log('Site logo fetched successfully:', value.url);
         }
       } catch (error) {
         console.error('Error fetching site logo:', error);
