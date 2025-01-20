@@ -34,15 +34,20 @@ export default function ProfileSettings() {
         return;
       }
 
+      console.log("Fetching profile for user:", session.user.id);
       const { data, error } = await supabase
         .from("profiles")
         .select("email, user_type")
         .eq("id", session.user.id)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error loading profile:", error);
+        throw error;
+      }
 
       if (data) {
+        console.log("Profile data loaded:", data);
         setEmail(data.email || "");
         setUserType(data.user_type || null);
       }
@@ -59,6 +64,8 @@ export default function ProfileSettings() {
   async function updateProfile() {
     try {
       setLoading(true);
+      console.log("Starting profile update...");
+      
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
@@ -68,14 +75,21 @@ export default function ProfileSettings() {
 
       const updates = {
         id: session.user.id,
-        email: email,
-        user_type: userType,
-        updated_at: new Date().toISOString(),
+        email,
+        user_type: userType
       };
 
-      const { error } = await supabase.from('profiles').upsert(updates);
-      if (error) throw error;
+      console.log("Updating profile with data:", updates);
+      const { error } = await supabase
+        .from('profiles')
+        .upsert(updates);
 
+      if (error) {
+        console.error("Error updating profile:", error);
+        throw error;
+      }
+
+      console.log("Profile updated successfully");
       toast({
         title: "Success",
         description: "Profile updated successfully",
