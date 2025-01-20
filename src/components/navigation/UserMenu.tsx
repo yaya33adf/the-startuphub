@@ -11,10 +11,23 @@ import { Link } from "react-router-dom";
 interface UserMenuProps {
   userProfile: any;
   handleSignOut: () => Promise<void>;
-  userEmail: string;
+  userEmail?: string;
 }
 
 export function UserMenu({ userProfile, handleSignOut, userEmail }: UserMenuProps) {
+  // If no userEmail is provided, show sign in button
+  if (!userEmail) {
+    return (
+      <Button variant="ghost" asChild>
+        <Link to="/auth/signin" className="flex items-center gap-2">
+          <User className="h-4 w-4" />
+          <span>Sign In</span>
+        </Link>
+      </Button>
+    );
+  }
+
+  // If user is authenticated, show the dropdown menu
   const displayName = userProfile?.name || userEmail.split('@')[0];
   
   return (
