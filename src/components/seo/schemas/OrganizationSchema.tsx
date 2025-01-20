@@ -35,6 +35,28 @@ export const OrganizationSchema: FC = () => {
     };
 
     fetchSiteLogo();
+
+    // Set up real-time subscription for logo updates
+    const channel = supabase
+      .channel('site_settings_changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'site_settings',
+          filter: 'key=eq.site_logo'
+        },
+        () => {
+          console.log('Logo settings changed, refetching...');
+          fetchSiteLogo();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const organizationSchema = {

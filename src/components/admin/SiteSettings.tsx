@@ -10,6 +10,7 @@ import { toast } from "sonner";
 export const SiteSettings = () => {
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     const fetchCurrentLogo = async () => {
@@ -45,20 +46,29 @@ export const SiteSettings = () => {
     if (!file) return;
 
     try {
+      setIsUploading(true);
       setLogoFile(file);
+      
+      // Create a preview URL
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
+
       const fileExt = file.name.split('.').pop();
       const fileName = `site-logo-${Date.now()}.${fileExt}`;
 
+      // Upload to storage
       const { error: uploadError, data } = await supabase.storage
         .from('brand_logos')
         .upload(fileName, file);
 
       if (uploadError) throw uploadError;
 
+      // Get public URL
       const { data: { publicUrl } } = supabase.storage
         .from('brand_logos')
         .getPublicUrl(fileName);
 
+      // Update site settings
       const { error: settingsError } = await supabase
         .from('site_settings')
         .upsert({
@@ -68,12 +78,17 @@ export const SiteSettings = () => {
 
       if (settingsError) throw settingsError;
 
-      setPreviewUrl(publicUrl);
       toast.success("Logo updated successfully!");
       console.log('Logo updated successfully:', publicUrl);
+      
+      // Clean up the preview URL
+      URL.revokeObjectURL(objectUrl);
+      setPreviewUrl(publicUrl);
     } catch (error) {
       console.error('Error uploading logo:', error);
       toast.error("Failed to upload logo");
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -101,9 +116,10 @@ export const SiteSettings = () => {
                 variant="outline"
                 onClick={() => document.getElementById('logo-upload')?.click()}
                 className="w-full"
+                disabled={isUploading}
               >
                 <Upload className="mr-2 h-4 w-4" />
-                Upload Logo
+                {isUploading ? 'Uploading...' : 'Upload Logo'}
               </Button>
               <Input
                 id="logo-upload"
@@ -111,6 +127,7 @@ export const SiteSettings = () => {
                 accept="image/*"
                 className="hidden"
                 onChange={handleLogoUpload}
+                disabled={isUploading}
               />
             </div>
             {logoFile && (
