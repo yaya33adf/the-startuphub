@@ -20,6 +20,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -28,6 +35,7 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
+  userType: z.enum(['startup', 'investor']).optional(),
   newPassword: z.string().min(6, {
     message: "Password must be at least 6 characters.",
   }).optional(),
@@ -52,6 +60,7 @@ export default function ProfileSettings() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      userType: undefined,
       newPassword: "",
       confirmPassword: "",
     },
@@ -74,6 +83,16 @@ export default function ProfileSettings() {
           .eq('id', session.user.id);
 
         if (updateError) throw updateError;
+      }
+
+      // Update user type in profiles table
+      if (values.userType) {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .update({ user_type: values.userType })
+          .eq('id', session.user.id);
+
+        if (profileError) throw profileError;
       }
 
       // Update password if provided
@@ -124,6 +143,28 @@ export default function ProfileSettings() {
                     <FormControl>
                       <Input placeholder="Enter your name" {...field} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="userType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>User Type</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select your user type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="startup">Startup</SelectItem>
+                        <SelectItem value="investor">Investor</SelectItem>
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
