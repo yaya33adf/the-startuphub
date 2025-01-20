@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Users, CreditCard, LayoutTemplate, Layout, Calendar } from "lucide-react";
+import { Users, CreditCard, LayoutTemplate, Layout, Calendar, MessageSquare } from "lucide-react";
 import { BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
 import { StartupsDropdown } from "./StartupsDropdown";
 import { ToolsDropdown } from "./ToolsDropdown";
@@ -22,6 +22,43 @@ export const NavLinks = ({ onClick = () => {} }: NavLinksProps) => {
       <StartupsDropdown onClick={onClick} />
       <ToolsDropdown onClick={onClick} />
       
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button 
+            variant="ghost" 
+            className="h-10 px-3 py-2 transition-all duration-200 hover:bg-accent/50 hover:text-accent-foreground hover:scale-105"
+          >
+            <MessageSquare className="w-4 h-4 mr-2" />
+            <span>Community</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent 
+          align="start"
+          className="w-56 animate-in fade-in-0 zoom-in-95 bg-background"
+        >
+          <DropdownMenuItem 
+            asChild 
+            onClick={onClick}
+            className="transition-colors duration-200 hover:bg-accent/50"
+          >
+            <Link to="/community" className="flex items-center gap-2 w-full p-2">
+              <Users className="w-4 h-4" />
+              <span>Community</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem 
+            asChild 
+            onClick={onClick}
+            className="transition-colors duration-200 hover:bg-accent/50"
+          >
+            <Link to="/events" className="flex items-center gap-2 w-full p-2">
+              <Calendar className="w-4 h-4" />
+              <span>Events</span>
+            </Link>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button 
@@ -58,28 +95,6 @@ export const NavLinks = ({ onClick = () => {} }: NavLinksProps) => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      <Button 
-        variant="ghost" 
-        asChild
-        className="h-10 px-3 py-2 transition-all duration-200 hover:bg-accent/50 hover:text-accent-foreground hover:scale-105"
-      >
-        <Link to="/community" className="flex items-center gap-2" onClick={onClick}>
-          <Users className="h-4 w-4" />
-          <span>Community</span>
-        </Link>
-      </Button>
-
-      <Button 
-        variant="ghost" 
-        asChild
-        className="h-10 px-3 py-2 transition-all duration-200 hover:bg-accent/50 hover:text-accent-foreground hover:scale-105"
-      >
-        <Link to="/events" className="flex items-center gap-2" onClick={onClick}>
-          <Calendar className="h-4 w-4" />
-          <span>Events</span>
-        </Link>
-      </Button>
     </>
   );
 };

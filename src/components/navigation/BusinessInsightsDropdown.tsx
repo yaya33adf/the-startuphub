@@ -1,4 +1,4 @@
-import { ChartLine, Globe, Lightbulb, Briefcase, DollarSign, Wrench, MessageSquare, Calendar } from "lucide-react";
+import { ChartLine, Globe, Lightbulb, Briefcase, DollarSign, Wrench, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +19,6 @@ export const BusinessInsightsDropdown = ({ onClick = () => {} }: BusinessInsight
     { to: "/side-hustles", icon: Lightbulb, label: "Side Hustles" },
     { to: "/crowdfunding", icon: DollarSign, label: "Crowdfunding" },
     { to: "/community", icon: MessageSquare, label: "Community" },
-    { to: "/events", icon: Calendar, label: "Events" },
   ];
 
   return (
