@@ -8,6 +8,7 @@ import { BlogPostActions } from "./BlogPostActions";
 export const BlogPostForm = () => {
   const [blogTitle, setBlogTitle] = useState("");
   const [blogContent, setBlogContent] = useState("");
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [currentPostId, setCurrentPostId] = useState<string | null>(null);
@@ -31,6 +32,7 @@ export const BlogPostForm = () => {
         if (data) {
           setBlogTitle(data.title);
           setBlogContent(data.content);
+          setImageUrl(data.image_url);
           setCurrentPostId(data.id);
         }
       } catch (error) {
@@ -40,6 +42,31 @@ export const BlogPostForm = () => {
 
     fetchCurrentPost();
   }, []);
+
+  const handleImageUpload = async (file: File) => {
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `blog-images/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('blog-images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('blog-images')
+        .getPublicUrl(filePath);
+
+      setImageUrl(publicUrl);
+      toast.success("Image uploaded successfully!");
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast.error("Failed to upload image");
+      throw error;
+    }
+  };
 
   const handleBlogSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +86,8 @@ export const BlogPostForm = () => {
           title: blogTitle,
           content: blogContent,
           author_id: user.id,
-          status: 'draft'
+          status: 'draft',
+          image_url: imageUrl
         });
 
       if (error) throw error;
@@ -67,6 +95,7 @@ export const BlogPostForm = () => {
       toast.success("Blog post created successfully!");
       setBlogTitle("");
       setBlogContent("");
+      setImageUrl(null);
     } catch (error) {
       console.error('Error creating blog post:', error);
       toast.error("Failed to create blog post");
@@ -83,6 +112,16 @@ export const BlogPostForm = () => {
 
     setIsDeleting(true);
     try {
+      // Delete the associated image if it exists
+      if (imageUrl) {
+        const imagePath = imageUrl.split('/').pop();
+        if (imagePath) {
+          await supabase.storage
+            .from('blog-images')
+            .remove([`blog-images/${imagePath}`]);
+        }
+      }
+
       const { error } = await supabase
         .from('blog_posts')
         .delete()
@@ -93,6 +132,7 @@ export const BlogPostForm = () => {
       toast.success("Blog post deleted successfully!");
       setBlogTitle("");
       setBlogContent("");
+      setImageUrl(null);
       setCurrentPostId(null);
     } catch (error) {
       console.error('Error deleting blog post:', error);
@@ -115,6 +155,8 @@ export const BlogPostForm = () => {
             setBlogTitle={setBlogTitle}
             blogContent={blogContent}
             setBlogContent={setBlogContent}
+            onImageUpload={handleImageUpload}
+            imageUrl={imageUrl}
           />
           <BlogPostActions
             isSubmitting={isSubmitting}
