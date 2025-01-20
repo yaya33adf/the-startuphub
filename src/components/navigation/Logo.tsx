@@ -2,6 +2,7 @@ import { TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
 import { memo, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import type { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
 
 export const Logo = memo(() => {
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
@@ -47,9 +48,9 @@ export const Logo = memo(() => {
           table: 'site_settings',
           filter: 'key=eq.site_logo'
         },
-        (payload) => {
+        (payload: RealtimePostgresChangesPayload<{ value: { url: string } }>) => {
           console.log('Logo settings changed, payload:', payload);
-          if (payload.new && typeof payload.new.value === 'object') {
+          if (payload.new && 'value' in payload.new && typeof payload.new.value === 'object') {
             const newValue = payload.new.value as { url: string };
             if ('url' in newValue) {
               console.log('Setting new logo URL:', newValue.url);
