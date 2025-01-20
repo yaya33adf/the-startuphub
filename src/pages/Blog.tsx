@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { BookOpen } from "lucide-react";
 import { PageSEO } from "@/components/seo/PageSEO";
+import { StructuredData } from "@/components/seo/StructuredData";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Card,
@@ -35,12 +36,30 @@ const Blog = () => {
     },
   });
 
+  // Get the first post for the main schema
+  const mainPost = posts?.[0];
+
   return (
     <>
       <PageSEO 
         title="Blog - Business Insights & Market Analysis"
         description="Read expert articles on business trends, market analysis, and entrepreneurial insights to help grow your business and stay ahead of the competition."
       />
+      {mainPost && (
+        <StructuredData
+          type="article"
+          articleData={{
+            title: mainPost.title,
+            description: mainPost.excerpt || mainPost.content.slice(0, 200),
+            image: mainPost.image_url,
+            datePublished: mainPost.created_at,
+            dateModified: mainPost.updated_at || mainPost.created_at,
+            authorName: mainPost.users?.name || 'TrendSpot Team',
+            category: mainPost.category,
+            tags: mainPost.tags
+          }}
+        />
+      )}
       <div className="p-8">
         <div className="flex items-center space-x-2 mb-6">
           <BookOpen className="w-6 h-6" />

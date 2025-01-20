@@ -8,6 +8,8 @@ interface ArticleSchemaProps {
     datePublished: string;
     dateModified: string;
     authorName: string;
+    category?: string;
+    tags?: string[];
   };
 }
 
@@ -26,7 +28,7 @@ export const ArticleSchema: FC<ArticleSchemaProps> = ({ data }) => {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'The Startup Hub',
+      name: 'TrendSpot',
       logo: {
         '@type': 'ImageObject',
         url: `${window.location.origin}/og-image.png`
@@ -35,7 +37,13 @@ export const ArticleSchema: FC<ArticleSchemaProps> = ({ data }) => {
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': window.location.href
-    }
+    },
+    ...(data.category && {
+      articleSection: data.category
+    }),
+    ...(data.tags?.length && {
+      keywords: data.tags.join(', ')
+    })
   };
 
   return (
