@@ -21,6 +21,14 @@ export const TemplatesSection = () => {
             WordPress Templates
           </Link>
         </li>
+        <li>
+          <Link 
+            to="/blossom-word-game" 
+            className="text-sm text-muted-foreground hover:text-primary transition-colors"
+          >
+            Blossom Word Game
+          </Link>
+        </li>
       </ul>
     </div>
   );
