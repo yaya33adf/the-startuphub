@@ -24,7 +24,7 @@ const Blog = () => {
             name
           )
         `)
-        .eq("status", "published")
+        .eq("status", "published") // Only fetch published posts
         .order("created_at", { ascending: false });
 
       if (error) {
