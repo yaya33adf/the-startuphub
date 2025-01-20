@@ -5,6 +5,7 @@ import { Calendar, MapPin, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
+import { EventForm } from "@/components/events/EventForm";
 
 interface Event {
   id: string;
@@ -33,8 +34,34 @@ const Events = () => {
           throw error;
         }
 
-        console.log("Events fetched:", data);
-        setEvents(data || []);
+        // If no events exist, create a sample event
+        if (!data || data.length === 0) {
+          const sampleEvent = {
+            title: "Startup Networking Mixer",
+            description: "Join us for an evening of networking with fellow entrepreneurs and investors. Share ideas, make connections, and explore potential collaborations.",
+            date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 1 week from now
+            location: "Innovation Hub, 123 Startup Street",
+          };
+
+          const { error: insertError } = await supabase
+            .from("events")
+            .insert([sampleEvent]);
+
+          if (insertError) throw insertError;
+
+          // Fetch events again to include the sample
+          const { data: refreshedData, error: refreshError } = await supabase
+            .from("events")
+            .select("*")
+            .order("date", { ascending: true });
+
+          if (refreshError) throw refreshError;
+          console.log("Events fetched with sample:", refreshedData);
+          setEvents(refreshedData || []);
+        } else {
+          console.log("Events fetched:", data);
+          setEvents(data);
+        }
       } catch (error) {
         console.error("Error fetching events:", error);
         toast({
@@ -58,11 +85,14 @@ const Events = () => {
       />
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-7xl mx-auto space-y-8">
-          <div className="space-y-4">
-            <h1 className="text-4xl font-bold">Upcoming Events</h1>
-            <p className="text-muted-foreground text-lg">
-              Connect with fellow entrepreneurs and discover new opportunities at our upcoming events.
-            </p>
+          <div className="flex justify-between items-center">
+            <div className="space-y-4">
+              <h1 className="text-4xl font-bold">Upcoming Events</h1>
+              <p className="text-muted-foreground text-lg">
+                Connect with fellow entrepreneurs and discover new opportunities at our upcoming events.
+              </p>
+            </div>
+            <EventForm />
           </div>
 
           {loading ? (
@@ -112,7 +142,7 @@ const Events = () => {
               <CardContent className="flex flex-col items-center justify-center py-8">
                 <Calendar className="h-12 w-12 text-muted-foreground mb-4" />
                 <p className="text-lg font-medium">No upcoming events</p>
-                <p className="text-muted-foreground">Check back later for new events</p>
+                <p className="text-muted-foreground">Create an event to get started</p>
               </CardContent>
             </Card>
           )}
