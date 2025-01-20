@@ -3,14 +3,25 @@ import { Link } from "react-router-dom";
 import { memo, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { RealtimePostgresChangesPayload } from "@supabase/supabase-js";
+import type { Json } from "@/integrations/supabase/types";
 
 interface SiteLogoValue {
   url: string;
 }
 
 interface SiteSettingsPayload {
-  value: SiteLogoValue;
+  value: Json;
 }
+
+const isValidLogoValue = (value: unknown): value is SiteLogoValue => {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    !Array.isArray(value) &&
+    'url' in value &&
+    typeof (value as Record<string, unknown>).url === 'string'
+  );
+};
 
 export const Logo = memo(() => {
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
@@ -30,12 +41,9 @@ export const Logo = memo(() => {
           return;
         }
 
-        if (data?.value && typeof data.value === 'object' && !Array.isArray(data.value)) {
-          const value = data.value as Record<string, unknown>;
-          if ('url' in value && typeof value.url === 'string') {
-            console.log('Logo URL updated:', value.url);
-            setLogoUrl(value.url);
-          }
+        if (data?.value && isValidLogoValue(data.value)) {
+          console.log('Logo URL updated:', data.value.url);
+          setLogoUrl(data.value.url);
         }
       } catch (error) {
         console.error('Error in fetchSiteLogo:', error);
@@ -58,15 +66,9 @@ export const Logo = memo(() => {
         },
         (payload: RealtimePostgresChangesPayload<SiteSettingsPayload>) => {
           console.log('Logo settings changed, payload:', payload);
-          if (payload.new && 'value' in payload.new) {
-            const newValue = payload.new.value;
-            if (typeof newValue === 'object' && !Array.isArray(newValue) && 'url' in newValue) {
-              const url = newValue.url;
-              if (typeof url === 'string') {
-                console.log('Setting new logo URL:', url);
-                setLogoUrl(url);
-              }
-            }
+          if (payload.new && 'value' in payload.new && isValidLogoValue(payload.new.value)) {
+            console.log('Setting new logo URL:', payload.new.value.url);
+            setLogoUrl(payload.new.value.url);
           }
         }
       )
