@@ -22,10 +22,8 @@ import { Label } from "@/components/ui/label";
 
 export default function ProfileSettings() {
   const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState("");
-  const [avatarUrl, setAvatarUrl] = useState("");
-  const [userType, setUserType] = useState<"startup" | "investor" | null>(null);
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [email, setEmail] = useState("");
+  const [userType, setUserType] = useState<string | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -44,15 +42,14 @@ export default function ProfileSettings() {
 
       const { data, error } = await supabase
         .from("profiles")
-        .select("name, avatar_url, user_type")
+        .select("email, user_type")
         .eq("id", session.user.id)
         .single();
 
       if (error) throw error;
 
       if (data) {
-        setUsername(data.name || "");
-        setAvatarUrl(data.avatar_url || "");
+        setEmail(data.email || "");
         setUserType(data.user_type || null);
       }
     } catch (error) {
@@ -75,31 +72,9 @@ export default function ProfileSettings() {
         return;
       }
 
-      let finalAvatarUrl = avatarUrl;
-
-      if (avatarFile) {
-        const fileExt = avatarFile.name.split('.').pop();
-        const filePath = `${session.user.id}-${Math.random()}.${fileExt}`;
-
-        const { error: uploadError, data } = await supabase.storage
-          .from('avatars')
-          .upload(filePath, avatarFile);
-
-        if (uploadError) throw uploadError;
-
-        if (data) {
-          const { data: { publicUrl } } = supabase.storage
-            .from('avatars')
-            .getPublicUrl(filePath);
-          
-          finalAvatarUrl = publicUrl;
-        }
-      }
-
       const updates = {
         id: session.user.id,
-        name: username,
-        avatar_url: finalAvatarUrl,
+        email: email,
         user_type: userType,
         updated_at: new Date().toISOString(),
       };
@@ -159,42 +134,21 @@ export default function ProfileSettings() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
+            <Label htmlFor="email">Email</Label>
             <Input
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter your username"
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
             />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="avatar">Profile Picture</Label>
-            <Input
-              id="avatar"
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) setAvatarFile(file);
-              }}
-            />
-            {avatarUrl && (
-              <div className="mt-2">
-                <img
-                  src={avatarUrl}
-                  alt="Profile"
-                  className="rounded-full w-20 h-20 object-cover"
-                />
-              </div>
-            )}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="userType">User Type</Label>
             <Select
               value={userType || undefined}
-              onValueChange={(value: "startup" | "investor") => setUserType(value)}
+              onValueChange={(value: string) => setUserType(value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select user type" />
