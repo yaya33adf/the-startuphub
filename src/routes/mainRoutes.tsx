@@ -20,12 +20,14 @@ import ScheduleCall from "@/pages/ScheduleCall";
 import Startups from "@/pages/Startups";
 import BusinessCards from "@/pages/BusinessCards";
 import WordPressTemplates from "@/pages/WordPressTemplates";
+import Events from "@/pages/Events";
 
 export const mainRoutes: RouteObject[] = [
   { path: "/", element: <Index /> },
   { path: "/about", element: <About /> },
   { path: "/blog", element: <Blog /> },
   { path: "/contact", element: <Contact /> },
+  { path: "/events", element: <Events /> },
   { path: "/faq", element: <FAQ /> },
   { path: "/markets", element: <Markets /> },
   { path: "/privacy-policy", element: <PrivacyPolicy /> },
