@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSession } from "@supabase/auth-helpers-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Card,
@@ -66,8 +66,13 @@ export default function ProfileSettings() {
     },
   });
 
+  useEffect(() => {
+    if (!session) {
+      navigate("/auth/signin");
+    }
+  }, [session, navigate]);
+
   if (!session) {
-    navigate("/auth/signin");
     return null;
   }
 
