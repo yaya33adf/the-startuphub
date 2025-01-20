@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { Upload } from "lucide-react";
+import { Upload, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 export const SiteSettings = () => {
@@ -26,12 +26,10 @@ export const SiteSettings = () => {
           return;
         }
 
-        if (data?.value && typeof data.value === 'object') {
+        if (data?.value && typeof data.value === 'object' && 'url' in data.value) {
           const value = data.value as { url: string };
-          if ('url' in value) {
-            console.log('Current logo URL:', value.url);
-            setPreviewUrl(value.url);
-          }
+          console.log('Current logo URL:', value.url);
+          setPreviewUrl(value.url);
         }
       } catch (error) {
         console.error('Error in fetchCurrentLogo:', error);
@@ -44,6 +42,19 @@ export const SiteSettings = () => {
   const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error("Please upload an image file");
+      return;
+    }
+
+    // Validate file size (e.g., 2MB limit)
+    const MAX_SIZE = 2 * 1024 * 1024; // 2MB
+    if (file.size > MAX_SIZE) {
+      toast.error("File is too large. Maximum size is 2MB");
+      return;
+    }
 
     try {
       setIsUploading(true);
@@ -59,7 +70,10 @@ export const SiteSettings = () => {
       // Upload to storage
       const { error: uploadError, data } = await supabase.storage
         .from('brand_logos')
-        .upload(fileName, file);
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
       if (uploadError) throw uploadError;
 
@@ -118,8 +132,17 @@ export const SiteSettings = () => {
                 className="w-full"
                 disabled={isUploading}
               >
-                <Upload className="mr-2 h-4 w-4" />
-                {isUploading ? 'Uploading...' : 'Upload Logo'}
+                {isUploading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Uploading...
+                  </>
+                ) : (
+                  <>
+                    <Upload className="mr-2 h-4 w-4" />
+                    Upload Logo
+                  </>
+                )}
               </Button>
               <Input
                 id="logo-upload"

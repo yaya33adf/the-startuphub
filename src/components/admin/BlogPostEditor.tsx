@@ -27,6 +27,20 @@ export const BlogPostEditor = ({
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      console.error('Invalid file type. Please upload an image.');
+      return;
+    }
+    
+    // Validate file size (e.g., 5MB limit)
+    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+    if (file.size > MAX_SIZE) {
+      console.error('File is too large. Maximum size is 5MB.');
+      return;
+    }
+
     await onImageUpload(file);
   };
 
