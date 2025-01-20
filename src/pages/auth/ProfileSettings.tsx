@@ -23,6 +23,9 @@ interface Profile {
   name: string | null;
   user_type: string | null;
   avatar_url: string | null;
+  role: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
 }
 
 export default function ProfileSettings() {
@@ -113,12 +116,13 @@ export default function ProfileSettings() {
         return;
       }
 
-      const updates: Partial<Profile> = {
+      const updates = {
         id: session.user.id,
         email,
         user_type: userType,
         name,
-        avatar_url: avatarUrl
+        avatar_url: avatarUrl,
+        updated_at: new Date().toISOString()
       };
 
       console.log("Updating profile with data:", updates);
