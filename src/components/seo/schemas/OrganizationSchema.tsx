@@ -17,12 +17,17 @@ export const OrganizationSchema: FC = () => {
           .eq('key', 'site_logo')
           .maybeSingle();
 
-        if (error) throw error;
+        if (error) {
+          console.error('Error fetching site logo:', error);
+          return;
+        }
         
-        if (data?.value && typeof data.value === 'object' && 'url' in data.value) {
-          const value = data.value as SiteLogoValue;
-          setLogoUrl(value.url);
-          console.log('Site logo fetched successfully:', value.url);
+        if (data?.value && typeof data.value === 'object') {
+          const value = data.value as unknown as SiteLogoValue;
+          if ('url' in value) {
+            setLogoUrl(value.url);
+            console.log('Site logo fetched successfully:', value.url);
+          }
         }
       } catch (error) {
         console.error('Error fetching site logo:', error);
