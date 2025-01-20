@@ -4,9 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Contact = () => {
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,19 +17,34 @@ const Contact = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     
-    // Log the form submission for debugging
-    console.log("Contact form submitted:", formData);
+    console.log("Submitting contact form:", formData);
     
-    // Here you would typically send the data to your backend
-    // For now, we'll just show a success message
-    toast({
-      title: "Message Sent",
-      description: "Thank you for contacting us. We'll get back to you soon!",
-    });
-    
-    // Reset form
-    setFormData({ name: "", email: "", message: "" });
+    try {
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: formData
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Message Sent",
+        description: "Thank you for contacting us. We'll get back to you soon!",
+      });
+      
+      // Reset form
+      setFormData({ name: "", email: "", message: "" });
+    } catch (error) {
+      console.error("Error sending contact form:", error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -51,6 +68,7 @@ const Contact = () => {
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
               placeholder="Your name"
+              disabled={isLoading}
             />
           </div>
           
@@ -65,6 +83,7 @@ const Contact = () => {
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
               placeholder="your.email@example.com"
+              disabled={isLoading}
             />
           </div>
           
@@ -79,11 +98,12 @@ const Contact = () => {
               required
               placeholder="How can we help you?"
               className="min-h-[150px]"
+              disabled={isLoading}
             />
           </div>
           
-          <Button type="submit" className="w-full">
-            Send Message
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Sending..." : "Send Message"}
           </Button>
         </form>
       </div>
