@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Users, CreditCard, LayoutTemplate, Layout, Calendar, MessageSquare } from "lucide-react";
+import { Users, CreditCard, LayoutTemplate, Layout, Calendar, MessageSquare, Blossom } from "lucide-react";
 import { BusinessInsightsDropdown } from "./BusinessInsightsDropdown";
 import { StartupsDropdown } from "./StartupsDropdown";
 import { ToolsDropdown } from "./ToolsDropdown";
@@ -90,7 +90,17 @@ export const NavLinks = ({ onClick = () => {} }: NavLinksProps) => {
           >
             <Link to="/wordpress-templates" className="flex items-center gap-2 w-full p-2">
               <Layout className="w-4 h-4" />
-              <span>Amazing Startup WordPress Ready Templates</span>
+              <span>WordPress Templates</span>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem 
+            asChild 
+            onClick={onClick}
+            className="transition-colors duration-200 hover:bg-accent/50"
+          >
+            <Link to="/blossom-word-game" className="flex items-center gap-2 w-full p-2">
+              <Blossom className="w-4 h-4" />
+              <span>Blossom Word Game</span>
             </Link>
           </DropdownMenuItem>
         </DropdownMenuContent>

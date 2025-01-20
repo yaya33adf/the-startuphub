@@ -21,6 +21,7 @@ import Startups from "@/pages/Startups";
 import BusinessCards from "@/pages/BusinessCards";
 import WordPressTemplates from "@/pages/WordPressTemplates";
 import Events from "@/pages/Events";
+import BlossomWordGame from "@/pages/BlossomWordGame";
 
 export const mainRoutes: RouteObject[] = [
   { path: "/", element: <Index /> },
@@ -45,4 +46,5 @@ export const mainRoutes: RouteObject[] = [
   { path: "/startups", element: <Startups /> },
   { path: "/business-cards", element: <BusinessCards /> },
   { path: "/wordpress-templates", element: <WordPressTemplates /> },
+  { path: "/blossom-word-game", element: <BlossomWordGame /> },
 ];
