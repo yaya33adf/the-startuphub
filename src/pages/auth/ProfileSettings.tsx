@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
@@ -11,14 +10,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
+import { EmailInput } from "@/components/profile-settings/EmailInput";
+import { UserTypeSelect } from "@/components/profile-settings/UserTypeSelect";
+import { PasswordUpdate } from "@/components/profile-settings/PasswordUpdate";
 
 export default function ProfileSettings() {
   const [loading, setLoading] = useState(false);
@@ -98,31 +92,6 @@ export default function ProfileSettings() {
     }
   }
 
-  async function updatePassword(newPassword: string) {
-    try {
-      setLoading(true);
-      const { error } = await supabase.auth.updateUser({
-        password: newPassword
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Success",
-        description: "Password updated successfully",
-      });
-    } catch (error) {
-      console.error("Error updating password:", error);
-      toast({
-        title: "Error",
-        description: "Error updating password",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  }
-
   return (
     <div className="container max-w-2xl py-8">
       <Card>
@@ -133,42 +102,17 @@ export default function ProfileSettings() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-            />
-          </div>
+          <EmailInput 
+            email={email} 
+            onEmailChange={setEmail} 
+          />
+          
+          <UserTypeSelect 
+            userType={userType} 
+            onUserTypeChange={setUserType} 
+          />
 
-          <div className="space-y-2">
-            <Label htmlFor="userType">User Type</Label>
-            <Select
-              value={userType || undefined}
-              onValueChange={(value: string) => setUserType(value)}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select user type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="startup">Startup</SelectItem>
-                <SelectItem value="investor">Investor</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="newPassword">New Password</Label>
-            <Input
-              id="newPassword"
-              type="password"
-              placeholder="Enter new password"
-              onChange={(e) => updatePassword(e.target.value)}
-            />
-          </div>
+          <PasswordUpdate />
 
           <Button
             onClick={updateProfile}
