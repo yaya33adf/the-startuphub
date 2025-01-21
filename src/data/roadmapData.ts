@@ -149,5 +149,205 @@ export const roadmaps: Record<string, JobRoadmap> = {
         ]
       }
     ]
+  },
+  "uiux-designer": {
+    title: "UI/UX Designer Roadmap",
+    description: "A comprehensive guide to becoming a UI/UX Designer",
+    sections: [
+      {
+        title: "1. Design Fundamentals",
+        steps: [
+          {
+            id: "design-basics",
+            title: "Design Basics",
+            description: "Learn fundamental design principles and concepts",
+            status: "required",
+            skills: ["Color Theory", "Typography", "Layout", "Visual Hierarchy", "Design Systems"],
+            resources: [
+              { name: "Design Principles", url: "https://www.designprinciples.com" },
+              { name: "Figma Design Course", url: "https://www.figma.com/resources/learn-design" }
+            ]
+          },
+          {
+            id: "user-research",
+            title: "User Research",
+            description: "Master user research methodologies and techniques",
+            status: "required",
+            skills: ["User Interviews", "Surveys", "Usability Testing", "Data Analysis"],
+            resources: [
+              { name: "Nielsen Norman Group", url: "https://www.nngroup.com/articles/user-research-methods" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "2. Design Tools",
+        steps: [
+          {
+            id: "design-software",
+            title: "Design Software",
+            description: "Learn industry-standard design tools",
+            status: "required",
+            skills: ["Figma", "Adobe XD", "Sketch", "InVision", "Principle"],
+            resources: [
+              { name: "Figma Tutorials", url: "https://www.figma.com/resources/learn-design" },
+              { name: "Adobe XD Tutorials", url: "https://www.adobe.com/products/xd/learn" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "data-scientist": {
+    title: "Data Scientist Roadmap",
+    description: "A comprehensive guide to becoming a Data Scientist",
+    sections: [
+      {
+        title: "1. Mathematics & Statistics",
+        steps: [
+          {
+            id: "math-fundamentals",
+            title: "Mathematical Foundations",
+            description: "Master essential mathematical concepts",
+            status: "required",
+            skills: ["Linear Algebra", "Calculus", "Probability", "Statistics"],
+            resources: [
+              { name: "Khan Academy Math", url: "https://www.khanacademy.org/math" },
+              { name: "Statistics Course", url: "https://www.coursera.org/learn/statistics" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "2. Programming & Tools",
+        steps: [
+          {
+            id: "programming-tools",
+            title: "Programming Languages & Tools",
+            description: "Learn essential programming languages and tools",
+            status: "required",
+            skills: ["Python", "R", "SQL", "Jupyter Notebooks", "Git"],
+            resources: [
+              { name: "Python for Data Science", url: "https://www.python.org/about/gettingstarted" },
+              { name: "R Programming", url: "https://www.r-project.org/about.html" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "devops-engineer": {
+    title: "DevOps Engineer Roadmap",
+    description: "A comprehensive guide to becoming a DevOps Engineer",
+    sections: [
+      {
+        title: "1. Operating Systems & Linux",
+        steps: [
+          {
+            id: "os-fundamentals",
+            title: "Operating System Fundamentals",
+            description: "Learn Linux and operating system concepts",
+            status: "required",
+            skills: ["Linux Administration", "Shell Scripting", "System Architecture"],
+            resources: [
+              { name: "Linux Journey", url: "https://linuxjourney.com" },
+              { name: "Shell Scripting", url: "https://www.shellscript.sh" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "2. Cloud & Infrastructure",
+        steps: [
+          {
+            id: "cloud-platforms",
+            title: "Cloud Platforms",
+            description: "Master cloud platforms and infrastructure",
+            status: "required",
+            skills: ["AWS", "Azure", "Google Cloud", "Docker", "Kubernetes"],
+            resources: [
+              { name: "AWS Training", url: "https://aws.amazon.com/training" },
+              { name: "Docker Guide", url: "https://docs.docker.com/get-started" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "mobile-developer": {
+    title: "Mobile Developer Roadmap",
+    description: "A comprehensive guide to becoming a Mobile Developer",
+    sections: [
+      {
+        title: "1. Mobile Development Fundamentals",
+        steps: [
+          {
+            id: "mobile-basics",
+            title: "Mobile Development Basics",
+            description: "Learn mobile development fundamentals",
+            status: "required",
+            skills: ["iOS (Swift)", "Android (Kotlin)", "React Native", "Flutter"],
+            resources: [
+              { name: "iOS Development", url: "https://developer.apple.com/tutorials" },
+              { name: "Android Development", url: "https://developer.android.com/courses" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "2. Mobile UI & UX",
+        steps: [
+          {
+            id: "mobile-design",
+            title: "Mobile Design Patterns",
+            description: "Master mobile UI/UX design patterns",
+            status: "required",
+            skills: ["Material Design", "iOS Design Guidelines", "Responsive Design"],
+            resources: [
+              { name: "Material Design", url: "https://material.io/design" },
+              { name: "iOS Design Guidelines", url: "https://developer.apple.com/design" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "cybersecurity-analyst": {
+    title: "Cybersecurity Analyst Roadmap",
+    description: "A comprehensive guide to becoming a Cybersecurity Analyst",
+    sections: [
+      {
+        title: "1. Security Fundamentals",
+        steps: [
+          {
+            id: "security-basics",
+            title: "Security Basics",
+            description: "Learn fundamental security concepts",
+            status: "required",
+            skills: ["Network Security", "Cryptography", "Security Protocols", "Risk Assessment"],
+            resources: [
+              { name: "CompTIA Security+", url: "https://www.comptia.org/certifications/security" },
+              { name: "Cybrary", url: "https://www.cybrary.it" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "2. Security Tools & Practices",
+        steps: [
+          {
+            id: "security-tools",
+            title: "Security Tools",
+            description: "Master security tools and best practices",
+            status: "required",
+            skills: ["Wireshark", "Metasploit", "Nmap", "Burp Suite"],
+            resources: [
+              { name: "Kali Linux", url: "https://www.kali.org/learn" },
+              { name: "OWASP", url: "https://owasp.org/www-project-top-ten" }
+            ]
+          }
+        ]
+      }
+    ]
   }
 };
