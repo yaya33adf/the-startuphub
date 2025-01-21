@@ -16,6 +16,7 @@ import { copywriterRoadmap } from "./roadmaps/copywriter";
 import { logoDesignerRoadmap } from "./roadmaps/logo-designer";
 import { businessPlanWriterRoadmap } from "./roadmaps/business-plan-writer";
 import { amazonFbaRoadmap } from "./roadmaps/amazon-fba";
+import { virtualAssistantRoadmap } from "./roadmaps/virtual-assistant";
 
 export const roadmaps: Record<string, JobRoadmap> = {
   "frontend-developer": frontendRoadmap,
@@ -34,5 +35,6 @@ export const roadmaps: Record<string, JobRoadmap> = {
   "copywriter": copywriterRoadmap,
   "logo-designer": logoDesignerRoadmap,
   "business-plan-writer": businessPlanWriterRoadmap,
-  "amazon-fba-specialist": amazonFbaRoadmap
+  "amazon-fba-specialist": amazonFbaRoadmap,
+  "virtual-assistant": virtualAssistantRoadmap
 };
