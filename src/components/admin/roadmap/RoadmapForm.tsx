@@ -55,9 +55,14 @@ export function RoadmapForm({ roadmap, onSuccess, onCancel }: RoadmapFormProps) 
 
     try {
       if (roadmap) {
+        // Update existing roadmap
         const { error } = await supabase
           .from('roadmap_templates')
-          .update(values)
+          .update({
+            title: values.title,
+            description: values.description,
+            slug: values.slug
+          })
           .eq('id', roadmap.id);
 
         if (error) throw error;
@@ -67,9 +72,14 @@ export function RoadmapForm({ roadmap, onSuccess, onCancel }: RoadmapFormProps) 
           description: "Roadmap updated successfully",
         });
       } else {
+        // Create new roadmap
         const { error } = await supabase
           .from('roadmap_templates')
-          .insert([values]);
+          .insert({
+            title: values.title,
+            description: values.description,
+            slug: values.slug
+          });
 
         if (error) throw error;
         
