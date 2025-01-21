@@ -3,6 +3,9 @@ import { BlogPostForm } from "@/components/admin/BlogPostForm";
 import { SiteSettings } from "@/components/admin/SiteSettings";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageSEO } from "@/components/seo/PageSEO";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { List } from "lucide-react";
 
 const Dashboard = () => {
   return (
@@ -13,7 +16,15 @@ const Dashboard = () => {
       />
       
       <div className="container mx-auto py-8 space-y-8">
-        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+          <Button variant="outline" asChild>
+            <Link to="/admin/roadmaps" className="flex items-center gap-2">
+              <List className="h-4 w-4" />
+              Manage Roadmaps
+            </Link>
+          </Button>
+        </div>
         
         <StatisticsCards />
         
