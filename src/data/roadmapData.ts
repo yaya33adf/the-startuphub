@@ -6,6 +6,8 @@ import { dataScienceRoadmap } from "./roadmaps/data-science";
 import { devopsRoadmap } from "./roadmaps/devops";
 import { mobileRoadmap } from "./roadmaps/mobile";
 import { cybersecurityRoadmap } from "./roadmaps/cybersecurity";
+import { wordpressRoadmap } from "./roadmaps/wordpress";
+import { shopifyRoadmap } from "./roadmaps/shopify";
 
 export const roadmaps: Record<string, JobRoadmap> = {
   "frontend-developer": frontendRoadmap,
@@ -14,5 +16,7 @@ export const roadmaps: Record<string, JobRoadmap> = {
   "data-scientist": dataScienceRoadmap,
   "devops-engineer": devopsRoadmap,
   "mobile-developer": mobileRoadmap,
-  "cybersecurity-analyst": cybersecurityRoadmap
+  "cybersecurity-analyst": cybersecurityRoadmap,
+  "wordpress-developer": wordpressRoadmap,
+  "shopify-developer": shopifyRoadmap
 };
