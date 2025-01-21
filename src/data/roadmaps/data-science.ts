@@ -12,26 +12,84 @@ export const dataScienceRoadmap: JobRoadmap = {
           title: "Mathematical Foundations",
           description: "Master essential mathematical concepts",
           status: "required",
-          skills: ["Linear Algebra", "Calculus", "Probability", "Statistics"],
+          skills: [
+            "Linear Algebra",
+            "Calculus",
+            "Probability",
+            "Statistics",
+            "Optimization"
+          ],
           resources: [
-            { name: "Khan Academy Math", url: "https://www.khanacademy.org/math" },
-            { name: "Statistics Course", url: "https://www.coursera.org/learn/statistics" }
+            {
+              name: "Khan Academy Math",
+              url: "https://www.khanacademy.org/math"
+            },
+            {
+              name: "Statistics Course",
+              url: "https://www.coursera.org/learn/statistics"
+            }
+          ]
+        },
+        {
+          id: "programming",
+          title: "Programming Skills",
+          description: "Learn essential programming languages for data science",
+          status: "required",
+          skills: [
+            "Python",
+            "R",
+            "SQL",
+            "Data Structures",
+            "Algorithms"
+          ],
+          resources: [
+            {
+              name: "Python for Data Science",
+              url: "https://www.python.org/about/gettingstarted"
+            }
           ]
         }
       ]
     },
     {
-      title: "2. Programming & Tools",
+      title: "2. Data Science Tools",
       steps: [
         {
-          id: "programming-tools",
-          title: "Programming Languages & Tools",
-          description: "Learn essential programming languages and tools",
+          id: "data-analysis",
+          title: "Data Analysis & Visualization",
+          description: "Master data analysis and visualization tools",
           status: "required",
-          skills: ["Python", "R", "SQL", "Jupyter Notebooks", "Git"],
+          skills: [
+            "Pandas",
+            "NumPy",
+            "Matplotlib",
+            "Seaborn",
+            "Jupyter Notebooks"
+          ],
           resources: [
-            { name: "Python for Data Science", url: "https://www.python.org/about/gettingstarted" },
-            { name: "R Programming", url: "https://www.r-project.org/about.html" }
+            {
+              name: "Pandas Documentation",
+              url: "https://pandas.pydata.org/docs"
+            }
+          ]
+        },
+        {
+          id: "machine-learning",
+          title: "Machine Learning",
+          description: "Learn machine learning concepts and tools",
+          status: "required",
+          skills: [
+            "Scikit-learn",
+            "TensorFlow",
+            "PyTorch",
+            "Model Evaluation",
+            "Feature Engineering"
+          ],
+          resources: [
+            {
+              name: "Machine Learning Course",
+              url: "https://www.coursera.org/learn/machine-learning"
+            }
           ]
         }
       ]

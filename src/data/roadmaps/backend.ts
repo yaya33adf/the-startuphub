@@ -10,28 +10,89 @@ export const backendRoadmap: JobRoadmap = {
         {
           id: "programming-basics",
           title: "Programming Basics",
-          description: "Learn core programming concepts and a backend language",
+          description: "Master core programming concepts and a backend language",
           status: "required",
-          skills: ["Variables", "Data Types", "Functions", "OOP", "Algorithms"],
+          skills: [
+            "Data Structures",
+            "Algorithms",
+            "OOP Principles",
+            "Design Patterns",
+            "Clean Code"
+          ],
           resources: [
-            { name: "Python.org", url: "https://www.python.org/about/gettingstarted/" },
-            { name: "Node.js Docs", url: "https://nodejs.org/docs/latest/api/" }
+            {
+              name: "Node.js Documentation",
+              url: "https://nodejs.org/docs"
+            },
+            {
+              name: "Python Documentation",
+              url: "https://docs.python.org"
+            }
+          ]
+        },
+        {
+          id: "version-control",
+          title: "Version Control",
+          description: "Learn Git and collaboration workflows",
+          status: "required",
+          skills: [
+            "Git Basics",
+            "Branching Strategies",
+            "Collaboration",
+            "CI/CD Concepts"
+          ],
+          resources: [
+            {
+              name: "Git Documentation",
+              url: "https://git-scm.com/doc"
+            }
           ]
         }
       ]
     },
     {
-      title: "2. Databases",
+      title: "2. Backend Development",
       steps: [
         {
           id: "databases",
-          title: "Database Management",
-          description: "Learn SQL and database design principles",
+          title: "Databases",
+          description: "Learn database design and management",
           status: "required",
-          skills: ["SQL", "Database Design", "Normalization", "Indexing"],
+          skills: [
+            "SQL",
+            "Database Design",
+            "Query Optimization",
+            "ORMs",
+            "NoSQL Databases"
+          ],
           resources: [
-            { name: "PostgreSQL Tutorial", url: "https://www.postgresqltutorial.com/" },
-            { name: "MongoDB University", url: "https://university.mongodb.com/" }
+            {
+              name: "PostgreSQL Tutorial",
+              url: "https://www.postgresqltutorial.com"
+            },
+            {
+              name: "MongoDB University",
+              url: "https://university.mongodb.com"
+            }
+          ]
+        },
+        {
+          id: "api-design",
+          title: "API Design",
+          description: "Master RESTful API design and implementation",
+          status: "required",
+          skills: [
+            "REST Principles",
+            "API Security",
+            "Authentication",
+            "Documentation",
+            "Testing"
+          ],
+          resources: [
+            {
+              name: "REST API Tutorial",
+              url: "https://restfulapi.net"
+            }
           ]
         }
       ]

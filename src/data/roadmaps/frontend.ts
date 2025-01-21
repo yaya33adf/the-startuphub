@@ -5,106 +5,105 @@ export const frontendRoadmap: JobRoadmap = {
   description: "A comprehensive guide to becoming a Frontend Developer",
   sections: [
     {
-      title: "1. Internet & Web Fundamentals",
+      title: "1. Web Fundamentals",
       steps: [
         {
-          id: "internet-basics",
-          title: "Internet Basics",
-          description: "Learn how the internet works, DNS, hosting, and HTTP/HTTPS",
+          id: "html-css",
+          title: "HTML & CSS",
+          description: "Master the building blocks of web development",
           status: "required",
-          skills: ["DNS", "Hosting", "HTTP/HTTPS", "Browsers", "Domain Names"],
+          skills: [
+            "HTML5 Semantics",
+            "CSS3 Properties",
+            "Flexbox",
+            "CSS Grid",
+            "Responsive Design",
+            "CSS Preprocessors"
+          ],
           resources: [
-            { name: "MDN: How the Internet works", url: "https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Web_mechanics/How_does_the_Internet_work" },
-            { name: "Web.dev", url: "https://web.dev/learn" }
+            {
+              name: "MDN Web Docs - HTML",
+              url: "https://developer.mozilla.org/en-US/docs/Learn/HTML"
+            },
+            {
+              name: "CSS Tricks",
+              url: "https://css-tricks.com"
+            }
           ]
         },
         {
-          id: "web-security",
-          title: "Web Security Basics",
-          description: "Understand fundamental web security concepts",
+          id: "javascript",
+          title: "JavaScript",
+          description: "Learn modern JavaScript and its ecosystem",
           status: "required",
-          skills: ["HTTPS", "CORS", "Content Security Policy", "OWASP Security Risks"],
+          skills: [
+            "ES6+ Features",
+            "DOM Manipulation",
+            "Async Programming",
+            "Error Handling",
+            "Modern JS Concepts"
+          ],
           resources: [
-            { name: "OWASP Top 10", url: "https://owasp.org/www-project-top-ten/" }
+            {
+              name: "JavaScript.info",
+              url: "https://javascript.info"
+            },
+            {
+              name: "Eloquent JavaScript",
+              url: "https://eloquentjavascript.net"
+            }
           ]
         }
       ]
     },
     {
-      title: "2. HTML & CSS Fundamentals",
-      steps: [
-        {
-          id: "html5",
-          title: "HTML5",
-          description: "Master modern HTML5 elements and best practices",
-          status: "required",
-          skills: ["Semantic HTML", "Forms", "Media Elements", "Accessibility"],
-          resources: [
-            { name: "MDN HTML Guide", url: "https://developer.mozilla.org/en-US/docs/Learn/HTML" },
-            { name: "HTML5 Doctor", url: "http://html5doctor.com/" }
-          ]
-        },
-        {
-          id: "css3",
-          title: "CSS3",
-          description: "Learn modern CSS features and responsive design",
-          status: "required",
-          skills: ["Flexbox", "Grid", "Animations", "Media Queries", "CSS Variables"],
-          resources: [
-            { name: "CSS-Tricks", url: "https://css-tricks.com/" },
-            { name: "MDN CSS Guide", url: "https://developer.mozilla.org/en-US/docs/Learn/CSS" }
-          ]
-        }
-      ]
-    },
-    {
-      title: "3. JavaScript & Programming Fundamentals",
-      steps: [
-        {
-          id: "js-basics",
-          title: "JavaScript Fundamentals",
-          description: "Master core JavaScript concepts and ES6+ features",
-          status: "required",
-          skills: ["Variables", "Functions", "Objects", "Arrays", "ES6+", "Async/Await"],
-          resources: [
-            { name: "JavaScript.info", url: "https://javascript.info/" },
-            { name: "Eloquent JavaScript", url: "https://eloquentjavascript.net/" }
-          ]
-        },
-        {
-          id: "dom-manipulation",
-          title: "DOM Manipulation",
-          description: "Learn how to interact with the Document Object Model",
-          status: "required",
-          skills: ["Selectors", "Events", "DOM Methods", "Event Bubbling"],
-          resources: [
-            { name: "MDN DOM Guide", url: "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model" }
-          ]
-        }
-      ]
-    },
-    {
-      title: "4. Frontend Frameworks & Tools",
+      title: "2. Frontend Frameworks",
       steps: [
         {
           id: "react",
           title: "React",
-          description: "Learn React and its ecosystem",
-          status: "recommended",
-          skills: ["Components", "Props", "State", "Hooks", "Context", "Redux"],
+          description: "Master React and its ecosystem",
+          status: "required",
+          skills: [
+            "Components",
+            "Props & State",
+            "Hooks",
+            "Context API",
+            "React Router",
+            "State Management"
+          ],
           resources: [
-            { name: "React Documentation", url: "https://react.dev" },
-            { name: "React Tutorial", url: "https://react.dev/learn" }
+            {
+              name: "React Documentation",
+              url: "https://react.dev"
+            },
+            {
+              name: "React Router Documentation",
+              url: "https://reactrouter.com"
+            }
           ]
         },
         {
-          id: "build-tools",
-          title: "Build Tools",
-          description: "Understanding modern build tools and module bundlers",
+          id: "tooling",
+          title: "Development Tools",
+          description: "Learn essential frontend development tools",
           status: "recommended",
-          skills: ["npm", "Webpack", "Vite", "ESLint", "Prettier"],
+          skills: [
+            "Git",
+            "Package Managers",
+            "Bundlers",
+            "Testing Libraries",
+            "Chrome DevTools"
+          ],
           resources: [
-            { name: "Vite Guide", url: "https://vitejs.dev/guide/" }
+            {
+              name: "Git Documentation",
+              url: "https://git-scm.com/doc"
+            },
+            {
+              name: "Vite Documentation",
+              url: "https://vitejs.dev"
+            }
           ]
         }
       ]
