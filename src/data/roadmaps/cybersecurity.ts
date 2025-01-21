@@ -1,8 +1,8 @@
 import { JobRoadmap } from "@/types/roadmap";
 
 export const cybersecurityRoadmap: JobRoadmap = {
-  title: "Cybersecurity Analyst Roadmap",
-  description: "A comprehensive guide to becoming a Cybersecurity Analyst",
+  title: "Cybersecurity Specialist Roadmap",
+  description: "A comprehensive guide to becoming a Cybersecurity Specialist",
   sections: [
     {
       title: "1. Security Fundamentals",
@@ -14,15 +14,27 @@ export const cybersecurityRoadmap: JobRoadmap = {
           status: "required",
           skills: [
             "Network Security",
-            "Operating Systems",
-            "Security Protocols",
             "Cryptography",
-            "Risk Management"
+            "Security Protocols",
+            "Risk Assessment",
+            "Security Tools"
           ],
           resources: [
             {
-              name: "CompTIA Security+",
-              url: "https://www.comptia.org/certifications/security"
+              name: "IBM Cybersecurity Analyst Professional Certificate",
+              url: "https://www.coursera.org/professional-certificates/ibm-cybersecurity-analyst"
+            },
+            {
+              name: "Complete Ethical Hacking Bootcamp",
+              url: "https://www.udemy.com/course/complete-ethical-hacking-bootcamp-zero-to-mastery/"
+            },
+            {
+              name: "CompTIA Security+ Certification",
+              url: "https://www.coursera.org/professional-certificates/comptia-security-plus"
+            },
+            {
+              name: "Practical Web Application Security & Testing",
+              url: "https://www.udemy.com/course/web-security-testing/"
             }
           ]
         },

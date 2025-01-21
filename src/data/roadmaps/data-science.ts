@@ -21,8 +21,20 @@ export const dataScienceRoadmap: JobRoadmap = {
           ],
           resources: [
             {
-              name: "DataCamp",
-              url: "https://www.datacamp.com"
+              name: "IBM Data Science Professional Certificate",
+              url: "https://www.coursera.org/professional-certificates/ibm-data-science"
+            },
+            {
+              name: "Applied Data Science with Python Specialization",
+              url: "https://www.coursera.org/specializations/data-science-python"
+            },
+            {
+              name: "Machine Learning A-Z™: AI, Python & R",
+              url: "https://www.udemy.com/course/machinelearning/"
+            },
+            {
+              name: "Deep Learning Specialization",
+              url: "https://www.coursera.org/specializations/deep-learning"
             }
           ]
         },

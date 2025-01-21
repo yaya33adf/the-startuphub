@@ -21,8 +21,20 @@ export const uiuxRoadmap: JobRoadmap = {
           ],
           resources: [
             {
-              name: "Design Principles",
-              url: "https://www.interaction-design.org"
+              name: "Google UX Design Professional Certificate",
+              url: "https://www.coursera.org/professional-certificates/google-ux-design"
+            },
+            {
+              name: "UI/UX Design Specialization",
+              url: "https://www.coursera.org/specializations/ui-ux-design"
+            },
+            {
+              name: "Complete Web & Mobile Designer in 2024",
+              url: "https://www.udemy.com/course/complete-web-designer-mobile-designer-zero-to-mastery/"
+            },
+            {
+              name: "Advanced UI/UX Design Course",
+              url: "https://www.udemy.com/course/advanced-ui-ux-design/"
             }
           ]
         },

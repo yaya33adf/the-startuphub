@@ -21,8 +21,20 @@ export const web3Roadmap: JobRoadmap = {
           ],
           resources: [
             {
-              name: "Ethereum Documentation",
-              url: "https://ethereum.org/developers"
+              name: "Blockchain Specialization by University of Buffalo",
+              url: "https://www.coursera.org/specializations/blockchain"
+            },
+            {
+              name: "Ethereum and Solidity: The Complete Developer's Guide",
+              url: "https://www.udemy.com/course/ethereum-and-solidity-the-complete-developers-guide/"
+            },
+            {
+              name: "NFT Fundamentals & Development",
+              url: "https://www.udemy.com/course/nft-fundamentals/"
+            },
+            {
+              name: "DeFi Development Mastery",
+              url: "https://www.udemy.com/course/defi-development/"
             }
           ]
         },

@@ -21,8 +21,20 @@ export const mobileRoadmap: JobRoadmap = {
           ],
           resources: [
             {
-              name: "Mobile Development Documentation",
-              url: "https://developer.android.com/docs"
+              name: "Complete iOS App Development Bootcamp",
+              url: "https://www.udemy.com/course/ios-13-app-development-bootcamp/"
+            },
+            {
+              name: "Android App Development Masterclass using Kotlin",
+              url: "https://www.udemy.com/course/android-oreo-kotlin-app-masterclass/"
+            },
+            {
+              name: "Flutter & Dart - The Complete Guide",
+              url: "https://www.udemy.com/course/learn-flutter-dart-to-build-ios-android-apps/"
+            },
+            {
+              name: "React Native - The Practical Guide",
+              url: "https://www.udemy.com/course/react-native-the-practical-guide/"
             }
           ]
         },
