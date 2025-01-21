@@ -56,7 +56,6 @@ export const mainRoutes = [
   { path: "/startups", element: <Startups /> },
   { path: "/business-cards", element: <BusinessCards /> },
   { path: "/wordpress-templates", element: <WordPressTemplates /> },
-  { path: "/blossom-word-game", element: <BlossomWordGame /> },
   {
     path: "/roadmap",
     element: (
