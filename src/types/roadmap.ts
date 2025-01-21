@@ -1,3 +1,8 @@
+export interface JobCategory {
+  title: string;
+  roles: string[];
+}
+
 export interface RoadmapStep {
   id: string;
   title: string;

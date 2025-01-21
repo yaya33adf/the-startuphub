@@ -1,10 +1,6 @@
 import { PageSEO } from "@/components/seo/PageSEO";
-import { JobCategoryCard } from "@/components/roadmap/JobCategoryCard";
-
-interface JobCategory {
-  title: string;
-  roles: string[];
-}
+import { RoadmapCategories } from "@/components/roadmap/RoadmapCategories";
+import { JobCategory } from "@/types/roadmap";
 
 const jobCategories: JobCategory[] = [
   {
@@ -272,15 +268,7 @@ const Roadmap = () => {
           Discover various career paths and skills needed to succeed as a freelancer
         </p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {jobCategories.map((category, index) => (
-            <JobCategoryCard
-              key={index}
-              title={category.title}
-              roles={category.roles}
-            />
-          ))}
-        </div>
+        <RoadmapCategories categories={jobCategories} />
       </div>
     </div>
   );
