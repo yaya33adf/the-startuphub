@@ -3,6 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { LogoUploader } from "./LogoUploader";
+import { Button } from "@/components/ui/button";
+import { Save } from "lucide-react";
 import type { LogoFile } from "./types/siteSettings";
 
 export const SiteSettings = () => {
@@ -11,6 +13,7 @@ export const SiteSettings = () => {
     previewUrl: null
   });
   const [isUploading, setIsUploading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     const fetchCurrentLogo = async () => {
@@ -56,20 +59,29 @@ export const SiteSettings = () => {
       return;
     }
 
-    try {
-      setIsUploading(true);
-      setLogoFile({
-        file,
-        previewUrl: URL.createObjectURL(file)
-      });
+    setLogoFile({
+      file,
+      previewUrl: URL.createObjectURL(file)
+    });
+  };
 
-      const fileExt = file.name.split('.').pop();
+  const handleSave = async () => {
+    if (!logoFile.file) {
+      toast.error("No changes to save");
+      return;
+    }
+
+    try {
+      setIsSaving(true);
+      setIsUploading(true);
+
+      const fileExt = logoFile.file.name.split('.').pop();
       const fileName = `site-logo-${Date.now()}.${fileExt}`;
 
       // Upload to storage
       const { error: uploadError, data } = await supabase.storage
         .from('brand_logos')
-        .upload(fileName, file, {
+        .upload(fileName, logoFile.file, {
           cacheControl: '3600',
           upsert: false
         });
@@ -91,15 +103,16 @@ export const SiteSettings = () => {
 
       if (settingsError) throw settingsError;
 
-      toast.success("Logo updated successfully!");
+      toast.success("Changes saved successfully!");
       console.log('Logo updated successfully:', publicUrl);
       
       // Update preview URL to the permanent URL
       setLogoFile(prev => ({ ...prev, previewUrl: publicUrl }));
     } catch (error) {
-      console.error('Error uploading logo:', error);
-      toast.error("Failed to upload logo");
+      console.error('Error saving changes:', error);
+      toast.error("Failed to save changes");
     } finally {
+      setIsSaving(false);
       setIsUploading(false);
     }
   };
@@ -117,6 +130,20 @@ export const SiteSettings = () => {
             isUploading={isUploading}
             onLogoUpload={handleLogoUpload}
           />
+          <Button 
+            onClick={handleSave} 
+            disabled={isSaving || !logoFile.file}
+            className="w-full"
+          >
+            {isSaving ? (
+              "Saving changes..."
+            ) : (
+              <>
+                <Save className="mr-2 h-4 w-4" />
+                Save Changes
+              </>
+            )}
+          </Button>
         </div>
       </CardContent>
     </Card>
