@@ -10,7 +10,7 @@ import { cybersecurityRoadmap } from "./roadmaps/cybersecurity";
 export const roadmaps: Record<string, JobRoadmap> = {
   "frontend-developer": frontendRoadmap,
   "backend-developer": backendRoadmap,
-  "uiux-designer": uiuxRoadmap,
+  "uxui-designer": uiuxRoadmap,
   "data-scientist": dataScienceRoadmap,
   "devops-engineer": devopsRoadmap,
   "mobile-developer": mobileRoadmap,
