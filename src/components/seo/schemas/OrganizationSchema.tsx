@@ -36,7 +36,6 @@ export const OrganizationSchema: FC = () => {
 
     fetchSiteLogo();
 
-    // Set up real-time subscription for logo updates
     const channel = supabase
       .channel('site_settings_changes')
       .on(
@@ -65,11 +64,23 @@ export const OrganizationSchema: FC = () => {
     name: 'The Startup Hub',
     url: window.location.origin,
     logo: logoUrl,
-    description: 'Your comprehensive platform for tracking market trends, exploring opportunities, and discovering side hustles',
+    description: 'Premier platform connecting innovative startups with visionary investors. Discover investment opportunities, track market trends, and grow your business.',
     sameAs: [
       'https://twitter.com/startuphub',
       'https://linkedin.com/company/startuphub',
-    ]
+    ],
+    knowsAbout: [
+      'Startup Investment',
+      'Venture Capital',
+      'Business Development',
+      'Market Analysis',
+      'Investment Opportunities',
+      'Business Growth',
+      'Startup Ecosystem'
+    ],
+    areaServed: 'Worldwide',
+    foundingDate: '2024',
+    slogan: 'Connecting Innovative Startups with Visionary Investors'
   };
 
   return (
