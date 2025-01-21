@@ -5,7 +5,6 @@ import * as z from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Form,
   FormControl,
@@ -15,88 +14,83 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Plus } from "lucide-react";
-import { RoadmapSectionForm } from "./RoadmapSectionForm";
+import { Loader2, Plus, Trash } from "lucide-react";
+import { RoadmapStepForm } from "./RoadmapStepForm";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  description: z.string().min(1, "Description is required"),
-  slug: z.string().min(1, "Slug is required").regex(/^[a-z0-9-]+$/, {
-    message: "Slug can only contain lowercase letters, numbers, and hyphens",
-  }),
+  order_index: z.number(),
 });
 
-interface RoadmapFormProps {
-  roadmap?: {
+interface RoadmapSectionFormProps {
+  roadmapId: string;
+  section?: {
     id: string;
     title: string;
-    description: string;
-    slug: string;
+    order_index: number;
   };
   onSuccess: () => void;
   onCancel: () => void;
 }
 
-export function RoadmapForm({ roadmap, onSuccess, onCancel }: RoadmapFormProps) {
+export function RoadmapSectionForm({ roadmapId, section, onSuccess, onCancel }: RoadmapSectionFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSectionForm, setShowSectionForm] = useState(false);
+  const [showStepForm, setShowStepForm] = useState(false);
   const { toast } = useToast();
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: roadmap?.title || "",
-      description: roadmap?.description || "",
-      slug: roadmap?.slug || "",
+      title: section?.title || "",
+      order_index: section?.order_index || 0,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
-    console.log("Submitting roadmap form:", values);
+    console.log("Submitting section form:", values);
 
     try {
-      if (roadmap) {
-        // Update existing roadmap
+      if (section) {
+        // Update existing section
         const { error } = await supabase
-          .from('roadmap_templates')
+          .from('roadmap_sections')
           .update({
             title: values.title,
-            description: values.description,
-            slug: values.slug
+            order_index: values.order_index,
           })
-          .eq('id', roadmap.id);
+          .eq('id', section.id);
 
         if (error) throw error;
         
         toast({
           title: "Success",
-          description: "Roadmap updated successfully",
+          description: "Section updated successfully",
         });
       } else {
-        // Create new roadmap
+        // Create new section
         const { error } = await supabase
-          .from('roadmap_templates')
+          .from('roadmap_sections')
           .insert({
+            roadmap_id: roadmapId,
             title: values.title,
-            description: values.description,
-            slug: values.slug
+            order_index: values.order_index,
           });
 
         if (error) throw error;
         
         toast({
           title: "Success",
-          description: "Roadmap created successfully",
+          description: "Section created successfully",
         });
       }
 
       onSuccess();
     } catch (error) {
-      console.error("Error saving roadmap:", error);
+      console.error("Error saving section:", error);
       toast({
         title: "Error",
-        description: "Failed to save roadmap",
+        description: "Failed to save section",
         variant: "destructive",
       });
     } finally {
@@ -105,7 +99,7 @@ export function RoadmapForm({ roadmap, onSuccess, onCancel }: RoadmapFormProps) 
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 bg-card p-6 rounded-lg">
           <FormField
@@ -113,9 +107,9 @@ export function RoadmapForm({ roadmap, onSuccess, onCancel }: RoadmapFormProps) 
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>Section Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="Frontend Developer Roadmap" {...field} />
+                  <Input placeholder="Getting Started" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -124,35 +118,15 @@ export function RoadmapForm({ roadmap, onSuccess, onCancel }: RoadmapFormProps) 
 
           <FormField
             control={form.control}
-            name="description"
+            name="order_index"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
-                <FormControl>
-                  <Textarea 
-                    placeholder="A comprehensive guide to becoming a frontend developer..."
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="slug"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Slug</FormLabel>
+                <FormLabel>Order</FormLabel>
                 <FormControl>
                   <Input 
-                    placeholder="frontend-developer"
+                    type="number" 
                     {...field}
-                    onChange={(e) => {
-                      const value = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-');
-                      field.onChange(value);
-                    }}
+                    onChange={(e) => field.onChange(parseInt(e.target.value))}
                   />
                 </FormControl>
                 <FormMessage />
@@ -171,30 +145,30 @@ export function RoadmapForm({ roadmap, onSuccess, onCancel }: RoadmapFormProps) 
             </Button>
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {roadmap ? 'Update' : 'Create'} Roadmap
+              {section ? 'Update' : 'Create'} Section
             </Button>
           </div>
         </form>
       </Form>
 
-      {roadmap && (
+      {section && (
         <div className="mt-8">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-semibold">Sections</h3>
-            <Button onClick={() => setShowSectionForm(true)} disabled={showSectionForm}>
+            <h3 className="text-lg font-semibold">Steps</h3>
+            <Button onClick={() => setShowStepForm(true)} disabled={showStepForm}>
               <Plus className="h-4 w-4 mr-2" />
-              Add Section
+              Add Step
             </Button>
           </div>
 
-          {showSectionForm && (
-            <RoadmapSectionForm
-              roadmapId={roadmap.id}
+          {showStepForm && (
+            <RoadmapStepForm
+              sectionId={section.id}
               onSuccess={() => {
-                setShowSectionForm(false);
+                setShowStepForm(false);
                 onSuccess();
               }}
-              onCancel={() => setShowSectionForm(false)}
+              onCancel={() => setShowStepForm(false)}
             />
           )}
         </div>
