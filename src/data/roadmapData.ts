@@ -1,4 +1,3 @@
-import { JobRoadmap } from "@/types/roadmap";
 import { frontendRoadmap } from "./roadmaps/frontend";
 import { backendRoadmap } from "./roadmaps/backend";
 import { uiuxRoadmap } from "./roadmaps/uiux";
@@ -13,6 +12,7 @@ import { fullStackRoadmap } from "./roadmaps/full-stack";
 import { web3Roadmap } from "./roadmaps/web3";
 import { seoRoadmap } from "./roadmaps/seo";
 import { copywriterRoadmap } from "./roadmaps/copywriter";
+import { logoDesignerRoadmap } from "./roadmaps/logo-designer";
 
 export const roadmaps: Record<string, JobRoadmap> = {
   "frontend-developer": frontendRoadmap,
@@ -28,5 +28,6 @@ export const roadmaps: Record<string, JobRoadmap> = {
   "shopify-developer": shopifyRoadmap,
   "digital-marketing": digitalMarketingRoadmap,
   "seo-specialist": seoRoadmap,
-  "copywriter": copywriterRoadmap
+  "copywriter": copywriterRoadmap,
+  "logo-designer": logoDesignerRoadmap
 };
