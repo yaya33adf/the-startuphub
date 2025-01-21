@@ -1,3 +1,4 @@
+import type { JobRoadmap } from '@/types/roadmap';
 import { frontendRoadmap } from "./roadmaps/frontend";
 import { backendRoadmap } from "./roadmaps/backend";
 import { uiuxRoadmap } from "./roadmaps/uiux";
