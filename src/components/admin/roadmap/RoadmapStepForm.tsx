@@ -10,7 +10,7 @@ import { SkillsInput } from "./form/SkillsInput";
 import { ResourcesInput } from "./form/ResourcesInput";
 import { BasicFormFields } from "./form/BasicFormFields";
 import { StatusOrderFields } from "./form/StatusOrderFields";
-import { roadmapStepFormSchema, RoadmapStepFormProps, RoadmapStepFormValues } from "./types/roadmap-step";
+import { roadmapStepFormSchema, RoadmapStepFormProps, RoadmapStepFormValues, validRoles } from "./types/roadmap-step";
 
 export function RoadmapStepForm({ sectionId, step, onSuccess, onCancel }: RoadmapStepFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
