@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,39 +22,16 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
-
-const formSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().min(1, "Description is required"),
-  status: z.enum(["required", "recommended", "optional"]),
-  order_index: z.number(),
-  skills: z.string(),
-  resources: z.string(),
-});
-
-type FormValues = z.infer<typeof formSchema>;
-
-interface RoadmapStepFormProps {
-  sectionId: string;
-  step?: {
-    id: string;
-    title: string;
-    description: string;
-    status: "required" | "recommended" | "optional";
-    order_index: number;
-    skills: string[];
-    resources: Array<{ name: string; url: string; }>;
-  };
-  onSuccess: () => void;
-  onCancel: () => void;
-}
+import { SkillsInput } from "./form/SkillsInput";
+import { ResourcesInput } from "./form/ResourcesInput";
+import { roadmapStepFormSchema, RoadmapStepFormProps, RoadmapStepFormValues } from "./types/roadmap-step";
 
 export function RoadmapStepForm({ sectionId, step, onSuccess, onCancel }: RoadmapStepFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<RoadmapStepFormValues>({
+    resolver: zodResolver(roadmapStepFormSchema),
     defaultValues: {
       title: step?.title || "",
       description: step?.description || "",
@@ -66,7 +42,7 @@ export function RoadmapStepForm({ sectionId, step, onSuccess, onCancel }: Roadma
     },
   });
 
-  const onSubmit = async (values: FormValues) => {
+  const onSubmit = async (values: RoadmapStepFormValues) => {
     setIsSubmitting(true);
     console.log("Submitting step form:", values);
 
@@ -205,40 +181,8 @@ export function RoadmapStepForm({ sectionId, step, onSuccess, onCancel }: Roadma
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="skills"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Skills (comma-separated)</FormLabel>
-              <FormControl>
-                <Input 
-                  placeholder="HTML, CSS, JavaScript"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="resources"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Resources (one per line, format: name|url)</FormLabel>
-              <FormControl>
-                <Textarea 
-                  placeholder="MDN Web Docs|https://developer.mozilla.org
-W3Schools|https://www.w3schools.com"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <SkillsInput form={form} />
+        <ResourcesInput form={form} />
 
         <div className="flex justify-end gap-4">
           <Button
