@@ -15,6 +15,7 @@ import QRCodeGeneratorPage from "@/pages/tools/QRCodeGeneratorPage";
 import ExpenseTrackerPage from "@/pages/tools/ExpenseTrackerPage";
 import { StartupValuation } from "@/components/tools/StartupValuation";
 import { SmallBusinessQuotes } from "@/components/tools/SmallBusinessQuotes";
+import { SmallBusinessTips } from "@/components/tools/SmallBusinessTips";
 
 export const toolRoutes: RouteObject[] = [
   { path: "/tools/startup-valuation", element: <StartupValuation /> },
@@ -32,5 +33,6 @@ export const toolRoutes: RouteObject[] = [
   { path: "/tools/brand-identity", element: <BrandIdentityPage /> },
   { path: "/tools/qr-code-generator", element: <QRCodeGeneratorPage /> },
   { path: "/tools/expense-tracker", element: <ExpenseTrackerPage /> },
-  { path: "/tools/small-business-quotes", element: <SmallBusinessQuotes /> }
+  { path: "/tools/small-business-quotes", element: <SmallBusinessQuotes /> },
+  { path: "/tools/small-business-tips", element: <SmallBusinessTips /> }
 ];

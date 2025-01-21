@@ -1,4 +1,4 @@
-import { BarChart3, Calculator, CreditCard, DollarSign, FileSpreadsheet, Quote } from "lucide-react";
+import { BarChart3, Calculator, CreditCard, DollarSign, FileSpreadsheet, Quote, Lightbulb } from "lucide-react";
 import { Tool } from "../types/ToolTypes";
 import { BusinessNameGenerator } from "../BusinessNameGenerator";
 import { CurrencyConverter } from "../CurrencyConverter";
@@ -7,6 +7,7 @@ import { InvoiceGenerator } from "../InvoiceGenerator";
 import { SalesAnalytics } from "../SalesAnalytics";
 import { StartupValuation } from "../StartupValuation";
 import { SmallBusinessQuotes } from "../SmallBusinessQuotes";
+import { SmallBusinessTips } from "../SmallBusinessTips";
 
 export const businessTools: Tool[] = [
   {
@@ -64,5 +65,13 @@ export const businessTools: Tool[] = [
     component: SmallBusinessQuotes,
     active: true,
     path: "/tools/small-business-quotes"
+  },
+  {
+    title: "Small Business Tips",
+    description: "Generate practical tips for small businesses",
+    icon: Lightbulb,
+    component: SmallBusinessTips,
+    active: true,
+    path: "/tools/small-business-tips"
   }
 ];
