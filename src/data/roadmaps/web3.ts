@@ -10,14 +10,14 @@ export const web3Roadmap: JobRoadmap = {
         {
           id: "blockchain-basics",
           title: "Blockchain Basics",
-          description: "Understand blockchain technology fundamentals",
+          description: "Learn core blockchain concepts and principles",
           status: "required",
           skills: [
-            "Distributed Systems",
+            "Blockchain Theory",
             "Cryptography",
             "Consensus Mechanisms",
             "Smart Contracts",
-            "Tokenomics"
+            "Web3.js"
           ],
           resources: [
             {
@@ -29,14 +29,14 @@ export const web3Roadmap: JobRoadmap = {
         {
           id: "smart-contracts",
           title: "Smart Contract Development",
-          description: "Learn to write and deploy smart contracts",
+          description: "Master smart contract development",
           status: "required",
           skills: [
             "Solidity",
-            "Web3.js",
-            "Ethers.js",
             "Hardhat",
-            "Testing"
+            "Truffle",
+            "Testing",
+            "Security Best Practices"
           ],
           resources: [
             {
@@ -48,24 +48,43 @@ export const web3Roadmap: JobRoadmap = {
       ]
     },
     {
-      title: "2. DApp Development",
+      title: "2. Advanced Web3 Development",
       steps: [
         {
-          id: "dapp-frontend",
-          title: "DApp Frontend",
-          description: "Build decentralized application frontends",
+          id: "dapp-development",
+          title: "DApp Development",
+          description: "Learn to build decentralized applications",
           status: "required",
           skills: [
-            "React",
-            "Web3 Libraries",
-            "Wallet Integration",
-            "State Management",
-            "UI/UX for Web3"
+            "React/Next.js",
+            "Ethers.js",
+            "IPFS",
+            "Token Standards",
+            "DeFi Protocols"
           ],
           resources: [
             {
               name: "Web3.js Documentation",
               url: "https://web3js.readthedocs.io"
+            }
+          ]
+        },
+        {
+          id: "blockchain-scaling",
+          title: "Blockchain Scaling & Security",
+          description: "Advanced blockchain development concepts",
+          status: "recommended",
+          skills: [
+            "Layer 2 Solutions",
+            "Cross-chain Development",
+            "Gas Optimization",
+            "Security Auditing",
+            "MEV Protection"
+          ],
+          resources: [
+            {
+              name: "OpenZeppelin Docs",
+              url: "https://docs.openzeppelin.com"
             }
           ]
         }

@@ -10,39 +10,33 @@ export const shopifyRoadmap: JobRoadmap = {
         {
           id: "shopify-basics",
           title: "Shopify Basics",
-          description: "Master core Shopify concepts and platform features",
+          description: "Learn Shopify platform basics and store management",
           status: "required",
           skills: [
             "Shopify Admin",
             "Store Setup",
             "Product Management",
-            "Collections",
             "Order Processing",
-            "Analytics"
+            "Theme Customization"
           ],
           resources: [
             {
               name: "Shopify Documentation",
               url: "https://shopify.dev/docs"
-            },
-            {
-              name: "Shopify Partners",
-              url: "https://www.shopify.com/partners"
             }
           ]
         },
         {
-          id: "liquid-theme",
-          title: "Liquid & Theme Development",
-          description: "Learn Shopify's template language and theme development",
+          id: "liquid-templates",
+          title: "Liquid Templates",
+          description: "Master Shopify's Liquid templating language",
           status: "required",
           skills: [
             "Liquid Syntax",
-            "Theme Architecture",
-            "Templates",
-            "Sections",
-            "Snippets",
-            "Theme Settings"
+            "Objects",
+            "Tags",
+            "Filters",
+            "Theme Architecture"
           ],
           resources: [
             {
@@ -54,25 +48,43 @@ export const shopifyRoadmap: JobRoadmap = {
       ]
     },
     {
-      title: "2. Advanced Development",
+      title: "2. Advanced Shopify Development",
       steps: [
         {
-          id: "app-development",
-          title: "App Development",
-          description: "Create custom Shopify applications",
+          id: "theme-development",
+          title: "Theme Development",
+          description: "Learn to create custom Shopify themes",
           status: "required",
           skills: [
-            "API Fundamentals",
-            "App Bridge",
-            "GraphQL",
-            "Webhooks",
-            "Authentication",
-            "App Extensions"
+            "Theme Structure",
+            "Sections & Blocks",
+            "CSS/SCSS",
+            "JavaScript",
+            "Theme Settings"
           ],
           resources: [
             {
-              name: "App Development Guide",
-              url: "https://shopify.dev/docs/apps"
+              name: "Shopify Theme Development",
+              url: "https://shopify.dev/themes"
+            }
+          ]
+        },
+        {
+          id: "app-development",
+          title: "App Development",
+          description: "Build custom Shopify applications",
+          status: "recommended",
+          skills: [
+            "Shopify API",
+            "App Bridge",
+            "GraphQL",
+            "Webhooks",
+            "Authentication"
+          ],
+          resources: [
+            {
+              name: "Shopify App Development",
+              url: "https://shopify.dev/apps"
             }
           ]
         }

@@ -10,69 +10,81 @@ export const wordpressRoadmap: JobRoadmap = {
         {
           id: "wp-basics",
           title: "WordPress Basics",
-          description: "Master core WordPress concepts and architecture",
+          description: "Learn WordPress core concepts and administration",
           status: "required",
           skills: [
             "WordPress Installation",
             "Admin Dashboard",
-            "Posts & Pages",
-            "Themes & Plugins",
-            "WordPress Loop",
-            "Settings & Configuration"
+            "Content Management",
+            "Plugins & Themes",
+            "WordPress Hosting"
           ],
           resources: [
             {
-              name: "WordPress Documentation",
-              url: "https://wordpress.org/documentation"
-            },
-            {
-              name: "WordPress Codex",
-              url: "https://codex.wordpress.org"
+              name: "WordPress.org Documentation",
+              url: "https://wordpress.org/documentation/"
             }
           ]
         },
         {
-          id: "php-mysql",
-          title: "PHP & MySQL",
-          description: "Learn essential PHP and MySQL for WordPress development",
+          id: "theme-development",
+          title: "Theme Development",
+          description: "Master WordPress theme development",
           status: "required",
           skills: [
-            "PHP Syntax",
-            "MySQL Queries",
-            "Database Management",
-            "WordPress Database Structure",
-            "PHP Functions",
-            "Error Handling"
+            "HTML/CSS",
+            "PHP Basics",
+            "WordPress Template Hierarchy",
+            "Theme Customization",
+            "Child Themes"
           ],
           resources: [
             {
-              name: "PHP Documentation",
-              url: "https://www.php.net/docs.php"
+              name: "WordPress Theme Handbook",
+              url: "https://developer.wordpress.org/themes/"
             }
           ]
         }
       ]
     },
     {
-      title: "2. Theme Development",
+      title: "2. Advanced WordPress Development",
       steps: [
         {
-          id: "theme-development",
-          title: "Theme Development",
-          description: "Learn to create custom WordPress themes",
+          id: "plugin-development",
+          title: "Plugin Development",
+          description: "Learn to create WordPress plugins",
           status: "required",
           skills: [
-            "Theme Structure",
-            "Template Hierarchy",
-            "Custom Post Types",
-            "Theme Functions",
+            "PHP Advanced",
+            "WordPress Plugin API",
             "WordPress Hooks",
-            "Child Themes"
+            "Database Integration",
+            "Security Best Practices"
           ],
           resources: [
             {
-              name: "Theme Handbook",
-              url: "https://developer.wordpress.org/themes"
+              name: "WordPress Plugin Handbook",
+              url: "https://developer.wordpress.org/plugins/"
+            }
+          ]
+        },
+        {
+          id: "wp-optimization",
+          title: "Performance & Security",
+          description: "Advanced WordPress optimization and security",
+          status: "recommended",
+          skills: [
+            "Caching",
+            "Performance Optimization",
+            "Security Hardening",
+            "SEO Optimization",
+            "Maintenance"
+          ],
+          resources: [
+            {
+              name: "WordPress Security Guide",
+              url: "https://wordpress.org/support/article/hardening-wordpress/"
             }
           ]
         }

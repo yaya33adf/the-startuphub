@@ -1,9 +1,8 @@
 import { JobRoadmap } from "@/types/roadmap";
-import { Layers, Palette, Users, LayoutGrid, Circle } from "lucide-react";
 
 export const uiuxRoadmap: JobRoadmap = {
-  title: "UX/UI Designer Roadmap",
-  description: "A comprehensive guide to becoming a UX/UI Designer",
+  title: "UI/UX Designer Roadmap",
+  description: "A comprehensive guide to becoming a UI/UX Designer",
   sections: [
     {
       title: "1. Design Fundamentals",
@@ -11,125 +10,81 @@ export const uiuxRoadmap: JobRoadmap = {
         {
           id: "design-basics",
           title: "Design Basics",
-          description: "Master fundamental design principles and concepts that form the foundation of UI/UX design",
+          description: "Learn core design principles and theory",
           status: "required",
           skills: [
             "Color Theory",
             "Typography",
             "Layout Principles",
             "Visual Hierarchy",
-            "Gestalt Principles",
             "Design Systems"
           ],
           resources: [
             {
-              name: "Design Principles - Learn UI Design Fundamentals",
-              url: "https://www.designprinciples.com"
-            },
-            {
-              name: "Figma Design Course",
-              url: "https://www.figma.com/resources/learn-design"
+              name: "Design Principles",
+              url: "https://www.interaction-design.org"
             }
           ]
         },
         {
-          id: "user-research",
-          title: "User Research",
-          description: "Learn how to conduct effective user research and gather valuable insights",
-          status: "required",
-          skills: [
-            "User Interviews",
-            "Surveys",
-            "Usability Testing",
-            "Data Analysis",
-            "Personas",
-            "User Journey Mapping"
-          ],
-          resources: [
-            {
-              name: "Nielsen Norman Group - User Research Methods",
-              url: "https://www.nngroup.com/articles/user-research-methods"
-            },
-            {
-              name: "UX Research Guide",
-              url: "https://www.uxresearch.guide"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      title: "2. Design Tools",
-      steps: [
-        {
-          id: "design-software",
-          title: "Design Software",
-          description: "Master industry-standard design tools used by professional UI/UX designers",
+          id: "design-tools",
+          title: "Design Tools",
+          description: "Master essential design tools",
           status: "required",
           skills: [
             "Figma",
             "Adobe XD",
             "Sketch",
-            "InVision",
-            "Principle",
-            "Protopie"
+            "Prototyping Tools",
+            "Design Libraries"
           ],
           resources: [
             {
               name: "Figma Tutorials",
-              url: "https://www.figma.com/resources/learn-design"
-            },
-            {
-              name: "Adobe XD Tutorials",
-              url: "https://www.adobe.com/products/xd/learn"
+              url: "https://www.figma.com/resources/learn-design/"
             }
           ]
         }
       ]
     },
     {
-      title: "3. Advanced UI/UX Skills",
+      title: "2. UX Process",
       steps: [
+        {
+          id: "user-research",
+          title: "User Research",
+          description: "Learn user research methods and practices",
+          status: "required",
+          skills: [
+            "User Interviews",
+            "Usability Testing",
+            "Personas",
+            "Journey Mapping",
+            "Information Architecture"
+          ],
+          resources: [
+            {
+              name: "UX Research Guide",
+              url: "https://www.nngroup.com/articles/ux-research-cheat-sheet/"
+            }
+          ]
+        },
         {
           id: "interaction-design",
           title: "Interaction Design",
-          description: "Learn how to create intuitive and engaging user interactions",
-          status: "required",
+          description: "Master interaction design principles",
+          status: "recommended",
           skills: [
-            "Microinteractions",
-            "Animation Principles",
-            "Responsive Design",
-            "Mobile-First Design",
+            "Wireframing",
+            "Prototyping",
+            "Micro-interactions",
             "Accessibility",
-            "Design Patterns"
+            "Mobile Design Patterns"
           ],
           resources: [
             {
               name: "Interaction Design Foundation",
               url: "https://www.interaction-design.org"
-            },
-            {
-              name: "UI Patterns",
-              url: "https://ui-patterns.com"
-            }
-          ]
-        },
-        {
-          id: "prototyping",
-          title: "Prototyping",
-          description: "Master the art of creating interactive prototypes",
-          status: "recommended",
-          skills: [
-            "Low-Fidelity Prototyping",
-            "High-Fidelity Prototyping",
-            "Interactive Prototypes",
-            "User Flow Design",
-            "Wireframing"
-          ],
-          resources: [
-            {
-              name: "Prototyping Best Practices",
-              url: "https://www.prototyping.guide"
             }
           ]
         }

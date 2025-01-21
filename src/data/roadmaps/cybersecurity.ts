@@ -8,38 +8,15 @@ export const cybersecurityRoadmap: JobRoadmap = {
       title: "1. Security Fundamentals",
       steps: [
         {
-          id: "networking-basics",
-          title: "Networking Fundamentals",
-          description: "Master networking concepts and protocols",
+          id: "security-basics",
+          title: "Security Basics",
+          description: "Learn core security concepts and principles",
           status: "required",
           skills: [
-            "TCP/IP",
-            "Network Protocols",
-            "OSI Model",
             "Network Security",
-            "Firewalls"
-          ],
-          resources: [
-            {
-              name: "CompTIA Network+",
-              url: "https://www.comptia.org/certifications/network"
-            },
-            {
-              name: "Cisco Networking Academy",
-              url: "https://www.netacad.com"
-            }
-          ]
-        },
-        {
-          id: "security-concepts",
-          title: "Security Concepts",
-          description: "Learn core security principles and practices",
-          status: "required",
-          skills: [
-            "CIA Triad",
-            "Access Control",
+            "Operating Systems",
+            "Security Protocols",
             "Cryptography",
-            "Security Policies",
             "Risk Management"
           ],
           resources: [
@@ -48,51 +25,66 @@ export const cybersecurityRoadmap: JobRoadmap = {
               url: "https://www.comptia.org/certifications/security"
             }
           ]
+        },
+        {
+          id: "threat-analysis",
+          title: "Threat Analysis",
+          description: "Master threat detection and analysis",
+          status: "required",
+          skills: [
+            "Threat Intelligence",
+            "Malware Analysis",
+            "Incident Response",
+            "Digital Forensics",
+            "Vulnerability Assessment"
+          ],
+          resources: [
+            {
+              name: "SANS Institute",
+              url: "https://www.sans.org"
+            }
+          ]
         }
       ]
     },
     {
-      title: "2. Security Operations",
+      title: "2. Advanced Security",
       steps: [
         {
-          id: "security-tools",
-          title: "Security Tools & Technologies",
-          description: "Master essential security tools and technologies",
+          id: "security-operations",
+          title: "Security Operations",
+          description: "Learn security operations and tools",
           status: "required",
           skills: [
             "SIEM Tools",
-            "IDS/IPS",
-            "Vulnerability Scanners",
+            "Security Automation",
             "Penetration Testing",
-            "Forensics Tools"
+            "Cloud Security",
+            "Compliance"
           ],
           resources: [
             {
-              name: "Kali Linux Tools",
-              url: "https://www.kali.org/tools"
-            },
-            {
-              name: "OWASP Top Ten",
-              url: "https://owasp.org/www-project-top-ten"
+              name: "Certified Ethical Hacker",
+              url: "https://www.eccouncil.org/programs/certified-ethical-hacker-ceh/"
             }
           ]
         },
         {
-          id: "incident-response",
-          title: "Incident Response",
-          description: "Learn incident response and threat hunting",
-          status: "required",
+          id: "advanced-defense",
+          title: "Advanced Defense",
+          description: "Master advanced security defense techniques",
+          status: "recommended",
           skills: [
-            "Incident Handling",
-            "Malware Analysis",
-            "Threat Intelligence",
-            "Digital Forensics",
-            "Documentation"
+            "Zero Trust Architecture",
+            "DevSecOps",
+            "Threat Hunting",
+            "Security Architecture",
+            "Red Team Operations"
           ],
           resources: [
             {
-              name: "SANS Incident Response",
-              url: "https://www.sans.org/incident-response"
+              name: "CISSP Certification",
+              url: "https://www.isc2.org/Certifications/CISSP"
             }
           ]
         }

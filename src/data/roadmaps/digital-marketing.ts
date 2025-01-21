@@ -1,153 +1,92 @@
 import { JobRoadmap } from "@/types/roadmap";
 
 export const digitalMarketingRoadmap: JobRoadmap = {
-  title: "Digital Marketing Professional",
-  description: "A comprehensive guide to becoming a successful digital marketing professional, covering essential skills, tools, and strategies.",
+  title: "Digital Marketing Roadmap",
+  description: "A comprehensive guide to becoming a Digital Marketing Professional",
   sections: [
     {
-      title: "Digital Marketing Fundamentals",
+      title: "1. Marketing Fundamentals",
       steps: [
         {
-          id: "dm-basics",
+          id: "marketing-basics",
           title: "Marketing Basics",
-          description: "Understanding core marketing concepts and principles",
-          skills: ["Marketing Mix (4Ps)", "Target Audience Analysis", "Brand Positioning", "Marketing Strategy"],
+          description: "Learn core marketing principles and strategies",
           status: "required",
+          skills: [
+            "Marketing Principles",
+            "Consumer Behavior",
+            "Market Research",
+            "Brand Strategy",
+            "Marketing Analytics"
+          ],
           resources: [
             {
-              name: "HubSpot Academy Marketing Course",
-              url: "https://academy.hubspot.com/courses/digital-marketing"
-            },
-            {
               name: "Google Digital Marketing Course",
-              url: "https://learndigital.withgoogle.com/digitalgarage/course/digital-marketing"
+              url: "https://learndigital.withgoogle.com/digitalgarage"
             }
           ]
         },
         {
-          id: "dm-analytics",
-          title: "Digital Analytics",
-          description: "Learn to measure and analyze digital marketing performance",
-          skills: ["Google Analytics", "Data Analysis", "KPI Tracking", "Conversion Rate Optimization"],
+          id: "digital-channels",
+          title: "Digital Marketing Channels",
+          description: "Master various digital marketing channels",
           status: "required",
+          skills: [
+            "Social Media Marketing",
+            "Email Marketing",
+            "Content Marketing",
+            "SEO",
+            "PPC Advertising"
+          ],
+          resources: [
+            {
+              name: "HubSpot Academy",
+              url: "https://academy.hubspot.com"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      title: "2. Advanced Digital Marketing",
+      steps: [
+        {
+          id: "analytics-tools",
+          title: "Analytics & Tools",
+          description: "Learn essential digital marketing tools",
+          status: "required",
+          skills: [
+            "Google Analytics",
+            "Google Ads",
+            "Social Media Analytics",
+            "Marketing Automation",
+            "CRM Systems"
+          ],
           resources: [
             {
               name: "Google Analytics Academy",
               url: "https://analytics.google.com/analytics/academy/"
             }
           ]
-        }
-      ]
-    },
-    {
-      title: "Content Marketing & SEO",
-      steps: [
-        {
-          id: "content-marketing",
-          title: "Content Marketing",
-          description: "Creating and distributing valuable content",
-          skills: ["Content Strategy", "Content Creation", "Editorial Calendar", "Content Distribution"],
-          status: "required",
-          resources: [
-            {
-              name: "Content Marketing Institute",
-              url: "https://contentmarketinginstitute.com/learning/"
-            }
-          ]
         },
         {
-          id: "seo",
-          title: "Search Engine Optimization",
-          description: "Optimizing content for search engines",
-          skills: ["Keyword Research", "On-Page SEO", "Technical SEO", "Link Building"],
-          status: "required",
-          resources: [
-            {
-              name: "Moz SEO Learning Center",
-              url: "https://moz.com/beginners-guide-to-seo"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      title: "Social Media Marketing",
-      steps: [
-        {
-          id: "social-media",
-          title: "Social Media Strategy",
-          description: "Managing social media presence and campaigns",
-          skills: ["Platform Selection", "Content Planning", "Community Management", "Social Media Analytics"],
-          status: "required",
-          resources: [
-            {
-              name: "Hootsuite Academy",
-              url: "https://education.hootsuite.com/"
-            }
-          ]
-        },
-        {
-          id: "paid-social",
-          title: "Paid Social Advertising",
-          description: "Running paid campaigns on social platforms",
-          skills: ["Ad Campaign Setup", "Audience Targeting", "Budget Management", "A/B Testing"],
+          id: "strategy-optimization",
+          title: "Strategy & Optimization",
+          description: "Advanced marketing strategy and optimization",
           status: "recommended",
+          skills: [
+            "A/B Testing",
+            "Conversion Rate Optimization",
+            "Marketing Attribution",
+            "Budget Management",
+            "ROI Analysis"
+          ],
           resources: [
             {
-              name: "Facebook Blueprint",
-              url: "https://www.facebook.com/business/learn"
+              name: "CXL Institute",
+              url: "https://cxl.com/institute/"
             }
           ]
-        }
-      ]
-    },
-    {
-      title: "Email Marketing",
-      steps: [
-        {
-          id: "email-marketing",
-          title: "Email Marketing Fundamentals",
-          description: "Creating effective email marketing campaigns",
-          skills: ["Email Strategy", "List Building", "Email Design", "Automation"],
-          status: "required",
-          resources: [
-            {
-              name: "Mailchimp Marketing Library",
-              url: "https://mailchimp.com/resources/"
-            }
-          ]
-        },
-        {
-          id: "email-automation",
-          title: "Marketing Automation",
-          description: "Setting up automated marketing workflows",
-          skills: ["Workflow Design", "Lead Nurturing", "Segmentation", "Personalization"],
-          status: "recommended"
-        }
-      ]
-    },
-    {
-      title: "Paid Advertising",
-      steps: [
-        {
-          id: "ppc",
-          title: "Pay-Per-Click Advertising",
-          description: "Managing paid search and display campaigns",
-          skills: ["Google Ads", "Keyword Planning", "Ad Copywriting", "Campaign Optimization"],
-          status: "recommended",
-          resources: [
-            {
-              name: "Google Ads Certification",
-              url: "https://skillshop.withgoogle.com/"
-            }
-          ]
-        },
-        {
-          id: "display-ads",
-          title: "Display & Programmatic",
-          description: "Understanding display advertising and programmatic buying",
-          skills: ["Ad Networks", "Targeting Options", "Creative Design", "Bid Management"],
-          status: "optional"
         }
       ]
     }

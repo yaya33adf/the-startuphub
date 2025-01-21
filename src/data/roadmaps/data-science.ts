@@ -5,83 +5,60 @@ export const dataScienceRoadmap: JobRoadmap = {
   description: "A comprehensive guide to becoming a Data Scientist",
   sections: [
     {
-      title: "1. Mathematics & Statistics",
+      title: "1. Data Science Fundamentals",
       steps: [
         {
-          id: "math-fundamentals",
-          title: "Mathematical Foundations",
-          description: "Master essential mathematical concepts",
-          status: "required",
-          skills: [
-            "Linear Algebra",
-            "Calculus",
-            "Probability",
-            "Statistics",
-            "Optimization"
-          ],
-          resources: [
-            {
-              name: "Khan Academy Math",
-              url: "https://www.khanacademy.org/math"
-            },
-            {
-              name: "Statistics Course",
-              url: "https://www.coursera.org/learn/statistics"
-            }
-          ]
-        },
-        {
-          id: "programming",
-          title: "Programming Skills",
-          description: "Learn essential programming languages for data science",
+          id: "programming-stats",
+          title: "Programming & Statistics",
+          description: "Master programming and statistical concepts",
           status: "required",
           skills: [
             "Python",
             "R",
-            "SQL",
-            "Data Structures",
-            "Algorithms"
+            "Statistics",
+            "Probability",
+            "Linear Algebra"
           ],
           resources: [
             {
-              name: "Python for Data Science",
-              url: "https://www.python.org/about/gettingstarted"
+              name: "DataCamp",
+              url: "https://www.datacamp.com"
             }
           ]
-        }
-      ]
-    },
-    {
-      title: "2. Data Science Tools",
-      steps: [
+        },
         {
           id: "data-analysis",
           title: "Data Analysis & Visualization",
-          description: "Master data analysis and visualization tools",
+          description: "Learn data analysis and visualization techniques",
           status: "required",
           skills: [
             "Pandas",
             "NumPy",
             "Matplotlib",
             "Seaborn",
-            "Jupyter Notebooks"
+            "Data Cleaning"
           ],
           resources: [
             {
-              name: "Pandas Documentation",
-              url: "https://pandas.pydata.org/docs"
+              name: "Kaggle Courses",
+              url: "https://www.kaggle.com/learn"
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      title: "2. Advanced Data Science",
+      steps: [
         {
           id: "machine-learning",
           title: "Machine Learning",
-          description: "Learn machine learning concepts and tools",
+          description: "Master machine learning concepts and tools",
           status: "required",
           skills: [
             "Scikit-learn",
-            "TensorFlow",
-            "PyTorch",
+            "Supervised Learning",
+            "Unsupervised Learning",
             "Model Evaluation",
             "Feature Engineering"
           ],
@@ -89,6 +66,25 @@ export const dataScienceRoadmap: JobRoadmap = {
             {
               name: "Machine Learning Course",
               url: "https://www.coursera.org/learn/machine-learning"
+            }
+          ]
+        },
+        {
+          id: "deep-learning",
+          title: "Deep Learning & Big Data",
+          description: "Learn deep learning and big data technologies",
+          status: "recommended",
+          skills: [
+            "TensorFlow",
+            "PyTorch",
+            "Neural Networks",
+            "Big Data Tools",
+            "Cloud Computing"
+          ],
+          resources: [
+            {
+              name: "Deep Learning Specialization",
+              url: "https://www.coursera.org/specializations/deep-learning"
             }
           ]
         }

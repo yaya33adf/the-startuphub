@@ -10,92 +10,81 @@ export const mobileRoadmap: JobRoadmap = {
         {
           id: "programming-basics",
           title: "Programming Fundamentals",
-          description: "Master programming concepts for mobile development",
+          description: "Master core programming concepts for mobile development",
           status: "required",
           skills: [
             "Object-Oriented Programming",
             "Data Structures",
             "Algorithms",
-            "Design Patterns",
-            "Version Control"
+            "Version Control (Git)",
+            "Mobile UI/UX Principles"
           ],
           resources: [
             {
-              name: "Swift Documentation",
-              url: "https://swift.org/documentation"
-            },
-            {
-              name: "Kotlin Documentation",
-              url: "https://kotlinlang.org/docs"
+              name: "Mobile Development Documentation",
+              url: "https://developer.android.com/docs"
             }
           ]
         },
         {
-          id: "platform-specific",
-          title: "Platform Development",
-          description: "Learn platform-specific development",
+          id: "cross-platform",
+          title: "Cross-Platform Development",
+          description: "Learn cross-platform mobile development",
           status: "required",
           skills: [
-            "iOS Development",
-            "Android Development",
-            "Cross-platform Development",
-            "Mobile Architecture"
+            "React Native",
+            "Flutter",
+            "JavaScript/TypeScript",
+            "Dart",
+            "Mobile State Management"
           ],
           resources: [
             {
-              name: "iOS Development",
-              url: "https://developer.apple.com/tutorials"
-            },
-            {
-              name: "Android Development",
-              url: "https://developer.android.com/courses"
+              name: "React Native Documentation",
+              url: "https://reactnative.dev/docs/getting-started"
             }
           ]
         }
       ]
     },
     {
-      title: "2. Advanced Mobile Development",
+      title: "2. Platform-Specific Development",
       steps: [
         {
-          id: "ui-ux",
-          title: "UI/UX Design",
-          description: "Learn mobile UI/UX principles",
-          status: "required",
+          id: "ios-development",
+          title: "iOS Development",
+          description: "Learn iOS app development",
+          status: "recommended",
           skills: [
-            "Material Design",
-            "iOS Design Guidelines",
-            "Responsive Design",
-            "Animation",
-            "Accessibility"
+            "Swift",
+            "SwiftUI",
+            "iOS SDK",
+            "Xcode",
+            "App Store Guidelines"
           ],
           resources: [
             {
-              name: "Material Design",
-              url: "https://material.io"
-            },
-            {
-              name: "Human Interface Guidelines",
-              url: "https://developer.apple.com/design"
+              name: "iOS Development",
+              url: "https://developer.apple.com/documentation/"
             }
           ]
         },
         {
-          id: "mobile-features",
-          title: "Mobile Features & APIs",
-          description: "Master mobile-specific features and APIs",
-          status: "required",
+          id: "android-development",
+          title: "Android Development",
+          description: "Master Android app development",
+          status: "recommended",
           skills: [
-            "Location Services",
-            "Push Notifications",
-            "Data Storage",
-            "Camera & Sensors",
-            "App Security"
+            "Kotlin",
+            "Android SDK",
+            "Android Studio",
+            "Material Design",
+            "Google Play Guidelines"
           ],
           resources: [
             {
-              name: "Firebase Documentation",
-              url: "https://firebase.google.com/docs"
+              name: "Android Development",
+              url: "https://developer.android.com/docs"
             }
           ]
         }
