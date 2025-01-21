@@ -15,7 +15,7 @@ export async function updateLogoMetaTags() {
     }
 
     if (data?.value && typeof data.value === 'object' && 'url' in data.value) {
-      const logoUrl = data.value.url;
+      const logoUrl = String(data.value.url);
       document.getElementById('og-image')?.setAttribute('content', logoUrl);
       document.getElementById('twitter-image')?.setAttribute('content', logoUrl);
       console.log('Meta tags updated with new logo URL:', logoUrl);
