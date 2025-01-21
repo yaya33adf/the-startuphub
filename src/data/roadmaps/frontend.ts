@@ -28,6 +28,18 @@ export const frontendRoadmap: JobRoadmap = {
             {
               name: "CSS Tricks",
               url: "https://css-tricks.com"
+            },
+            {
+              name: "Complete Web Development Bootcamp - Udemy",
+              url: "https://www.udemy.com/course/the-complete-web-development-bootcamp/"
+            },
+            {
+              name: "CSS for JavaScript Developers",
+              url: "https://css-for-js.dev/"
+            },
+            {
+              name: "freeCodeCamp Responsive Web Design",
+              url: "https://www.freecodecamp.org/learn/responsive-web-design/"
             }
           ]
         },
@@ -51,6 +63,18 @@ export const frontendRoadmap: JobRoadmap = {
             {
               name: "Eloquent JavaScript",
               url: "https://eloquentjavascript.net"
+            },
+            {
+              name: "JavaScript30 by Wes Bos",
+              url: "https://javascript30.com/"
+            },
+            {
+              name: "Deep JavaScript Foundations - Frontend Masters",
+              url: "https://frontendmasters.com/courses/deep-javascript-v3/"
+            },
+            {
+              name: "Modern JavaScript Tutorial",
+              url: "https://javascript.info/"
             }
           ]
         }
@@ -78,8 +102,20 @@ export const frontendRoadmap: JobRoadmap = {
               url: "https://react.dev"
             },
             {
-              name: "React Router Documentation",
-              url: "https://reactrouter.com"
+              name: "Epic React by Kent C. Dodds",
+              url: "https://epicreact.dev/"
+            },
+            {
+              name: "React - The Complete Guide - Udemy",
+              url: "https://www.udemy.com/course/react-the-complete-guide-incl-redux/"
+            },
+            {
+              name: "React Query Essentials",
+              url: "https://ui.dev/react-query"
+            },
+            {
+              name: "Testing React Applications",
+              url: "https://frontendmasters.com/courses/testing-react/"
             }
           ]
         },
@@ -103,6 +139,18 @@ export const frontendRoadmap: JobRoadmap = {
             {
               name: "Vite Documentation",
               url: "https://vitejs.dev"
+            },
+            {
+              name: "Testing JavaScript with Kent C. Dodds",
+              url: "https://testingjavascript.com/"
+            },
+            {
+              name: "Chrome DevTools Documentation",
+              url: "https://developers.google.com/web/tools/chrome-devtools"
+            },
+            {
+              name: "Web Performance Fundamentals",
+              url: "https://frontendmasters.com/courses/web-performance/"
             }
           ]
         }
