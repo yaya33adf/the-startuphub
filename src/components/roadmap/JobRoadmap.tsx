@@ -1,183 +1,143 @@
 import { useParams } from "react-router-dom";
 import { PageSEO } from "@/components/seo/PageSEO";
-import { Card } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { RoadmapVisualization } from "./RoadmapVisualization";
 
 interface RoadmapStep {
+  id: string;
   title: string;
   description: string;
   skills: string[];
+  status?: 'required' | 'recommended' | 'optional';
   resources?: {
     name: string;
     url: string;
   }[];
 }
 
+interface RoadmapSection {
+  title: string;
+  steps: RoadmapStep[];
+}
+
 interface JobRoadmap {
   title: string;
   description: string;
-  steps: RoadmapStep[];
+  sections: RoadmapSection[];
 }
 
 const roadmaps: Record<string, JobRoadmap> = {
   "frontend-developer": {
     title: "Frontend Developer Roadmap",
     description: "A comprehensive guide to becoming a Frontend Developer",
-    steps: [
+    sections: [
       {
-        title: "1. Learn the Basics",
-        description: "Start with the fundamental building blocks of web development",
-        skills: ["HTML5", "CSS3", "JavaScript (ES6+)"],
-        resources: [
-          { name: "MDN Web Docs", url: "https://developer.mozilla.org/" },
-          { name: "freeCodeCamp", url: "https://www.freecodecamp.org/" }
+        title: "1. Internet & Web Fundamentals",
+        steps: [
+          {
+            id: "internet-basics",
+            title: "Internet Basics",
+            description: "Learn how the internet works, DNS, hosting, and HTTP/HTTPS",
+            status: "required",
+            skills: ["DNS", "Hosting", "HTTP/HTTPS", "Browsers", "Domain Names"],
+            resources: [
+              { name: "MDN: How the Internet works", url: "https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Web_mechanics/How_does_the_Internet_work" },
+              { name: "Web.dev", url: "https://web.dev/learn" }
+            ]
+          },
+          {
+            id: "web-security",
+            title: "Web Security Basics",
+            description: "Understand fundamental web security concepts",
+            status: "required",
+            skills: ["HTTPS", "CORS", "Content Security Policy", "OWASP Security Risks"],
+            resources: [
+              { name: "OWASP Top 10", url: "https://owasp.org/www-project-top-ten/" }
+            ]
+          }
         ]
       },
       {
-        title: "2. CSS Frameworks & Preprocessors",
-        description: "Learn popular CSS frameworks and preprocessors",
-        skills: ["Tailwind CSS", "Bootstrap", "Sass/SCSS", "CSS Modules"],
-        resources: [
+        title: "2. HTML & CSS Fundamentals",
+        steps: [
           {
-            name: "Tailwind CSS Documentation",
-            url: "https://tailwindcss.com/docs",
+            id: "html5",
+            title: "HTML5",
+            description: "Master modern HTML5 elements and best practices",
+            status: "required",
+            skills: ["Semantic HTML", "Forms", "Media Elements", "Accessibility"],
+            resources: [
+              { name: "MDN HTML Guide", url: "https://developer.mozilla.org/en-US/docs/Learn/HTML" },
+              { name: "HTML5 Doctor", url: "http://html5doctor.com/" }
+            ]
           },
-        ],
-      },
-      {
-        title: "3. JavaScript Frameworks",
-        description: "Master popular JavaScript frameworks",
-        skills: ["React", "Vue.js", "Angular", "State Management (Redux, Vuex)"],
-        resources: [
           {
-            name: "React Documentation",
-            url: "https://react.dev",
-          },
-        ],
-      },
-      {
-        title: "4. Version Control & Development Tools",
-        description: "Learn essential development tools",
-        skills: ["Git", "GitHub", "VS Code", "Chrome DevTools"],
-        resources: [
-          {
-            name: "Git Documentation",
-            url: "https://git-scm.com/doc",
-          },
-        ],
-      },
-      {
-        title: "5. Build Tools & Module Bundlers",
-        description: "Understanding modern build tools",
-        skills: ["Webpack", "Vite", "npm/yarn", "Babel"],
-        resources: [
-          {
-            name: "Vite Documentation",
-            url: "https://vitejs.dev/",
-          },
-        ],
-      },
-    ]
-  },
-  "backend-developer": {
-    title: "Backend Developer Roadmap",
-    description: "Master backend development and server-side technologies",
-    steps: [
-      {
-        title: "1. Programming Fundamentals",
-        description: "Master a backend programming language and its ecosystem",
-        skills: ["Python", "Java", "Node.js", "Data Structures", "Algorithms"],
-        resources: [
-          { name: "Python Documentation", url: "https://docs.python.org/" },
-          { name: "Node.js Documentation", url: "https://nodejs.org/docs" }
+            id: "css3",
+            title: "CSS3",
+            description: "Learn modern CSS features and responsive design",
+            status: "required",
+            skills: ["Flexbox", "Grid", "Animations", "Media Queries", "CSS Variables"],
+            resources: [
+              { name: "CSS-Tricks", url: "https://css-tricks.com/" },
+              { name: "MDN CSS Guide", url: "https://developer.mozilla.org/en-US/docs/Learn/CSS" }
+            ]
+          }
         ]
       },
       {
-        title: "2. Databases",
-        description: "Learn database management and querying",
-        skills: ["SQL", "PostgreSQL", "MongoDB", "Redis", "Database Design"],
-        resources: [
-          { name: "PostgreSQL Tutorial", url: "https://www.postgresql.org/docs/tutorial/" },
-          { name: "MongoDB University", url: "https://university.mongodb.com/" }
+        title: "3. JavaScript & Programming Fundamentals",
+        steps: [
+          {
+            id: "js-basics",
+            title: "JavaScript Fundamentals",
+            description: "Master core JavaScript concepts and ES6+ features",
+            status: "required",
+            skills: ["Variables", "Functions", "Objects", "Arrays", "ES6+", "Async/Await"],
+            resources: [
+              { name: "JavaScript.info", url: "https://javascript.info/" },
+              { name: "Eloquent JavaScript", url: "https://eloquentjavascript.net/" }
+            ]
+          },
+          {
+            id: "dom-manipulation",
+            title: "DOM Manipulation",
+            description: "Learn how to interact with the Document Object Model",
+            status: "required",
+            skills: ["Selectors", "Events", "DOM Methods", "Event Bubbling"],
+            resources: [
+              { name: "MDN DOM Guide", url: "https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model" }
+            ]
+          }
         ]
       },
       {
-        title: "3. APIs and Web Services",
-        description: "Understanding API design and implementation",
-        skills: ["REST", "GraphQL", "API Security", "OAuth", "JWT"],
-        resources: [
-          { name: "REST API Tutorial", url: "https://restfulapi.net/" },
-          { name: "GraphQL Documentation", url: "https://graphql.org/learn/" }
+        title: "4. Frontend Frameworks & Tools",
+        steps: [
+          {
+            id: "react",
+            title: "React",
+            description: "Learn React and its ecosystem",
+            status: "recommended",
+            skills: ["Components", "Props", "State", "Hooks", "Context", "Redux"],
+            resources: [
+              { name: "React Documentation", url: "https://react.dev" },
+              { name: "React Tutorial", url: "https://react.dev/learn" }
+            ]
+          },
+          {
+            id: "build-tools",
+            title: "Build Tools",
+            description: "Understanding modern build tools and module bundlers",
+            status: "recommended",
+            skills: ["npm", "Webpack", "Vite", "ESLint", "Prettier"],
+            resources: [
+              { name: "Vite Guide", url: "https://vitejs.dev/guide/" }
+            ]
+          }
         ]
       }
     ]
   },
-  "ui-ux-designer": {
-    title: "UI/UX Designer Roadmap",
-    description: "Learn to create beautiful and functional user interfaces",
-    steps: [
-      {
-        title: "1. Design Fundamentals",
-        description: "Master the basic principles of design",
-        skills: ["Color Theory", "Typography", "Layout Design", "Visual Hierarchy"],
-        resources: [
-          { name: "Design Principles", url: "https://principles.design/" },
-          { name: "Material Design", url: "https://material.io/design" }
-        ]
-      },
-      {
-        title: "2. UX Research",
-        description: "Learn user research methods and practices",
-        skills: ["User Research", "Personas", "User Journey Mapping", "Usability Testing"],
-        resources: [
-          { name: "Nielsen Norman Group", url: "https://www.nngroup.com/" },
-          { name: "UX Research Guide", url: "https://www.usability.gov/what-and-why/user-research.html" }
-        ]
-      },
-      {
-        title: "3. Design Tools",
-        description: "Master essential design tools",
-        skills: ["Figma", "Adobe XD", "Sketch", "Prototyping"],
-        resources: [
-          { name: "Figma Tutorials", url: "https://www.figma.com/resources/learn-design/" },
-          { name: "Adobe XD Tutorials", url: "https://www.adobe.com/products/xd/learn.html" }
-        ]
-      }
-    ]
-  },
-  "data-scientist": {
-    title: "Data Scientist Roadmap",
-    description: "Begin your journey into data science and analytics",
-    steps: [
-      {
-        title: "1. Mathematics and Statistics",
-        description: "Build a strong foundation in math and stats",
-        skills: ["Linear Algebra", "Calculus", "Probability", "Statistical Analysis"],
-        resources: [
-          { name: "Khan Academy", url: "https://www.khanacademy.org/" },
-          { name: "Statistics.com", url: "https://statistics.com/" }
-        ]
-      },
-      {
-        title: "2. Programming for Data Science",
-        description: "Learn programming languages for data analysis",
-        skills: ["Python", "R", "SQL", "Jupyter Notebooks"],
-        resources: [
-          { name: "DataCamp", url: "https://www.datacamp.com/" },
-          { name: "Kaggle Courses", url: "https://www.kaggle.com/learn" }
-        ]
-      },
-      {
-        title: "3. Machine Learning",
-        description: "Master machine learning concepts and tools",
-        skills: ["Scikit-learn", "TensorFlow", "Neural Networks", "Deep Learning"],
-        resources: [
-          { name: "Fast.ai", url: "https://www.fast.ai/" },
-          { name: "Google ML Crash Course", url: "https://developers.google.com/machine-learning/crash-course" }
-        ]
-      }
-    ]
-  }
+  // Add more roadmaps here...
 };
 
 export const JobRoadmap = () => {
@@ -199,49 +159,11 @@ export const JobRoadmap = () => {
         description={roadmap.description}
       />
       
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <h1 className="text-4xl font-bold mb-4">{roadmap.title}</h1>
-        <p className="text-lg text-muted-foreground mb-8">{roadmap.description}</p>
+        <p className="text-lg text-muted-foreground mb-12">{roadmap.description}</p>
 
-        <div className="space-y-6">
-          {roadmap.steps.map((step, index) => (
-            <Card key={index} className="p-6">
-              <h2 className="text-xl font-semibold mb-3">{step.title}</h2>
-              <p className="text-muted-foreground mb-4">{step.description}</p>
-              
-              <div className="mb-4">
-                <h3 className="font-medium mb-2">Required Skills:</h3>
-                <ScrollArea className="h-[100px]">
-                  <ul className="list-disc list-inside space-y-1">
-                    {step.skills.map((skill, skillIndex) => (
-                      <li key={skillIndex} className="text-sm">{skill}</li>
-                    ))}
-                  </ul>
-                </ScrollArea>
-              </div>
-
-              {step.resources && (
-                <div>
-                  <h3 className="font-medium mb-2">Learning Resources:</h3>
-                  <ul className="space-y-1">
-                    {step.resources.map((resource, resourceIndex) => (
-                      <li key={resourceIndex}>
-                        <a
-                          href={resource.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-primary hover:underline"
-                        >
-                          {resource.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </Card>
-          ))}
-        </div>
+        <RoadmapVisualization sections={roadmap.sections} />
       </div>
     </div>
   );
