@@ -1,3 +1,4 @@
+import { lazy } from "react";
 import { RouteObject } from "react-router-dom";
 import Index from "@/pages/Index";
 import About from "@/pages/About";
@@ -23,7 +24,9 @@ import WordPressTemplates from "@/pages/WordPressTemplates";
 import Events from "@/pages/Events";
 import BlossomWordGame from "@/pages/BlossomWordGame";
 
-export const mainRoutes: RouteObject[] = [
+const Roadmap = lazy(() => import("@/pages/Roadmap"));
+
+export const mainRoutes = [
   { path: "/", element: <Index /> },
   { path: "/about", element: <About /> },
   { path: "/blog", element: <Blog /> },
@@ -47,4 +50,8 @@ export const mainRoutes: RouteObject[] = [
   { path: "/business-cards", element: <BusinessCards /> },
   { path: "/wordpress-templates", element: <WordPressTemplates /> },
   { path: "/blossom-word-game", element: <BlossomWordGame /> },
+  {
+    path: "/roadmap",
+    element: <Roadmap />,
+  },
 ];
