@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Twitter, MessageSquare, HelpCircle, Linkedin, Facebook } from "lucide-react";
+import CompassAnimation from "./CompassAnimation";
 
 const SocialLinks = () => {
   return (
@@ -45,6 +46,7 @@ const SocialLinks = () => {
           <Facebook className="h-5 w-5" />
         </a>
       </div>
+      <CompassAnimation />
     </div>
   );
 };
