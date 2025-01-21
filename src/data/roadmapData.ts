@@ -12,6 +12,7 @@ import { digitalMarketingRoadmap } from "./roadmaps/digital-marketing";
 import { fullStackRoadmap } from "./roadmaps/full-stack";
 import { web3Roadmap } from "./roadmaps/web3";
 import { seoRoadmap } from "./roadmaps/seo";
+import { copywriterRoadmap } from "./roadmaps/copywriter";
 
 export const roadmaps: Record<string, JobRoadmap> = {
   "frontend-developer": frontendRoadmap,
@@ -26,5 +27,6 @@ export const roadmaps: Record<string, JobRoadmap> = {
   "wordpress-developer": wordpressRoadmap,
   "shopify-developer": shopifyRoadmap,
   "digital-marketing": digitalMarketingRoadmap,
-  "seo-specialist": seoRoadmap
+  "seo-specialist": seoRoadmap,
+  "copywriter": copywriterRoadmap
 };
