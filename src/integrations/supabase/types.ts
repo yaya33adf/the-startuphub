@@ -337,6 +337,33 @@ export type Database = {
         }
         Relationships: []
       }
+      freelancer_jobs: {
+        Row: {
+          category: string
+          created_at: string | null
+          description: string | null
+          id: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       goals: {
         Row: {
           completed: boolean | null
@@ -363,6 +390,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      job_skills: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          job_id: string | null
+          order_index: number
+          skill_level: string
+          skill_name: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          job_id?: string | null
+          order_index: number
+          skill_level: string
+          skill_name: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          job_id?: string | null
+          order_index?: number
+          skill_level?: string
+          skill_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_skills_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "freelancer_jobs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       notes: {
         Row: {
@@ -540,6 +605,44 @@ export type Database = {
           value?: Json
         }
         Relationships: []
+      }
+      skill_resources: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          skill_id: string | null
+          title: string
+          type: string
+          url: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          skill_id?: string | null
+          title: string
+          type: string
+          url: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          skill_id?: string | null
+          title?: string
+          type?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "skill_resources_skill_id_fkey"
+            columns: ["skill_id"]
+            isOneToOne: false
+            referencedRelation: "job_skills"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       startup_ratings: {
         Row: {
