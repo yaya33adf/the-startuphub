@@ -29,21 +29,8 @@ const formSchema = z.object({
   description: z.string().min(1, "Description is required"),
   status: z.enum(["required", "recommended", "optional"]),
   order_index: z.number(),
-  skills: z.string().transform((val) => val.split(',').map(s => s.trim())).optional(),
-  resources: z.string().transform((val) => {
-    if (!val) return [];
-    try {
-      return val.split('\n')
-        .filter(line => line.trim())
-        .map(line => {
-          const [name, url] = line.split('|').map(s => s.trim());
-          if (!name || !url) throw new Error("Invalid format");
-          return { name, url };
-        });
-    } catch (e) {
-      return [];
-    }
-  }),
+  skills: z.string(),
+  resources: z.string(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -89,8 +76,14 @@ export function RoadmapStepForm({ sectionId, step, onSuccess, onCancel }: Roadma
         description: values.description,
         status: values.status,
         order_index: values.order_index,
-        skills: values.skills || [],
-        resources: values.resources || [],
+        skills: values.skills.split(',').map(s => s.trim()).filter(Boolean),
+        resources: values.resources.split('\n')
+          .filter(line => line.trim())
+          .map(line => {
+            const [name, url] = line.split('|').map(s => s.trim());
+            return { name, url };
+          })
+          .filter(r => r.name && r.url),
       };
 
       if (step) {
