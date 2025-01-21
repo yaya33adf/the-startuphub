@@ -24,7 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { SkillsInput } from "./form/SkillsInput";
 import { ResourcesInput } from "./form/ResourcesInput";
-import { roadmapStepFormSchema, RoadmapStepFormProps, RoadmapStepFormValues } from "./types/roadmap-step";
+import { roadmapStepFormSchema, RoadmapStepFormProps, RoadmapStepFormValues, validRoles } from "./types/roadmap-step";
 
 export function RoadmapStepForm({ sectionId, step, onSuccess, onCancel }: RoadmapStepFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,6 +39,7 @@ export function RoadmapStepForm({ sectionId, step, onSuccess, onCancel }: Roadma
       order_index: step?.order_index || 0,
       skills: step?.skills?.join(', ') || "",
       resources: step?.resources?.map(r => `${r.name}|${r.url}`).join('\n') || "",
+      role: step?.role || validRoles[0],
     },
   });
 
@@ -60,6 +61,7 @@ export function RoadmapStepForm({ sectionId, step, onSuccess, onCancel }: Roadma
             return { name, url };
           })
           .filter(r => r.name && r.url),
+        role: values.role,
       };
 
       if (step) {
@@ -132,6 +134,34 @@ export function RoadmapStepForm({ sectionId, step, onSuccess, onCancel }: Roadma
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="role"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Role</FormLabel>
+              <Select 
+                onValueChange={field.onChange} 
+                defaultValue={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a role" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {validRoles.map((role) => (
+                    <SelectItem key={role} value={role}>
+                      {role}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}
