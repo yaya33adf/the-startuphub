@@ -30,21 +30,20 @@ const formSchema = z.object({
   status: z.enum(["required", "recommended", "optional"]),
   order_index: z.number(),
   skills: z.string().transform((val) => val.split(',').map(s => s.trim())).optional(),
-  resources: z.string()
-    .transform((val) => {
-      if (!val) return [];
-      try {
-        return val.split('\n')
-          .filter(line => line.trim())
-          .map(line => {
-            const [name, url] = line.split('|').map(s => s.trim());
-            return { name, url };
-          });
-      } catch (e) {
-        return [];
-      }
-    })
-    .optional(),
+  resources: z.string().transform((val) => {
+    if (!val) return [];
+    try {
+      return val.split('\n')
+        .filter(line => line.trim())
+        .map(line => {
+          const [name, url] = line.split('|').map(s => s.trim());
+          if (!name || !url) throw new Error("Invalid format");
+          return { name, url };
+        });
+    } catch (e) {
+      return [];
+    }
+  }),
 });
 
 interface RoadmapStepFormProps {
@@ -83,18 +82,19 @@ export function RoadmapStepForm({ sectionId, step, onSuccess, onCancel }: Roadma
     console.log("Submitting step form:", values);
 
     try {
+      const formattedData = {
+        title: values.title,
+        description: values.description,
+        status: values.status,
+        order_index: values.order_index,
+        skills: values.skills || [],
+        resources: values.resources || [],
+      };
+
       if (step) {
-        // Update existing step
         const { error } = await supabase
           .from('roadmap_steps')
-          .update({
-            title: values.title,
-            description: values.description,
-            status: values.status,
-            order_index: values.order_index,
-            skills: values.skills || [],
-            resources: values.resources || [],
-          })
+          .update(formattedData)
           .eq('id', step.id);
 
         if (error) throw error;
@@ -104,17 +104,11 @@ export function RoadmapStepForm({ sectionId, step, onSuccess, onCancel }: Roadma
           description: "Step updated successfully",
         });
       } else {
-        // Create new step
         const { error } = await supabase
           .from('roadmap_steps')
           .insert({
+            ...formattedData,
             section_id: sectionId,
-            title: values.title,
-            description: values.description,
-            status: values.status,
-            order_index: values.order_index,
-            skills: values.skills || [],
-            resources: values.resources || [],
           });
 
         if (error) throw error;
