@@ -46,6 +46,8 @@ const formSchema = z.object({
   }),
 });
 
+type FormValues = z.infer<typeof formSchema>;
+
 interface RoadmapStepFormProps {
   sectionId: string;
   step?: {
@@ -65,7 +67,7 @@ export function RoadmapStepForm({ sectionId, step, onSuccess, onCancel }: Roadma
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: step?.title || "",
@@ -77,7 +79,7 @@ export function RoadmapStepForm({ sectionId, step, onSuccess, onCancel }: Roadma
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: FormValues) => {
     setIsSubmitting(true);
     console.log("Submitting step form:", values);
 
