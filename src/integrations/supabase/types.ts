@@ -486,6 +486,115 @@ export type Database = {
         }
         Relationships: []
       }
+      roadmap_sections: {
+        Row: {
+          created_at: string | null
+          id: string
+          order_index: number
+          roadmap_id: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          order_index: number
+          roadmap_id: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          order_index?: number
+          roadmap_id?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roadmap_sections_roadmap_id_fkey"
+            columns: ["roadmap_id"]
+            isOneToOne: false
+            referencedRelation: "roadmap_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      roadmap_steps: {
+        Row: {
+          created_at: string | null
+          description: string
+          id: string
+          order_index: number
+          resources: Json | null
+          section_id: string
+          skills: string[] | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          id?: string
+          order_index: number
+          resources?: Json | null
+          section_id: string
+          skills?: string[] | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          id?: string
+          order_index?: number
+          resources?: Json | null
+          section_id?: string
+          skills?: string[] | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "roadmap_steps_section_id_fkey"
+            columns: ["section_id"]
+            isOneToOne: false
+            referencedRelation: "roadmap_sections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      roadmap_templates: {
+        Row: {
+          created_at: string | null
+          description: string
+          id: string
+          slug: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          id?: string
+          slug: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          id?: string
+          slug?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       schedule_calls: {
         Row: {
           additional_info: string | null
