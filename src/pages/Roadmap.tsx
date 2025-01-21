@@ -1,6 +1,7 @@
 import { PageSEO } from "@/components/seo/PageSEO";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Link } from "react-router-dom";
 
 interface JobCategory {
   title: string;
@@ -258,6 +259,13 @@ const jobCategories: JobCategory[] = [
 ];
 
 const Roadmap = () => {
+  const getJobSlug = (role: string) => {
+    return role
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-');
+  };
+
   return (
     <div className="container py-8">
       <PageSEO 
@@ -280,11 +288,13 @@ const Roadmap = () => {
               <ScrollArea className="h-[300px] pr-4">
                 <ul className="space-y-2">
                   {category.roles.map((role, roleIndex) => (
-                    <li 
-                      key={roleIndex}
-                      className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                    >
-                      {role}
+                    <li key={roleIndex}>
+                      <Link
+                        to={`/roadmap/${getJobSlug(role)}`}
+                        className="text-sm text-muted-foreground hover:text-primary transition-colors hover:underline"
+                      >
+                        {role}
+                      </Link>
                     </li>
                   ))}
                 </ul>

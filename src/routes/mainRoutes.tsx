@@ -25,6 +25,7 @@ import Events from "@/pages/Events";
 import BlossomWordGame from "@/pages/BlossomWordGame";
 
 const Roadmap = lazy(() => import("@/pages/Roadmap"));
+const JobRoadmap = lazy(() => import("@/components/roadmap/JobRoadmap").then(module => ({ default: module.JobRoadmap })));
 
 const LoadingFallback = () => (
   <div className="flex items-center justify-center min-h-[60vh]">
@@ -61,6 +62,14 @@ export const mainRoutes = [
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <Roadmap />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/roadmap/:jobId",
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <JobRoadmap />
       </Suspense>
     ),
   },
