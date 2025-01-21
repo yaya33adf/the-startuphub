@@ -1,4 +1,4 @@
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
 import { RouteObject } from "react-router-dom";
 import Index from "@/pages/Index";
 import About from "@/pages/About";
@@ -26,6 +26,12 @@ import BlossomWordGame from "@/pages/BlossomWordGame";
 
 const Roadmap = lazy(() => import("@/pages/Roadmap"));
 
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-[60vh]">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+  </div>
+);
+
 export const mainRoutes = [
   { path: "/", element: <Index /> },
   { path: "/about", element: <About /> },
@@ -52,6 +58,10 @@ export const mainRoutes = [
   { path: "/blossom-word-game", element: <BlossomWordGame /> },
   {
     path: "/roadmap",
-    element: <Roadmap />,
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <Roadmap />
+      </Suspense>
+    ),
   },
 ];
