@@ -13,8 +13,10 @@ import BookNameGeneratorPage from "@/pages/tools/BookNameGeneratorPage";
 import BrandIdentityPage from "@/pages/tools/BrandIdentityPage";
 import QRCodeGeneratorPage from "@/pages/tools/QRCodeGeneratorPage";
 import ExpenseTrackerPage from "@/pages/tools/ExpenseTrackerPage";
+import { StartupValuation } from "@/components/tools/StartupValuation";
 
 export const toolRoutes: RouteObject[] = [
+  { path: "/tools/startup-valuation", element: <StartupValuation /> },
   { path: "/tools/business-name-generator", element: <BusinessNameGeneratorPage /> },
   { path: "/tools/currency-converter", element: <CurrencyConverterPage /> },
   { path: "/tools/startup-idea-generator", element: <StartupIdeaGeneratorPage /> },

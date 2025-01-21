@@ -5,6 +5,7 @@ import { CurrencyConverter } from "../CurrencyConverter";
 import { ExpenseTracker } from "../ExpenseTracker";
 import { InvoiceGenerator } from "../InvoiceGenerator";
 import { SalesAnalytics } from "../SalesAnalytics";
+import { StartupValuation } from "../StartupValuation";
 
 export const businessTools: Tool[] = [
   {
@@ -46,5 +47,13 @@ export const businessTools: Tool[] = [
     component: SalesAnalytics,
     active: true,
     path: "/tools/sales-analytics"
+  },
+  {
+    title: "Startup Valuation Calculator",
+    description: "Calculate your startup's valuation using multiple methodologies",
+    icon: Calculator,
+    component: StartupValuation,
+    active: true,
+    path: "/tools/startup-valuation"
   }
 ];
