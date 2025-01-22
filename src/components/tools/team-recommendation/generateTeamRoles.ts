@@ -24,8 +24,13 @@ export const generateTeamRoles = (data: FormData): TeamRole[] => {
       roles.push(
         { role: "Marketing Manager", count: 1 },
         { role: "Content Creator", count: data.project_size === "large" ? 2 : 1 },
-        { role: "Social Media Specialist", count: 1 },
-        { role: "Graphic Designer", count: 1 }
+        { role: "Social Media Specialist", count: data.project_size === "large" ? 2 : 1 },
+        { role: "SEO Specialist", count: 1 },
+        { role: "Email Marketing Specialist", count: 1 },
+        { role: "PPC Specialist", count: data.project_size === "large" ? 1 : 0 },
+        { role: "Marketing Analytics Expert", count: data.project_size === "large" ? 1 : 0 },
+        { role: "Graphic Designer", count: 1 },
+        { role: "Copywriter", count: data.project_size === "large" ? 2 : 1 }
       );
       break;
     default:
@@ -36,5 +41,6 @@ export const generateTeamRoles = (data: FormData): TeamRole[] => {
       );
   }
   
-  return roles;
+  // Filter out roles with count 0
+  return roles.filter(role => role.count > 0);
 };
