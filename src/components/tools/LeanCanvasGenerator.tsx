@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { Download } from "lucide-react";
-import html2canvas from "html-to-image";
+import { toPng } from 'html-to-image';
 
 const formSchema = z.object({
   problem: z.string().min(1, "Problem is required"),
@@ -57,10 +57,10 @@ export const LeanCanvasGenerator = () => {
     const canvas = document.getElementById('lean-canvas');
     if (canvas) {
       try {
-        const dataUrl = await html2canvas(canvas);
+        const dataUrl = await toPng(canvas);
         const link = document.createElement('a');
         link.download = 'lean-canvas.png';
-        link.href = dataUrl.toDataURL();
+        link.href = dataUrl;
         link.click();
         
         toast({
