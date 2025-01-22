@@ -1,12 +1,14 @@
 import { JobRoadmap } from "@/types/roadmap";
-import { lifeCoachRoadmap } from "../life-coach";
+import { personalChefRoadmap } from "../personal-chef";
+import { personalStylistRoadmap } from "../personal-stylist";
 import { personalTrainerRoadmap } from "../personal-trainer";
 import { travelPlannerRoadmap } from "../travel-planner";
-import { personalChefRoadmap } from "../personal-chef";
+import { eventPlannerRoadmap } from "../event-planner";
 
 export const personalLifestyleRoadmaps: Record<string, JobRoadmap> = {
-  "life-coach": lifeCoachRoadmap,
+  "personal-chef": personalChefRoadmap,
+  "personal-stylist": personalStylistRoadmap,
   "personal-trainer": personalTrainerRoadmap,
   "travel-planner": travelPlannerRoadmap,
-  "personal-chef": personalChefRoadmap
+  "event-planner": eventPlannerRoadmap
 };
