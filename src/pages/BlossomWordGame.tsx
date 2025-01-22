@@ -1,5 +1,5 @@
 import { PageSEO } from "@/components/seo/PageSEO";
-import { StartupWordGame } from "@/components/word-game/StartupWordGame";
+import StartupWordGame from "@/components/word-game/StartupWordGame";
 
 const BlossomWordGame = () => {
   return (
