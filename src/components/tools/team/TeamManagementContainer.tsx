@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { AddTeamMemberForm } from "./AddTeamMemberForm";
 import { TeamMembersList } from "./TeamMembersList";
 import { useTeamManagement } from "./useTeamManagement";
+import { StartupRecommendationForm } from "./StartupRecommendationForm";
 
 export const TeamManagementContainer = () => {
   const { 
@@ -14,6 +15,8 @@ export const TeamManagementContainer = () => {
 
   return (
     <div className="space-y-6">
+      <StartupRecommendationForm />
+      
       <AddTeamMemberForm
         onSubmit={(member) => addMemberMutation.mutate(member)}
         isSubmitting={addMemberMutation.isPending}
