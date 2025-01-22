@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Briefcase, Building2, Users, Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Investor {
   id: string;
@@ -45,6 +46,11 @@ const Investors = () => {
       setInvestors(data || []);
     } catch (error) {
       console.error("Error in fetchInvestors:", error);
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -59,19 +65,27 @@ const Investors = () => {
       
       <div className="space-y-6">
         <div className="flex flex-col gap-4">
-          <h1 className="text-4xl font-bold">Investors</h1>
+          <h1 className="text-4xl font-bold tracking-tight">Connect with Investors</h1>
           <p className="text-lg text-muted-foreground">
-            Connect with investors who are looking to fund the next big thing.
+            Discover and connect with investors who are actively looking to fund the next big innovation.
           </p>
         </div>
 
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
-              <Card key={i} className="p-6 animate-pulse">
-                <div className="h-6 bg-muted rounded w-3/4 mb-4"></div>
-                <div className="h-4 bg-muted rounded w-1/2 mb-2"></div>
-                <div className="h-4 bg-muted rounded w-2/3"></div>
+              <Card key={i} className="p-6">
+                <div className="flex items-start gap-4">
+                  <Skeleton className="h-12 w-12 rounded-full" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-6 w-32" />
+                    <Skeleton className="h-4 w-24" />
+                  </div>
+                </div>
+                <div className="mt-4 space-y-2">
+                  <Skeleton className="h-4 w-full" />
+                  <Skeleton className="h-4 w-3/4" />
+                </div>
               </Card>
             ))}
           </div>
