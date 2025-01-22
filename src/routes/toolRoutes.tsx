@@ -20,6 +20,7 @@ import StartupValuationPage from "@/pages/tools/StartupValuationPage";
 import LeanCanvasGeneratorPage from "@/pages/tools/LeanCanvasGeneratorPage";
 import SWOTAnalysisPage from "@/pages/tools/SWOTAnalysisPage";
 import BusinessModelGeneratorPage from "@/pages/tools/BusinessModelGeneratorPage";
+import CompetitorBenchmarkingPage from "@/pages/tools/CompetitorBenchmarkingPage";
 
 export const toolRoutes = [
   {
@@ -109,5 +110,9 @@ export const toolRoutes = [
   {
     path: "/tools/business-model-generator",
     element: <BusinessModelGeneratorPage />
+  },
+  {
+    path: "/tools/competitor-benchmarking",
+    element: <CompetitorBenchmarkingPage />
   }
 ];
