@@ -1,15 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Trash2 } from "lucide-react";
-
-interface TeamMember {
-  id: string;
-  member_name: string;
-  role: string;
-  email: string;
-  assignment: string | null;
-  due_date: string | null;
-}
+import { TeamMember } from "./types";
 
 interface TeamMembersListProps {
   members: TeamMember[];
