@@ -9,6 +9,7 @@ import { mobileRoadmap } from "../mobile";
 
 export const developmentRoadmaps: Record<string, JobRoadmap> = {
   "frontend-developer": frontendRoadmap,
+  "frontend-developer-html-css-javascript": frontendHtmlCssJsRoadmap,
   "backend-developer": backendRoadmap,
   "full-stack-developer": fullStackRoadmap,
   "web3-developer": web3Roadmap,
