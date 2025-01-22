@@ -4,7 +4,7 @@ export const jobCategories: JobCategory[] = [
   {
     title: "Web Development & IT",
     roles: [
-      "Front-End Developer (HTML, CSS, JavaScript)",
+      "Front-End Developer (HTML, CSS, JavaScript) [Roadmap Available]",
       "Back-End Developer (Node.js, PHP, Python)",
       "Full-Stack Developer",
       "WordPress Developer",
