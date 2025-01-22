@@ -51,3 +51,12 @@ export const filterSalesTools = (tools: Tool[]) =>
     tool.path?.includes('invoice') ||
     tool.path?.includes('pricing')
   );
+
+export const filterFundingTools = (tools: Tool[]) =>
+  tools.filter(tool =>
+    tool.path?.includes('funding') ||
+    tool.path?.includes('investment') ||
+    tool.path?.includes('investor') ||
+    tool.path?.includes('startup-valuation') ||
+    tool.path?.includes('crowdfunding')
+  );

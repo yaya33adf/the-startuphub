@@ -14,6 +14,7 @@ import { MarketingToolsSubmenu } from "./tool-submenus/MarketingToolsSubmenu";
 import { ProductToolsSubmenu } from "./tool-submenus/ProductToolsSubmenu";
 import { LegalToolsSubmenu } from "./tool-submenus/LegalToolsSubmenu";
 import { SalesToolsSubmenu } from "./tool-submenus/SalesToolsSubmenu";
+import { FundingToolsSubmenu } from "./tool-submenus/FundingToolsSubmenu";
 import { useToolsFilter } from "@/hooks/useToolsFilter";
 
 interface ToolsDropdownProps {
@@ -28,6 +29,7 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
     productTools,
     legalTools,
     salesTools,
+    fundingTools,
     freeTools
   } = useToolsFilter(tools);
 
@@ -53,6 +55,7 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
           <MarketingToolsSubmenu tools={marketingTools} onClick={onClick} />
           <ProductToolsSubmenu tools={productTools} onClick={onClick} />
           <SalesToolsSubmenu tools={salesTools} onClick={onClick} />
+          <FundingToolsSubmenu tools={fundingTools} onClick={onClick} />
           <LegalToolsSubmenu tools={legalTools} onClick={onClick} />
         </DropdownMenuGroup>
       </DropdownMenuContent>

@@ -6,7 +6,8 @@ import {
   filterMarketingTools,
   filterProductTools,
   filterLegalTools,
-  filterSalesTools
+  filterSalesTools,
+  filterFundingTools
 } from "@/utils/toolFilters";
 
 export const useToolsFilter = (tools: Tool[]) => {
@@ -46,6 +47,11 @@ export const useToolsFilter = (tools: Tool[]) => {
     [activeTools]
   );
 
+  const fundingTools = useMemo(() => 
+    filterFundingTools(activeTools),
+    [activeTools]
+  );
+
   // All remaining tools go to free tools
   const freeTools = useMemo(() => 
     activeTools.filter(tool => 
@@ -54,9 +60,10 @@ export const useToolsFilter = (tools: Tool[]) => {
       !marketingTools.includes(tool) &&
       !productTools.includes(tool) &&
       !legalTools.includes(tool) &&
-      !salesTools.includes(tool)
+      !salesTools.includes(tool) &&
+      !fundingTools.includes(tool)
     ),
-    [activeTools, financialTools, businessPlanningTools, marketingTools, productTools, legalTools, salesTools]
+    [activeTools, financialTools, businessPlanningTools, marketingTools, productTools, legalTools, salesTools, fundingTools]
   );
 
   return {
@@ -66,6 +73,7 @@ export const useToolsFilter = (tools: Tool[]) => {
     productTools,
     legalTools,
     salesTools,
+    fundingTools,
     freeTools
   };
 };
