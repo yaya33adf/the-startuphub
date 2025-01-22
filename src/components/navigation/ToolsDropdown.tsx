@@ -1,4 +1,4 @@
-import { Wrench, Coins, Gift, Calculator, TrendingUp, Package } from "lucide-react";
+import { Wrench, Coins, Gift, Calculator, TrendingUp, Package, Scale } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,12 +53,21 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
     tool.path?.includes('product-backlog')
   );
 
+  const legalTools = activeTools.filter(tool =>
+    tool.path?.includes('legal') ||
+    tool.path?.includes('compliance') ||
+    tool.path?.includes('terms') ||
+    tool.path?.includes('privacy') ||
+    tool.path?.includes('contract')
+  );
+
   // All remaining tools go to free tools
   const freeTools = activeTools.filter(tool => 
     !financialTools.includes(tool) &&
     !businessPlanningTools.includes(tool) &&
     !marketingTools.includes(tool) &&
-    !productTools.includes(tool)
+    !productTools.includes(tool) &&
+    !legalTools.includes(tool)
   );
 
   return (
@@ -197,6 +206,34 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
             <DropdownMenuSubContent className="bg-background">
               {productTools.length > 0 ? (
                 productTools.map((tool) => (
+                  <DropdownMenuItem
+                    key={tool.path}
+                    asChild
+                    onClick={onClick}
+                    className="transition-colors duration-200 hover:bg-accent/50"
+                  >
+                    <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
+                      <tool.icon className="w-4 h-4" />
+                      <span>{tool.title}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                ))
+              ) : (
+                <DropdownMenuLabel className="text-sm text-muted-foreground px-2 py-1">
+                  Coming soon...
+                </DropdownMenuLabel>
+              )}
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger className="flex items-center gap-2">
+              <Scale className="w-4 h-4" />
+              <span>Legal & Compliance Tools</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent className="bg-background">
+              {legalTools.length > 0 ? (
+                legalTools.map((tool) => (
                   <DropdownMenuItem
                     key={tool.path}
                     asChild
