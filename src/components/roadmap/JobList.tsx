@@ -8,15 +8,15 @@ interface JobListProps {
 
 export const JobList = ({ roles }: JobListProps) => {
   const getJobSlug = (role: string) => {
-    return role
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-');
+    const slug = role.toLowerCase().replace(/\s+/g, '-');
+    console.log(`Converting role "${role}" to slug "${slug}"`); // Debug log
+    return slug;
   };
 
   const hasRoadmap = (role: string) => {
     const slug = getJobSlug(role);
     console.log("Checking roadmap for slug:", slug); // Debug log
+    console.log("Available roadmaps:", Object.keys(roadmaps)); // Debug log
     const exists = !!roadmaps[slug];
     console.log("Roadmap exists:", exists); // Debug log
     return exists;
@@ -26,7 +26,7 @@ export const JobList = ({ roles }: JobListProps) => {
     <ul className="space-y-2">
       {roles.map((role, roleIndex) => {
         const slug = getJobSlug(role);
-        console.log(`Role: ${role}, Slug: ${slug}`); // Debug log
+        console.log(`Processing role: ${role}, Generated slug: ${slug}`); // Debug log
         return (
           <li key={roleIndex} className="flex items-center justify-between">
             <Link
