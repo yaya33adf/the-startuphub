@@ -17,10 +17,10 @@ import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
-  revenue: z.string().transform((val) => Number(val) || 0),
-  growthRate: z.string().transform((val) => Number(val) || 0),
-  marketSize: z.string().transform((val) => Number(val) || 0),
-  margins: z.string().transform((val) => Number(val) || 0),
+  revenue: z.string().transform((val) => parseFloat(val) || 0),
+  growthRate: z.string().transform((val) => parseFloat(val) || 0),
+  marketSize: z.string().transform((val) => parseFloat(val) || 0),
+  margins: z.string().transform((val) => parseFloat(val) || 0),
 });
 
 type ValuationFormValues = z.infer<typeof formSchema>;
