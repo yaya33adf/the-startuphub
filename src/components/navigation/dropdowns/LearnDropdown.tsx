@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { GraduationCap } from "lucide-react";
+import { GraduationCap, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -36,6 +36,16 @@ export const LearnDropdown = ({ onClick = () => {} }: LearnDropdownProps) => {
           <Link to="/roadmap" className="flex items-center gap-2 w-full p-2">
             <GraduationCap className="w-4 h-4" />
             <span>Career Roadmap</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem 
+          asChild 
+          onClick={onClick}
+          className="transition-colors duration-200 hover:bg-accent/50"
+        >
+          <Link to="/problems" className="flex items-center gap-2 w-full p-2">
+            <HelpCircle className="w-4 h-4" />
+            <span>Problems</span>
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
