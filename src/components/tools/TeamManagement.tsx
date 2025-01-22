@@ -55,7 +55,11 @@ export const TeamManagement = () => {
       console.log("Adding team member:", memberData);
       const { data, error } = await supabase
         .from("teams")
-        .insert([{ ...memberData, user_id: userId, status: "active" }])
+        .insert([{ 
+          ...memberData,
+          user_id: userId,
+          status: "active"
+        }])
         .select()
         .single();
 
