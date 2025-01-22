@@ -8,6 +8,7 @@ import { mainRoutes } from "@/routes/mainRoutes";
 import { authRoutes } from "@/routes/authRoutes";
 import { toolRoutes } from "@/routes/toolRoutes";
 import { adminRoutes } from "@/routes/adminRoutes";
+import { JobRoadmap } from "@/components/roadmap/JobRoadmap";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
                   element={route.element}
                 />
               ))}
+              <Route path="/roadmap/:jobId" element={<JobRoadmap />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>

@@ -6,7 +6,10 @@ import { roadmaps } from "@/data/roadmapData";
 
 export const JobRoadmap = () => {
   const { jobId } = useParams();
-  const roadmap = roadmaps[jobId as string];
+  console.log("Current jobId:", jobId); // Debug log
+  console.log("Available roadmaps:", Object.keys(roadmaps)); // Debug log
+
+  const roadmap = jobId ? roadmaps[jobId] : null;
 
   if (!roadmap) {
     return <RoadmapNotFound />;
