@@ -14,6 +14,15 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 
+interface TeamRole {
+  role: string;
+  count: number;
+}
+
+interface RecommendationData {
+  recommended_roles: TeamRole[];
+}
+
 export const StartupRecommendationForm = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
@@ -36,7 +45,7 @@ export const StartupRecommendationForm = () => {
         .single();
 
       if (error) throw error;
-      return data?.recommended_roles || null;
+      return data as RecommendationData;
     },
     enabled: !!formData.project_type && !!formData.project_size
   });
@@ -131,11 +140,11 @@ export const StartupRecommendationForm = () => {
             </Select>
           </div>
 
-          {recommendation && (
+          {recommendation?.recommended_roles && (
             <div className="mt-4 p-4 bg-muted rounded-lg">
               <h4 className="font-medium mb-2">Recommended Team Structure:</h4>
               <ul className="space-y-2">
-                {recommendation.map((role: { role: string; count: number }, index: number) => (
+                {recommendation.recommended_roles.map((role: TeamRole, index: number) => (
                   <li key={index} className="flex justify-between">
                     <span>{role.role}</span>
                     <span className="text-muted-foreground">×{role.count}</span>
