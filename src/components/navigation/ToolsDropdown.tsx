@@ -13,6 +13,7 @@ import { BusinessToolsSubmenu } from "./tool-submenus/BusinessToolsSubmenu";
 import { MarketingToolsSubmenu } from "./tool-submenus/MarketingToolsSubmenu";
 import { ProductToolsSubmenu } from "./tool-submenus/ProductToolsSubmenu";
 import { LegalToolsSubmenu } from "./tool-submenus/LegalToolsSubmenu";
+import { SalesToolsSubmenu } from "./tool-submenus/SalesToolsSubmenu";
 
 interface ToolsDropdownProps {
   onClick?: () => void;
@@ -61,13 +62,21 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
     tool.path?.includes('contract')
   );
 
+  const salesTools = activeTools.filter(tool =>
+    tool.path?.includes('sales') ||
+    tool.path?.includes('revenue') ||
+    tool.path?.includes('invoice') ||
+    tool.path?.includes('pricing')
+  );
+
   // All remaining tools go to free tools
   const freeTools = activeTools.filter(tool => 
     !financialTools.includes(tool) &&
     !businessPlanningTools.includes(tool) &&
     !marketingTools.includes(tool) &&
     !productTools.includes(tool) &&
-    !legalTools.includes(tool)
+    !legalTools.includes(tool) &&
+    !salesTools.includes(tool)
   );
 
   return (
@@ -91,6 +100,7 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
           <BusinessToolsSubmenu tools={businessPlanningTools} onClick={onClick} />
           <MarketingToolsSubmenu tools={marketingTools} onClick={onClick} />
           <ProductToolsSubmenu tools={productTools} onClick={onClick} />
+          <SalesToolsSubmenu tools={salesTools} onClick={onClick} />
           <LegalToolsSubmenu tools={legalTools} onClick={onClick} />
         </DropdownMenuGroup>
       </DropdownMenuContent>
