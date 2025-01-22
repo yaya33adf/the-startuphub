@@ -17,17 +17,28 @@ const Sitemap = () => {
       />
       <WebsiteSchema />
       
-      <div className="container mx-auto py-12">
+      <div className="container mx-auto py-12 px-4">
         <h1 className="text-3xl font-bold mb-8">Site Map</h1>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <MainNavigation />
-          <BusinessTools />
-          <CommunitySupport />
-          <AccountSettings />
-          <InvestorsSection />
-          <LegalSection />
-          <TemplatesSection />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Main Navigation */}
+          <div className="space-y-8">
+            <MainNavigation />
+            <BusinessTools />
+          </div>
+
+          {/* Community & Support */}
+          <div className="space-y-8">
+            <CommunitySupport />
+            <AccountSettings />
+          </div>
+
+          {/* Additional Resources */}
+          <div className="space-y-8">
+            <InvestorsSection />
+            <LegalSection />
+            <TemplatesSection />
+          </div>
         </div>
       </div>
     </div>

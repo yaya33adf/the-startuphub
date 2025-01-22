@@ -22,6 +22,11 @@ export const MainNavigation = () => {
           </Link>
         </li>
         <li>
+          <Link to="/events" className="text-muted-foreground hover:text-primary transition-colors">
+            Events - Business Meetups & Networking
+          </Link>
+        </li>
+        <li>
           <Link to="/contact" className="text-muted-foreground hover:text-primary transition-colors">
             Contact - Get in Touch
           </Link>
