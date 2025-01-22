@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { AddTeamMemberForm } from "./team/AddTeamMemberForm";
-import { TeamMembersList } from "./team/TeamMembersList";
+import { AddTeamMemberForm } from "./AddTeamMemberForm";
+import { TeamMembersList } from "./TeamMembersList";
 
-export const TeamManagement = () => {
+export const TeamManagementContainer = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [userId, setUserId] = useState<string | null>(null);
@@ -112,10 +112,6 @@ export const TeamManagement = () => {
       setDeletingId(null);
     },
   });
-
-  if (isLoading) {
-    return <div className="text-center p-4">Loading team members...</div>;
-  }
 
   return (
     <div className="space-y-6">

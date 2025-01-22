@@ -1,5 +1,5 @@
 import { PageSEO } from "@/components/seo/PageSEO";
-import { TeamManagement } from "@/components/tools/TeamManagement";
+import { TeamManagementContainer } from "@/components/tools/team/TeamManagementContainer";
 
 const Team = () => {
   return (
@@ -18,7 +18,7 @@ const Team = () => {
         </div>
       </div>
 
-      <TeamManagement />
+      <TeamManagementContainer />
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { Target, Users, CalendarDays, StickyNote } from "lucide-react";
 import { Tool } from "../types/ToolTypes";
 import { GoalTracker } from "../GoalTracker";
-import { TeamManagement } from "../TeamManagement";
+import { TeamManagementContainer } from "../team/TeamManagementContainer";
 import { AppointmentScheduler } from "../AppointmentScheduler";
 import { NotesWidget } from "../NotesWidget";
 
@@ -18,7 +18,7 @@ export const productivityTools: Tool[] = [
     title: "Team Management",
     description: "Manage team members and assignments",
     icon: Users,
-    component: TeamManagement,
+    component: TeamManagementContainer,
     active: true,
     path: "/tools/team-management"
   },
