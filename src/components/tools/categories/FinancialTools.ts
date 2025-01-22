@@ -81,6 +81,6 @@ export const financialTools: Tool[] = [
     description: "Calculate the funding target needed to cover production and marketing costs",
     icon: Goal,
     path: "/tools/crowdfunding-goal",
-    active: false
+    active: true
   }
 ];
