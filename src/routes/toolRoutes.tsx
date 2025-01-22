@@ -16,6 +16,10 @@ import ExpenseTrackerPage from "@/pages/tools/ExpenseTrackerPage";
 import { StartupValuation } from "@/components/tools/StartupValuation";
 import { SmallBusinessQuotes } from "@/components/tools/SmallBusinessQuotes";
 import { SmallBusinessTips } from "@/components/tools/SmallBusinessTips";
+import { RunwayCalculator } from "@/components/tools/RunwayCalculator";
+import { BreakEvenAnalysis } from "@/components/tools/BreakEvenAnalysis";
+import { InvestorReturn } from "@/components/tools/InvestorReturn";
+import { CrowdfundingGoal } from "@/components/tools/CrowdfundingGoal";
 
 export const toolRoutes: RouteObject[] = [
   { path: "/tools/startup-valuation", element: <StartupValuation /> },
@@ -34,5 +38,9 @@ export const toolRoutes: RouteObject[] = [
   { path: "/tools/qr-code-generator", element: <QRCodeGeneratorPage /> },
   { path: "/tools/expense-tracker", element: <ExpenseTrackerPage /> },
   { path: "/tools/small-business-quotes", element: <SmallBusinessQuotes /> },
-  { path: "/tools/small-business-tips", element: <SmallBusinessTips /> }
+  { path: "/tools/small-business-tips", element: <SmallBusinessTips /> },
+  { path: "/tools/runway-calculator", element: <RunwayCalculator /> },
+  { path: "/tools/break-even-analysis", element: <BreakEvenAnalysis /> },
+  { path: "/tools/investor-return", element: <InvestorReturn /> },
+  { path: "/tools/crowdfunding-goal", element: <CrowdfundingGoal /> }
 ];
