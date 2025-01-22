@@ -8,7 +8,8 @@ export const filterFinancialTools = (tools: Tool[]) =>
      tool.path.includes('investment') || 
      tool.path.includes('cash-flow') || 
      tool.path.includes('financial') ||
-     tool.path.includes('profit'))
+     tool.path.includes('profit') ||
+     tool.path.includes('startup-valuation'))
   );
 
 export const filterBusinessTools = (tools: Tool[]) =>
