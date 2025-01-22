@@ -3,7 +3,7 @@ import { PageSEO } from "@/components/seo/PageSEO";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Briefcase, Building2, Users, Mail } from "lucide-react";
+import { Briefcase, Building2, Globe, Users, Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { InvestorForm } from "@/components/investors/InvestorForm";

@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Plus, User, Mail, Globe, Building2, Image } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export function InvestorForm() {
   const [name, setName] = useState("");
@@ -16,24 +17,33 @@ export function InvestorForm() {
   const [investmentStage, setInvestmentStage] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!user) {
+      toast({
+        title: "Error",
+        description: "You must be logged in to create an investor profile",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       const { error } = await supabase
         .from('profiles')
-        .insert([
-          {
-            name,
-            email,
-            country,
-            company,
-            investment_stage: investmentStage,
-            image_url: imageUrl,
-            user_type: 'investor'
-          }
-        ]);
+        .upsert({
+          id: user.id,
+          name,
+          email,
+          country,
+          company,
+          investment_stage: investmentStage,
+          image_url: imageUrl,
+          user_type: 'investor'
+        });
 
       if (error) throw error;
 
