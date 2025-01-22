@@ -1,4 +1,4 @@
-import { Wrench, Coins, Gift, Calculator, TrendingUp } from "lucide-react";
+import { Wrench, Coins, Gift, Calculator, TrendingUp, Package } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +24,7 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
   
   const financialTools = activeTools.filter(tool => 
     tool.path?.startsWith('/tools/') && 
-    !tool.path.includes('currency-converter') && // Exclude currency converter from financial tools
+    !tool.path.includes('currency-converter') && 
     (tool.path.includes('budget') || 
      tool.path.includes('investment') || 
      tool.path.includes('cash-flow') || 
@@ -46,11 +46,19 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
     tool.path?.includes('sales-analytics')
   );
 
+  const productTools = activeTools.filter(tool =>
+    tool.path?.includes('product-roadmap') ||
+    tool.path?.includes('feature-planning') ||
+    tool.path?.includes('sprint-planning') ||
+    tool.path?.includes('product-backlog')
+  );
+
   // All remaining tools go to free tools
   const freeTools = activeTools.filter(tool => 
     !financialTools.includes(tool) &&
     !businessPlanningTools.includes(tool) &&
-    !marketingTools.includes(tool)
+    !marketingTools.includes(tool) &&
+    !productTools.includes(tool)
   );
 
   return (
@@ -161,6 +169,34 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
             <DropdownMenuSubContent className="bg-background">
               {marketingTools.length > 0 ? (
                 marketingTools.map((tool) => (
+                  <DropdownMenuItem
+                    key={tool.path}
+                    asChild
+                    onClick={onClick}
+                    className="transition-colors duration-200 hover:bg-accent/50"
+                  >
+                    <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
+                      <tool.icon className="w-4 h-4" />
+                      <span>{tool.title}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                ))
+              ) : (
+                <DropdownMenuLabel className="text-sm text-muted-foreground px-2 py-1">
+                  Coming soon...
+                </DropdownMenuLabel>
+              )}
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger className="flex items-center gap-2">
+              <Package className="w-4 h-4" />
+              <span>Product Development Tools</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent className="bg-background">
+              {productTools.length > 0 ? (
+                productTools.map((tool) => (
                   <DropdownMenuItem
                     key={tool.path}
                     asChild
