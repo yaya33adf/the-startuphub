@@ -1,86 +1,74 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
+import { Label } from "@/components/ui/label";
 
 export const InvestorReturn = () => {
-  const [initialInvestment, setInitialInvestment] = useState("");
-  const [projectedValue, setProjectedValue] = useState("");
-  const [timeframe, setTimeframe] = useState("");
+  const [initialInvestment, setInitialInvestment] = useState<number>(0);
+  const [projectedValue, setProjectedValue] = useState<number>(0);
+  const [timeframe, setTimeframe] = useState<number>(0);
   const [roi, setRoi] = useState<number | null>(null);
-  const { toast } = useToast();
 
   const calculateROI = () => {
-    const investment = parseFloat(initialInvestment);
-    const value = parseFloat(projectedValue);
-    const years = parseFloat(timeframe);
-
-    if (isNaN(investment) || isNaN(value) || isNaN(years)) {
-      toast({
-        title: "Invalid Input",
-        description: "Please enter valid numbers for all fields",
-        variant: "destructive",
-      });
+    if (initialInvestment === 0) {
+      setRoi(null);
       return;
     }
-
-    if (investment <= 0 || years <= 0) {
-      toast({
-        title: "Invalid Values",
-        description: "Investment and timeframe must be greater than zero",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const totalReturn = ((value - investment) / investment) * 100;
-    const annualizedROI = (Math.pow(value / investment, 1 / years) - 1) * 100;
-    setRoi(annualizedROI);
+    const totalReturn = ((projectedValue - initialInvestment) / initialInvestment) * 100;
+    const annualizedReturn = (totalReturn / timeframe);
+    setRoi(Math.round(annualizedReturn * 100) / 100);
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Investor Return Calculator</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Initial Investment ($)</label>
+    <Card className="w-full max-w-2xl mx-auto p-6">
+      <h2 className="text-2xl font-bold mb-6">Investor Return Calculator</h2>
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="initialInvestment">Initial Investment ($)</Label>
           <Input
+            id="initialInvestment"
             type="number"
+            min="0"
             value={initialInvestment}
-            onChange={(e) => setInitialInvestment(e.target.value)}
-            placeholder="Enter initial investment amount"
+            onChange={(e) => setInitialInvestment(Number(e.target.value))}
+            className="mt-1"
           />
         </div>
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Projected Future Value ($)</label>
+        <div>
+          <Label htmlFor="projectedValue">Projected Value ($)</Label>
           <Input
+            id="projectedValue"
             type="number"
+            min="0"
             value={projectedValue}
-            onChange={(e) => setProjectedValue(e.target.value)}
-            placeholder="Enter projected value"
+            onChange={(e) => setProjectedValue(Number(e.target.value))}
+            className="mt-1"
           />
         </div>
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Investment Timeframe (Years)</label>
+        <div>
+          <Label htmlFor="timeframe">Investment Timeframe (years)</Label>
           <Input
+            id="timeframe"
             type="number"
+            min="0"
             value={timeframe}
-            onChange={(e) => setTimeframe(e.target.value)}
-            placeholder="Enter number of years"
+            onChange={(e) => setTimeframe(Number(e.target.value))}
+            className="mt-1"
           />
         </div>
-        <Button onClick={calculateROI} className="w-full">Calculate ROI</Button>
+        <Button onClick={calculateROI} className="w-full">
+          Calculate Annual ROI
+        </Button>
         {roi !== null && (
           <div className="mt-4 p-4 bg-secondary rounded-lg">
-            <p className="text-center">
-              Annualized ROI: <span className="font-bold">{roi.toFixed(2)}%</span>
+            <p className="text-lg">
+              Expected annual ROI:{" "}
+              <span className="font-bold">{roi}%</span>
             </p>
           </div>
         )}
-      </CardContent>
+      </div>
     </Card>
   );
 };

@@ -1,4 +1,3 @@
-import { RouteObject } from "react-router-dom";
 import BusinessNameGeneratorPage from "@/pages/tools/BusinessNameGeneratorPage";
 import CurrencyConverterPage from "@/pages/tools/CurrencyConverterPage";
 import StartupIdeaGeneratorPage from "@/pages/tools/StartupIdeaGeneratorPage";
@@ -13,34 +12,82 @@ import BookNameGeneratorPage from "@/pages/tools/BookNameGeneratorPage";
 import BrandIdentityPage from "@/pages/tools/BrandIdentityPage";
 import QRCodeGeneratorPage from "@/pages/tools/QRCodeGeneratorPage";
 import ExpenseTrackerPage from "@/pages/tools/ExpenseTrackerPage";
-import { StartupValuation } from "@/components/tools/StartupValuation";
-import { SmallBusinessQuotes } from "@/components/tools/SmallBusinessQuotes";
-import { SmallBusinessTips } from "@/components/tools/SmallBusinessTips";
-import { RunwayCalculator } from "@/components/tools/RunwayCalculator";
-import { BreakEvenAnalysis } from "@/components/tools/BreakEvenAnalysis";
-import { InvestorReturn } from "@/components/tools/InvestorReturn";
-import { CrowdfundingGoal } from "@/components/tools/CrowdfundingGoal";
+import RunwayCalculatorPage from "@/pages/tools/RunwayCalculatorPage";
+import BreakEvenAnalysisPage from "@/pages/tools/BreakEvenAnalysisPage";
+import InvestorReturnPage from "@/pages/tools/InvestorReturnPage";
+import CrowdfundingGoalPage from "@/pages/tools/CrowdfundingGoalPage";
 
-export const toolRoutes: RouteObject[] = [
-  { path: "/tools/startup-valuation", element: <StartupValuation /> },
-  { path: "/tools/business-name-generator", element: <BusinessNameGeneratorPage /> },
-  { path: "/tools/currency-converter", element: <CurrencyConverterPage /> },
-  { path: "/tools/startup-idea-generator", element: <StartupIdeaGeneratorPage /> },
-  { path: "/tools/sales-analytics", element: <SalesAnalyticsPage /> },
-  { path: "/tools/team-management", element: <TeamManagementPage /> },
-  { path: "/tools/email-campaign-manager", element: <EmailCampaignPage /> },
-  { path: "/tools/invoice-generator", element: <InvoiceGeneratorPage /> },
-  { path: "/tools/goal-tracker", element: <GoalTrackerPage /> },
-  { path: "/tools/appointment-scheduler", element: <AppointmentSchedulerPage /> },
-  { path: "/tools/notes", element: <NotesWidgetPage /> },
-  { path: "/tools/book-name-generator", element: <BookNameGeneratorPage /> },
-  { path: "/tools/brand-identity", element: <BrandIdentityPage /> },
-  { path: "/tools/qr-code-generator", element: <QRCodeGeneratorPage /> },
-  { path: "/tools/expense-tracker", element: <ExpenseTrackerPage /> },
-  { path: "/tools/small-business-quotes", element: <SmallBusinessQuotes /> },
-  { path: "/tools/small-business-tips", element: <SmallBusinessTips /> },
-  { path: "/tools/runway-calculator", element: <RunwayCalculator /> },
-  { path: "/tools/break-even-analysis", element: <BreakEvenAnalysis /> },
-  { path: "/tools/investor-return", element: <InvestorReturn /> },
-  { path: "/tools/crowdfunding-goal", element: <CrowdfundingGoal /> }
+export const toolRoutes = [
+  {
+    path: "/tools/business-name-generator",
+    element: <BusinessNameGeneratorPage />
+  },
+  {
+    path: "/tools/currency-converter",
+    element: <CurrencyConverterPage />
+  },
+  {
+    path: "/tools/startup-idea-generator",
+    element: <StartupIdeaGeneratorPage />
+  },
+  {
+    path: "/tools/sales-analytics",
+    element: <SalesAnalyticsPage />
+  },
+  {
+    path: "/tools/team-management",
+    element: <TeamManagementPage />
+  },
+  {
+    path: "/tools/email-campaign-manager",
+    element: <EmailCampaignPage />
+  },
+  {
+    path: "/tools/invoice-generator",
+    element: <InvoiceGeneratorPage />
+  },
+  {
+    path: "/tools/goal-tracker",
+    element: <GoalTrackerPage />
+  },
+  {
+    path: "/tools/appointment-scheduler",
+    element: <AppointmentSchedulerPage />
+  },
+  {
+    path: "/tools/notes",
+    element: <NotesWidgetPage />
+  },
+  {
+    path: "/tools/book-name-generator",
+    element: <BookNameGeneratorPage />
+  },
+  {
+    path: "/tools/brand-identity",
+    element: <BrandIdentityPage />
+  },
+  {
+    path: "/tools/qr-code-generator",
+    element: <QRCodeGeneratorPage />
+  },
+  {
+    path: "/tools/expense-tracker",
+    element: <ExpenseTrackerPage />
+  },
+  {
+    path: "/tools/runway-calculator",
+    element: <RunwayCalculatorPage />
+  },
+  {
+    path: "/tools/break-even-analysis",
+    element: <BreakEvenAnalysisPage />
+  },
+  {
+    path: "/tools/investor-return",
+    element: <InvestorReturnPage />
+  },
+  {
+    path: "/tools/crowdfunding-goal",
+    element: <CrowdfundingGoalPage />
+  }
 ];

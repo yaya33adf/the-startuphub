@@ -1,87 +1,86 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
+import { Label } from "@/components/ui/label";
 
 export const CrowdfundingGoal = () => {
-  const [productionCosts, setProductionCosts] = useState("");
-  const [marketingCosts, setMarketingCosts] = useState("");
-  const [platformFeePercentage, setPlatformFeePercentage] = useState("5");
+  const [productionCosts, setProductionCosts] = useState<number>(0);
+  const [marketingCosts, setMarketingCosts] = useState<number>(0);
+  const [platformFeePercentage, setPlatformFeePercentage] = useState<number>(5);
+  const [bufferPercentage, setBufferPercentage] = useState<number>(10);
   const [totalGoal, setTotalGoal] = useState<number | null>(null);
-  const { toast } = useToast();
 
   const calculateGoal = () => {
-    const production = parseFloat(productionCosts);
-    const marketing = parseFloat(marketingCosts);
-    const feePercentage = parseFloat(platformFeePercentage);
-
-    if (isNaN(production) || isNaN(marketing) || isNaN(feePercentage)) {
-      toast({
-        title: "Invalid Input",
-        description: "Please enter valid numbers for all fields",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (feePercentage < 0 || feePercentage > 100) {
-      toast({
-        title: "Invalid Fee Percentage",
-        description: "Platform fee percentage must be between 0 and 100",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const subtotal = production + marketing;
-    const platformFee = (subtotal * feePercentage) / 100;
-    const total = subtotal + platformFee;
-    setTotalGoal(total);
+    const subtotal = productionCosts + marketingCosts;
+    const platformFee = (subtotal * platformFeePercentage) / 100;
+    const buffer = (subtotal * bufferPercentage) / 100;
+    const total = subtotal + platformFee + buffer;
+    setTotalGoal(Math.ceil(total));
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Crowdfunding Goal Calculator</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Production Costs ($)</label>
+    <Card className="w-full max-w-2xl mx-auto p-6">
+      <h2 className="text-2xl font-bold mb-6">Crowdfunding Goal Calculator</h2>
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="productionCosts">Production Costs ($)</Label>
           <Input
+            id="productionCosts"
             type="number"
+            min="0"
             value={productionCosts}
-            onChange={(e) => setProductionCosts(e.target.value)}
-            placeholder="Enter production costs"
+            onChange={(e) => setProductionCosts(Number(e.target.value))}
+            className="mt-1"
           />
         </div>
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Marketing Costs ($)</label>
+        <div>
+          <Label htmlFor="marketingCosts">Marketing Costs ($)</Label>
           <Input
+            id="marketingCosts"
             type="number"
+            min="0"
             value={marketingCosts}
-            onChange={(e) => setMarketingCosts(e.target.value)}
-            placeholder="Enter marketing costs"
+            onChange={(e) => setMarketingCosts(Number(e.target.value))}
+            className="mt-1"
           />
         </div>
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Platform Fee (%)</label>
+        <div>
+          <Label htmlFor="platformFee">Platform Fee (%)</Label>
           <Input
+            id="platformFee"
             type="number"
+            min="0"
+            max="100"
             value={platformFeePercentage}
-            onChange={(e) => setPlatformFeePercentage(e.target.value)}
-            placeholder="Enter platform fee percentage"
+            onChange={(e) => setPlatformFeePercentage(Number(e.target.value))}
+            className="mt-1"
           />
         </div>
-        <Button onClick={calculateGoal} className="w-full">Calculate Funding Goal</Button>
+        <div>
+          <Label htmlFor="buffer">Buffer Percentage (%)</Label>
+          <Input
+            id="buffer"
+            type="number"
+            min="0"
+            max="100"
+            value={bufferPercentage}
+            onChange={(e) => setBufferPercentage(Number(e.target.value))}
+            className="mt-1"
+          />
+        </div>
+        <Button onClick={calculateGoal} className="w-full">
+          Calculate Funding Goal
+        </Button>
         {totalGoal !== null && (
           <div className="mt-4 p-4 bg-secondary rounded-lg">
-            <p className="text-center">
-              Recommended funding goal: <span className="font-bold">${totalGoal.toFixed(2)}</span>
+            <p className="text-lg">
+              Recommended funding goal:{" "}
+              <span className="font-bold">${totalGoal.toLocaleString()}</span>
             </p>
           </div>
         )}
-      </CardContent>
+      </div>
     </Card>
   );
 };

@@ -1,85 +1,74 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
+import { Label } from "@/components/ui/label";
 
 export const BreakEvenAnalysis = () => {
-  const [fixedCosts, setFixedCosts] = useState("");
-  const [pricePerUnit, setPricePerUnit] = useState("");
-  const [variableCostPerUnit, setVariableCostPerUnit] = useState("");
-  const [breakEvenUnits, setBreakEvenUnits] = useState<number | null>(null);
-  const { toast } = useToast();
+  const [fixedCosts, setFixedCosts] = useState<number>(0);
+  const [pricePerUnit, setPricePerUnit] = useState<number>(0);
+  const [variableCostPerUnit, setVariableCostPerUnit] = useState<number>(0);
+  const [breakEvenPoint, setBreakEvenPoint] = useState<number | null>(null);
 
   const calculateBreakEven = () => {
-    const fixed = parseFloat(fixedCosts);
-    const price = parseFloat(pricePerUnit);
-    const variable = parseFloat(variableCostPerUnit);
-
-    if (isNaN(fixed) || isNaN(price) || isNaN(variable)) {
-      toast({
-        title: "Invalid Input",
-        description: "Please enter valid numbers for all fields",
-        variant: "destructive",
-      });
+    if (pricePerUnit - variableCostPerUnit === 0) {
+      setBreakEvenPoint(null);
       return;
     }
-
-    if (price <= variable) {
-      toast({
-        title: "Invalid Pricing",
-        description: "Price per unit must be greater than variable cost per unit",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const breakEven = Math.ceil(fixed / (price - variable));
-    setBreakEvenUnits(breakEven);
+    const breakEvenUnits = fixedCosts / (pricePerUnit - variableCostPerUnit);
+    setBreakEvenPoint(Math.ceil(breakEvenUnits));
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Break-even Analysis</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Fixed Costs ($)</label>
+    <Card className="w-full max-w-2xl mx-auto p-6">
+      <h2 className="text-2xl font-bold mb-6">Break-Even Analysis</h2>
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="fixedCosts">Fixed Costs ($)</Label>
           <Input
+            id="fixedCosts"
             type="number"
+            min="0"
             value={fixedCosts}
-            onChange={(e) => setFixedCosts(e.target.value)}
-            placeholder="Enter total fixed costs"
+            onChange={(e) => setFixedCosts(Number(e.target.value))}
+            className="mt-1"
           />
         </div>
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Price per Unit ($)</label>
+        <div>
+          <Label htmlFor="pricePerUnit">Price per Unit ($)</Label>
           <Input
+            id="pricePerUnit"
             type="number"
+            min="0"
             value={pricePerUnit}
-            onChange={(e) => setPricePerUnit(e.target.value)}
-            placeholder="Enter selling price per unit"
+            onChange={(e) => setPricePerUnit(Number(e.target.value))}
+            className="mt-1"
           />
         </div>
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Variable Cost per Unit ($)</label>
+        <div>
+          <Label htmlFor="variableCost">Variable Cost per Unit ($)</Label>
           <Input
+            id="variableCost"
             type="number"
+            min="0"
             value={variableCostPerUnit}
-            onChange={(e) => setVariableCostPerUnit(e.target.value)}
-            placeholder="Enter variable cost per unit"
+            onChange={(e) => setVariableCostPerUnit(Number(e.target.value))}
+            className="mt-1"
           />
         </div>
-        <Button onClick={calculateBreakEven} className="w-full">Calculate Break-even Point</Button>
-        {breakEvenUnits !== null && (
+        <Button onClick={calculateBreakEven} className="w-full">
+          Calculate Break-Even Point
+        </Button>
+        {breakEvenPoint !== null && (
           <div className="mt-4 p-4 bg-secondary rounded-lg">
-            <p className="text-center">
-              You need to sell <span className="font-bold">{breakEvenUnits} units</span> to break even
+            <p className="text-lg">
+              You need to sell{" "}
+              <span className="font-bold">{breakEvenPoint} units</span> to break
+              even
             </p>
           </div>
         )}
-      </CardContent>
+      </div>
     </Card>
   );
 };

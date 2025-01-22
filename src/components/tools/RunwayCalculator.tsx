@@ -1,74 +1,61 @@
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
+import { Label } from "@/components/ui/label";
 
 export const RunwayCalculator = () => {
-  const [monthlyBurnRate, setMonthlyBurnRate] = useState("");
-  const [currentFunds, setCurrentFunds] = useState("");
+  const [currentFunds, setCurrentFunds] = useState<number>(0);
+  const [monthlyBurnRate, setMonthlyBurnRate] = useState<number>(0);
   const [runway, setRunway] = useState<number | null>(null);
-  const { toast } = useToast();
 
   const calculateRunway = () => {
-    const burn = parseFloat(monthlyBurnRate);
-    const funds = parseFloat(currentFunds);
-
-    if (isNaN(burn) || isNaN(funds)) {
-      toast({
-        title: "Invalid Input",
-        description: "Please enter valid numbers for both fields",
-        variant: "destructive",
-      });
+    if (monthlyBurnRate === 0) {
+      setRunway(null);
       return;
     }
-
-    if (burn <= 0) {
-      toast({
-        title: "Invalid Burn Rate",
-        description: "Monthly burn rate must be greater than zero",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const runwayMonths = Math.floor(funds / burn);
-    setRunway(runwayMonths);
+    const runwayMonths = currentFunds / monthlyBurnRate;
+    setRunway(Math.round(runwayMonths * 10) / 10);
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Runway Calculator</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Monthly Burn Rate ($)</label>
+    <Card className="w-full max-w-2xl mx-auto p-6">
+      <h2 className="text-2xl font-bold mb-6">Runway Calculator</h2>
+      <div className="space-y-4">
+        <div>
+          <Label htmlFor="currentFunds">Current Funds ($)</Label>
           <Input
+            id="currentFunds"
             type="number"
-            value={monthlyBurnRate}
-            onChange={(e) => setMonthlyBurnRate(e.target.value)}
-            placeholder="Enter monthly expenses"
-          />
-        </div>
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Current Funds ($)</label>
-          <Input
-            type="number"
+            min="0"
             value={currentFunds}
-            onChange={(e) => setCurrentFunds(e.target.value)}
-            placeholder="Enter available funds"
+            onChange={(e) => setCurrentFunds(Number(e.target.value))}
+            className="mt-1"
           />
         </div>
-        <Button onClick={calculateRunway} className="w-full">Calculate Runway</Button>
+        <div>
+          <Label htmlFor="burnRate">Monthly Burn Rate ($)</Label>
+          <Input
+            id="burnRate"
+            type="number"
+            min="0"
+            value={monthlyBurnRate}
+            onChange={(e) => setMonthlyBurnRate(Number(e.target.value))}
+            className="mt-1"
+          />
+        </div>
+        <Button onClick={calculateRunway} className="w-full">
+          Calculate Runway
+        </Button>
         {runway !== null && (
           <div className="mt-4 p-4 bg-secondary rounded-lg">
-            <p className="text-center">
-              Your runway is approximately <span className="font-bold">{runway} months</span>
+            <p className="text-lg">
+              Your runway is approximately{" "}
+              <span className="font-bold">{runway} months</span>
             </p>
           </div>
         )}
-      </CardContent>
+      </div>
     </Card>
   );
 };
