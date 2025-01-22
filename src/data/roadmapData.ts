@@ -6,6 +6,7 @@ import { businessRoadmaps } from './roadmaps/categories/business';
 import { creativeRoadmaps } from './roadmaps/categories/creative';
 import { techRoadmaps } from './roadmaps/categories/tech';
 import { legalRoadmaps } from './roadmaps/categories/legal';
+import { healthCoachRoadmap } from './roadmaps/health-coach';
 
 export const roadmaps: Record<string, JobRoadmap> = {
   ...developmentRoadmaps,
@@ -15,4 +16,5 @@ export const roadmaps: Record<string, JobRoadmap> = {
   ...creativeRoadmaps,
   ...techRoadmaps,
   ...legalRoadmaps,
+  'health-coach': healthCoachRoadmap,
 };
