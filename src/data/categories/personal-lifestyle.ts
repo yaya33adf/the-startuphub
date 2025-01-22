@@ -5,13 +5,13 @@ export const personalLifestyleCategory: JobCategory = {
   roles: [
     "Personal Stylist",
     "Life Coach",
-    "Personal Organizer",
-    "Event Planner",
+    "Personal Trainer",
     "Travel Planner",
-    "Personal Shopper",
+    "Personal Chef",
+    "Event Planner",
     "Interior Decorator",
+    "Personal Shopper",
     "Relationship Coach",
-    "Productivity Coach",
     "Lifestyle Blogger"
   ]
 };
