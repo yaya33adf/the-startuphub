@@ -18,6 +18,7 @@ import InvestorReturnPage from "@/pages/tools/InvestorReturnPage";
 import CrowdfundingGoalPage from "@/pages/tools/CrowdfundingGoalPage";
 import StartupValuationPage from "@/pages/tools/StartupValuationPage";
 import LeanCanvasGeneratorPage from "@/pages/tools/LeanCanvasGeneratorPage";
+import SWOTAnalysisPage from "@/pages/tools/SWOTAnalysisPage";
 
 export const toolRoutes = [
   {
@@ -99,5 +100,9 @@ export const toolRoutes = [
   {
     path: "/tools/lean-canvas-generator",
     element: <LeanCanvasGeneratorPage />
+  },
+  {
+    path: "/tools/swot-analysis",
+    element: <SWOTAnalysisPage />
   }
 ];

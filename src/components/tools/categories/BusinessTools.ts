@@ -9,9 +9,11 @@ import {
   XSquare,
   LayoutGrid,
   LayoutDashboard,
-  LayoutList
+  LayoutList,
+  Brain
 } from "lucide-react";
 import { LeanCanvasGenerator } from "../LeanCanvasGenerator";
+import { SWOTAnalysis } from "../SWOTAnalysis";
 
 export const businessTools: Tool[] = [
   {
@@ -21,6 +23,15 @@ export const businessTools: Tool[] = [
     component: LeanCanvasGenerator,
     active: true,
     path: "/tools/lean-canvas-generator",
+    fullWidth: true
+  },
+  {
+    title: "SWOT Analysis",
+    description: "Analyze your business's Strengths, Weaknesses, Opportunities, and Threats",
+    icon: Brain,
+    component: SWOTAnalysis,
+    active: true,
+    path: "/tools/swot-analysis",
     fullWidth: true
   },
   {
