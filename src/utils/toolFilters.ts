@@ -35,6 +35,13 @@ export const filterProductTools = (tools: Tool[]) =>
     tool.path?.includes('product-backlog')
   );
 
+export const filterOperationsTools = (tools: Tool[]) =>
+  tools.filter(tool =>
+    tool.path?.includes('inventory-management') ||
+    tool.path?.includes('warehouse-management') ||
+    tool.path?.includes('shipping-calculator')
+  );
+
 export const filterLegalTools = (tools: Tool[]) =>
   tools.filter(tool =>
     tool.path?.includes('legal') ||

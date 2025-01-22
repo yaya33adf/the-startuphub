@@ -1,4 +1,3 @@
-import { Tool } from "./types/ToolTypes";
 import {
   Calculator,
   Wallet,
@@ -26,7 +25,10 @@ import {
   Goal,
   Heart,
   MessageSquare,
-  Headset
+  Headset,
+  Truck,
+  Package,
+  Warehouse
 } from "lucide-react";
 
 // Financial Planning Tools
@@ -128,6 +130,31 @@ const customerExperienceTools: Tool[] = [
   }
 ];
 
+// Operations & Logistics Tools
+const operationsTools: Tool[] = [
+  {
+    title: "Inventory Management",
+    description: "Track and manage your inventory levels",
+    icon: Package,
+    path: "/tools/inventory-management",
+    active: true
+  },
+  {
+    title: "Warehouse Management",
+    description: "Optimize warehouse operations and storage",
+    icon: Warehouse,
+    path: "/tools/warehouse-management",
+    active: true
+  },
+  {
+    title: "Shipping Calculator",
+    description: "Calculate shipping costs and delivery times",
+    icon: Truck,
+    path: "/tools/shipping-calculator",
+    active: true
+  }
+];
+
 import { businessTools } from "./categories/BusinessTools";
 import { productivityTools } from "./categories/ProductivityTools";
 import { creativeTools } from "./categories/CreativeTools";
@@ -139,5 +166,6 @@ export const tools = [
   ...creativeTools,
   ...utilityTools,
   ...financialPlanningTools,
-  ...customerExperienceTools
+  ...customerExperienceTools,
+  ...operationsTools
 ];
