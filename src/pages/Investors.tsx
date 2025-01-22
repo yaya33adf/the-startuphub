@@ -3,8 +3,9 @@ import { PageSEO } from "@/components/seo/PageSEO";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input"; // Added for search
-import { Briefcase, Building2, Globe, Users, Mail, Search } from "lucide-react"; // Added Search icon
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Briefcase, Building2, Globe, Users, Mail, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 import { InvestorForm } from "@/components/investors/InvestorForm";
@@ -24,7 +25,8 @@ interface Investor {
 const Investors = () => {
   const [investors, setInvestors] = useState<Investor[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchCountry, setSearchCountry] = useState("");
+  const [searchName, setSearchName] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -63,10 +65,15 @@ const Investors = () => {
     }
   };
 
-  const filteredInvestors = investors.filter(investor => 
-    !searchCountry || 
-    (investor.country && investor.country.toLowerCase().includes(searchCountry.toLowerCase()))
-  );
+  const filteredInvestors = investors.filter(investor => {
+    const nameMatch = !searchName || 
+      (investor.name && investor.name.toLowerCase().includes(searchName.toLowerCase()));
+    const countryMatch = !selectedCountry || 
+      (investor.country && investor.country === selectedCountry);
+    return nameMatch && countryMatch;
+  });
+
+  const uniqueCountries = [...new Set(investors.filter(i => i.country).map(i => i.country))];
 
   return (
     <div className="container py-8 max-w-7xl mx-auto">
@@ -83,16 +90,29 @@ const Investors = () => {
           </p>
         </div>
 
-        <div className="w-full max-w-sm mb-6">
-          <div className="relative">
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <div className="relative flex-1">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search by country..."
-              value={searchCountry}
-              onChange={(e) => setSearchCountry(e.target.value)}
+              placeholder="Search by name..."
+              value={searchName}
+              onChange={(e) => setSearchName(e.target.value)}
               className="pl-8"
             />
           </div>
+          <Select value={selectedCountry} onValueChange={setSelectedCountry}>
+            <SelectTrigger className="w-full sm:w-[200px]">
+              <SelectValue placeholder="Select country" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All Countries</SelectItem>
+              {uniqueCountries.map((country) => (
+                <SelectItem key={country} value={country}>
+                  {country}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <InvestorForm />
@@ -188,8 +208,8 @@ const Investors = () => {
             <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <h3 className="text-xl font-semibold mb-2">No Investors Found</h3>
             <p className="text-muted-foreground">
-              {searchCountry 
-                ? `No investors found in "${searchCountry}". Try a different country or clear the search.`
+              {searchName || selectedCountry
+                ? `No investors found with the current filters. Try different search terms or clear the filters.`
                 : "There are currently no registered investors. Use the Add Investor button to create one."}
             </p>
           </Card>
