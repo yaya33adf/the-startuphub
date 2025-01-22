@@ -16,6 +16,7 @@ export function InvestorForm() {
   const [company, setCompany] = useState("");
   const [investmentStage, setInvestmentStage] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [previousWork, setPreviousWork] = useState("");
   const { toast } = useToast();
   const { user } = useAuth();
 
@@ -32,6 +33,8 @@ export function InvestorForm() {
     }
 
     try {
+      console.log("Submitting investor profile with previous work:", previousWork);
+      
       const { error } = await supabase
         .from('profiles')
         .upsert({
@@ -42,7 +45,8 @@ export function InvestorForm() {
           company,
           investment_stage: investmentStage,
           image_url: imageUrl,
-          user_type: 'investor'
+          user_type: 'investor',
+          previous_work: previousWork
         });
 
       if (error) throw error;
@@ -59,6 +63,7 @@ export function InvestorForm() {
       setCompany("");
       setInvestmentStage("");
       setImageUrl("");
+      setPreviousWork("");
     } catch (error) {
       console.error('Error creating investor:', error);
       toast({
@@ -85,8 +90,10 @@ export function InvestorForm() {
           <BasicInfoFields
             name={name}
             email={email}
+            previousWork={previousWork}
             onNameChange={setName}
             onEmailChange={setEmail}
+            onPreviousWorkChange={setPreviousWork}
           />
           
           <ImageUrlField

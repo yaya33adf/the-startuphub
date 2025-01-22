@@ -500,6 +500,7 @@ export type Database = {
           image_url: string | null
           investment_stage: string | null
           name: string | null
+          previous_work: string | null
           role: string | null
           updated_at: string | null
           user_type: string | null
@@ -514,6 +515,7 @@ export type Database = {
           image_url?: string | null
           investment_stage?: string | null
           name?: string | null
+          previous_work?: string | null
           role?: string | null
           updated_at?: string | null
           user_type?: string | null
@@ -528,6 +530,7 @@ export type Database = {
           image_url?: string | null
           investment_stage?: string | null
           name?: string | null
+          previous_work?: string | null
           role?: string | null
           updated_at?: string | null
           user_type?: string | null
