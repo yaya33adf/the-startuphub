@@ -1,18 +1,18 @@
-import { Wrench, Coins, Gift, Calculator, TrendingUp, Package, Scale } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Wrench } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
   DropdownMenuGroup,
-  DropdownMenuLabel,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { tools } from "@/components/tools/ToolsData";
+import { FreeToolsSubmenu } from "./tool-submenus/FreeToolsSubmenu";
+import { FinancialToolsSubmenu } from "./tool-submenus/FinancialToolsSubmenu";
+import { BusinessToolsSubmenu } from "./tool-submenus/BusinessToolsSubmenu";
+import { MarketingToolsSubmenu } from "./tool-submenus/MarketingToolsSubmenu";
+import { ProductToolsSubmenu } from "./tool-submenus/ProductToolsSubmenu";
+import { LegalToolsSubmenu } from "./tool-submenus/LegalToolsSubmenu";
 
 interface ToolsDropdownProps {
   onClick?: () => void;
@@ -86,173 +86,12 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
         className="w-56 animate-in fade-in-0 zoom-in-95 bg-background"
       >
         <DropdownMenuGroup>
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger className="flex items-center gap-2">
-              <Gift className="w-4 h-4" />
-              <span>Free Tools</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent className="bg-background">
-              {freeTools.length > 0 ? (
-                freeTools.map((tool) => (
-                  <DropdownMenuItem
-                    key={tool.path}
-                    asChild
-                    onClick={onClick}
-                    className="transition-colors duration-200 hover:bg-accent/50"
-                  >
-                    <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
-                      <tool.icon className="w-4 h-4" />
-                      <span>{tool.title}</span>
-                    </Link>
-                  </DropdownMenuItem>
-                ))
-              ) : (
-                <DropdownMenuLabel className="text-sm text-muted-foreground px-2 py-1">
-                  No free tools available
-                </DropdownMenuLabel>
-              )}
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
-
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger className="flex items-center gap-2">
-              <Coins className="w-4 h-4" />
-              <span>Financial Planning Tools</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent className="bg-background">
-              {financialTools.length > 0 ? (
-                financialTools.map((tool) => (
-                  <DropdownMenuItem
-                    key={tool.path}
-                    asChild
-                    onClick={onClick}
-                    className="transition-colors duration-200 hover:bg-accent/50"
-                  >
-                    <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
-                      <tool.icon className="w-4 h-4" />
-                      <span>{tool.title}</span>
-                    </Link>
-                  </DropdownMenuItem>
-                ))
-              ) : (
-                <DropdownMenuLabel className="text-sm text-muted-foreground px-2 py-1">
-                  Coming soon...
-                </DropdownMenuLabel>
-              )}
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
-
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger className="flex items-center gap-2">
-              <Calculator className="w-4 h-4" />
-              <span>Business Planning Tools</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent className="bg-background">
-              {businessPlanningTools.length > 0 ? (
-                businessPlanningTools.map((tool) => (
-                  <DropdownMenuItem
-                    key={tool.path}
-                    asChild
-                    onClick={onClick}
-                    className="transition-colors duration-200 hover:bg-accent/50"
-                  >
-                    <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
-                      <tool.icon className="w-4 h-4" />
-                      <span>{tool.title}</span>
-                    </Link>
-                  </DropdownMenuItem>
-                ))
-              ) : (
-                <DropdownMenuLabel className="text-sm text-muted-foreground px-2 py-1">
-                  Coming soon...
-                </DropdownMenuLabel>
-              )}
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
-
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4" />
-              <span>Marketing & Growth Tools</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent className="bg-background">
-              {marketingTools.length > 0 ? (
-                marketingTools.map((tool) => (
-                  <DropdownMenuItem
-                    key={tool.path}
-                    asChild
-                    onClick={onClick}
-                    className="transition-colors duration-200 hover:bg-accent/50"
-                  >
-                    <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
-                      <tool.icon className="w-4 h-4" />
-                      <span>{tool.title}</span>
-                    </Link>
-                  </DropdownMenuItem>
-                ))
-              ) : (
-                <DropdownMenuLabel className="text-sm text-muted-foreground px-2 py-1">
-                  Coming soon...
-                </DropdownMenuLabel>
-              )}
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
-
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger className="flex items-center gap-2">
-              <Package className="w-4 h-4" />
-              <span>Product Development Tools</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent className="bg-background">
-              {productTools.length > 0 ? (
-                productTools.map((tool) => (
-                  <DropdownMenuItem
-                    key={tool.path}
-                    asChild
-                    onClick={onClick}
-                    className="transition-colors duration-200 hover:bg-accent/50"
-                  >
-                    <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
-                      <tool.icon className="w-4 h-4" />
-                      <span>{tool.title}</span>
-                    </Link>
-                  </DropdownMenuItem>
-                ))
-              ) : (
-                <DropdownMenuLabel className="text-sm text-muted-foreground px-2 py-1">
-                  Coming soon...
-                </DropdownMenuLabel>
-              )}
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
-
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger className="flex items-center gap-2">
-              <Scale className="w-4 h-4" />
-              <span>Legal & Compliance Tools</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuSubContent className="bg-background">
-              {legalTools.length > 0 ? (
-                legalTools.map((tool) => (
-                  <DropdownMenuItem
-                    key={tool.path}
-                    asChild
-                    onClick={onClick}
-                    className="transition-colors duration-200 hover:bg-accent/50"
-                  >
-                    <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
-                      <tool.icon className="w-4 h-4" />
-                      <span>{tool.title}</span>
-                    </Link>
-                  </DropdownMenuItem>
-                ))
-              ) : (
-                <DropdownMenuLabel className="text-sm text-muted-foreground px-2 py-1">
-                  Coming soon...
-                </DropdownMenuLabel>
-              )}
-            </DropdownMenuSubContent>
-          </DropdownMenuSub>
+          <FreeToolsSubmenu tools={freeTools} onClick={onClick} />
+          <FinancialToolsSubmenu tools={financialTools} onClick={onClick} />
+          <BusinessToolsSubmenu tools={businessPlanningTools} onClick={onClick} />
+          <MarketingToolsSubmenu tools={marketingTools} onClick={onClick} />
+          <ProductToolsSubmenu tools={productTools} onClick={onClick} />
+          <LegalToolsSubmenu tools={legalTools} onClick={onClick} />
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
