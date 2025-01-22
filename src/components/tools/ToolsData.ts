@@ -30,6 +30,7 @@ import {
   Package,
   Warehouse
 } from "lucide-react";
+import { Tool } from "./types/ToolTypes";
 
 // Financial Planning Tools
 const financialPlanningTools: Tool[] = [
