@@ -453,6 +453,42 @@ export type Database = {
         }
         Relationships: []
       }
+      problems: {
+        Row: {
+          created_at: string | null
+          description: string
+          id: string
+          role: string
+          role_category: string
+          status: string | null
+          title: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description: string
+          id?: string
+          role: string
+          role_category: string
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string
+          id?: string
+          role?: string
+          role_category?: string
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
