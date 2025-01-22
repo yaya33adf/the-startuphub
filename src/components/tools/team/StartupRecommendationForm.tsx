@@ -13,6 +13,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import { Json } from "@/integrations/supabase/types";
 
 interface TeamRole {
   role: string;
@@ -45,7 +46,20 @@ export const StartupRecommendationForm = () => {
         .single();
 
       if (error) throw error;
-      return data as RecommendationData;
+
+      // Safely transform the JSON data into our expected type
+      if (data?.recommended_roles) {
+        const roles = data.recommended_roles as Json[];
+        if (Array.isArray(roles)) {
+          return {
+            recommended_roles: roles.map(role => ({
+              role: (role as any).role as string,
+              count: (role as any).count as number
+            }))
+          } as RecommendationData;
+        }
+      }
+      return null;
     },
     enabled: !!formData.project_type && !!formData.project_size
   });
@@ -144,7 +158,7 @@ export const StartupRecommendationForm = () => {
             <div className="mt-4 p-4 bg-muted rounded-lg">
               <h4 className="font-medium mb-2">Recommended Team Structure:</h4>
               <ul className="space-y-2">
-                {recommendation.recommended_roles.map((role: TeamRole, index: number) => (
+                {recommendation.recommended_roles.map((role, index) => (
                   <li key={index} className="flex justify-between">
                     <span>{role.role}</span>
                     <span className="text-muted-foreground">×{role.count}</span>
