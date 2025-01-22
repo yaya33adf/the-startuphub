@@ -64,10 +64,10 @@ export const financialTools: Tool[] = [
   },
   {
     title: "Break-even Analysis Tool",
-    description: "Identify the sales volume needed to cover costs and achieve profitability",
+    description: "Calculate the point at which total revenue equals total costs",
     icon: Scale,
     path: "/tools/break-even-analysis",
-    active: false
+    active: true
   },
   {
     title: "Investor Return Calculator",
