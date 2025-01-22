@@ -81,7 +81,7 @@ const financialPlanningTools: Tool[] = [
     description: "Determine how long your current funding will last based on burn rate",
     icon: Timer,
     path: "/tools/runway-calculator",
-    active: false
+    active: true
   },
   {
     title: "Break-even Analysis Tool",
