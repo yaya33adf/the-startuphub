@@ -24,6 +24,7 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
   
   const financialTools = activeTools.filter(tool => 
     tool.path?.startsWith('/tools/') && 
+    !tool.path.includes('currency-converter') && // Exclude currency converter from financial tools
     (tool.path.includes('budget') || 
      tool.path.includes('investment') || 
      tool.path.includes('cash-flow') || 
@@ -31,10 +32,9 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
      tool.path.includes('profit'))
   );
 
-  // Update the filter to explicitly include currency converter in free tools
+  // All non-financial tools plus currency converter go to free tools
   const freeTools = activeTools.filter(tool => 
-    !financialTools.includes(tool) || 
-    tool.path?.includes('currency-converter')
+    !financialTools.includes(tool)
   );
 
   return (
