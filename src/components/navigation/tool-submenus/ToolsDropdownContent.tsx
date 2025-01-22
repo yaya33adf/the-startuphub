@@ -11,6 +11,7 @@ import { LegalToolsSubmenu } from "./LegalToolsSubmenu";
 import { SalesToolsSubmenu } from "./SalesToolsSubmenu";
 import { FundingToolsSubmenu } from "./FundingToolsSubmenu";
 import { HRToolsSubmenu } from "./HRToolsSubmenu";
+import { CustomerExperienceToolsSubmenu } from "./CustomerExperienceToolsSubmenu";
 import { Tool } from "@/components/tools/types/ToolTypes";
 
 interface ToolsDropdownContentProps {
@@ -24,6 +25,7 @@ interface ToolsDropdownContentProps {
     salesTools: Tool[];
     fundingTools: Tool[];
     hrTools: Tool[];
+    customerExperienceTools: Tool[];
   };
   onClick?: () => void;
 }
@@ -43,6 +45,7 @@ export const ToolsDropdownContent = ({ tools, onClick }: ToolsDropdownContentPro
         <SalesToolsSubmenu tools={tools.salesTools} onClick={onClick} />
         <FundingToolsSubmenu tools={tools.fundingTools} onClick={onClick} />
         <HRToolsSubmenu tools={tools.hrTools} onClick={onClick} />
+        <CustomerExperienceToolsSubmenu tools={tools.customerExperienceTools} onClick={onClick} />
         <LegalToolsSubmenu tools={tools.legalTools} onClick={onClick} />
       </DropdownMenuGroup>
     </DropdownMenuContent>
