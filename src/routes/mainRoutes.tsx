@@ -10,6 +10,7 @@ import Terms from "@/pages/Terms";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import Community from "@/pages/Community";
 import Problems from "@/pages/Problems";
+import Events from "@/pages/Events";
 
 export const mainRoutes = [
   {
@@ -27,6 +28,10 @@ export const mainRoutes = [
   {
     path: "/contact",
     element: <Contact />,
+  },
+  {
+    path: "/events",
+    element: <Events />,
   },
   {
     path: "/faq",
