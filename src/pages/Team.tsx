@@ -1,18 +1,24 @@
 import { PageSEO } from "@/components/seo/PageSEO";
+import { TeamManagement } from "@/components/tools/TeamManagement";
 
 const Team = () => {
   return (
     <div className="container py-8">
       <PageSEO
-        title="Our Team | Meet the Innovators"
-        description="Meet our team of dedicated professionals working to support startups and innovation."
+        title="Team Management | Build Your Dream Team"
+        description="Manage your team members, assign roles, and track projects efficiently."
       />
-      <h1 className="text-4xl font-bold mb-8">Our Team</h1>
-      <div className="prose max-w-none">
-        <p className="text-lg text-muted-foreground">
-          Meet the team behind our platform. We're a group of dedicated professionals committed to helping startups succeed.
-        </p>
+      
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-4xl font-bold">Team Management</h1>
+          <p className="text-lg text-muted-foreground mt-2">
+            Build and manage your team effectively. Add team members, assign roles, and track their progress.
+          </p>
+        </div>
       </div>
+
+      <TeamManagement />
     </div>
   );
 };
