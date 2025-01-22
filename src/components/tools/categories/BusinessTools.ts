@@ -1,77 +1,82 @@
-import { FileSpreadsheet, Calculator, CreditCard, DollarSign, BarChart3, Quote, Lightbulb, Layout } from "lucide-react";
 import { Tool } from "../types/ToolTypes";
-import { BusinessNameGenerator } from "../BusinessNameGenerator";
-import { CurrencyConverter } from "../CurrencyConverter";
-import { ExpenseTracker } from "../ExpenseTracker";
-import { InvoiceGenerator } from "../InvoiceGenerator";
-import { SalesAnalytics } from "../SalesAnalytics";
-import { SmallBusinessQuotes } from "../SmallBusinessQuotes";
-import { SmallBusinessTips } from "../SmallBusinessTips";
+import { 
+  FileText, 
+  BookOpen, 
+  LayoutTemplate, 
+  Book,
+  Edit,
+  CheckSquare,
+  XSquare,
+  LayoutGrid,
+  LayoutDashboard,
+  LayoutList
+} from "lucide-react";
 import { LeanCanvasGenerator } from "../LeanCanvasGenerator";
 
 export const businessTools: Tool[] = [
   {
-    title: "Business Name Generator",
-    description: "Generate unique business names",
-    icon: FileSpreadsheet,
-    component: BusinessNameGenerator,
-    active: true,
-    path: "/tools/business-name-generator"
-  },
-  {
-    title: "Currency Converter",
-    description: "Convert between different currencies",
-    icon: DollarSign,
-    component: CurrencyConverter,
-    active: true,
-    path: "/tools/currency-converter"
-  },
-  {
-    title: "Expense Tracker",
-    description: "Track business expenses",
-    icon: Calculator,
-    component: ExpenseTracker,
-    active: true,
-    path: "/tools/expense-tracker"
-  },
-  {
-    title: "Invoice Generator",
-    description: "Create professional invoices",
-    icon: CreditCard,
-    component: InvoiceGenerator,
-    active: true,
-    path: "/tools/invoice-generator"
-  },
-  {
-    title: "Sales Analytics",
-    description: "Analyze sales performance",
-    icon: BarChart3,
-    component: SalesAnalytics,
-    active: true,
-    path: "/tools/sales-analytics"
-  },
-  {
-    title: "Small Business Quotes",
-    description: "Generate inspirational quotes for small businesses",
-    icon: Quote,
-    component: SmallBusinessQuotes,
-    active: true,
-    path: "/tools/small-business-quotes"
-  },
-  {
-    title: "Small Business Tips",
-    description: "Generate practical tips for small businesses",
-    icon: Lightbulb,
-    component: SmallBusinessTips,
-    active: true,
-    path: "/tools/small-business-tips"
-  },
-  {
     title: "Lean Canvas Generator",
-    description: "Create a one-page business plan efficiently",
-    icon: Layout,
+    description: "Create a comprehensive business plan using the Lean Canvas methodology",
+    icon: LayoutTemplate,
     component: LeanCanvasGenerator,
     active: true,
-    path: "/tools/lean-canvas-generator"
-  }
+    path: "/tools/lean-canvas-generator",
+    fullWidth: true
+  },
+  {
+    title: "Business Plan Template",
+    description: "A template to help you create a detailed business plan",
+    icon: FileText,
+    active: true,
+    path: "/tools/business-plan-template",
+  },
+  {
+    title: "Market Research Tool",
+    description: "Conduct market research to validate your business idea",
+    icon: BookOpen,
+    active: true,
+    path: "/tools/market-research-tool",
+  },
+  {
+    title: "Financial Projection Tool",
+    description: "Create financial projections for your business",
+    icon: Book,
+    active: true,
+    path: "/tools/financial-projection-tool",
+  },
+  {
+    title: "Pitch Deck Creator",
+    description: "Create a professional pitch deck for investors",
+    icon: Edit,
+    active: true,
+    path: "/tools/pitch-deck-creator",
+  },
+  {
+    title: "Task Management Tool",
+    description: "Manage your tasks and projects effectively",
+    icon: CheckSquare,
+    active: true,
+    path: "/tools/task-management-tool",
+  },
+  {
+    title: "Team Collaboration Tool",
+    description: "Collaborate with your team in real-time",
+    icon: XSquare,
+    active: true,
+    path: "/tools/team-collaboration-tool",
+  },
+  {
+    title: "Dashboard Analytics Tool",
+    description: "Analyze your business performance with dashboards",
+    icon: LayoutDashboard,
+    active: true,
+    path: "/tools/dashboard-analytics-tool",
+  },
+  {
+    title: "Content Calendar Tool",
+    description: "Plan and schedule your content marketing",
+    icon: LayoutList,
+    active: true,
+    path: "/tools/content-calendar-tool",
+  },
 ];
