@@ -17,10 +17,10 @@ import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
-  revenue: z.string().transform((val) => parseFloat(val) || 0),
-  growthRate: z.string().transform((val) => parseFloat(val) || 0),
-  marketSize: z.string().transform((val) => parseFloat(val) || 0),
-  margins: z.string().transform((val) => parseFloat(val) || 0),
+  revenue: z.number().default(0),
+  growthRate: z.number().default(0),
+  marketSize: z.number().default(0),
+  margins: z.number().default(0),
 });
 
 type ValuationFormValues = z.infer<typeof formSchema>;
@@ -32,10 +32,10 @@ export const StartupValuation = () => {
   const form = useForm<ValuationFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      revenue: "0",
-      growthRate: "0",
-      marketSize: "0",
-      margins: "0",
+      revenue: 0,
+      growthRate: 0,
+      marketSize: 0,
+      margins: 0,
     },
   });
 
@@ -76,13 +76,14 @@ export const StartupValuation = () => {
               <FormField
                 control={form.control}
                 name="revenue"
-                render={({ field }) => (
+                render={({ field: { onChange, ...field } }) => (
                   <FormItem>
                     <FormLabel>Annual Revenue ($)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         placeholder="Enter annual revenue"
+                        onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
                         {...field}
                       />
                     </FormControl>
@@ -97,13 +98,14 @@ export const StartupValuation = () => {
               <FormField
                 control={form.control}
                 name="growthRate"
-                render={({ field }) => (
+                render={({ field: { onChange, ...field } }) => (
                   <FormItem>
                     <FormLabel>Annual Growth Rate (%)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         placeholder="Enter growth rate"
+                        onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
                         {...field}
                       />
                     </FormControl>
@@ -118,13 +120,14 @@ export const StartupValuation = () => {
               <FormField
                 control={form.control}
                 name="marketSize"
-                render={({ field }) => (
+                render={({ field: { onChange, ...field } }) => (
                   <FormItem>
                     <FormLabel>Total Addressable Market Size ($)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         placeholder="Enter market size"
+                        onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
                         {...field}
                       />
                     </FormControl>
@@ -139,13 +142,14 @@ export const StartupValuation = () => {
               <FormField
                 control={form.control}
                 name="margins"
-                render={({ field }) => (
+                render={({ field: { onChange, ...field } }) => (
                   <FormItem>
                     <FormLabel>Profit Margins (%)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         placeholder="Enter profit margins"
+                        onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
                         {...field}
                       />
                     </FormControl>
