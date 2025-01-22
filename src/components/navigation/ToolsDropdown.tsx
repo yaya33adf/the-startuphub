@@ -32,18 +32,8 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
      tool.path.includes('profit'))
   );
 
-  const freeTools = tools.filter(tool => 
-    tool.active && 
-    tool.path?.startsWith('/tools/') && 
-    !financialTools.includes(tool) &&
-    (tool.path.includes('generator') || 
-     tool.path.includes('converter') || 
-     tool.path.includes('calculator'))
-  );
-
-  const remainingTools = activeTools.filter(tool => 
-    !financialTools.includes(tool) && 
-    !freeTools.includes(tool)
+  const freeTools = activeTools.filter(tool => 
+    !financialTools.includes(tool)
   );
 
   return (
@@ -62,20 +52,6 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
         className="w-56 animate-in fade-in-0 zoom-in-95 bg-background"
       >
         <DropdownMenuGroup>
-          {remainingTools.map((tool) => (
-            <DropdownMenuItem 
-              key={tool.path}
-              asChild 
-              onClick={onClick}
-              className="transition-colors duration-200 hover:bg-accent/50"
-            >
-              <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
-                <tool.icon className="w-4 h-4" />
-                <span>{tool.title}</span>
-              </Link>
-            </DropdownMenuItem>
-          ))}
-          
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="flex items-center gap-2">
               <Gift className="w-4 h-4" />
