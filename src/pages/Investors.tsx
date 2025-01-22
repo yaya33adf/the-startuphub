@@ -26,7 +26,7 @@ const Investors = () => {
   const [investors, setInvestors] = useState<Investor[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchName, setSearchName] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState("all");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const Investors = () => {
   const filteredInvestors = investors.filter(investor => {
     const nameMatch = !searchName || 
       (investor.name && investor.name.toLowerCase().includes(searchName.toLowerCase()));
-    const countryMatch = !selectedCountry || 
+    const countryMatch = selectedCountry === "all" || 
       (investor.country && investor.country === selectedCountry);
     return nameMatch && countryMatch;
   });
@@ -105,7 +105,7 @@ const Investors = () => {
               <SelectValue placeholder="Select country" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Countries</SelectItem>
+              <SelectItem value="all">All Countries</SelectItem>
               {uniqueCountries.map((country) => (
                 <SelectItem key={country} value={country}>
                   {country}
@@ -208,7 +208,7 @@ const Investors = () => {
             <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <h3 className="text-xl font-semibold mb-2">No Investors Found</h3>
             <p className="text-muted-foreground">
-              {searchName || selectedCountry
+              {searchName || selectedCountry !== "all"
                 ? `No investors found with the current filters. Try different search terms or clear the filters.`
                 : "There are currently no registered investors. Use the Add Investor button to create one."}
             </p>
