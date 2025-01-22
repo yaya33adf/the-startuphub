@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Briefcase, Building2, Users, Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { InvestorForm } from "@/components/investors/InvestorForm";
 
 interface Investor {
   id: string;
@@ -13,6 +14,10 @@ interface Investor {
   email: string;
   user_type: string;
   investment_preferences?: string[];
+  country?: string;
+  company?: string;
+  investment_stage?: string;
+  image_url?: string;
 }
 
 const Investors = () => {
@@ -71,6 +76,8 @@ const Investors = () => {
           </p>
         </div>
 
+        <InvestorForm />
+
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
@@ -95,20 +102,41 @@ const Investors = () => {
               <Card key={investor.id} className="p-6 hover:shadow-lg transition-shadow">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <Briefcase className="h-6 w-6 text-primary" />
-                    </div>
+                    {investor.image_url ? (
+                      <img 
+                        src={investor.image_url} 
+                        alt={investor.name} 
+                        className="h-12 w-12 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                        <Briefcase className="h-6 w-6 text-primary" />
+                      </div>
+                    )}
                     <div>
                       <h3 className="font-semibold text-lg">{investor.name || 'Anonymous Investor'}</h3>
                       <p className="text-sm text-muted-foreground flex items-center gap-1">
                         <Building2 className="h-4 w-4" />
-                        {investor.user_type}
+                        {investor.company || investor.user_type}
                       </p>
                     </div>
                   </div>
                 </div>
 
                 <div className="space-y-4">
+                  {investor.country && (
+                    <p className="text-sm flex items-center gap-2">
+                      <Globe className="h-4 w-4" />
+                      {investor.country}
+                    </p>
+                  )}
+                  
+                  {investor.investment_stage && (
+                    <p className="text-sm bg-accent text-accent-foreground inline-block px-2 py-1 rounded-full">
+                      {investor.investment_stage}
+                    </p>
+                  )}
+
                   {investor.investment_preferences && (
                     <div className="flex flex-wrap gap-2">
                       {investor.investment_preferences.map((pref, index) => (
@@ -141,7 +169,7 @@ const Investors = () => {
             <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <h3 className="text-xl font-semibold mb-2">No Investors Found</h3>
             <p className="text-muted-foreground">
-              There are currently no registered investors. Check back later or sign up as an investor.
+              There are currently no registered investors. Use the Add Investor button to create one.
             </p>
           </Card>
         )}
