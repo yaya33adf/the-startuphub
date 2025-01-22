@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Users, Calendar, MessageSquare } from "lucide-react";
+import { Users, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -36,16 +36,6 @@ export const CommunityDropdown = ({ onClick = () => {} }: CommunityDropdownProps
           <Link to="/community" className="flex items-center gap-2 w-full p-2">
             <Users className="w-4 h-4" />
             <span>Community</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem 
-          asChild 
-          onClick={onClick}
-          className="transition-colors duration-200 hover:bg-accent/50"
-        >
-          <Link to="/events" className="flex items-center gap-2 w-full p-2">
-            <Calendar className="w-4 h-4" />
-            <span>Events</span>
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
