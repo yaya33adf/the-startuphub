@@ -3,15 +3,15 @@ import { JobCategory } from "@/types/roadmap";
 export const photographyVideographyCategory: JobCategory = {
   title: "Photography & Videography",
   roles: [
-    "Photographer",
+    "Professional Photographer",
     "Videographer",
     "Video Editor",
-    "Photo Retoucher",
-    "Drone Photographer",
-    "Product Photographer",
     "Wedding Photographer",
-    "Real Estate Photographer",
-    "Stock Photographer",
-    "Social Media Content Creator"
+    "Product Photographer",
+    "Documentary Filmmaker",
+    "Aerial Photographer",
+    "Event Photographer",
+    "Portrait Photographer",
+    "Commercial Photographer"
   ]
 };

@@ -4,14 +4,14 @@ export const healthcareWellnessCategory: JobCategory = {
   title: "Healthcare & Wellness",
   roles: [
     "Health Coach",
-    "Nutrition Consultant",
+    "Wellness Consultant",
+    "Nutritionist",
     "Fitness Trainer",
-    "Wellness Writer",
-    "Mental Health Coach",
-    "Meditation Teacher",
-    "Yoga Instructor",
-    "Lifestyle Coach",
-    "Stress Management Consultant",
-    "Holistic Health Practitioner"
+    "Mental Health Counselor",
+    "Telemedicine Consultant",
+    "Healthcare Writer",
+    "Wellness Program Manager",
+    "Alternative Medicine Practitioner",
+    "Health Technology Advisor"
   ]
 };

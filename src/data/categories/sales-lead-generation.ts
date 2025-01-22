@@ -4,14 +4,14 @@ export const salesLeadGenerationCategory: JobCategory = {
   title: "Sales & Lead Generation",
   roles: [
     "Sales Representative",
-    "Lead Generator",
-    "Business Development",
-    "Sales Funnel Specialist",
-    "Cold Caller",
-    "Email Marketing Specialist",
-    "Sales Copywriter",
-    "Appointment Setter",
-    "CRM Specialist",
-    "Sales Automation Expert"
+    "Lead Generation Specialist",
+    "Business Development Manager",
+    "Sales Consultant",
+    "Account Manager",
+    "Sales Strategist",
+    "Market Research Analyst",
+    "Sales Operations Manager",
+    "Inside Sales Representative",
+    "Sales Trainer"
   ]
 };
