@@ -18,6 +18,9 @@ import Crowdfunding from "@/pages/Crowdfunding";
 import Feedback from "@/pages/Feedback";
 import Team from "@/pages/Team";
 import Investors from "@/pages/Investors";
+import BusinessCards from "@/pages/BusinessCards";
+import WordPressTemplates from "@/pages/WordPressTemplates";
+import BlossomWordGame from "@/pages/BlossomWordGame";
 
 export const mainRoutes = [
   {
@@ -95,5 +98,17 @@ export const mainRoutes = [
   {
     path: "/community",
     element: <Community />,
+  },
+  {
+    path: "/business-cards",
+    element: <BusinessCards />,
+  },
+  {
+    path: "/wordpress-templates",
+    element: <WordPressTemplates />,
+  },
+  {
+    path: "/blossom-word-game",
+    element: <BlossomWordGame />,
   },
 ];
