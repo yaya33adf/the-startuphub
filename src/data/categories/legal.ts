@@ -1,17 +1,14 @@
 import { JobCategory } from "@/types/roadmap";
 
 export const legalCategory: JobCategory = {
-  title: "Legal & Compliance",
+  title: "Legal",
   roles: [
     "Legal Consultant",
     "Contract Lawyer",
-    "Compliance Specialist",
-    "Intellectual Property Expert",
+    "Intellectual Property Specialist",
+    "Compliance Officer",
     "Legal Writer",
-    "Privacy Consultant",
-    "Legal Tech Specialist",
-    "Corporate Law Advisor",
-    "Legal Document Reviewer",
-    "Regulatory Compliance Officer"
+    "Privacy Specialist",
+    "Legal Tech Consultant"
   ]
 };

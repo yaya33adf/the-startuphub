@@ -1,17 +1,14 @@
 import { JobCategory } from "@/types/roadmap";
 
 export const techCategory: JobCategory = {
-  title: "Technology & IT",
+  title: "Technology",
   roles: [
-    "Cloud Engineer",
+    "Cloud Architect",
+    "Data Scientist",
+    "AI/ML Engineer",
+    "Cybersecurity Specialist",
     "System Administrator",
     "Network Engineer",
-    "Security Specialist",
-    "Database Administrator",
-    "IT Support Specialist",
-    "Data Scientist",
-    "Machine Learning Engineer",
-    "Blockchain Developer",
-    "IoT Developer"
+    "Database Administrator"
   ]
 };
