@@ -3,14 +3,16 @@ import { PageSEO } from "@/components/seo/PageSEO";
 const Feedback = () => {
   return (
     <div className="container py-8">
-      <PageSEO 
-        title="Feedback & Suggestions" 
-        description="Share your feedback and suggestions to help improve our platform"
+      <PageSEO
+        title="Feedback | Share Your Thoughts"
+        description="Share your feedback and help us improve our platform for startups and entrepreneurs."
       />
-      <h1 className="text-4xl font-bold mb-6">Feedback & Suggestions</h1>
-      <p className="text-muted-foreground mb-8">
-        Share your thoughts, ideas, and suggestions to help us improve and better serve the community.
-      </p>
+      <h1 className="text-4xl font-bold mb-8">Feedback</h1>
+      <div className="prose max-w-none">
+        <p className="text-lg text-muted-foreground">
+          Your feedback helps us improve. Share your thoughts, suggestions, and ideas to help us better serve the startup community.
+        </p>
+      </div>
     </div>
   );
 };

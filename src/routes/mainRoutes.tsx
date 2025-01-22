@@ -21,11 +21,32 @@ import Investors from "@/pages/Investors";
 import BusinessCards from "@/pages/BusinessCards";
 import WordPressTemplates from "@/pages/WordPressTemplates";
 import BlossomWordGame from "@/pages/BlossomWordGame";
+import Startups from "@/pages/Startups";
 
 export const mainRoutes = [
   {
     path: "/",
     element: <Index />,
+  },
+  {
+    path: "/startups",
+    element: <Startups />,
+  },
+  {
+    path: "/investors",
+    element: <Investors />,
+  },
+  {
+    path: "/events",
+    element: <Events />,
+  },
+  {
+    path: "/feedback",
+    element: <Feedback />,
+  },
+  {
+    path: "/team",
+    element: <Team />,
   },
   {
     path: "/about",
@@ -38,10 +59,6 @@ export const mainRoutes = [
   {
     path: "/contact",
     element: <Contact />,
-  },
-  {
-    path: "/events",
-    element: <Events />,
   },
   {
     path: "/faq",
@@ -70,18 +87,6 @@ export const mainRoutes = [
   {
     path: "/problems",
     element: <Problems />,
-  },
-  {
-    path: "/feedback",
-    element: <Feedback />,
-  },
-  {
-    path: "/team",
-    element: <Team />,
-  },
-  {
-    path: "/investors",
-    element: <Investors />,
   },
   {
     path: "/sitemap",
