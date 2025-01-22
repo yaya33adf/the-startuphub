@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Twitter, MessageSquare, HelpCircle, Linkedin, Facebook } from "lucide-react";
+import { Twitter, MessageSquare, HelpCircle, Linkedin, Facebook, Instagram } from "lucide-react";
 
 const SocialLinks = () => {
   return (
@@ -43,6 +43,14 @@ const SocialLinks = () => {
           className="text-muted-foreground hover:text-primary transition-colors"
         >
           <Facebook className="h-5 w-5" />
+        </a>
+        <a
+          href="https://www.instagram.com/startuphub552/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-muted-foreground hover:text-primary transition-colors"
+        >
+          <Instagram className="h-5 w-5" />
         </a>
       </div>
     </div>
