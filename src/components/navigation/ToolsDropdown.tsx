@@ -1,4 +1,4 @@
-import { Wrench } from "lucide-react";
+import { Wrench, Coins } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
