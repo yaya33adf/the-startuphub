@@ -23,11 +23,13 @@ const formSchema = z.object({
   margins: z.string().transform((val) => Number(val) || 0),
 });
 
+type ValuationFormValues = z.infer<typeof formSchema>;
+
 export const StartupValuation = () => {
   const [valuation, setValuation] = useState<number | null>(null);
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<ValuationFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       revenue: "",
@@ -37,20 +39,18 @@ export const StartupValuation = () => {
     },
   });
 
-  const calculateValuation = (data: z.infer<typeof formSchema>) => {
-    // Simple valuation formula for demonstration
-    // Revenue multiple based on growth rate and market size
+  const calculateValuation = (data: ValuationFormValues) => {
     const growthMultiple = 1 + (data.growthRate / 100);
     const marketSizeMultiple = Math.log10(data.marketSize / 1000000) || 1;
     const marginMultiple = (data.margins / 100) || 0.1;
     
-    const baseMultiple = 5; // Base revenue multiple
+    const baseMultiple = 5;
     const revenueMultiple = baseMultiple * growthMultiple * marketSizeMultiple * marginMultiple;
     
     return Math.round(data.revenue * revenueMultiple);
   };
 
-  const onSubmit = (data: z.infer<typeof formSchema>) => {
+  const onSubmit = (data: ValuationFormValues) => {
     console.log("Form submitted with data:", data);
     const calculatedValuation = calculateValuation(data);
     setValuation(calculatedValuation);
