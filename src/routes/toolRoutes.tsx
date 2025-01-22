@@ -19,6 +19,7 @@ import CrowdfundingGoalPage from "@/pages/tools/CrowdfundingGoalPage";
 import StartupValuationPage from "@/pages/tools/StartupValuationPage";
 import LeanCanvasGeneratorPage from "@/pages/tools/LeanCanvasGeneratorPage";
 import SWOTAnalysisPage from "@/pages/tools/SWOTAnalysisPage";
+import BusinessModelGeneratorPage from "@/pages/tools/BusinessModelGeneratorPage";
 
 export const toolRoutes = [
   {
@@ -104,5 +105,9 @@ export const toolRoutes = [
   {
     path: "/tools/swot-analysis",
     element: <SWOTAnalysisPage />
+  },
+  {
+    path: "/tools/business-model-generator",
+    element: <BusinessModelGeneratorPage />
   }
 ];

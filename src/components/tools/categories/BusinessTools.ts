@@ -10,12 +10,23 @@ import {
   LayoutGrid,
   LayoutDashboard,
   LayoutList,
-  Brain
+  Brain,
+  Building2
 } from "lucide-react";
 import { LeanCanvasGenerator } from "../LeanCanvasGenerator";
 import { SWOTAnalysis } from "../SWOTAnalysis";
+import { BusinessModelGenerator } from "../BusinessModelGenerator";
 
 export const businessTools: Tool[] = [
+  {
+    title: "Business Model Generator",
+    description: "Create a comprehensive business model canvas",
+    icon: Building2,
+    component: BusinessModelGenerator,
+    active: true,
+    path: "/tools/business-model-generator",
+    fullWidth: true
+  },
   {
     title: "Lean Canvas Generator",
     description: "Create a comprehensive business plan using the Lean Canvas methodology",
