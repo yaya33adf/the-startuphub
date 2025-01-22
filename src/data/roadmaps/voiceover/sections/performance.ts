@@ -4,30 +4,31 @@ export const performanceSection: RoadmapSection = {
   title: "Performance Skills",
   steps: [
     {
-      id: "script-analysis",
-      title: "Script Analysis & Interpretation",
-      description: "Develop skills in analyzing scripts and delivering appropriate performances.",
-      status: "required",
-      skills: ["Script Analysis", "Character Development", "Emotional Range"],
+      id: "voice-styles",
+      title: "Voice Styles & Characters",
+      description: "Develop various voice styles and character performances",
+      skills: ["Character voices", "Accents", "Tone variation", "Emotional range"],
+      status: "required"
+    },
+    {
+      id: "commercial-vo",
+      title: "Commercial Voice Over",
+      description: "Master commercial voice over techniques",
+      skills: ["Hard sell", "Soft sell", "Timing", "Brand voice"],
+      status: "recommended",
       resources: [
         {
-          name: "Script Analysis for Voice Actors",
-          url: "https://www.voiceactingmastery.com/scripts"
+          name: "Commercial VO Guide",
+          url: "https://www.voices.com/blog/commercial-voice-over/"
         }
       ]
     },
     {
-      id: "voice-styles",
-      title: "Voice Styles & Characters",
-      description: "Learn to create and maintain different voice styles and characters.",
-      status: "required",
-      skills: ["Character Voices", "Accent Work", "Style Adaptation"],
-      resources: [
-        {
-          name: "Character Voice Development",
-          url: "https://www.voiceacting.com/characters"
-        }
-      ]
+      id: "narration",
+      title: "Narration Techniques",
+      description: "Learn various narration styles and techniques",
+      skills: ["Audiobook narration", "Documentary style", "E-learning", "Corporate narration"],
+      status: "recommended"
     }
   ]
 };

@@ -6,28 +6,35 @@ export const technicalSection: RoadmapSection = {
     {
       id: "recording-equipment",
       title: "Recording Equipment",
-      description: "Learn about microphones, audio interfaces, and setting up a home studio.",
+      description: "Learn about essential recording equipment and setup",
+      skills: ["Microphone selection", "Audio interface usage", "Studio setup", "Acoustic treatment"],
       status: "required",
-      skills: ["Microphone Technique", "Audio Interface Setup", "Studio Acoustics"],
       resources: [
         {
           name: "Home Studio Setup Guide",
-          url: "https://www.soundonsound.com/studio"
+          url: "https://www.voices.com/blog/home-recording-studio-setup/"
         }
       ]
     },
     {
       id: "audio-software",
-      title: "Audio Software",
-      description: "Master DAWs and audio editing software for professional recordings.",
+      title: "Audio Software & DAWs",
+      description: "Master audio recording and editing software",
+      skills: ["DAW proficiency", "Audio editing", "Noise reduction", "File management"],
       status: "required",
-      skills: ["DAW Proficiency", "Audio Editing", "Noise Reduction"],
       resources: [
         {
-          name: "Audio Production Basics",
-          url: "https://www.audioskills.com/production"
+          name: "Audio Editing Basics",
+          url: "https://www.soundonsound.com/techniques/audio-editing-basics"
         }
       ]
+    },
+    {
+      id: "audio-processing",
+      title: "Audio Processing & Effects",
+      description: "Understanding audio processing and effects for voice over",
+      skills: ["EQ", "Compression", "De-essing", "Noise gate"],
+      status: "recommended"
     }
   ]
 };

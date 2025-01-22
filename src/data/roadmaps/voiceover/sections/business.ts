@@ -4,30 +4,31 @@ export const businessSection: RoadmapSection = {
   title: "Business Development",
   steps: [
     {
-      id: "demo-reel",
-      title: "Demo Reel Creation",
-      description: "Create professional demo reels for different voice-over genres.",
+      id: "vo-business",
+      title: "Business Fundamentals",
+      description: "Establish your voice over business",
+      skills: ["Business planning", "Pricing strategy", "Marketing", "Brand development"],
       status: "required",
-      skills: ["Demo Production", "Genre Selection", "Personal Branding"],
       resources: [
         {
-          name: "Demo Reel Production Guide",
-          url: "https://www.voices.com/demo-guide"
+          name: "Voice Over Business Guide",
+          url: "https://www.voices.com/blog/voice-over-business/"
         }
       ]
     },
     {
-      id: "business-skills",
-      title: "Business Skills",
-      description: "Learn marketing, networking, and managing your voice-over business.",
-      status: "required",
-      skills: ["Marketing", "Client Relations", "Rate Setting", "Contract Negotiation"],
-      resources: [
-        {
-          name: "Voice-Over Business Guide",
-          url: "https://www.voicecoach.com/business"
-        }
-      ]
+      id: "portfolio",
+      title: "Demo Reel & Portfolio",
+      description: "Create and maintain a professional demo reel",
+      skills: ["Demo production", "Portfolio curation", "Website creation", "Social media presence"],
+      status: "required"
+    },
+    {
+      id: "networking",
+      title: "Industry Networking",
+      description: "Build professional relationships in the industry",
+      skills: ["Online platforms", "Industry events", "Agent relationships", "Collaboration"],
+      status: "recommended"
     }
   ]
 };

@@ -1,37 +1,40 @@
 import { RoadmapSection } from "@/types/roadmap";
 
 export const fundamentalsSection: RoadmapSection = {
-  title: "Voice Fundamentals",
+  title: "Voice Over Fundamentals",
   steps: [
     {
-      id: "voice-anatomy",
-      title: "Voice Anatomy & Health",
-      description: "Learn about vocal anatomy, breathing techniques, and maintaining vocal health.",
+      id: "vo-basics",
+      title: "Voice Acting Basics",
+      description: "Learn the fundamentals of voice acting and vocal performance",
+      skills: ["Vocal warm-ups", "Breathing techniques", "Voice projection", "Articulation"],
       status: "required",
-      skills: ["Breathing Control", "Vocal Hygiene", "Voice Anatomy"],
       resources: [
         {
-          name: "Voice Anatomy for Voice Actors",
-          url: "https://www.voiceacting.com/anatomy"
-        },
-        {
-          name: "Vocal Health Guidelines",
-          url: "https://www.voicecouncil.com/health"
+          name: "Introduction to Voice Acting",
+          url: "https://www.masterclass.com/articles/voice-acting-guide"
         }
       ]
     },
     {
-      id: "voice-techniques",
-      title: "Voice Techniques",
-      description: "Master essential voice techniques including pitch, tone, and modulation.",
+      id: "vocal-health",
+      title: "Vocal Health & Maintenance",
+      description: "Understand how to maintain and protect your voice",
+      skills: ["Vocal hygiene", "Voice rest", "Hydration", "Diet management"],
       status: "required",
-      skills: ["Pitch Control", "Tone Modulation", "Articulation", "Pronunciation"],
       resources: [
         {
-          name: "Voice-Over Technique Masterclass",
-          url: "https://www.masterclass.com/voiceover"
+          name: "Vocal Health Guide",
+          url: "https://www.voicecouncil.com/category/vocal-health"
         }
       ]
+    },
+    {
+      id: "script-reading",
+      title: "Script Analysis & Interpretation",
+      description: "Learn how to analyze and interpret various types of scripts",
+      skills: ["Script marking", "Character analysis", "Emotional interpretation", "Timing"],
+      status: "required"
     }
   ]
 };
