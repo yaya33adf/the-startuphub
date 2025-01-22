@@ -27,10 +27,6 @@ export const copywriterRoadmap: JobRoadmap = {
             {
               name: "Hemingway Editor",
               url: "https://hemingwayapp.com/"
-            },
-            {
-              name: "The Elements of Style",
-              url: "https://www.gutenberg.org/files/37134/37134-h/37134-h.htm"
             }
           ]
         },
@@ -50,10 +46,6 @@ export const copywriterRoadmap: JobRoadmap = {
             {
               name: "Copyblogger Academy",
               url: "https://copyblogger.com/blog/"
-            },
-            {
-              name: "The Boron Letters",
-              url: "https://www.amazon.com/Boron-Letters-Gary-C-Halbert/dp/1484825985"
             }
           ]
         }
@@ -78,10 +70,6 @@ export const copywriterRoadmap: JobRoadmap = {
             {
               name: "HubSpot Marketing Course",
               url: "https://academy.hubspot.com/courses/digital-marketing"
-            },
-            {
-              name: "Psychology Today Marketing Articles",
-              url: "https://www.psychologytoday.com/us/topics/marketing"
             }
           ]
         },
@@ -101,10 +89,6 @@ export const copywriterRoadmap: JobRoadmap = {
             {
               name: "Content Marketing Institute",
               url: "https://contentmarketinginstitute.com/"
-            },
-            {
-              name: "Moz Content Strategy Guide",
-              url: "https://moz.com/beginners-guide-to-content-marketing"
             }
           ]
         }
@@ -152,10 +136,6 @@ export const copywriterRoadmap: JobRoadmap = {
             {
               name: "UX Writing Hub",
               url: "https://uxwritinghub.com/"
-            },
-            {
-              name: "Storytelling for Brands",
-              url: "https://www.coursera.org/learn/brand-storytelling"
             }
           ]
         }
