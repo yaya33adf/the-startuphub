@@ -1,4 +1,4 @@
-import { Wrench, Coins } from "lucide-react";
+import { Wrench, Coins, Gift } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +21,7 @@ interface ToolsDropdownProps {
 export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
   // Filter only active tools and ensure unique paths
   const activeTools = tools.filter(tool => tool.active && tool.path);
+  
   const financialTools = tools.filter(tool => 
     tool.active && 
     tool.path?.startsWith('/tools/') && 
@@ -29,6 +30,20 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
      tool.path.includes('cash-flow') || 
      tool.path.includes('financial') ||
      tool.path.includes('profit'))
+  );
+
+  const freeTools = tools.filter(tool => 
+    tool.active && 
+    tool.path?.startsWith('/tools/') && 
+    !financialTools.includes(tool) &&
+    (tool.path.includes('generator') || 
+     tool.path.includes('converter') || 
+     tool.path.includes('calculator'))
+  );
+
+  const remainingTools = activeTools.filter(tool => 
+    !financialTools.includes(tool) && 
+    !freeTools.includes(tool)
   );
 
   return (
@@ -47,22 +62,48 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
         className="w-56 animate-in fade-in-0 zoom-in-95 bg-background"
       >
         <DropdownMenuGroup>
-          {activeTools
-            .filter(tool => !financialTools.includes(tool))
-            .map((tool) => (
-              <DropdownMenuItem 
-                key={tool.path}
-                asChild 
-                onClick={onClick}
-                className="transition-colors duration-200 hover:bg-accent/50"
-              >
-                <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
-                  <tool.icon className="w-4 h-4" />
-                  <span>{tool.title}</span>
-                </Link>
-              </DropdownMenuItem>
-            ))}
+          {remainingTools.map((tool) => (
+            <DropdownMenuItem 
+              key={tool.path}
+              asChild 
+              onClick={onClick}
+              className="transition-colors duration-200 hover:bg-accent/50"
+            >
+              <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
+                <tool.icon className="w-4 h-4" />
+                <span>{tool.title}</span>
+              </Link>
+            </DropdownMenuItem>
+          ))}
           
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger className="flex items-center gap-2">
+              <Gift className="w-4 h-4" />
+              <span>Free Tools</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent className="bg-background">
+              {freeTools.length > 0 ? (
+                freeTools.map((tool) => (
+                  <DropdownMenuItem
+                    key={tool.path}
+                    asChild
+                    onClick={onClick}
+                    className="transition-colors duration-200 hover:bg-accent/50"
+                  >
+                    <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
+                      <tool.icon className="w-4 h-4" />
+                      <span>{tool.title}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                ))
+              ) : (
+                <DropdownMenuLabel className="text-sm text-muted-foreground px-2 py-1">
+                  No free tools available
+                </DropdownMenuLabel>
+              )}
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="flex items-center gap-2">
               <Coins className="w-4 h-4" />
