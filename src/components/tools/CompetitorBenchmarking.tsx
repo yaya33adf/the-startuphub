@@ -127,9 +127,9 @@ export const CompetitorBenchmarking = () => {
               <SelectValue placeholder="Select market share" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="high">High (>30%)</SelectItem>
+              <SelectItem value="high">High (&gt;30%)</SelectItem>
               <SelectItem value="medium">Medium (10-30%)</SelectItem>
-              <SelectItem value="low">Low (<10%)</SelectItem>
+              <SelectItem value="low">Low (&lt;10%)</SelectItem>
               <SelectItem value="unknown">Unknown</SelectItem>
             </SelectContent>
           </Select>
