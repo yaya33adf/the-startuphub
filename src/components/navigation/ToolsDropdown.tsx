@@ -1,4 +1,4 @@
-import { Wrench, Coins, Gift } from "lucide-react";
+import { Wrench, Coins, Gift, Calculator } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -32,9 +32,17 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
      tool.path.includes('profit'))
   );
 
-  // All non-financial tools plus currency converter go to free tools
+  const businessPlanningTools = activeTools.filter(tool =>
+    tool.path?.includes('runway-calculator') ||
+    tool.path?.includes('break-even-analysis') ||
+    tool.path?.includes('investor-return') ||
+    tool.path?.includes('crowdfunding-goal')
+  );
+
+  // All non-financial and non-business planning tools plus currency converter go to free tools
   const freeTools = activeTools.filter(tool => 
-    !financialTools.includes(tool)
+    !financialTools.includes(tool) &&
+    !businessPlanningTools.includes(tool)
   );
 
   return (
@@ -89,6 +97,34 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
             <DropdownMenuSubContent className="bg-background">
               {financialTools.length > 0 ? (
                 financialTools.map((tool) => (
+                  <DropdownMenuItem
+                    key={tool.path}
+                    asChild
+                    onClick={onClick}
+                    className="transition-colors duration-200 hover:bg-accent/50"
+                  >
+                    <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
+                      <tool.icon className="w-4 h-4" />
+                      <span>{tool.title}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                ))
+              ) : (
+                <DropdownMenuLabel className="text-sm text-muted-foreground px-2 py-1">
+                  Coming soon...
+                </DropdownMenuLabel>
+              )}
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
+
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger className="flex items-center gap-2">
+              <Calculator className="w-4 h-4" />
+              <span>Business Planning Tools</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent className="bg-background">
+              {businessPlanningTools.length > 0 ? (
+                businessPlanningTools.map((tool) => (
                   <DropdownMenuItem
                     key={tool.path}
                     asChild
