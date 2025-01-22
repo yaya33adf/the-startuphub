@@ -40,6 +40,8 @@ export const SearchLogic = ({ onSearchResults }: SearchLogicProps) => {
         throw new Error("No results returned from trend calculation");
       }
       
+      console.log("Received trend results:", result);
+      
       const metadata = (typeof result.metadata === 'object' && result.metadata !== null) 
         ? result.metadata as Record<string, { score?: number; metadata?: any }>
         : {};
@@ -80,6 +82,7 @@ export const SearchLogic = ({ onSearchResults }: SearchLogicProps) => {
         metadata: transformedMetadata
       };
       
+      console.log("Transformed trend data:", trendData);
       onSearchResults(trendData);
       
       toast({

@@ -7,10 +7,15 @@ interface TrendSearchProps {
 }
 
 export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
+  const handleSearchResults = (results: TrendData) => {
+    console.log("Search results in TrendSearch:", results);
+    onSearchResults(results);
+  };
+
   return (
     <div className="space-y-6">
       <SearchHeader />
-      <SearchLogic onSearchResults={onSearchResults} />
+      <SearchLogic onSearchResults={handleSearchResults} />
     </div>
   );
 };
