@@ -34,7 +34,7 @@ export const StartupsDropdown = ({ onClick = () => {} }: StartupsDropdownProps) 
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="start"
-        className="w-56 animate-in fade-in-0 zoom-in-95"
+        className="w-56 animate-in fade-in-0 zoom-in-95 bg-background"
       >
         {startupsItems.map((item) => (
           <DropdownMenuItem 

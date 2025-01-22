@@ -33,7 +33,7 @@ export const BusinessInsightsDropdown = ({ onClick = () => {} }: BusinessInsight
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="start"
-        className="w-56 animate-in fade-in-0 zoom-in-95"
+        className="w-56 animate-in fade-in-0 zoom-in-95 bg-background"
       >
         {businessInsightsItems.map((item) => (
           <DropdownMenuItem 
@@ -53,5 +53,4 @@ export const BusinessInsightsDropdown = ({ onClick = () => {} }: BusinessInsight
   );
 };
 
-// Re-export icons for NavLinks
 export { Wrench, BookOpen, Users2, Users, MessageSquare } from "lucide-react";

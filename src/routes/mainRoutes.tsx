@@ -11,6 +11,13 @@ import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import Community from "@/pages/Community";
 import Problems from "@/pages/Problems";
 import Events from "@/pages/Events";
+import Roadmap from "@/pages/Roadmap";
+import Trends from "@/pages/Trends";
+import SideHustles from "@/pages/SideHustles";
+import Crowdfunding from "@/pages/Crowdfunding";
+import Feedback from "@/pages/Feedback";
+import Team from "@/pages/Team";
+import Investors from "@/pages/Investors";
 
 export const mainRoutes = [
   {
@@ -42,6 +49,38 @@ export const mainRoutes = [
     element: <Markets />,
   },
   {
+    path: "/trends",
+    element: <Trends />,
+  },
+  {
+    path: "/side-hustles",
+    element: <SideHustles />,
+  },
+  {
+    path: "/crowdfunding",
+    element: <Crowdfunding />,
+  },
+  {
+    path: "/roadmap",
+    element: <Roadmap />,
+  },
+  {
+    path: "/problems",
+    element: <Problems />,
+  },
+  {
+    path: "/feedback",
+    element: <Feedback />,
+  },
+  {
+    path: "/team",
+    element: <Team />,
+  },
+  {
+    path: "/investors",
+    element: <Investors />,
+  },
+  {
     path: "/sitemap",
     element: <Sitemap />,
   },
@@ -56,9 +95,5 @@ export const mainRoutes = [
   {
     path: "/community",
     element: <Community />,
-  },
-  {
-    path: "/problems",
-    element: <Problems />,
   },
 ];
