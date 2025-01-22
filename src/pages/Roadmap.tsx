@@ -4,6 +4,9 @@ import { RoadmapPageHeader } from "@/components/roadmap/RoadmapPageHeader";
 import { jobCategories } from "@/data/jobCategories";
 
 const Roadmap = () => {
+  console.log("Rendering Roadmap page"); // Debug log
+  console.log("Job categories:", jobCategories); // Debug log
+  
   return (
     <div className="container py-8">
       <PageSEO 
