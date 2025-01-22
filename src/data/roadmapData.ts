@@ -12,6 +12,7 @@ import { academicWriterRoadmap } from './roadmaps/academic-writer';
 import { localizationSpecialistRoadmap } from './roadmaps/localization-specialist';
 import { photographerRoadmap } from './roadmaps/photographer';
 import { propertyManagerRoadmap } from './roadmaps/property-manager';
+import { travelPlannerRoadmap } from './roadmaps/travel-planner';
 
 export const roadmaps: Record<string, JobRoadmap> = {
   ...developmentRoadmaps,
@@ -27,4 +28,5 @@ export const roadmaps: Record<string, JobRoadmap> = {
   'localization-specialist': localizationSpecialistRoadmap,
   'professional-photographer': photographerRoadmap,
   'property-manager': propertyManagerRoadmap,
+  'travel-planner': travelPlannerRoadmap,
 };
