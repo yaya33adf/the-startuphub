@@ -1,26 +1,14 @@
 import { useEffect, useState } from "react";
 import { PageSEO } from "@/components/seo/PageSEO";
 import { supabase } from "@/integrations/supabase/client";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Briefcase, Building2, Globe, Users, Mail, Search } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Card } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 import { InvestorForm } from "@/components/investors/InvestorForm";
-
-interface Investor {
-  id: string;
-  name: string;
-  email: string;
-  user_type: string;
-  investment_preferences?: string[];
-  country?: string;
-  company?: string;
-  investment_stage?: string;
-  image_url?: string;
-}
+import { InvestorSearchFilters } from "@/components/investors/InvestorSearchFilters";
+import { InvestorGrid } from "@/components/investors/InvestorGrid";
+import { EmptyInvestorState } from "@/components/investors/EmptyInvestorState";
+import type { Investor } from "@/types/investors";
 
 const Investors = () => {
   const [investors, setInvestors] = useState<Investor[]>([]);
@@ -90,30 +78,13 @@ const Investors = () => {
           </p>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 mb-6">
-          <div className="relative flex-1">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search by name..."
-              value={searchName}
-              onChange={(e) => setSearchName(e.target.value)}
-              className="pl-8"
-            />
-          </div>
-          <Select value={selectedCountry} onValueChange={setSelectedCountry}>
-            <SelectTrigger className="w-full sm:w-[200px]">
-              <SelectValue placeholder="Select country" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Countries</SelectItem>
-              {uniqueCountries.map((country) => (
-                <SelectItem key={country} value={country}>
-                  {country}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <InvestorSearchFilters
+          searchName={searchName}
+          selectedCountry={selectedCountry}
+          uniqueCountries={uniqueCountries}
+          onSearchNameChange={setSearchName}
+          onCountryChange={setSelectedCountry}
+        />
 
         <InvestorForm />
 
@@ -135,84 +106,12 @@ const Investors = () => {
               </Card>
             ))}
           </div>
+        ) : filteredInvestors.length > 0 ? (
+          <InvestorGrid investors={filteredInvestors} />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredInvestors.map((investor) => (
-              <Card key={investor.id} className="p-6 hover:shadow-lg transition-shadow">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-3">
-                    {investor.image_url ? (
-                      <img 
-                        src={investor.image_url} 
-                        alt={investor.name} 
-                        className="h-12 w-12 rounded-full object-cover"
-                      />
-                    ) : (
-                      <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Briefcase className="h-6 w-6 text-primary" />
-                      </div>
-                    )}
-                    <div>
-                      <h3 className="font-semibold text-lg">{investor.name || 'Anonymous Investor'}</h3>
-                      <p className="text-sm text-muted-foreground flex items-center gap-1">
-                        <Building2 className="h-4 w-4" />
-                        {investor.company || investor.user_type}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  {investor.country && (
-                    <p className="text-sm flex items-center gap-2">
-                      <Globe className="h-4 w-4" />
-                      {investor.country}
-                    </p>
-                  )}
-                  
-                  {investor.investment_stage && (
-                    <p className="text-sm bg-accent text-accent-foreground inline-block px-2 py-1 rounded-full">
-                      {investor.investment_stage}
-                    </p>
-                  )}
-
-                  {investor.investment_preferences && (
-                    <div className="flex flex-wrap gap-2">
-                      {investor.investment_preferences.map((pref, index) => (
-                        <span
-                          key={index}
-                          className="px-2 py-1 bg-accent text-accent-foreground rounded-full text-sm"
-                        >
-                          {pref}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  <Button
-                    variant="outline"
-                    className="w-full mt-4"
-                    onClick={() => window.location.href = `mailto:${investor.email}`}
-                  >
-                    <Mail className="h-4 w-4 mr-2" />
-                    Contact Investor
-                  </Button>
-                </div>
-              </Card>
-            ))}
-          </div>
-        )}
-
-        {!loading && filteredInvestors.length === 0 && (
-          <Card className="p-8 text-center">
-            <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-xl font-semibold mb-2">No Investors Found</h3>
-            <p className="text-muted-foreground">
-              {searchName || selectedCountry !== "all"
-                ? `No investors found with the current filters. Try different search terms or clear the filters.`
-                : "There are currently no registered investors. Use the Add Investor button to create one."}
-            </p>
-          </Card>
+          <EmptyInvestorState 
+            hasFilters={searchName !== "" || selectedCountry !== "all"} 
+          />
         )}
       </div>
     </div>
