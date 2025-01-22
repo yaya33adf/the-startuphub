@@ -14,10 +14,10 @@ export const filterFinancialTools = (tools: Tool[]) =>
 
 export const filterBusinessTools = (tools: Tool[]) =>
   tools.filter(tool =>
-    tool.path?.includes('runway-calculator') ||
-    tool.path?.includes('break-even-analysis') ||
-    tool.path?.includes('investor-return') ||
-    tool.path?.includes('crowdfunding-goal')
+    tool.path?.includes('lean-canvas-generator') ||
+    tool.path?.includes('business-plan-template') ||
+    tool.path?.includes('market-research-tool') ||
+    tool.path?.includes('pitch-deck-creator')
   );
 
 export const filterMarketingTools = (tools: Tool[]) =>
@@ -86,3 +86,4 @@ export const filterCustomerExperienceTools = (tools: Tool[]) =>
     tool.path?.includes('chat-support') ||
     tool.path?.includes('help-desk')
   );
+
