@@ -7,6 +7,7 @@ import { AccountSettings } from "@/components/sitemap/AccountSettings";
 import { InvestorsSection } from "@/components/sitemap/InvestorsSection";
 import { LegalSection } from "@/components/sitemap/LegalSection";
 import { TemplatesSection } from "@/components/sitemap/TemplatesSection";
+import { LearnSection } from "@/components/sitemap/LearnSection";
 
 const Sitemap = () => {
   return (
@@ -31,6 +32,7 @@ const Sitemap = () => {
           <div className="space-y-8">
             <CommunitySupport />
             <AccountSettings />
+            <LearnSection />
           </div>
 
           {/* Additional Resources */}
