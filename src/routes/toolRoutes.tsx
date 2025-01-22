@@ -16,6 +16,7 @@ import RunwayCalculatorPage from "@/pages/tools/RunwayCalculatorPage";
 import BreakEvenAnalysisPage from "@/pages/tools/BreakEvenAnalysisPage";
 import InvestorReturnPage from "@/pages/tools/InvestorReturnPage";
 import CrowdfundingGoalPage from "@/pages/tools/CrowdfundingGoalPage";
+import StartupValuationPage from "@/pages/tools/StartupValuationPage";
 
 export const toolRoutes = [
   {
@@ -89,5 +90,9 @@ export const toolRoutes = [
   {
     path: "/tools/crowdfunding-goal",
     element: <CrowdfundingGoalPage />
+  },
+  {
+    path: "/tools/startup-valuation",
+    element: <StartupValuationPage />
   }
 ];
