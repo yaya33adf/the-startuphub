@@ -15,6 +15,7 @@ import ExpenseTrackerPage from "@/pages/tools/ExpenseTrackerPage";
 import RunwayCalculatorPage from "@/pages/tools/RunwayCalculatorPage";
 import BreakEvenAnalysisPage from "@/pages/tools/BreakEvenAnalysisPage";
 import InvestorReturnPage from "@/pages/tools/InvestorReturnPage";
+import InvestorReturnPage from "@/pages/tools/InvestorReturnPage";
 import CrowdfundingGoalPage from "@/pages/tools/CrowdfundingGoalPage";
 import StartupValuationPage from "@/pages/tools/StartupValuationPage";
 import LeanCanvasGeneratorPage from "@/pages/tools/LeanCanvasGeneratorPage";
@@ -83,6 +84,10 @@ export const toolRoutes = [
   {
     path: "/tools/break-even-analysis",
     element: <BreakEvenAnalysisPage />
+  },
+  {
+    path: "/tools/investor-return",
+    element: <InvestorReturnPage />
   },
   {
     path: "/tools/investor-return",

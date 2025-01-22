@@ -74,7 +74,7 @@ export const financialTools: Tool[] = [
     description: "Show potential investors their expected ROI based on your financial projections",
     icon: PieChart,
     path: "/tools/investor-return",
-    active: false
+    active: true
   },
   {
     title: "Crowdfunding Goal Calculator",
