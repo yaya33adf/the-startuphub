@@ -62,6 +62,7 @@ export const AddTeamMemberForm = ({ onSubmit, isSubmitting }: AddTeamMemberFormP
                   setNewMember({ ...newMember, member_name: e.target.value })
                 }
                 placeholder="Enter member name"
+                required
               />
             </div>
             <div className="space-y-2">
@@ -71,6 +72,7 @@ export const AddTeamMemberForm = ({ onSubmit, isSubmitting }: AddTeamMemberFormP
                 onValueChange={(value) =>
                   setNewMember({ ...newMember, role: value })
                 }
+                required
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select role" />
@@ -94,6 +96,7 @@ export const AddTeamMemberForm = ({ onSubmit, isSubmitting }: AddTeamMemberFormP
                   setNewMember({ ...newMember, email: e.target.value })
                 }
                 placeholder="Enter email address"
+                required
               />
             </div>
             <div className="space-y-2">

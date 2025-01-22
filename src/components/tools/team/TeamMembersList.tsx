@@ -18,6 +18,14 @@ interface TeamMembersListProps {
 }
 
 export const TeamMembersList = ({ members, onDelete, isDeletingId }: TeamMembersListProps) => {
+  if (!members.length) {
+    return (
+      <div className="text-center p-4 text-muted-foreground">
+        No team members added yet. Add your first team member above.
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 gap-4">
       {members.map((member) => (

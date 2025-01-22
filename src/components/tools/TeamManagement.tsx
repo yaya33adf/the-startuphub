@@ -43,7 +43,13 @@ export const TeamManagement = () => {
   });
 
   const addMemberMutation = useMutation({
-    mutationFn: async (memberData: Omit<any, "id" | "status" | "created_at" | "updated_at">) => {
+    mutationFn: async (memberData: {
+      member_name: string;
+      role: string;
+      email: string;
+      assignment: string;
+      due_date: string;
+    }) => {
       if (!userId) throw new Error("User not authenticated");
 
       console.log("Adding team member:", memberData);
