@@ -23,7 +23,10 @@ import {
   Timer,
   Scale,
   PieChart,
-  Goal
+  Goal,
+  Heart,
+  MessageSquare,
+  Headset
 } from "lucide-react";
 
 // Financial Planning Tools
@@ -100,6 +103,31 @@ const financialPlanningTools: Tool[] = [
   }
 ];
 
+// Customer Experience Tools
+const customerExperienceTools: Tool[] = [
+  {
+    title: "Customer Feedback System",
+    description: "Collect and analyze customer feedback",
+    icon: MessageSquare,
+    path: "/tools/customer-feedback",
+    active: true
+  },
+  {
+    title: "Support Ticket Manager",
+    description: "Manage customer support tickets efficiently",
+    icon: Headset,
+    path: "/tools/support-tickets",
+    active: true
+  },
+  {
+    title: "Customer Satisfaction Survey",
+    description: "Create and manage customer satisfaction surveys",
+    icon: Heart,
+    path: "/tools/satisfaction-survey",
+    active: true
+  }
+];
+
 import { businessTools } from "./categories/BusinessTools";
 import { productivityTools } from "./categories/ProductivityTools";
 import { creativeTools } from "./categories/CreativeTools";
@@ -110,5 +138,6 @@ export const tools = [
   ...productivityTools,
   ...creativeTools,
   ...utilityTools,
-  ...financialPlanningTools
+  ...financialPlanningTools,
+  ...customerExperienceTools
 ];

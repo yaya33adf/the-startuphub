@@ -73,7 +73,7 @@ export const filterHRTools = (tools: Tool[]) =>
 export const filterCustomerExperienceTools = (tools: Tool[]) =>
   tools.filter(tool =>
     tool.path?.includes('customer-feedback') ||
-    tool.path?.includes('customer-support') ||
+    tool.path?.includes('support-tickets') ||
     tool.path?.includes('satisfaction-survey') ||
     tool.path?.includes('chat-support') ||
     tool.path?.includes('help-desk')
