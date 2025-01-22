@@ -17,6 +17,7 @@ import BreakEvenAnalysisPage from "@/pages/tools/BreakEvenAnalysisPage";
 import InvestorReturnPage from "@/pages/tools/InvestorReturnPage";
 import CrowdfundingGoalPage from "@/pages/tools/CrowdfundingGoalPage";
 import StartupValuationPage from "@/pages/tools/StartupValuationPage";
+import LeanCanvasGeneratorPage from "@/pages/tools/LeanCanvasGeneratorPage";
 
 export const toolRoutes = [
   {
@@ -94,5 +95,9 @@ export const toolRoutes = [
   {
     path: "/tools/startup-valuation",
     element: <StartupValuationPage />
+  },
+  {
+    path: "/tools/lean-canvas-generator",
+    element: <LeanCanvasGeneratorPage />
   }
 ];

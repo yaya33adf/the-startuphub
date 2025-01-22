@@ -1,13 +1,13 @@
-import { BarChart3, Calculator, CreditCard, DollarSign, FileSpreadsheet, Quote, Lightbulb } from "lucide-react";
+import { FileSpreadsheet, Calculator, CreditCard, DollarSign, BarChart3, Quote, Lightbulb, Layout } from "lucide-react";
 import { Tool } from "../types/ToolTypes";
 import { BusinessNameGenerator } from "../BusinessNameGenerator";
 import { CurrencyConverter } from "../CurrencyConverter";
 import { ExpenseTracker } from "../ExpenseTracker";
 import { InvoiceGenerator } from "../InvoiceGenerator";
 import { SalesAnalytics } from "../SalesAnalytics";
-import { StartupValuation } from "../StartupValuation";
 import { SmallBusinessQuotes } from "../SmallBusinessQuotes";
 import { SmallBusinessTips } from "../SmallBusinessTips";
+import { LeanCanvasGenerator } from "../LeanCanvasGenerator";
 
 export const businessTools: Tool[] = [
   {
@@ -51,14 +51,6 @@ export const businessTools: Tool[] = [
     path: "/tools/sales-analytics"
   },
   {
-    title: "Startup Valuation Calculator",
-    description: "Calculate your startup's valuation using multiple methodologies",
-    icon: Calculator,
-    component: StartupValuation,
-    active: true,
-    path: "/tools/startup-valuation"
-  },
-  {
     title: "Small Business Quotes",
     description: "Generate inspirational quotes for small businesses",
     icon: Quote,
@@ -73,5 +65,13 @@ export const businessTools: Tool[] = [
     component: SmallBusinessTips,
     active: true,
     path: "/tools/small-business-tips"
+  },
+  {
+    title: "Lean Canvas Generator",
+    description: "Create a one-page business plan efficiently",
+    icon: Layout,
+    component: LeanCanvasGenerator,
+    active: true,
+    path: "/tools/lean-canvas-generator"
   }
 ];
