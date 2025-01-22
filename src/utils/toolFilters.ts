@@ -60,3 +60,12 @@ export const filterFundingTools = (tools: Tool[]) =>
     tool.path?.includes('startup-valuation') ||
     tool.path?.includes('crowdfunding')
   );
+
+export const filterHRTools = (tools: Tool[]) =>
+  tools.filter(tool =>
+    tool.path?.includes('team-management') ||
+    tool.path?.includes('hr') ||
+    tool.path?.includes('recruitment') ||
+    tool.path?.includes('employee') ||
+    tool.path?.includes('performance')
+  );
