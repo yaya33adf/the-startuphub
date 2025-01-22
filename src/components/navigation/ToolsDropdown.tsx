@@ -22,6 +22,7 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
   // Filter only active tools and ensure unique paths
   const activeTools = tools.filter(tool => tool.active && tool.path);
   const financialTools = tools.filter(tool => 
+    tool.active && 
     tool.path?.startsWith('/tools/') && 
     (tool.path.includes('budget') || 
      tool.path.includes('investment') || 
@@ -46,19 +47,21 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
         className="w-56 animate-in fade-in-0 zoom-in-95 bg-background"
       >
         <DropdownMenuGroup>
-          {activeTools.map((tool) => (
-            <DropdownMenuItem 
-              key={tool.path}
-              asChild 
-              onClick={onClick}
-              className="transition-colors duration-200 hover:bg-accent/50"
-            >
-              <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
-                <tool.icon className="w-4 h-4" />
-                <span>{tool.title}</span>
-              </Link>
-            </DropdownMenuItem>
-          ))}
+          {activeTools
+            .filter(tool => !financialTools.includes(tool))
+            .map((tool) => (
+              <DropdownMenuItem 
+                key={tool.path}
+                asChild 
+                onClick={onClick}
+                className="transition-colors duration-200 hover:bg-accent/50"
+              >
+                <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
+                  <tool.icon className="w-4 h-4" />
+                  <span>{tool.title}</span>
+                </Link>
+              </DropdownMenuItem>
+            ))}
           
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="flex items-center gap-2">
@@ -66,20 +69,21 @@ export const ToolsDropdown = ({ onClick = () => {} }: ToolsDropdownProps) => {
               <span>Financial Planning Tools</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent className="bg-background">
-              {financialTools.map((tool) => (
-                <DropdownMenuItem
-                  key={tool.path}
-                  asChild
-                  onClick={onClick}
-                  className="transition-colors duration-200 hover:bg-accent/50"
-                >
-                  <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
-                    <tool.icon className="w-4 h-4" />
-                    <span>{tool.title}</span>
-                  </Link>
-                </DropdownMenuItem>
-              ))}
-              {financialTools.length === 0 && (
+              {financialTools.length > 0 ? (
+                financialTools.map((tool) => (
+                  <DropdownMenuItem
+                    key={tool.path}
+                    asChild
+                    onClick={onClick}
+                    className="transition-colors duration-200 hover:bg-accent/50"
+                  >
+                    <Link to={tool.path} className="flex items-center gap-2 w-full p-2">
+                      <tool.icon className="w-4 h-4" />
+                      <span>{tool.title}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                ))
+              ) : (
                 <DropdownMenuLabel className="text-sm text-muted-foreground px-2 py-1">
                   Coming soon...
                 </DropdownMenuLabel>
