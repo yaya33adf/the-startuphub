@@ -32,10 +32,10 @@ export const StartupValuation = () => {
   const form = useForm<ValuationFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      revenue: "",
-      growthRate: "",
-      marketSize: "",
-      margins: "",
+      revenue: "0",
+      growthRate: "0",
+      marketSize: "0",
+      margins: "0",
     },
   });
 
