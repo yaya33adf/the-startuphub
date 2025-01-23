@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User, Building2, Briefcase, Users } from "lucide-react";
+import { User, Building2, Briefcase, Users, Code2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -56,7 +56,8 @@ export function UserMenu({ userProfile, handleSignOut, userEmail }: UserMenuProp
   const userType = userProfile?.user_type;
   
   const UserTypeIcon = userType === 'startup' ? Building2 : 
-                      userType === 'investor' ? Briefcase : 
+                      userType === 'investor' ? Briefcase :
+                      userType === 'freelancer' ? Code2 :
                       null;
   
   return (

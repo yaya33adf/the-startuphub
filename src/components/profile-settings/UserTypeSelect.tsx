@@ -26,6 +26,7 @@ export function UserTypeSelect({ userType, onUserTypeChange }: UserTypeSelectPro
         <SelectContent>
           <SelectItem value="startup">Startup</SelectItem>
           <SelectItem value="investor">Investor</SelectItem>
+          <SelectItem value="freelancer">Freelancer</SelectItem>
         </SelectContent>
       </Select>
     </div>
