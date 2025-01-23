@@ -28,6 +28,8 @@ const Markets = () => {
 
   const handleMarketSearch = (query: string, region: string, timeframe: string) => {
     console.log("Market search:", { query, region, timeframe });
+    // Reset trend results when performing a new market search
+    setSearchResults(null);
   };
 
   // Sample market data for demonstration
@@ -64,8 +66,13 @@ const Markets = () => {
           <div className="bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-2xl font-semibold mb-6">Market Research Tools</h2>
             <div className="space-y-6">
+              {/* Only use TrendSearch for trend analysis */}
               <TrendSearch onSearchResults={handleSearchResults} />
-              <MarketSearch onSearch={handleMarketSearch} />
+              {/* MarketSearch no longer handles trend analysis */}
+              <MarketSearch 
+                onSearch={handleMarketSearch}
+                buttonText="Search Markets"
+              />
             </div>
           </div>
         </div>
