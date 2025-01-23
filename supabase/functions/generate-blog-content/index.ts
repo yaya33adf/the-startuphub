@@ -1,19 +1,15 @@
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
+import { corsHeaders } from '../_shared/cors.ts'
 
-const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+console.log('Hello from generate-blog-content!')
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response('ok', { headers: corsHeaders })
   }
 
   try {
+    const openAIApiKey = Deno.env.get('OPENAI_API_KEY')
     const { keyword } = await req.json();
     console.log('Generating blog content for keyword:', keyword);
 
@@ -24,20 +20,20 @@ serve(async (req) => {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
+        Authorization: `Bearer ${openAIApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini', // Using the faster model for better response times
+        model: 'gpt-3.5-turbo',
         messages: [
           {
             role: 'system',
-            content: 'You are a professional blog writer. Create engaging, well-structured blog posts with proper formatting and sections.'
+            content: 'You are a professional blog writer. Create a blog post with a title and content. The title should be on the first line starting with #. The content should follow after a blank line.',
           },
           {
             role: 'user',
-            content: `Write a comprehensive blog post about "${keyword}". Include a catchy title, introduction, 3-4 main sections, and a conclusion. Make it informative and engaging.`
-          }
+            content: `Write a blog post about ${keyword}. Make it informative and engaging.`,
+          },
         ],
       }),
     });
@@ -61,8 +57,8 @@ serve(async (req) => {
     }
 
     const generatedContent = data.choices[0].message.content;
+    console.log('Raw generated content:', generatedContent);
 
-    // Extract title from the first line
     const lines = generatedContent.split('\n');
     const title = lines[0].replace('#', '').trim();
     const content = lines.slice(1).join('\n').trim();
@@ -73,21 +69,23 @@ serve(async (req) => {
     });
 
     return new Response(
-      JSON.stringify({ 
+      JSON.stringify({
         title,
         content,
-        excerpt: content.slice(0, 150) + '...'
       }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    );
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200,
+      },
+    )
   } catch (error) {
-    console.error('Error generating blog content:', error);
+    console.error('Error:', error.message)
     return new Response(
       JSON.stringify({ error: error.message }),
-      { 
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      }
-    );
+      {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 400,
+      },
+    )
   }
-});
+})

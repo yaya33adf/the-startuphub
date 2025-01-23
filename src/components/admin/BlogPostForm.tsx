@@ -38,11 +38,21 @@ export const BlogPostForm = () => {
 
     setIsGenerating(true);
     try {
+      console.log('Calling generate-blog-content function with keyword:', keyword);
       const { data, error } = await supabase.functions.invoke('generate-blog-content', {
         body: { keyword }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error from edge function:', error);
+        throw error;
+      }
+
+      console.log('Generated content:', data);
+
+      if (!data?.title || !data?.content) {
+        throw new Error('Invalid content generated');
+      }
 
       setBlogTitle(data.title);
       setBlogContent(data.content);
