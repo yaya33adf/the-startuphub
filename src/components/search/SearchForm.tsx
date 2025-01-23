@@ -30,8 +30,14 @@ export const SearchForm = ({
   onSubmit,
   isLoading,
 }: SearchFormProps) => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Form submitted with:", { searchQuery, region, timeframe });
+    onSubmit(e);
+  };
+
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="flex flex-col md:flex-row gap-4">
         <div className="flex-1">
           <Input
