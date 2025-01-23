@@ -132,7 +132,7 @@ const Markets = () => {
           )}
         </div>
 
-        {/* Market Insights Section - Moved to bottom */}
+        {/* Market Insights Section */}
         <div className="bg-accent/10 rounded-lg p-6">
           <h2 className="text-2xl font-semibold mb-4">Market Insights</h2>
           <p className="text-muted-foreground">
