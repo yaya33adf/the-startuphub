@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 import { supabase } from "@/integrations/supabase/client"
 import { useNavigate } from "react-router-dom"
-import { Google } from "lucide-react"
+import { Mail } from "lucide-react"
 
 export default function SignIn() {
   const [email, setEmail] = useState("")
@@ -103,7 +103,7 @@ export default function SignIn() {
           disabled={loading}
           className="w-full"
         >
-          <Google className="mr-2 h-4 w-4" />
+          <Mail className="mr-2 h-4 w-4" />
           Sign in with Google
         </Button>
 
