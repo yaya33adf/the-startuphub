@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/use-toast"
 import { supabase } from "@/integrations/supabase/client"
 import { useNavigate } from "react-router-dom"
+import { Google } from "lucide-react"
 
 export default function SignIn() {
   const [email, setEmail] = useState("")
@@ -50,6 +51,40 @@ export default function SignIn() {
     }
   }
 
+  const handleGoogleSignIn = async () => {
+    try {
+      setLoading(true)
+      console.log("Attempting Google sign in")
+      
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/callback`
+        }
+      })
+
+      if (error) {
+        console.error("Google sign in error:", error)
+        toast({
+          variant: "destructive",
+          title: "Error signing in with Google",
+          description: error.message,
+        })
+      } else {
+        console.log("Google sign in initiated:", data)
+      }
+    } catch (error) {
+      console.error("Unexpected error during Google sign in:", error)
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "An unexpected error occurred",
+      })
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="flex min-h-[80vh] items-center justify-center">
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
@@ -60,6 +95,27 @@ export default function SignIn() {
           <p className="text-sm text-muted-foreground">
             Enter your credentials to sign in
           </p>
+        </div>
+
+        <Button 
+          variant="outline" 
+          onClick={handleGoogleSignIn}
+          disabled={loading}
+          className="w-full"
+        >
+          <Google className="mr-2 h-4 w-4" />
+          Sign in with Google
+        </Button>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
