@@ -4,7 +4,7 @@ import { BlogPostActions } from "./BlogPostActions";
 import { useCreateBlogPost } from "@/hooks/useCreateBlogPost";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Wand2 } from "lucide-react";
+import { Wand2, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -78,14 +78,24 @@ export const BlogPostForm = () => {
               placeholder="Enter main keyword for AI generation..."
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
+              disabled={isGenerating}
             />
             <Button 
               onClick={generateContent} 
-              disabled={isGenerating}
+              disabled={isGenerating || !keyword.trim()}
               variant="outline"
             >
-              <Wand2 className="w-4 h-4 mr-2" />
-              {isGenerating ? "Generating..." : "Generate"}
+              {isGenerating ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Wand2 className="w-4 h-4 mr-2" />
+                  Generate
+                </>
+              )}
             </Button>
           </div>
         </div>

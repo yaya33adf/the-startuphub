@@ -4,18 +4,25 @@ import { corsHeaders } from '../_shared/cors.ts'
 console.log('Hello from generate-blog-content!')
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
 
   try {
     const openAIApiKey = Deno.env.get('OPENAI_API_KEY')
-    const { keyword } = await req.json();
-    console.log('Generating blog content for keyword:', keyword);
-
     if (!openAIApiKey) {
+      console.error('OpenAI API key not configured');
       throw new Error('OpenAI API key not configured');
     }
+
+    const { keyword } = await req.json();
+    if (!keyword) {
+      console.error('No keyword provided');
+      throw new Error('No keyword provided');
+    }
+    
+    console.log('Generating blog content for keyword:', keyword);
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -24,7 +31,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4o-mini',
         messages: [
           {
             role: 'system',
@@ -59,9 +66,10 @@ serve(async (req) => {
     const generatedContent = data.choices[0].message.content;
     console.log('Raw generated content:', generatedContent);
 
+    // Split content into title and body
     const lines = generatedContent.split('\n');
     const title = lines[0].replace('#', '').trim();
-    const content = lines.slice(1).join('\n').trim();
+    const content = lines.slice(2).join('\n').trim(); // Skip the blank line after title
 
     console.log('Successfully generated content:', {
       titleLength: title.length,
@@ -79,9 +87,12 @@ serve(async (req) => {
       },
     )
   } catch (error) {
-    console.error('Error:', error.message)
+    console.error('Error:', error.message);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error.message,
+        details: error.stack
+      }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 400,
