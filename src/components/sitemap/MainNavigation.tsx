@@ -12,6 +12,11 @@ export const MainNavigation = () => {
           </Link>
         </li>
         <li>
+          <Link to="/job-board" className="text-muted-foreground hover:text-primary transition-colors">
+            Job Board - Find & Post Jobs
+          </Link>
+        </li>
+        <li>
           <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">
             About Us - Our Mission & Vision
           </Link>
