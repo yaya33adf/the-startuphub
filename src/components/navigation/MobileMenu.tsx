@@ -14,10 +14,11 @@ interface MobileMenuProps {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
   session: any;
+  userProfile: any;
   handleSignOut: () => Promise<void>;
 }
 
-export const MobileMenu = ({ isOpen, setIsOpen, session, handleSignOut }: MobileMenuProps) => {
+export const MobileMenu = ({ isOpen, setIsOpen, session, userProfile, handleSignOut }: MobileMenuProps) => {
   const handleClose = () => setIsOpen(false);
 
   return (
