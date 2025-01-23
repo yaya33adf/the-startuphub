@@ -9,7 +9,9 @@ interface TrendSearchProps {
 export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
   const handleSearchResults = (results: TrendData) => {
     console.log("Search results in TrendSearch:", results);
-    onSearchResults(results);
+    if (results) {
+      onSearchResults(results);
+    }
   };
 
   return (
