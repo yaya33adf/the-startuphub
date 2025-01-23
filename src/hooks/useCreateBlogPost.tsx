@@ -21,13 +21,15 @@ export const useCreateBlogPost = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
+      console.log('Fetching latest blog post for user:', user.id);
+      
       const { data, error } = await supabase
         .from('blog_posts')
         .select('*')
         .eq('author_id', user.id)
         .order('created_at', { ascending: false })
         .limit(1)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error('Error fetching blog post:', error);
@@ -35,6 +37,7 @@ export const useCreateBlogPost = () => {
       }
       
       if (data) {
+        console.log('Found existing blog post:', data);
         setBlogTitle(data.title);
         setBlogContent(data.content);
         setImageUrl(data.image_url);
