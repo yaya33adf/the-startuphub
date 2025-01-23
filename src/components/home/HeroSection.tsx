@@ -64,7 +64,6 @@ export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps
     <>
       <section className="relative py-12 md:py-20 px-4 bg-gradient-to-br from-secondary/30 via-accent/20 to-primary/10">
         <div className="max-w-4xl mx-auto">
-          {/* Prioritize loading of the header */}
           <link rel="preload" as="image" href="/og-image.png" />
           
           <GlobalTrendsHeader />
@@ -74,6 +73,14 @@ export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps
           <p className="text-base md:text-xl text-muted-foreground mb-6 md:mb-8 animate-fade-in px-4" style={{ animationDelay: '0.2s' }}>
             Your comprehensive platform for tracking market trends, exploring opportunities, and discovering side hustles
           </p>
+          
+          {/* Signature line */}
+          <div className="relative mb-12">
+            <p className="text-2xl md:text-3xl font-semibold italic text-primary/80 tracking-wide animate-fade-in" style={{ animationDelay: '0.3s' }}>
+              Build. Scale. Succeed
+            </p>
+          </div>
+
           <div className="mb-6 md:mb-8 animate-fade-in" style={{ animationDelay: '0.4s' }}>
             <TrendSearch onSearchResults={onSearchResults} />
             {searchResults && <TrendResults data={searchResults} />}
