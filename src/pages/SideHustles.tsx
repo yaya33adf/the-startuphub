@@ -3,21 +3,37 @@ import { SideHustleHeader } from "@/components/side-hustles/SideHustleHeader";
 import { SideHustleResults } from "@/components/side-hustles/SideHustleResults";
 import { TrendSearch } from "@/components/TrendSearch";
 import type { TrendData } from "@/types/trends";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Loader2 } from "lucide-react";
 
 const SideHustles = () => {
   const [searchResults, setSearchResults] = useState<TrendData | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { data: sideHustles, isLoading, error } = useQuery({
+    queryKey: ['sideHustles'],
+    queryFn: async () => {
+      console.log("Fetching side hustles data");
+      const { data, error } = await supabase
+        .from('side_hustles')
+        .select('*')
+        .order('trend_score', { ascending: false });
+
+      if (error) {
+        console.error("Error fetching side hustles:", error);
+        throw error;
+      }
+
+      return data;
+    }
+  });
 
   const handleSearchResults = async (results: TrendData) => {
     try {
-      setIsLoading(true);
       console.log("Side hustles search results:", results);
       setSearchResults(results);
     } catch (error) {
       console.error("Error handling side hustles search:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -26,20 +42,12 @@ const SideHustles = () => {
       <SideHustleHeader />
       <div className="space-y-8">
         <TrendSearch onSearchResults={handleSearchResults} />
-        {isLoading ? (
-          <div className="flex justify-center items-center min-h-[200px]">
-            <Loader2 className="h-8 w-8 animate-spin" />
-          </div>
-        ) : (
-          searchResults && (
-            <SideHustleResults 
-              trendResults={searchResults}
-              sideHustles={undefined}
-              isLoading={false}
-              error={null}
-            />
-          )
-        )}
+        <SideHustleResults 
+          trendResults={searchResults}
+          sideHustles={sideHustles}
+          isLoading={isLoading}
+          error={error as Error | null}
+        />
       </div>
     </div>
   );
