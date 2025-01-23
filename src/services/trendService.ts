@@ -51,7 +51,7 @@ export const calculateTrendScores = async (searchQuery: string) => {
       pypi: pypiData
     });
 
-    // Calculate combined score
+    // Calculate combined score while preserving existing calculation logic
     const scores = [
       githubData.data?.score || 0,
       googleData.data?.score || 0,
@@ -94,13 +94,13 @@ export const calculateTrendScores = async (searchQuery: string) => {
         metadata: pypiData.data?.metadata
       }
     };
-
+    
     console.log('Calculated scores:', {
       avgScore,
       metadata
     });
 
-    // Store the results in the database
+    // Store the results while preserving existing storage logic
     const { error: insertError } = await supabase
       .from('trend_scores')
       .insert({
