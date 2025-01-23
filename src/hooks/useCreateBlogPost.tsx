@@ -105,6 +105,7 @@ export const useCreateBlogPost = () => {
       setBlogTitle("");
       setBlogContent("");
       setImageUrl(null);
+      fetchCurrentPost(); // Refresh to get the new post
     } catch (error) {
       console.error('Error creating blog post:', error);
       toast.error("Failed to create blog post");
