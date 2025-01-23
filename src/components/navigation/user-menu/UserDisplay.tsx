@@ -10,6 +10,8 @@ interface UserDisplayProps {
 
 export const UserDisplay = forwardRef<HTMLButtonElement, UserDisplayProps>(
   ({ displayName, avatarUrl, userType }, ref) => {
+    console.log("UserDisplay rendering with props:", { displayName, avatarUrl, userType });
+    
     const UserTypeIcon = userType === 'startup' ? Building2 : 
                         userType === 'investor' ? Briefcase :
                         userType === 'freelancer' ? Code2 :
@@ -19,21 +21,25 @@ export const UserDisplay = forwardRef<HTMLButtonElement, UserDisplayProps>(
       <Button 
         ref={ref}
         variant="ghost" 
-        className="h-10 px-3"
+        className="relative h-10 w-full px-3 text-left font-normal"
+        role="combobox"
+        aria-expanded={true}
       >
-        {avatarUrl ? (
-          <img
-            src={avatarUrl}
-            alt={displayName}
-            className="h-6 w-6 rounded-full mr-2"
-          />
-        ) : (
-          <User className="h-4 w-4 mr-2" />
-        )}
-        <span>{displayName}</span>
-        {UserTypeIcon && (
-          <UserTypeIcon className="h-4 w-4 ml-2 text-muted-foreground" />
-        )}
+        <span className="flex items-center">
+          {avatarUrl ? (
+            <img
+              src={avatarUrl}
+              alt={displayName}
+              className="h-6 w-6 rounded-full mr-2"
+            />
+          ) : (
+            <User className="h-4 w-4 mr-2" />
+          )}
+          <span>{displayName}</span>
+          {UserTypeIcon && (
+            <UserTypeIcon className="h-4 w-4 ml-2 text-muted-foreground" />
+          )}
+        </span>
       </Button>
     );
   }
