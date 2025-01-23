@@ -1,5 +1,5 @@
+import React, { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { useState } from "react";
 import { Search, Globe, Calendar } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -13,12 +13,13 @@ import {
 
 interface MarketSearchProps {
   onSearch: (query: string, region: string, timeframe: string) => void;
+  buttonText?: string;
 }
 
-export const MarketSearch = ({ onSearch }: MarketSearchProps) => {
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const [region, setRegion] = React.useState("worldwide");
-  const [timeframe, setTimeframe] = React.useState("7d");
+export const MarketSearch = ({ onSearch, buttonText = "Search" }: MarketSearchProps) => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [region, setRegion] = useState("worldwide");
+  const [timeframe, setTimeframe] = useState("7d");
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +70,7 @@ export const MarketSearch = ({ onSearch }: MarketSearchProps) => {
         
         <Button type="submit" className="w-full md:w-auto">
           <Search className="w-4 h-4 mr-2" />
-          Search
+          {buttonText}
         </Button>
       </form>
     </div>

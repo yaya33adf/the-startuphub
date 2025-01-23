@@ -69,10 +69,7 @@ const Markets = () => {
               {/* Only use TrendSearch for trend analysis */}
               <TrendSearch onSearchResults={handleSearchResults} />
               {/* MarketSearch no longer handles trend analysis */}
-              <MarketSearch 
-                onSearch={handleMarketSearch}
-                buttonText="Search Markets"
-              />
+              <MarketSearch onSearch={handleMarketSearch} />
             </div>
           </div>
         </div>
