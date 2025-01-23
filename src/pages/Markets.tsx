@@ -6,8 +6,6 @@ import { PageSEO } from "@/components/seo/PageSEO";
 import { Loader2 } from "lucide-react";
 import { MarketHeader } from "@/components/markets/MarketHeader";
 import { MarketSearch } from "@/components/search/MarketSearch";
-import { MarketChart } from "@/components/markets/MarketChart";
-import { MarketCards } from "@/components/markets/MarketCards";
 
 const Markets = () => {
   const [searchResults, setSearchResults] = useState<TrendData | null>(null);
@@ -79,56 +77,12 @@ const Markets = () => {
               <Loader2 className="h-8 w-8 animate-spin" />
             </div>
           ) : (
-            <>
-              {searchResults && (
-                <MarketResults 
-                  trendResults={searchResults}
-                  marketData={marketData}
-                  isLoading={false}
-                  error={error}
-                />
-              )}
-              {!searchResults && (
-                <div className="space-y-8">
-                  <div className="bg-white rounded-lg shadow-sm p-6">
-                    <h2 className="text-2xl font-semibold mb-6">Market Overview</h2>
-                    <MarketChart data={marketData} />
-                  </div>
-                  
-                  <div className="bg-white rounded-lg shadow-sm p-6">
-                    <h2 className="text-2xl font-semibold mb-6">Top Market Opportunities</h2>
-                    <MarketCards 
-                      markets={[
-                        {
-                          id: "1",
-                          name: "AI Development",
-                          description: "Artificial Intelligence and Machine Learning solutions",
-                          trend_score: 95,
-                          monthly_earnings_min: 8000,
-                          monthly_earnings_max: 15000
-                        },
-                        {
-                          id: "2",
-                          name: "Web Development",
-                          description: "Frontend and Backend Development",
-                          trend_score: 88,
-                          monthly_earnings_min: 6000,
-                          monthly_earnings_max: 12000
-                        },
-                        {
-                          id: "3",
-                          name: "Mobile Development",
-                          description: "iOS and Android Development",
-                          trend_score: 85,
-                          monthly_earnings_min: 7000,
-                          monthly_earnings_max: 13000
-                        }
-                      ]}
-                    />
-                  </div>
-                </div>
-              )}
-            </>
+            <MarketResults 
+              trendResults={searchResults}
+              marketData={marketData}
+              isLoading={false}
+              error={error}
+            />
           )}
         </div>
       </div>
