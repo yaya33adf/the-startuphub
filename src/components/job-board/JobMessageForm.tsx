@@ -3,15 +3,9 @@ import { useForm } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Loader2, Send } from "lucide-react";
+import { JobMessagesList } from "./JobMessagesList";
 
 interface JobMessageFormProps {
   jobPostingId: string;
@@ -61,23 +55,14 @@ export const JobMessageForm = ({ jobPostingId, onSuccess }: JobMessageFormProps)
   };
 
   return (
-    <Form {...form}>
+    <div className="space-y-4">
+      <JobMessagesList jobId={jobPostingId} />
+      
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="message"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Textarea
-                  placeholder="Type your message here..."
-                  className="min-h-[100px]"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
+        <Textarea
+          placeholder="Type your message here..."
+          className="min-h-[100px]"
+          {...form.register("message")}
         />
 
         <div className="flex justify-end">
@@ -91,6 +76,6 @@ export const JobMessageForm = ({ jobPostingId, onSuccess }: JobMessageFormProps)
           </Button>
         </div>
       </form>
-    </Form>
+    </div>
   );
 };
