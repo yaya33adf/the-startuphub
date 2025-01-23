@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Card,
   CardContent,
@@ -13,6 +14,22 @@ import {
 import { AvatarUpload } from "@/components/profile-settings/AvatarUpload";
 import { ProfileForm } from "@/components/profile-settings/ProfileForm";
 import { PasswordUpdate } from "@/components/profile-settings/PasswordUpdate";
+import { CertificatesInput } from "@/components/profile-settings/CertificatesInput";
+import { CoursesInput } from "@/components/profile-settings/CoursesInput";
+import { SkillsLanguagesInput } from "@/components/profile-settings/SkillsLanguagesInput";
+import { Label } from "@/components/ui/label";
+
+interface Certificate {
+  name: string;
+  issuer: string;
+  date: string;
+}
+
+interface Course {
+  name: string;
+  platform: string;
+  completionDate: string;
+}
 
 interface Profile {
   id: string;
@@ -20,8 +37,11 @@ interface Profile {
   name: string | null;
   user_type: string | null;
   avatar_url: string | null;
-  created_at?: string | null;
-  updated_at?: string | null;
+  bio: string | null;
+  certificates: Certificate[];
+  courses: Course[];
+  languages: string[];
+  skills: string[];
 }
 
 export default function ProfileSettings() {
@@ -30,6 +50,12 @@ export default function ProfileSettings() {
   const [name, setName] = useState("");
   const [userType, setUserType] = useState<string | null>(null);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [bio, setBio] = useState("");
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [languages, setLanguages] = useState<string[]>([]);
+  const [skills, setSkills] = useState<string[]>([]);
+  
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -49,7 +75,7 @@ export default function ProfileSettings() {
       console.log("Fetching profile for user:", session.user.id);
       const { data, error } = await supabase
         .from("profiles")
-        .select("email, user_type, name, avatar_url")
+        .select("*")
         .eq("id", session.user.id)
         .single();
 
@@ -64,6 +90,11 @@ export default function ProfileSettings() {
         setUserType(data.user_type || null);
         setName(data.name || "");
         setAvatarUrl(data.avatar_url || null);
+        setBio(data.bio || "");
+        setCertificates(data.certificates || []);
+        setCourses(data.courses || []);
+        setLanguages(data.languages || []);
+        setSkills(data.skills || []);
       }
     } catch (error) {
       console.error("Error loading profile:", error);
@@ -87,13 +118,17 @@ export default function ProfileSettings() {
         return;
       }
 
-      // Create updates object with required id field
       const updates = {
-        id: session.user.id, // Ensure id is always included
+        id: session.user.id,
         email,
         user_type: userType,
         name,
         avatar_url: avatarUrl,
+        bio,
+        certificates,
+        courses,
+        languages,
+        skills,
         updated_at: new Date().toISOString()
       };
 
@@ -146,6 +181,41 @@ export default function ProfileSettings() {
             onNameChange={setName}
             onEmailChange={setEmail}
             onUserTypeChange={setUserType}
+          />
+
+          <div className="space-y-2">
+            <Label htmlFor="bio">Bio</Label>
+            <Textarea
+              id="bio"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              placeholder="Tell us about yourself..."
+              className="min-h-[100px]"
+            />
+          </div>
+
+          <SkillsLanguagesInput
+            title="Skills"
+            items={skills}
+            onItemsChange={setSkills}
+            placeholder="Add a skill (e.g., JavaScript, Project Management)"
+          />
+
+          <SkillsLanguagesInput
+            title="Languages"
+            items={languages}
+            onItemsChange={setLanguages}
+            placeholder="Add a language (e.g., English, Spanish)"
+          />
+
+          <CertificatesInput
+            certificates={certificates}
+            onCertificatesChange={setCertificates}
+          />
+
+          <CoursesInput
+            courses={courses}
+            onCoursesChange={setCourses}
           />
 
           <PasswordUpdate />
