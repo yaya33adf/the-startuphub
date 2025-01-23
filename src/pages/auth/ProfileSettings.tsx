@@ -18,6 +18,7 @@ import { CertificatesInput } from "@/components/profile-settings/CertificatesInp
 import { CoursesInput } from "@/components/profile-settings/CoursesInput";
 import { SkillsLanguagesInput } from "@/components/profile-settings/SkillsLanguagesInput";
 import { Label } from "@/components/ui/label";
+import { Json } from "@/integrations/supabase/types";
 
 interface Certificate {
   name: string;
@@ -38,8 +39,8 @@ interface Profile {
   user_type: string | null;
   avatar_url: string | null;
   bio: string | null;
-  certificates: Certificate[];
-  courses: Course[];
+  certificates: Json;
+  courses: Json;
   languages: string[];
   skills: string[];
 }
@@ -91,8 +92,8 @@ export default function ProfileSettings() {
         setName(data.name || "");
         setAvatarUrl(data.avatar_url || null);
         setBio(data.bio || "");
-        setCertificates(data.certificates || []);
-        setCourses(data.courses || []);
+        setCertificates(data.certificates ? JSON.parse(JSON.stringify(data.certificates)) : []);
+        setCourses(data.courses ? JSON.parse(JSON.stringify(data.courses)) : []);
         setLanguages(data.languages || []);
         setSkills(data.skills || []);
       }
@@ -125,8 +126,8 @@ export default function ProfileSettings() {
         name,
         avatar_url: avatarUrl,
         bio,
-        certificates,
-        courses,
+        certificates: certificates as Json,
+        courses: courses as Json,
         languages,
         skills,
         updated_at: new Date().toISOString()
