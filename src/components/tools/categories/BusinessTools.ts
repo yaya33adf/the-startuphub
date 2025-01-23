@@ -18,7 +18,7 @@ import { StartupValuation } from "../StartupValuation";
 import { ExpenseTracker } from "../ExpenseTracker";
 import { BreakEvenAnalysis } from "../BreakEvenAnalysis";
 import { BrandIdentityTool } from "../BrandIdentityTool";
-import { TeamRecommendationForm } from "../team-recommendation/RecommendationForm";
+import { RecommendationForm } from "../team-recommendation/RecommendationForm";
 import { LeanCanvasGenerator } from "../LeanCanvasGenerator";
 import { SalesAnalytics } from "../SalesAnalytics";
 
@@ -83,7 +83,7 @@ export const businessTools: Tool[] = [
     title: "Team Recommendation",
     description: "Get team building recommendations",
     icon: Users,
-    component: TeamRecommendationForm,
+    component: RecommendationForm,
     active: true,
     path: "/tools/team-recommendation"
   },
