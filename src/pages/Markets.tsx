@@ -28,6 +28,11 @@ const Markets = () => {
     }
   };
 
+  const handleMarketSearch = (query: string, region: string, timeframe: string) => {
+    console.log("Market search:", { query, region, timeframe });
+    // Implement market search logic here
+  };
+
   // Sample market data for demonstration
   const marketData = [
     {
@@ -59,7 +64,7 @@ const Markets = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
           <div className="space-y-6">
             <TrendSearch onSearchResults={handleSearchResults} />
-            <MarketSearch />
+            <MarketSearch onSearch={handleMarketSearch} />
           </div>
           <div className="bg-accent/10 rounded-lg p-6">
             <h3 className="text-xl font-semibold mb-4">Market Insights</h3>
@@ -99,8 +104,7 @@ const Markets = () => {
                       description: "Artificial Intelligence and Machine Learning solutions",
                       trend_score: 95,
                       monthly_earnings_min: 8000,
-                      monthly_earnings_max: 15000,
-                      category: "Technology"
+                      monthly_earnings_max: 15000
                     },
                     {
                       id: "2",
@@ -108,8 +112,7 @@ const Markets = () => {
                       description: "Frontend and Backend Development",
                       trend_score: 88,
                       monthly_earnings_min: 6000,
-                      monthly_earnings_max: 12000,
-                      category: "Technology"
+                      monthly_earnings_max: 12000
                     },
                     {
                       id: "3",
@@ -117,8 +120,7 @@ const Markets = () => {
                       description: "iOS and Android Development",
                       trend_score: 85,
                       monthly_earnings_min: 7000,
-                      monthly_earnings_max: 13000,
-                      category: "Technology"
+                      monthly_earnings_max: 13000
                     }
                   ]}
                 />
