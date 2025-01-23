@@ -8,6 +8,7 @@ export interface Tool {
   active: boolean;
   fullWidth?: boolean;
   path?: string;
+  isFree?: boolean;
 }
 
 export interface ToolCategory {
