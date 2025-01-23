@@ -30,7 +30,6 @@ const Markets = () => {
 
   const handleMarketSearch = (query: string, region: string, timeframe: string) => {
     console.log("Market search:", { query, region, timeframe });
-    // Implement market search logic here
   };
 
   // Sample market data for demonstration
@@ -62,32 +61,13 @@ const Markets = () => {
       <div className="container mx-auto px-4 py-8 space-y-8">
         <MarketHeader />
         
-        {/* Search and Insights Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-2xl font-semibold mb-6">Market Research Tools</h2>
-              <div className="space-y-6">
-                <TrendSearch onSearchResults={handleSearchResults} />
-                <MarketSearch onSearch={handleMarketSearch} />
-              </div>
-            </div>
-          </div>
-          
-          <div className="bg-accent/10 rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-4">Market Insights</h2>
-            <p className="text-muted-foreground">
-              Analyze current market trends and discover emerging opportunities in various sectors.
-              Use our advanced analytics tools to make data-driven decisions.
-            </p>
-            <div className="mt-6">
-              <h3 className="font-medium mb-2">Key Features:</h3>
-              <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                <li>Real-time trend analysis</li>
-                <li>Market opportunity scoring</li>
-                <li>Competitive landscape overview</li>
-                <li>Growth potential indicators</li>
-              </ul>
+        {/* Search Tools Section */}
+        <div className="space-y-6">
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <h2 className="text-2xl font-semibold mb-6">Market Research Tools</h2>
+            <div className="space-y-6">
+              <TrendSearch onSearchResults={handleSearchResults} />
+              <MarketSearch onSearch={handleMarketSearch} />
             </div>
           </div>
         </div>
@@ -150,6 +130,24 @@ const Markets = () => {
               )}
             </>
           )}
+        </div>
+
+        {/* Market Insights Section - Moved to bottom */}
+        <div className="bg-accent/10 rounded-lg p-6">
+          <h2 className="text-2xl font-semibold mb-4">Market Insights</h2>
+          <p className="text-muted-foreground">
+            Analyze current market trends and discover emerging opportunities in various sectors.
+            Use our advanced analytics tools to make data-driven decisions.
+          </p>
+          <div className="mt-6">
+            <h3 className="font-medium mb-2">Key Features:</h3>
+            <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+              <li>Real-time trend analysis</li>
+              <li>Market opportunity scoring</li>
+              <li>Competitive landscape overview</li>
+              <li>Growth potential indicators</li>
+            </ul>
+          </div>
         </div>
       </div>
     </>
