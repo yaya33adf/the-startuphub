@@ -7,6 +7,8 @@ import { UserMenu } from "./navigation/UserMenu";
 import { NavigationContainer } from "./navigation/NavigationContainer";
 import { AuthStateProvider } from "./navigation/AuthStateProvider";
 import { useMobile } from "@/hooks/use-mobile";
+import { Wrench } from "lucide-react";
+import { Button } from "./ui/button";
 
 export const NavigationMenu = () => {
   const isMobile = useMobile();
@@ -35,11 +37,16 @@ export const NavigationMenu = () => {
                   handleSignOut={handleSignOut}
                 />
               ) : (
-                <DesktopNav 
-                  session={session}
-                  userProfile={userProfile}
-                  handleSignOut={handleSignOut}
-                />
+                <>
+                  <Button variant="ghost" size="icon" className="h-10 w-10">
+                    <Wrench className="h-5 w-5" />
+                  </Button>
+                  <DesktopNav 
+                    session={session}
+                    userProfile={userProfile}
+                    handleSignOut={handleSignOut}
+                  />
+                </>
               )}
               
               {session && (
