@@ -391,6 +391,45 @@ export type Database = {
         }
         Relationships: []
       }
+      job_postings: {
+        Row: {
+          budget: number
+          category: string
+          country: string
+          created_at: string
+          description: string
+          estimated_time: string
+          id: string
+          poster_name: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          budget: number
+          category: string
+          country: string
+          created_at?: string
+          description: string
+          estimated_time: string
+          id?: string
+          poster_name: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          budget?: number
+          category?: string
+          country?: string
+          created_at?: string
+          description?: string
+          estimated_time?: string
+          id?: string
+          poster_name?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       job_skills: {
         Row: {
           created_at: string | null
