@@ -11,7 +11,8 @@ export function GoogleSignInButton() {
   const handleGoogleSignIn = async () => {
     try {
       setLoading(true)
-      console.log("Attempting Google sign in")
+      console.log("Starting Google sign in process")
+      console.log("Current origin:", window.location.origin)
       
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -25,21 +26,28 @@ export function GoogleSignInButton() {
       })
 
       if (error) {
-        console.error("Google sign in error:", error)
+        console.error("Google sign in error details:", {
+          message: error.message,
+          status: error.status,
+          name: error.name
+        })
         toast({
           variant: "destructive",
           title: "Error signing in with Google",
-          description: error.message,
+          description: `${error.message}. Please try again or contact support if the issue persists.`,
         })
       } else {
-        console.log("Google sign in initiated:", data)
+        console.log("Google sign in successful, redirecting...", {
+          provider: data.provider,
+          url: data.url
+        })
       }
     } catch (error) {
       console.error("Unexpected error during Google sign in:", error)
       toast({
         variant: "destructive",
         title: "Error",
-        description: "An unexpected error occurred",
+        description: "An unexpected error occurred while signing in with Google. Please try again.",
       })
     } finally {
       setLoading(false)
