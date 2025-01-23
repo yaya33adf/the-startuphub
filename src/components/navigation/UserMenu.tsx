@@ -2,13 +2,15 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { User, Building2, Briefcase, Users, Code2 } from "lucide-react";
+import { User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { UserDisplay } from "./user-menu/UserDisplay";
+import { UserMenuItems } from "./user-menu/UserMenuItems";
+import { TeamMembersCount } from "./user-menu/TeamMembersCount";
 
 interface UserMenuProps {
   userProfile: any;
@@ -17,7 +19,6 @@ interface UserMenuProps {
 }
 
 export function UserMenu({ userProfile, handleSignOut, userEmail }: UserMenuProps) {
-  // Query to get team members count
   const { data: teamMembersCount = 0 } = useQuery({
     queryKey: ["team-members-count"],
     queryFn: async () => {
@@ -38,7 +39,6 @@ export function UserMenu({ userProfile, handleSignOut, userEmail }: UserMenuProp
     enabled: !!userProfile?.id
   });
 
-  // If no userEmail is provided, show sign in button
   if (!userEmail) {
     return (
       <Button variant="ghost" asChild>
@@ -50,57 +50,22 @@ export function UserMenu({ userProfile, handleSignOut, userEmail }: UserMenuProp
     );
   }
 
-  // If user is authenticated, show the dropdown menu
   const displayName = userProfile?.name || userEmail.split('@')[0];
-  const avatarUrl = userProfile?.avatar_url;
-  const userType = userProfile?.user_type;
-  
-  const UserTypeIcon = userType === 'startup' ? Building2 : 
-                      userType === 'investor' ? Briefcase :
-                      userType === 'freelancer' ? Code2 :
-                      null;
   
   return (
     <div className="flex items-center gap-2">
-      {teamMembersCount > 0 && (
-        <Button variant="ghost" size="icon" asChild className="relative">
-          <Link to="/team">
-            <Users className="h-4 w-4" />
-            <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground rounded-full w-4 h-4 text-xs flex items-center justify-center">
-              {teamMembersCount}
-            </span>
-          </Link>
-        </Button>
-      )}
+      <TeamMembersCount count={teamMembersCount} />
       
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-10 px-3">
-            {avatarUrl ? (
-              <img
-                src={avatarUrl}
-                alt={displayName}
-                className="h-6 w-6 rounded-full mr-2"
-              />
-            ) : (
-              <User className="h-4 w-4 mr-2" />
-            )}
-            <span>{displayName}</span>
-            {UserTypeIcon && (
-              <UserTypeIcon className="h-4 w-4 ml-2 text-muted-foreground" />
-            )}
-          </Button>
+          <UserDisplay 
+            displayName={displayName}
+            avatarUrl={userProfile?.avatar_url}
+            userType={userProfile?.user_type}
+          />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem asChild>
-            <Link to="/auth/profile">Profile Settings</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link to="/team">Team Management</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={handleSignOut}>
-            Sign Out
-          </DropdownMenuItem>
+          <UserMenuItems handleSignOut={handleSignOut} />
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
