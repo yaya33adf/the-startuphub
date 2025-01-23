@@ -75,8 +75,8 @@ export const HeroSection = ({ searchResults, onSearchResults }: HeroSectionProps
           </p>
           
           {/* Signature line */}
-          <div className="relative mb-12">
-            <p className="text-2xl md:text-3xl font-semibold italic text-primary/80 tracking-wide animate-fade-in" style={{ animationDelay: '0.3s' }}>
+          <div className="relative mb-12 text-center">
+            <p className="text-2xl md:text-3xl font-semibold italic text-primary/80 tracking-wide animate-fade-in mx-auto" style={{ animationDelay: '0.3s' }}>
               Build. Scale. Succeed
             </p>
           </div>
