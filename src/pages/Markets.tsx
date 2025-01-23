@@ -35,7 +35,14 @@ const Markets = () => {
             <Loader2 className="h-8 w-8 animate-spin" />
           </div>
         ) : (
-          searchResults && <MarketResults data={searchResults} />
+          searchResults && (
+            <MarketResults 
+              trendResults={searchResults}
+              marketData={[]}
+              isLoading={false}
+              error={null}
+            />
+          )
         )}
       </div>
     </>
