@@ -17,6 +17,10 @@ serve(async (req) => {
     const { keyword } = await req.json();
     console.log('Generating blog content for keyword:', keyword);
 
+    if (!openAIApiKey) {
+      throw new Error('OpenAI API key not configured');
+    }
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -24,7 +28,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4',
+        model: 'gpt-4o-mini', // Using the faster model for better response times
         messages: [
           {
             role: 'system',
@@ -38,10 +42,21 @@ serve(async (req) => {
       }),
     });
 
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('OpenAI API error:', errorData);
+      throw new Error(`OpenAI API error: ${errorData.error?.message || 'Unknown error'}`);
+    }
+
     const data = await response.json();
-    console.log('OpenAI response:', data);
+    console.log('OpenAI response received:', {
+      status: response.status,
+      hasChoices: !!data.choices,
+      firstChoice: !!data.choices?.[0]
+    });
     
     if (!data.choices?.[0]?.message?.content) {
+      console.error('Invalid response structure:', data);
       throw new Error('No content generated');
     }
 
@@ -51,6 +66,11 @@ serve(async (req) => {
     const lines = generatedContent.split('\n');
     const title = lines[0].replace('#', '').trim();
     const content = lines.slice(1).join('\n').trim();
+
+    console.log('Successfully generated content:', {
+      titleLength: title.length,
+      contentLength: content.length
+    });
 
     return new Response(
       JSON.stringify({ 
