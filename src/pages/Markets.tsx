@@ -1,96 +1,59 @@
-import { TrendSearch } from "@/components/TrendSearch";
-import { MarketResults } from "@/components/markets/MarketResults";
 import { useState } from "react";
-import type { TrendData } from "@/types/trends";
-import { PageSEO } from "@/components/seo/PageSEO";
-import { Loader2 } from "lucide-react";
 import { MarketHeader } from "@/components/markets/MarketHeader";
-import { MarketSearch } from "@/components/search/MarketSearch";
+import { MarketResults } from "@/components/markets/MarketResults";
+import { TrendSearch } from "@/components/TrendSearch";
+import type { TrendData } from "@/types/trends";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const Markets = () => {
   const [searchResults, setSearchResults] = useState<TrendData | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+
+  const { data: marketData, isLoading, error } = useQuery({
+    queryKey: ['markets'],
+    queryFn: async () => {
+      console.log("Fetching market data");
+      const { data, error } = await supabase
+        .from('side_hustles')
+        .select('*')
+        .order('trend_score', { ascending: false })
+        .limit(10);
+
+      if (error) {
+        console.error("Error fetching market data:", error);
+        throw error;
+      }
+
+      return data.map(market => ({
+        name: market.name,
+        trendScore: market.trend_score || 0,
+        potentialEarnings: market.monthly_earnings_max || 0,
+      }));
+    }
+  });
 
   const handleSearchResults = async (results: TrendData) => {
     try {
-      setIsLoading(true);
-      setError(null);
-      console.log("Search results received:", results);
+      console.log("Market search results:", results);
       setSearchResults(results);
-    } catch (err) {
-      console.error("Error handling search results:", err);
-      setError(err instanceof Error ? err : new Error("An error occurred"));
-    } finally {
-      setIsLoading(false);
+    } catch (error) {
+      console.error("Error handling market search:", error);
     }
   };
-
-  const handleMarketSearch = (query: string, region: string, timeframe: string) => {
-    console.log("Market search:", { query, region, timeframe });
-    // Reset trend results when performing a new market search
-    setSearchResults(null);
-  };
-
-  // Sample market data for demonstration
-  const marketData = [
-    {
-      name: "AI Development",
-      trendScore: 95,
-      potentialEarnings: 15000,
-    },
-    {
-      name: "Web Development",
-      trendScore: 88,
-      potentialEarnings: 12000,
-    },
-    {
-      name: "Mobile Development",
-      trendScore: 85,
-      potentialEarnings: 13000,
-    }
-  ];
 
   return (
-    <>
-      <PageSEO 
-        title="Market Analysis & Opportunities"
-        description="Track and analyze market trends in real-time with our comprehensive market analysis tools and insights."
-      />
-      
-      <div className="container mx-auto px-4 py-8 space-y-8">
-        <MarketHeader />
-        
-        {/* Search Tools Section */}
-        <div className="space-y-6">
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <h2 className="text-2xl font-semibold mb-6">Market Research Tools</h2>
-            <div className="space-y-6">
-              {/* Only use TrendSearch for trend analysis */}
-              <TrendSearch onSearchResults={handleSearchResults} />
-              {/* MarketSearch no longer handles trend analysis */}
-              <MarketSearch onSearch={handleMarketSearch} />
-            </div>
-          </div>
-        </div>
-
-        {/* Results Section */}
-        <div className="mt-8">
-          {isLoading ? (
-            <div className="flex justify-center items-center min-h-[200px]">
-              <Loader2 className="h-8 w-8 animate-spin" />
-            </div>
-          ) : (
-            <MarketResults 
-              trendResults={searchResults}
-              marketData={marketData}
-              isLoading={false}
-              error={error}
-            />
-          )}
-        </div>
+    <div className="container mx-auto px-4 py-8">
+      <MarketHeader />
+      <div className="space-y-8">
+        <TrendSearch onSearchResults={handleSearchResults} />
+        <MarketResults 
+          trendResults={searchResults}
+          marketData={marketData || []}
+          isLoading={isLoading}
+          error={error as Error | null}
+        />
       </div>
-    </>
+    </div>
   );
 };
 
