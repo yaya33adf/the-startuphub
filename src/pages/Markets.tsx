@@ -131,24 +131,6 @@ const Markets = () => {
             </>
           )}
         </div>
-
-        {/* Market Insights Section */}
-        <div className="bg-accent/10 rounded-lg p-6">
-          <h2 className="text-2xl font-semibold mb-4">Market Insights</h2>
-          <p className="text-muted-foreground">
-            Analyze current market trends and discover emerging opportunities in various sectors.
-            Use our advanced analytics tools to make data-driven decisions.
-          </p>
-          <div className="mt-6">
-            <h3 className="font-medium mb-2">Key Features:</h3>
-            <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-              <li>Real-time trend analysis</li>
-              <li>Market opportunity scoring</li>
-              <li>Competitive landscape overview</li>
-              <li>Growth potential indicators</li>
-            </ul>
-          </div>
-        </div>
       </div>
     </>
   );
