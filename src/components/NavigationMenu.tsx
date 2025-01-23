@@ -13,7 +13,7 @@ export const NavigationMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
-  // Close mobile menu on route change using useEffect instead of useMemo
+  // Close mobile menu on route change
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
@@ -22,10 +22,10 @@ export const NavigationMenu = () => {
     <AuthStateProvider>
       {({ session, userProfile, handleSignOut }) => (
         <NavigationContainer>
-          <div className="flex items-center gap-4 flex-shrink-0">
+          <div className="flex items-center gap-4">
             <Logo />
           </div>
-          <div className="flex-1 flex items-center justify-end overflow-hidden">
+          <div className="flex flex-1 items-center justify-end gap-4">
             {isMobile ? (
               <MobileMenu 
                 isOpen={isOpen} 
@@ -40,16 +40,13 @@ export const NavigationMenu = () => {
                 handleSignOut={handleSignOut}
               />
             )}
-            <div className="flex items-center justify-end space-x-2">
-              <div className="w-full flex-1 md:w-auto md:flex-none" />
-              {session && (
-                <UserMenu 
-                  userProfile={userProfile} 
-                  handleSignOut={handleSignOut}
-                  userEmail={session.user.email}
-                />
-              )}
-            </div>
+            {session && (
+              <UserMenu 
+                userProfile={userProfile} 
+                handleSignOut={handleSignOut}
+                userEmail={session.user.email}
+              />
+            )}
           </div>
         </NavigationContainer>
       )}
