@@ -6,12 +6,14 @@ import { TrendResults } from "@/components/TrendResults";
 import { CrowdfundingHeader } from "@/components/crowdfunding/CrowdfundingHeader";
 import { CrowdfundingSearch } from "@/components/crowdfunding/CrowdfundingSearch";
 import { CrowdfundingList } from "@/components/crowdfunding/CrowdfundingList";
+import { Loader2 } from "lucide-react";
 
 const Crowdfunding = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [country, setCountry] = useState("global");
   const [period, setPeriod] = useState("7d");
   const [trendResults, setTrendResults] = useState<TrendData | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
 
   const { data: companies = [], isLoading, refetch } = useQuery({
     queryKey: ["crowdfunding-companies", searchQuery, country, period],
@@ -42,6 +44,17 @@ const Crowdfunding = () => {
     },
   });
 
+  const handleTrendResults = async (results: TrendData) => {
+    try {
+      setIsSearching(true);
+      setTrendResults(results);
+    } catch (error) {
+      console.error("Error handling trend results:", error);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
   return (
     <div className="container mx-auto py-8 px-4">
       <CrowdfundingHeader />
@@ -53,11 +66,17 @@ const Crowdfunding = () => {
         setCountry={setCountry}
         period={period}
         setPeriod={setPeriod}
-        onTrendResults={setTrendResults}
+        onTrendResults={handleTrendResults}
         refetchCompanies={refetch}
       />
 
-      {trendResults && <TrendResults data={trendResults} />}
+      {isSearching ? (
+        <div className="flex justify-center items-center min-h-[200px]">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
+      ) : (
+        trendResults && <TrendResults data={trendResults} />
+      )}
 
       <CrowdfundingList 
         companies={companies} 

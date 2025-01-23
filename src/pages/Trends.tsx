@@ -3,13 +3,22 @@ import { TrendResults } from "@/components/TrendResults";
 import { useState } from "react";
 import type { TrendData } from "@/types/trends";
 import { PageSEO } from "@/components/seo/PageSEO";
+import { Loader2 } from "lucide-react";
 
 const Trends = () => {
   const [searchResults, setSearchResults] = useState<TrendData | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSearchResults = (results: TrendData) => {
-    setSearchResults(results);
-    console.log("Search results received:", results);
+  const handleSearchResults = async (results: TrendData) => {
+    try {
+      setIsLoading(true);
+      console.log("Search results received:", results);
+      setSearchResults(results);
+    } catch (error) {
+      console.error("Error handling search results:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -21,7 +30,13 @@ const Trends = () => {
       <div className="container mx-auto p-8 space-y-8">
         <h1 className="text-3xl font-bold text-center mb-8">Market Trend Analysis</h1>
         <TrendSearch onSearchResults={handleSearchResults} />
-        {searchResults && <TrendResults data={searchResults} />}
+        {isLoading ? (
+          <div className="flex justify-center items-center min-h-[200px]">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
+        ) : (
+          searchResults && <TrendResults data={searchResults} />
+        )}
       </div>
     </>
   );

@@ -1,99 +1,44 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { MarketSearch } from "@/components/markets/MarketSearch";
-import { MarketHeader } from "@/components/markets/MarketHeader";
+import { TrendSearch } from "@/components/TrendSearch";
 import { MarketResults } from "@/components/markets/MarketResults";
-import { toast } from "@/hooks/use-toast";
+import { useState } from "react";
 import type { TrendData } from "@/types/trends";
+import { PageSEO } from "@/components/seo/PageSEO";
+import { Loader2 } from "lucide-react";
 
 const Markets = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [country, setCountry] = useState("global");
-  const [period, setPeriod] = useState("7d");
-  const [trendResults, setTrendResults] = useState<TrendData | null>(null);
+  const [searchResults, setSearchResults] = useState<TrendData | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const { data: marketData, isLoading, error, refetch } = useQuery({
-    queryKey: ["marketOpportunities", searchQuery, country, period],
-    queryFn: async () => {
-      console.log("Starting market opportunities fetch with filters:", { searchQuery, country, period });
-      
-      try {
-        let query = supabase
-          .from("trend_scores")
-          .select("*")
-          .order('total_score', { ascending: false });
-
-        if (searchQuery) {
-          console.log("Applying search filter:", searchQuery);
-          query = query.ilike('query', `%${searchQuery}%`);
-        }
-
-        const { data, error } = await query.limit(10);
-
-        if (error) {
-          console.error("Error fetching market data:", error);
-          throw error;
-        }
-
-        const transformedData = data.map(score => ({
-          id: score.id,
-          name: score.query,
-          description: "Market opportunity based on trend analysis",
-          trend_score: score.total_score || 0,
-          monthly_earnings_min: 1000,
-          monthly_earnings_max: 5000,
-          category: "Market Trend",
-          difficulty: "Medium",
-          skills: ["Research", "Analysis", "Marketing"],
-          platforms: ["Online", "Digital"],
-        }));
-
-        console.log("Successfully fetched market opportunities:", transformedData);
-        return transformedData;
-      } catch (err) {
-        console.error("Unexpected error in market data fetch:", err);
-        throw err;
-      }
-    },
-  });
-
-  const handleSearch = () => {
-    console.log("Searching markets with:", { searchQuery, country, period });
-    toast({
-      title: "Exploring Markets",
-      description: `Searching for "${searchQuery || 'all markets'}" in ${country}`,
-    });
-    refetch();
-  };
-
-  const handleTrendResults = (results: TrendData) => {
-    console.log("Received trend results:", results);
-    setTrendResults(results);
+  const handleSearchResults = async (results: TrendData) => {
+    try {
+      setIsLoading(true);
+      console.log("Search results received:", results);
+      setSearchResults(results);
+    } catch (error) {
+      console.error("Error handling search results:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="container mx-auto p-8">
-      <MarketHeader />
-      
-      <MarketSearch
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        country={country}
-        setCountry={setCountry}
-        period={period}
-        setPeriod={setPeriod}
-        onSearch={handleSearch}
-        onTrendResults={handleTrendResults}
+    <>
+      <PageSEO 
+        title="Market Analysis & Opportunities"
+        description="Track and analyze market trends in real-time with our comprehensive market analysis tools and insights."
       />
-
-      <MarketResults 
-        trendResults={trendResults}
-        marketData={marketData || []}
-        isLoading={isLoading}
-        error={error as Error}
-      />
-    </div>
+      <div className="container mx-auto p-8 space-y-8">
+        <h1 className="text-3xl font-bold text-center mb-8">Market Analysis</h1>
+        <TrendSearch onSearchResults={handleSearchResults} />
+        {isLoading ? (
+          <div className="flex justify-center items-center min-h-[200px]">
+            <Loader2 className="h-8 w-8 animate-spin" />
+          </div>
+        ) : (
+          searchResults && <MarketResults data={searchResults} />
+        )}
+      </div>
+    </>
   );
 };
 
