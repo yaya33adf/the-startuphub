@@ -22,11 +22,16 @@ import BusinessCards from "@/pages/BusinessCards";
 import WordPressTemplates from "@/pages/WordPressTemplates";
 import BlossomWordGame from "@/pages/BlossomWordGame";
 import Startups from "@/pages/Startups";
+import JobBoard from "@/pages/JobBoard";
 
 export const mainRoutes = [
   {
     path: "/",
     element: <Index />,
+  },
+  {
+    path: "/job-board",
+    element: <JobBoard />,
   },
   {
     path: "/startups",
