@@ -531,46 +531,61 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          bio: string | null
+          certificates: Json | null
           company: string | null
           country: string | null
+          courses: Json | null
           created_at: string | null
           email: string | null
           id: string
           image_url: string | null
           investment_stage: string | null
+          languages: string[] | null
           name: string | null
           previous_work: string | null
           role: string | null
+          skills: string[] | null
           updated_at: string | null
           user_type: string | null
         }
         Insert: {
           avatar_url?: string | null
+          bio?: string | null
+          certificates?: Json | null
           company?: string | null
           country?: string | null
+          courses?: Json | null
           created_at?: string | null
           email?: string | null
           id: string
           image_url?: string | null
           investment_stage?: string | null
+          languages?: string[] | null
           name?: string | null
           previous_work?: string | null
           role?: string | null
+          skills?: string[] | null
           updated_at?: string | null
           user_type?: string | null
         }
         Update: {
           avatar_url?: string | null
+          bio?: string | null
+          certificates?: Json | null
           company?: string | null
           country?: string | null
+          courses?: Json | null
           created_at?: string | null
           email?: string | null
           id?: string
           image_url?: string | null
           investment_stage?: string | null
+          languages?: string[] | null
           name?: string | null
           previous_work?: string | null
           role?: string | null
+          skills?: string[] | null
           updated_at?: string | null
           user_type?: string | null
         }
