@@ -1,0 +1,67 @@
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+
+const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    const { keyword } = await req.json();
+    console.log('Generating blog content for keyword:', keyword);
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openAIApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a professional blog writer. Create engaging, well-structured blog posts with proper formatting and sections.'
+          },
+          {
+            role: 'user',
+            content: `Write a comprehensive blog post about "${keyword}". Include a catchy title, introduction, 3-4 main sections, and a conclusion. Make it informative and engaging.`
+          }
+        ],
+      }),
+    });
+
+    const data = await response.json();
+    const generatedContent = data.choices[0].message.content;
+
+    // Extract title from the first line
+    const lines = generatedContent.split('\n');
+    const title = lines[0].replace('#', '').trim();
+    const content = lines.slice(1).join('\n').trim();
+
+    return new Response(
+      JSON.stringify({ 
+        title,
+        content,
+        excerpt: content.slice(0, 150) + '...'
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+  } catch (error) {
+    console.error('Error generating blog content:', error);
+    return new Response(
+      JSON.stringify({ error: error.message }),
+      { 
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      }
+    );
+  }
+});
