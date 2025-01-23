@@ -1,5 +1,4 @@
 import { DropdownMenuContent } from "@/components/ui/dropdown-menu";
-import { Link } from "react-router-dom";
 import { BusinessToolsSubmenu } from "./BusinessToolsSubmenu";
 import { CustomerExperienceToolsSubmenu } from "./CustomerExperienceToolsSubmenu";
 import { FinancialToolsSubmenu } from "./FinancialToolsSubmenu";
@@ -11,7 +10,6 @@ import { MarketingToolsSubmenu } from "./MarketingToolsSubmenu";
 import { OperationsToolsSubmenu } from "./OperationsToolsSubmenu";
 import { ProductToolsSubmenu } from "./ProductToolsSubmenu";
 import { SalesToolsSubmenu } from "./SalesToolsSubmenu";
-import { Briefcase } from "lucide-react";
 import { Tool } from "@/components/tools/types/ToolTypes";
 
 interface ToolsDropdownContentProps {
@@ -35,14 +33,6 @@ export const ToolsDropdownContent = ({ tools, onClick = () => {} }: ToolsDropdow
   return (
     <DropdownMenuContent className="w-56">
       <div className="p-2">
-        <Link
-          to="/job-board"
-          className="flex items-center gap-2 px-2 py-1.5 text-sm rounded-md hover:bg-secondary"
-          onClick={onClick}
-        >
-          <Briefcase className="w-4 h-4" />
-          <span>Job Board</span>
-        </Link>
         <BusinessToolsSubmenu tools={tools.businessPlanningTools} onClick={onClick} />
         <CustomerExperienceToolsSubmenu tools={tools.customerExperienceTools} onClick={onClick} />
         <FinancialToolsSubmenu tools={tools.financialTools} onClick={onClick} />
