@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Mail } from "lucide-react"
+import { Chrome } from "lucide-react"
 import { useState } from "react"
 import { useToast } from "@/hooks/use-toast"
 import { supabase } from "@/integrations/supabase/client"
@@ -16,6 +16,10 @@ export function GoogleSignInButton() {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
           redirectTo: `${window.location.origin}/auth/callback`
         }
       })
@@ -49,8 +53,8 @@ export function GoogleSignInButton() {
       disabled={loading}
       className="w-full"
     >
-      <Mail className="mr-2 h-4 w-4" />
-      Sign in with Google
+      <Chrome className="mr-2 h-4 w-4" />
+      {loading ? "Signing in..." : "Sign in with Google"}
     </Button>
   )
 }
