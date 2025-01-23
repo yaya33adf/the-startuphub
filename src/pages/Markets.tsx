@@ -8,14 +8,17 @@ import { Loader2 } from "lucide-react";
 const Markets = () => {
   const [searchResults, setSearchResults] = useState<TrendData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   const handleSearchResults = async (results: TrendData) => {
     try {
       setIsLoading(true);
+      setError(null);
       console.log("Search results received:", results);
       setSearchResults(results);
-    } catch (error) {
-      console.error("Error handling search results:", error);
+    } catch (err) {
+      console.error("Error handling search results:", err);
+      setError(err instanceof Error ? err : new Error("An error occurred"));
     } finally {
       setIsLoading(false);
     }
@@ -40,7 +43,7 @@ const Markets = () => {
               trendResults={searchResults}
               marketData={[]}
               isLoading={false}
-              error={null}
+              error={error}
             />
           )
         )}
