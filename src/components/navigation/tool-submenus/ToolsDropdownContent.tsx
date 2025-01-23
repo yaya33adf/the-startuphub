@@ -12,9 +12,22 @@ import { OperationsToolsSubmenu } from "./OperationsToolsSubmenu";
 import { ProductToolsSubmenu } from "./ProductToolsSubmenu";
 import { SalesToolsSubmenu } from "./SalesToolsSubmenu";
 import { Briefcase } from "lucide-react";
+import { Tool } from "@/components/tools/types/ToolTypes";
 
 interface ToolsDropdownContentProps {
-  tools: any[];
+  tools: {
+    freeTools: Tool[];
+    financialTools: Tool[];
+    businessPlanningTools: Tool[];
+    marketingTools: Tool[];
+    productTools: Tool[];
+    legalTools: Tool[];
+    salesTools: Tool[];
+    fundingTools: Tool[];
+    hrTools: Tool[];
+    customerExperienceTools: Tool[];
+    operationsTools: Tool[];
+  };
   onClick?: () => void;
 }
 
@@ -30,17 +43,17 @@ export const ToolsDropdownContent = ({ tools, onClick = () => {} }: ToolsDropdow
           <Briefcase className="w-4 h-4" />
           <span>Job Board</span>
         </Link>
-        <BusinessToolsSubmenu onClick={onClick} />
-        <CustomerExperienceToolsSubmenu onClick={onClick} />
-        <FinancialToolsSubmenu onClick={onClick} />
-        <FreeToolsSubmenu onClick={onClick} />
-        <FundingToolsSubmenu onClick={onClick} />
-        <HRToolsSubmenu onClick={onClick} />
-        <LegalToolsSubmenu onClick={onClick} />
-        <MarketingToolsSubmenu onClick={onClick} />
-        <OperationsToolsSubmenu onClick={onClick} />
-        <ProductToolsSubmenu onClick={onClick} />
-        <SalesToolsSubmenu onClick={onClick} />
+        <BusinessToolsSubmenu tools={tools.businessPlanningTools} onClick={onClick} />
+        <CustomerExperienceToolsSubmenu tools={tools.customerExperienceTools} onClick={onClick} />
+        <FinancialToolsSubmenu tools={tools.financialTools} onClick={onClick} />
+        <FreeToolsSubmenu tools={tools.freeTools} onClick={onClick} />
+        <FundingToolsSubmenu tools={tools.fundingTools} onClick={onClick} />
+        <HRToolsSubmenu tools={tools.hrTools} onClick={onClick} />
+        <LegalToolsSubmenu tools={tools.legalTools} onClick={onClick} />
+        <MarketingToolsSubmenu tools={tools.marketingTools} onClick={onClick} />
+        <OperationsToolsSubmenu tools={tools.operationsTools} onClick={onClick} />
+        <ProductToolsSubmenu tools={tools.productTools} onClick={onClick} />
+        <SalesToolsSubmenu tools={tools.salesTools} onClick={onClick} />
       </div>
     </DropdownMenuContent>
   );
