@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { Logo } from "./navigation/Logo";
 import { DesktopNav } from "./navigation/DesktopNav";
 import { MobileMenu } from "./navigation/MobileMenu";
-import { Logo } from "./navigation/Logo";
 import { UserMenu } from "./navigation/UserMenu";
-import { useMobile } from "@/hooks/use-mobile";
-import { AuthStateProvider } from "./navigation/AuthStateProvider";
 import { NavigationContainer } from "./navigation/NavigationContainer";
+import { AuthStateProvider } from "./navigation/AuthStateProvider";
+import { useMobile } from "@/hooks/use-mobile";
 
 export const NavigationMenu = () => {
   const isMobile = useMobile();
@@ -22,31 +22,34 @@ export const NavigationMenu = () => {
     <AuthStateProvider>
       {({ session, userProfile, handleSignOut }) => (
         <NavigationContainer>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between w-full gap-4">
             <Logo />
-          </div>
-          <div className="flex flex-1 items-center justify-end gap-4">
-            {isMobile ? (
-              <MobileMenu 
-                isOpen={isOpen} 
-                setIsOpen={setIsOpen}
-                session={session}
-                handleSignOut={handleSignOut}
-              />
-            ) : (
-              <DesktopNav
-                session={session}
-                userProfile={userProfile}
-                handleSignOut={handleSignOut}
-              />
-            )}
-            {session && (
-              <UserMenu 
-                userProfile={userProfile} 
-                handleSignOut={handleSignOut}
-                userEmail={session.user.email}
-              />
-            )}
+            
+            <div className="flex items-center gap-2">
+              {isMobile ? (
+                <MobileMenu 
+                  isOpen={isOpen} 
+                  setIsOpen={setIsOpen}
+                  session={session}
+                  userProfile={userProfile}
+                  handleSignOut={handleSignOut}
+                />
+              ) : (
+                <DesktopNav 
+                  session={session}
+                  userProfile={userProfile}
+                  handleSignOut={handleSignOut}
+                />
+              )}
+              
+              {session && (
+                <UserMenu 
+                  userProfile={userProfile} 
+                  handleSignOut={handleSignOut}
+                  userEmail={session.user.email}
+                />
+              )}
+            </div>
           </div>
         </NavigationContainer>
       )}
