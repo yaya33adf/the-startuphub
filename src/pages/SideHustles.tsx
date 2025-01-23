@@ -31,14 +31,7 @@ const SideHustles = () => {
             <Loader2 className="h-8 w-8 animate-spin" />
           </div>
         ) : (
-          searchResults && (
-            <SideHustleResults 
-              trendResults={searchResults}
-              sideHustles={undefined}
-              isLoading={false}
-              error={null}
-            />
-          )
+          searchResults && <SideHustleResults data={searchResults} />
         )}
       </div>
     </div>
