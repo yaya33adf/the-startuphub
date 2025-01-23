@@ -38,9 +38,10 @@ export const NavigationMenu = () => {
                 />
               ) : (
                 <>
-                  <Button variant="ghost" size="icon" className="h-10 w-10" asChild>
-                    <Link to="/job-board">
+                  <Button variant="ghost" className="h-10 px-4" asChild>
+                    <Link to="/job-board" className="flex items-center gap-2">
                       <Briefcase className="h-5 w-5" />
+                      <span>Job Board</span>
                     </Link>
                   </Button>
                   <DesktopNav 
