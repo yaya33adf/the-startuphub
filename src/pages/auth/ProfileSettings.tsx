@@ -92,8 +92,8 @@ export default function ProfileSettings() {
         setName(data.name || "");
         setAvatarUrl(data.avatar_url || null);
         setBio(data.bio || "");
-        setCertificates(data.certificates ? JSON.parse(JSON.stringify(data.certificates)) : []);
-        setCourses(data.courses ? JSON.parse(JSON.stringify(data.courses)) : []);
+        setCertificates(data.certificates ? (JSON.parse(JSON.stringify(data.certificates)) as Certificate[]) : []);
+        setCourses(data.courses ? (JSON.parse(JSON.stringify(data.courses)) as Course[]) : []);
         setLanguages(data.languages || []);
         setSkills(data.skills || []);
       }
@@ -126,8 +126,8 @@ export default function ProfileSettings() {
         name,
         avatar_url: avatarUrl,
         bio,
-        certificates: certificates as Json,
-        courses: courses as Json,
+        certificates: JSON.parse(JSON.stringify(certificates)) as Json,
+        courses: JSON.parse(JSON.stringify(courses)) as Json,
         languages,
         skills,
         updated_at: new Date().toISOString()
