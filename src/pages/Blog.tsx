@@ -38,7 +38,7 @@ const Blog = () => {
           return;
         }
 
-        console.log('Fetched published posts:', data?.length || 0);
+        console.log('Successfully fetched published posts:', data?.length || 0);
         setPosts(data || []);
       } catch (error) {
         console.error('Error in fetchPosts:', error);
@@ -57,7 +57,7 @@ const Blog = () => {
         title="Blog | Startup Hub" 
         description="Latest insights and updates from the Startup Hub community"
       />
-      <div className="container mx-auto py-8">
+      <div className="container mx-auto px-4 py-8">
         <h1 className="text-4xl font-bold mb-8">Blog</h1>
         {loading ? (
           <div className="flex items-center justify-center py-12">
@@ -66,30 +66,35 @@ const Blog = () => {
         ) : posts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {posts.map((post) => (
-              <div key={post.id} className="border rounded-lg p-4 hover:shadow-lg transition-shadow">
-                <h2 className="text-2xl font-semibold mb-2">{post.title}</h2>
-                {post.excerpt && (
-                  <p className="text-gray-600 mb-4">{post.excerpt}</p>
-                )}
+              <div 
+                key={post.id} 
+                className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              >
                 {post.image_url && (
-                  <div className="mb-4">
+                  <div className="aspect-video w-full overflow-hidden">
                     <img 
                       src={post.image_url} 
                       alt={post.title} 
-                      className="w-full h-48 object-cover rounded-md"
+                      className="w-full h-full object-cover"
                     />
                   </div>
                 )}
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">
-                    {post.read_time ? `${post.read_time} min read` : ''}
-                  </span>
-                  <a 
-                    href={`/blog/${post.id}`} 
-                    className="text-primary hover:text-primary/90 hover:underline"
-                  >
-                    Read more
-                  </a>
+                <div className="p-4">
+                  <h2 className="text-2xl font-semibold mb-2 line-clamp-2">{post.title}</h2>
+                  {post.excerpt && (
+                    <p className="text-gray-600 mb-4 line-clamp-3">{post.excerpt}</p>
+                  )}
+                  <div className="flex justify-between items-center mt-4">
+                    <span className="text-sm text-gray-500">
+                      {post.read_time ? `${post.read_time} min read` : ''}
+                    </span>
+                    <a 
+                      href={`/blog/${post.id}`} 
+                      className="text-primary hover:text-primary/90 hover:underline"
+                    >
+                      Read more
+                    </a>
+                  </div>
                 </div>
               </div>
             ))}
