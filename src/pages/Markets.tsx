@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { TrendData } from "@/types/trends";
 import { PageSEO } from "@/components/seo/PageSEO";
 import { Loader2 } from "lucide-react";
+import { MarketHeader } from "@/components/markets/MarketHeader";
 
 const Markets = () => {
   const [searchResults, setSearchResults] = useState<TrendData | null>(null);
@@ -31,7 +32,7 @@ const Markets = () => {
         description="Track and analyze market trends in real-time with our comprehensive market analysis tools and insights."
       />
       <div className="container mx-auto p-8 space-y-8">
-        <h1 className="text-3xl font-bold text-center mb-8">Market Analysis</h1>
+        <MarketHeader />
         <TrendSearch onSearchResults={handleSearchResults} />
         {isLoading ? (
           <div className="flex justify-center items-center min-h-[200px]">
