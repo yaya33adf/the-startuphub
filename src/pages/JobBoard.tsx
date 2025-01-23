@@ -7,6 +7,18 @@ import { PageSEO } from "@/components/seo/PageSEO";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
+const sampleJob = {
+  id: "sample-job",
+  title: "Frontend Developer Needed",
+  category: "Development",
+  description: "Looking for a skilled frontend developer to help build modern web applications using React and TypeScript. Experience with Tailwind CSS and component libraries is a plus.",
+  estimated_time: "2-3 months",
+  budget: 5000,
+  poster_name: "Tech Startup Inc.",
+  country: "United States",
+  created_at: new Date().toISOString()
+};
+
 const JobBoard = () => {
   const [showForm, setShowForm] = useState(false);
 
@@ -23,6 +35,13 @@ const JobBoard = () => {
         console.error("Error fetching job postings:", error);
         throw error;
       }
+
+      // If no jobs found, return array with sample job
+      if (!data || data.length === 0) {
+        console.log("No jobs found, returning sample job");
+        return [sampleJob];
+      }
+
       return data;
     },
   });
