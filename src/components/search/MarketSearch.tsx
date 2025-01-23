@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { Search, Globe, Calendar } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -17,9 +17,9 @@ interface MarketSearchProps {
 }
 
 export const MarketSearch = ({ onSearch, buttonText = "Search" }: MarketSearchProps) => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [region, setRegion] = useState("worldwide");
-  const [timeframe, setTimeframe] = useState("7d");
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [region, setRegion] = React.useState("worldwide");
+  const [timeframe, setTimeframe] = React.useState("7d");
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
