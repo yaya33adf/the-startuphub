@@ -58,13 +58,25 @@ export function UserMenu({ userProfile, handleSignOut, userEmail }: UserMenuProp
       
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <UserDisplay 
-            displayName={displayName}
-            avatarUrl={userProfile?.avatar_url}
-            userType={userProfile?.user_type}
-          />
+          <Button 
+            variant="ghost" 
+            className="relative h-10 w-full px-3 text-left font-normal"
+          >
+            <span className="flex items-center gap-2">
+              {userProfile?.avatar_url ? (
+                <img
+                  src={userProfile.avatar_url}
+                  alt={displayName}
+                  className="h-6 w-6 rounded-full"
+                />
+              ) : (
+                <User className="h-4 w-4" />
+              )}
+              <span>{displayName}</span>
+            </span>
+          </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
+        <DropdownMenuContent align="end" className="w-56">
           <UserMenuItems handleSignOut={handleSignOut} />
         </DropdownMenuContent>
       </DropdownMenu>
