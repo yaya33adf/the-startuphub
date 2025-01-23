@@ -4,7 +4,7 @@ export const CommunityHeader = () => {
   return (
     <div className="space-y-6">
       <div className="flex flex-col space-y-2">
-        <h1 className="text-4xl font-bold">Community Hub</h1>
+        <h2 className="text-4xl font-bold">Community Hub</h2>
         <p className="text-muted-foreground text-lg">
           Connect with fellow entrepreneurs, share insights, and grow together
         </p>
