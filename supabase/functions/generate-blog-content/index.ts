@@ -24,7 +24,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
+        model: 'gpt-4',
         messages: [
           {
             role: 'system',
@@ -39,6 +39,12 @@ serve(async (req) => {
     });
 
     const data = await response.json();
+    console.log('OpenAI response:', data);
+    
+    if (!data.choices?.[0]?.message?.content) {
+      throw new Error('No content generated');
+    }
+
     const generatedContent = data.choices[0].message.content;
 
     // Extract title from the first line

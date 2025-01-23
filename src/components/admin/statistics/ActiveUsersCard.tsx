@@ -11,8 +11,8 @@ export const ActiveUsersCard = () => {
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-      const { count, error } = await supabase
-        .from("users")
+      const { data, error } = await supabase
+        .from("profiles")
         .select("*", { count: "exact", head: true })
         .gte("created_at", thirtyDaysAgo.toISOString());
 
@@ -20,7 +20,7 @@ export const ActiveUsersCard = () => {
         console.error("Error fetching active users:", error);
         throw error;
       }
-      return count || 0;
+      return data?.length || 0;
     },
     staleTime: 30000,
     refetchOnWindowFocus: false
