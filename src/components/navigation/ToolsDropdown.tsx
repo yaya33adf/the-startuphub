@@ -4,7 +4,19 @@ import { ToolsDropdownContent } from "./tool-submenus/ToolsDropdownContent";
 import { useToolsFilter } from "@/hooks/useToolsFilter";
 import { tools } from "@/components/tools/ToolsData";
 import { Tool } from "@/components/tools/types/ToolTypes";
-import { filterBusinessTools, filterFinancialTools, filterMarketingTools, filterProductTools, filterLegalTools, filterSalesTools, filterFundingTools, filterHRTools, filterCustomerExperienceTools, filterOperationsTools, filterFreeTools } from "@/utils/toolFilters";
+import { 
+  filterBusinessTools, 
+  filterFinancialTools, 
+  filterMarketingTools, 
+  filterProductTools, 
+  filterLegalTools, 
+  filterSalesTools, 
+  filterFundingTools, 
+  filterHRTools, 
+  filterCustomerExperienceTools, 
+  filterOperationsTools,
+  filterFreeTools 
+} from "@/utils/toolFilters";
 
 interface ToolsDropdownProps {
   onClick?: () => void;

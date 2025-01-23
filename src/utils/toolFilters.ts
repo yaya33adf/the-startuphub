@@ -93,3 +93,6 @@ export const filterOperationsTools = (tools: Tool[]) =>
     tool.path?.includes('order-tracking-tool') ||
     tool.path?.includes('supply-chain-tool')
   );
+
+export const filterFreeTools = (tools: Tool[]) =>
+  tools.filter(tool => tool.isFree === true);
