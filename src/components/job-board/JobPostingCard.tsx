@@ -1,7 +1,18 @@
+import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Briefcase, Clock, DollarSign, MapPin, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Briefcase, Clock, DollarSign, MapPin, MessageSquare, User } from "lucide-react";
+import { JobMessageForm } from "./JobMessageForm";
+import { useAuth } from "@/hooks/useAuth";
 
 interface JobPosting {
   id: string;
@@ -20,6 +31,9 @@ interface JobPostingCardProps {
 }
 
 export const JobPostingCard = ({ job }: JobPostingCardProps) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { user } = useAuth();
+
   return (
     <Card>
       <CardHeader>
@@ -39,7 +53,7 @@ export const JobPostingCard = ({ job }: JobPostingCardProps) => {
       </CardHeader>
       <CardContent>
         <p className="mb-4">{job.description}</p>
-        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-4">
           <div className="flex items-center gap-1">
             <DollarSign className="w-4 h-4" />
             <span>${job.budget}</span>
@@ -53,6 +67,26 @@ export const JobPostingCard = ({ job }: JobPostingCardProps) => {
             <span>Posted {formatDistanceToNow(new Date(job.created_at))} ago</span>
           </div>
         </div>
+
+        {user && (
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                <MessageSquare className="w-4 h-4 mr-2" />
+                Send Message
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Send Message about {job.title}</DialogTitle>
+              </DialogHeader>
+              <JobMessageForm
+                jobPostingId={job.id}
+                onSuccess={() => setIsDialogOpen(false)}
+              />
+            </DialogContent>
+          </Dialog>
+        )}
       </CardContent>
     </Card>
   );
