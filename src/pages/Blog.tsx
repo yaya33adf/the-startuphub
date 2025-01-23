@@ -3,14 +3,31 @@ import { supabase } from "@/integrations/supabase/client";
 import { PageSEO } from "@/components/seo/PageSEO";
 import { toast } from "sonner";
 
+interface BlogPost {
+  id: string;
+  title: string;
+  excerpt?: string;
+  content: string;
+  image_url?: string;
+  category?: string;
+  tags?: string[];
+  read_time?: string;
+  created_at: string;
+  author?: {
+    id: string;
+    email: string;
+    name: string;
+  };
+}
+
 const Blog = () => {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        console.log('Fetching published blog posts...');
+        console.log('Initiating blog posts fetch...');
         const { data, error } = await supabase
           .from('blog_posts')
           .select(`
