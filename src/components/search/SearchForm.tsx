@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Globe, Calendar } from "lucide-react";
+import { Search } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -30,53 +30,50 @@ export const SearchForm = ({
   onSubmit,
   isLoading,
 }: SearchFormProps) => {
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form submitted with:", { searchQuery, region, timeframe });
-    onSubmit(e);
-  };
-
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex-1">
-          <Input
-            type="text"
-            placeholder="Search for trends (e.g., AI, Crypto, Electric Cars)"
-            value={searchQuery}
-            onChange={(e) => onSearchQueryChange(e.target.value)}
-            className="w-full"
-          />
+    <form onSubmit={onSubmit} className="space-y-4">
+      <div className="flex flex-col gap-4">
+        <Input
+          type="text"
+          placeholder="Search for trends (e.g., AI, Crypto, Electric Cars)"
+          value={searchQuery}
+          onChange={(e) => onSearchQueryChange(e.target.value)}
+          className="w-full min-h-[44px]"
+        />
+        
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Select value={region} onValueChange={onRegionChange}>
+            <SelectTrigger className="w-full min-h-[44px]">
+              <SelectValue placeholder="Select region" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="global">Worldwide</SelectItem>
+              <SelectItem value="US">United States</SelectItem>
+              <SelectItem value="GB">United Kingdom</SelectItem>
+              <SelectItem value="CA">Canada</SelectItem>
+              <SelectItem value="AU">Australia</SelectItem>
+              <SelectItem value="IN">India</SelectItem>
+            </SelectContent>
+          </Select>
+          
+          <Select value={timeframe} onValueChange={onTimeframeChange}>
+            <SelectTrigger className="w-full min-h-[44px]">
+              <SelectValue placeholder="Select timeframe" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="7d">Last 7 days</SelectItem>
+              <SelectItem value="30d">Last 30 days</SelectItem>
+              <SelectItem value="90d">Last 90 days</SelectItem>
+              <SelectItem value="12m">Last 12 months</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         
-        <Select value={region} onValueChange={onRegionChange}>
-          <SelectTrigger className="w-full md:w-[180px]">
-            <Globe className="w-4 h-4 mr-2" />
-            <SelectValue placeholder="Select region" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="worldwide">Worldwide</SelectItem>
-            <SelectItem value="us">United States</SelectItem>
-            <SelectItem value="eu">Europe</SelectItem>
-            <SelectItem value="asia">Asia</SelectItem>
-            <SelectItem value="other">Other Regions</SelectItem>
-          </SelectContent>
-        </Select>
-        
-        <Select value={timeframe} onValueChange={onTimeframeChange}>
-          <SelectTrigger className="w-full md:w-[180px]">
-            <Calendar className="w-4 h-4 mr-2" />
-            <SelectValue placeholder="Select timeframe" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="7d">Last 7 days</SelectItem>
-            <SelectItem value="30d">Last 30 days</SelectItem>
-            <SelectItem value="90d">Last 90 days</SelectItem>
-            <SelectItem value="12m">Last 12 months</SelectItem>
-          </SelectContent>
-        </Select>
-        
-        <Button type="submit" className="w-full md:w-auto" disabled={isLoading}>
+        <Button 
+          type="submit" 
+          className="w-full min-h-[44px]" 
+          disabled={isLoading}
+        >
           <Search className="w-4 h-4 mr-2" />
           {isLoading ? "Searching..." : "Explore Trends"}
         </Button>

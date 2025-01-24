@@ -15,12 +15,14 @@ interface SearchLogicProps {
 export const SearchLogic = ({ onSearchResults, country, period }: SearchLogicProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [region, setRegion] = useState(country);
+  const [timeframe, setTimeframe] = useState(period);
   const { toast } = useToast();
   const { session } = useSessionContext();
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Search initiated with:", { searchQuery, country, period, session: !!session });
+    console.log("Search initiated with:", { searchQuery, region, timeframe, session: !!session });
 
     if (!searchQuery.trim()) {
       toast({
@@ -34,14 +36,14 @@ export const SearchLogic = ({ onSearchResults, country, period }: SearchLogicPro
     setIsLoading(true);
     try {
       console.log("Starting trend calculation for:", searchQuery);
-      const result = await calculateTrendScores(searchQuery, country, period);
+      const result = await calculateTrendScores(searchQuery, region, timeframe);
       
       if (!result) {
         throw new Error("No results returned from trend calculation");
       }
       
       console.log("Received trend results:", result);
-      onSearchResults(result);
+      onSearchResults(result as TrendData);
       
       toast({
         title: "Trend scores calculated",
@@ -70,6 +72,10 @@ export const SearchLogic = ({ onSearchResults, country, period }: SearchLogicPro
       <SearchForm
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
+        region={region}
+        onRegionChange={setRegion}
+        timeframe={timeframe}
+        onTimeframeChange={setTimeframe}
         onSubmit={handleSearch}
         isLoading={isLoading}
       />

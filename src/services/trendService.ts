@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
+import type { TrendData } from "@/types/trends";
 
-export const calculateTrendScores = async (searchQuery: string, country: string = 'worldwide', timeframe: string = '7d') => {
+export const calculateTrendScores = async (searchQuery: string, country: string = 'worldwide', timeframe: string = '7d'): Promise<TrendData> => {
   console.log('Starting trend calculation for:', { searchQuery, country, timeframe });
   
   // First check if we have recent results cached
@@ -57,19 +58,6 @@ export const calculateTrendScores = async (searchQuery: string, country: string 
       pypi: pypiData
     });
 
-    // Calculate combined score while preserving existing calculation logic
-    const scores = [
-      githubData.data?.score || 0,
-      googleData.data?.score || 0,
-      hackerNewsData.data?.score || 0,
-      stackOverflowData.data?.score || 0,
-      wikipediaData.data?.score || 0,
-      npmData.data?.score || 0,
-      pypiData.data?.score || 0
-    ];
-    
-    const avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
-
     const metadata = {
       github: {
         score: githubData.data?.score || 0,
@@ -100,13 +88,21 @@ export const calculateTrendScores = async (searchQuery: string, country: string 
         metadata: pypiData.data?.metadata
       }
     };
-    
-    console.log('Calculated scores:', {
-      avgScore,
-      metadata
-    });
 
-    // Store the results while preserving existing storage logic
+    // Calculate combined score
+    const scores = [
+      githubData.data?.score || 0,
+      googleData.data?.score || 0,
+      hackerNewsData.data?.score || 0,
+      stackOverflowData.data?.score || 0,
+      wikipediaData.data?.score || 0,
+      npmData.data?.score || 0,
+      pypiData.data?.score || 0
+    ];
+    
+    const avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+
+    // Store the results
     const { error: insertError } = await supabase
       .from('trend_scores')
       .insert({
@@ -120,8 +116,6 @@ export const calculateTrendScores = async (searchQuery: string, country: string 
 
     if (insertError) {
       console.error('Error storing trend scores:', insertError);
-    } else {
-      console.log('Results stored in database successfully');
     }
 
     return {
