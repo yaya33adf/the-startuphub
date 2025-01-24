@@ -8,19 +8,19 @@ import { PopularSearches } from "./PopularSearches";
 
 interface SearchLogicProps {
   onSearchResults: (results: TrendData) => void;
+  country: string;
+  period: string;
 }
 
-export const SearchLogic = ({ onSearchResults }: SearchLogicProps) => {
+export const SearchLogic = ({ onSearchResults, country, period }: SearchLogicProps) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [region, setRegion] = useState("worldwide");
-  const [timeframe, setTimeframe] = useState("7d");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { session } = useSessionContext();
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Search initiated with session:", !!session);
+    console.log("Search initiated with:", { searchQuery, country, period, session: !!session });
 
     if (!searchQuery.trim()) {
       toast({
@@ -33,57 +33,15 @@ export const SearchLogic = ({ onSearchResults }: SearchLogicProps) => {
 
     setIsLoading(true);
     try {
-      console.log("Starting trend search for:", searchQuery);
-      const result = await calculateTrendScores(searchQuery);
+      console.log("Starting trend calculation for:", searchQuery);
+      const result = await calculateTrendScores(searchQuery, country, period);
       
       if (!result) {
         throw new Error("No results returned from trend calculation");
       }
       
       console.log("Received trend results:", result);
-      
-      const metadata = (typeof result.metadata === 'object' && result.metadata !== null) 
-        ? result.metadata as Record<string, { score?: number; metadata?: any }>
-        : {};
-
-      const transformedMetadata: TrendData['metadata'] = {
-        github: {
-          score: metadata.github?.score ?? 0,
-          metadata: metadata.github?.metadata ?? null
-        },
-        google_trends: {
-          score: metadata.google_trends?.score ?? 0,
-          metadata: metadata.google_trends?.metadata ?? null
-        },
-        hacker_news: {
-          score: metadata.hacker_news?.score ?? 0,
-          metadata: metadata.hacker_news?.metadata ?? null
-        },
-        stack_overflow: {
-          score: metadata.stack_overflow?.score ?? 0,
-          metadata: metadata.stack_overflow?.metadata ?? null
-        },
-        wikipedia: {
-          score: metadata.wikipedia?.score ?? 0,
-          metadata: metadata.wikipedia?.metadata ?? null
-        },
-        npm: {
-          score: metadata.npm?.score ?? 0,
-          metadata: metadata.npm?.metadata ?? null
-        },
-        pypi: {
-          score: metadata.pypi?.score ?? 0,
-          metadata: metadata.pypi?.metadata ?? null
-        }
-      };
-      
-      const trendData: TrendData = {
-        score: result.score,
-        metadata: transformedMetadata
-      };
-      
-      console.log("Transformed trend data:", trendData);
-      onSearchResults(trendData);
+      onSearchResults(result);
       
       toast({
         title: "Trend scores calculated",
@@ -112,10 +70,6 @@ export const SearchLogic = ({ onSearchResults }: SearchLogicProps) => {
       <SearchForm
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
-        region={region}
-        onRegionChange={setRegion}
-        timeframe={timeframe}
-        onTimeframeChange={setTimeframe}
         onSubmit={handleSearch}
         isLoading={isLoading}
       />

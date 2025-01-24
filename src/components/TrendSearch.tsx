@@ -1,15 +1,19 @@
 import type { TrendData } from "@/types/trends";
 import { SearchHeader } from "./search/SearchHeader";
 import { SearchLogic } from "./search/SearchLogic";
+import { LocationPeriodSelect } from "./search/LocationPeriodSelect";
+import { useState } from "react";
 
 interface TrendSearchProps {
   onSearchResults: (results: TrendData) => void;
 }
 
 export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
+  const [country, setCountry] = useState("global");
+  const [period, setPeriod] = useState("7d");
+
   const handleSearchResults = (results: TrendData) => {
     console.log("Search results in TrendSearch:", results);
-    // Preserve existing functionality by ensuring we have valid results
     if (results) {
       onSearchResults(results);
     }
@@ -18,7 +22,19 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
   return (
     <div className="space-y-6">
       <SearchHeader />
-      <SearchLogic onSearchResults={handleSearchResults} />
+      <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <LocationPeriodSelect
+          country={country}
+          setCountry={setCountry}
+          period={period}
+          setPeriod={setPeriod}
+        />
+      </div>
+      <SearchLogic 
+        onSearchResults={handleSearchResults}
+        country={country}
+        period={period}
+      />
     </div>
   );
 };

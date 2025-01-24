@@ -1,7 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export const calculateTrendScores = async (searchQuery: string) => {
-  console.log('Starting trend calculation for:', searchQuery);
+export const calculateTrendScores = async (searchQuery: string, country: string = 'worldwide', timeframe: string = '7d') => {
+  console.log('Starting trend calculation for:', { searchQuery, country, timeframe });
   
   // First check if we have recent results cached
   const { data: existingScores } = await supabase
@@ -33,7 +33,13 @@ export const calculateTrendScores = async (searchQuery: string) => {
       pypiData
     ] = await Promise.all([
       supabase.functions.invoke('github-trends', { body: { query: searchQuery } }),
-      supabase.functions.invoke('google-trends', { body: { query: searchQuery } }),
+      supabase.functions.invoke('google-trends', { 
+        body: { 
+          query: searchQuery,
+          country: country,
+          timeframe: timeframe
+        } 
+      }),
       supabase.functions.invoke('hackernews-trends', { body: { query: searchQuery } }),
       supabase.functions.invoke('stackoverflow-trends', { body: { query: searchQuery } }),
       supabase.functions.invoke('wikipedia-trends', { body: { query: searchQuery } }),
