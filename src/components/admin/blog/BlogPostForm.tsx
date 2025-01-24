@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import {
   Form,
@@ -13,19 +12,28 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-interface BlogPostFormData {
-  keyword: string;
-}
+const formSchema = z.object({
+  keyword: z.string().min(2, "Keyword must be at least 2 characters"),
+});
+
+type BlogPostFormData = z.infer<typeof formSchema>;
 
 export const BlogPostForm = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const form = useForm<BlogPostFormData>();
+  const form = useForm<BlogPostFormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      keyword: "",
+    },
+  });
 
   const onSubmit = async (data: BlogPostFormData) => {
     try {
       setIsLoading(true);
-      console.log('Generating blog content for keyword:', data.keyword);
+      console.log('Starting blog post generation for keyword:', data.keyword);
 
       const { data: generatedContent, error: functionError } = await supabase.functions.invoke(
         'generate-blog-content',
@@ -35,12 +43,28 @@ export const BlogPostForm = () => {
       );
 
       if (functionError) {
-        console.error('Error generating content:', functionError);
-        toast.error('Failed to generate blog content');
+        console.error('Edge function error:', functionError);
+        toast.error('Failed to generate blog content. Please try again.');
         return;
       }
 
-      console.log('Generated content:', generatedContent);
+      if (!generatedContent || !generatedContent.title || !generatedContent.content) {
+        console.error('Invalid content structure:', generatedContent);
+        toast.error('Generated content is invalid. Please try again.');
+        return;
+      }
+
+      console.log('Successfully generated content:', {
+        titleLength: generatedContent.title.length,
+        contentLength: generatedContent.content.length
+      });
+
+      const user = await supabase.auth.getUser();
+      if (!user.data.user) {
+        console.error('No authenticated user found');
+        toast.error('You must be logged in to create blog posts');
+        return;
+      }
 
       const { error: insertError } = await supabase
         .from('blog_posts')
@@ -48,20 +72,21 @@ export const BlogPostForm = () => {
           title: generatedContent.title,
           content: generatedContent.content,
           status: 'published',
-          author_id: (await supabase.auth.getUser()).data.user?.id,
+          author_id: user.data.user.id,
         });
 
       if (insertError) {
-        console.error('Error saving blog post:', insertError);
-        toast.error('Failed to save blog post');
+        console.error('Database insertion error:', insertError);
+        toast.error('Failed to save blog post to database');
         return;
       }
 
+      console.log('Blog post successfully saved to database');
       toast.success('Blog post created successfully!');
       form.reset();
     } catch (error) {
-      console.error('Error in blog post creation:', error);
-      toast.error('An error occurred while creating the blog post');
+      console.error('Unexpected error in blog post creation:', error);
+      toast.error('An unexpected error occurred');
     } finally {
       setIsLoading(false);
     }
@@ -87,7 +112,11 @@ export const BlogPostForm = () => {
           )}
         />
 
-        <Button type="submit" disabled={isLoading}>
+        <Button 
+          type="submit" 
+          disabled={isLoading}
+          className="w-full"
+        >
           {isLoading ? 'Generating...' : 'Generate Blog Post'}
         </Button>
       </form>
