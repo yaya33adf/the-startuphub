@@ -42,6 +42,8 @@ serve(async (req) => {
             content: `Write a blog post about ${keyword}. Make it informative and engaging.`,
           },
         ],
+        max_tokens: 2000,
+        temperature: 0.7,
       }),
     });
 
