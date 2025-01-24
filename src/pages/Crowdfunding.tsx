@@ -2,22 +2,14 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { TrendData } from "@/types/trends";
+import type { Database } from "@/integrations/supabase/types";
 import { TrendResults } from "@/components/TrendResults";
 import { CrowdfundingHeader } from "@/components/crowdfunding/CrowdfundingHeader";
 import { CrowdfundingSearch } from "@/components/crowdfunding/CrowdfundingSearch";
 import { CrowdfundingList } from "@/components/crowdfunding/CrowdfundingList";
 import { Loader2 } from "lucide-react";
 
-type CrowdfundingCompany = {
-  id: string;
-  name: string;
-  description?: string | null;
-  category?: string | null;
-  website_url?: string | null;
-  funding_goal?: number | null;
-  current_funding?: number | null;
-  score?: number | null;
-};
+type CrowdfundingCompany = Database['public']['Tables']['crowdfunding_companies']['Row'];
 
 const Crowdfunding = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,7 +18,7 @@ const Crowdfunding = () => {
   const [trendResults, setTrendResults] = useState<TrendData | null>(null);
   const [isSearching, setIsSearching] = useState(false);
 
-  const { data: companies = [], isLoading, refetch } = useQuery<CrowdfundingCompany[]>({
+  const { data: companies = [], isLoading, refetch } = useQuery({
     queryKey: ["crowdfunding-companies", searchQuery, country, period],
     queryFn: async () => {
       console.log("Fetching crowdfunding companies with search:", searchQuery, "country:", country, "period:", period);
