@@ -8,7 +8,7 @@ import { CrowdfundingSearch } from "@/components/crowdfunding/CrowdfundingSearch
 import { CrowdfundingList } from "@/components/crowdfunding/CrowdfundingList";
 import { Loader2 } from "lucide-react";
 
-interface Company {
+type Company = {
   id: string;
   name: string;
   description?: string;
@@ -17,7 +17,7 @@ interface Company {
   funding_goal?: number;
   current_funding?: number;
   score?: number;
-}
+};
 
 const Crowdfunding = () => {
   const [searchQuery, setSearchQuery] = useState("");
