@@ -1,5 +1,6 @@
 import { StatisticsCards } from "@/components/admin/StatisticsCards";
 import { SiteSettings } from "@/components/admin/SiteSettings";
+import { BlogPostForm } from "@/components/admin/blog/BlogPostForm";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { PageSEO } from "@/components/seo/PageSEO";
 import { Button } from "@/components/ui/button";
@@ -27,11 +28,19 @@ const Dashboard = () => {
         
         <StatisticsCards />
         
-        <Tabs defaultValue="settings" className="w-full">
+        <Tabs defaultValue="blog" className="w-full">
           <TabsList>
+            <TabsTrigger value="blog">Blog Posts</TabsTrigger>
             <TabsTrigger value="settings">Site Settings</TabsTrigger>
           </TabsList>
           
+          <TabsContent value="blog" className="mt-6">
+            <div className="space-y-6">
+              <h2 className="text-2xl font-semibold">Create New Blog Post</h2>
+              <BlogPostForm />
+            </div>
+          </TabsContent>
+
           <TabsContent value="settings" className="mt-6">
             <SiteSettings />
           </TabsContent>
