@@ -8,6 +8,17 @@ import { CrowdfundingSearch } from "@/components/crowdfunding/CrowdfundingSearch
 import { CrowdfundingList } from "@/components/crowdfunding/CrowdfundingList";
 import { Loader2 } from "lucide-react";
 
+interface Company {
+  id: string;
+  name: string;
+  description?: string;
+  category?: string;
+  website_url?: string;
+  funding_goal?: number;
+  current_funding?: number;
+  score?: number;
+}
+
 const Crowdfunding = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [country, setCountry] = useState("global");
@@ -15,7 +26,7 @@ const Crowdfunding = () => {
   const [trendResults, setTrendResults] = useState<TrendData | null>(null);
   const [isSearching, setIsSearching] = useState(false);
 
-  const { data: companies = [], isLoading, refetch } = useQuery({
+  const { data: companies = [], isLoading, refetch } = useQuery<Company[]>({
     queryKey: ["crowdfunding-companies", searchQuery, country, period],
     queryFn: async () => {
       console.log("Fetching crowdfunding companies with search:", searchQuery, "country:", country, "period:", period);

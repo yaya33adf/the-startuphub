@@ -12,11 +12,11 @@ export const calculateTrendScores = async (searchQuery: string, country: string 
     .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()) // Last 24 hours
     .maybeSingle();
 
-  if (existingScores) {
+  if (existingScores?.metadata && typeof existingScores.metadata === 'object') {
     console.log('Found cached results:', existingScores);
     return {
       score: existingScores.total_score || 0,
-      metadata: existingScores.metadata || {}
+      metadata: existingScores.metadata as TrendData['metadata']
     };
   }
 
@@ -58,7 +58,7 @@ export const calculateTrendScores = async (searchQuery: string, country: string 
       pypi: pypiData
     });
 
-    const metadata = {
+    const metadata: TrendData['metadata'] = {
       github: {
         score: githubData.data?.score || 0,
         metadata: githubData.data?.metadata
