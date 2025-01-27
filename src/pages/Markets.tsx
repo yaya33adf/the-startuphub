@@ -12,6 +12,7 @@ const Markets = () => {
   const handleSearchResults = async (results: TrendData) => {
     setIsLoading(true);
     try {
+      console.log("Search results received:", results);
       setSearchResults(results);
     } finally {
       setIsLoading(false);
