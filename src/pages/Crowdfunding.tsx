@@ -43,16 +43,14 @@ const Crowdfunding = () => {
       }
       
       console.log("Fetched companies:", data);
-      return data;
+      return data as CrowdfundingCompany[];
     },
   });
 
-  const handleTrendResults = async (results: TrendData) => {
+  const handleTrendResults = (results: TrendData) => {
+    setIsSearching(true);
     try {
-      setIsSearching(true);
       setTrendResults(results);
-    } catch (error) {
-      console.error("Error handling trend results:", error);
     } finally {
       setIsSearching(false);
     }
