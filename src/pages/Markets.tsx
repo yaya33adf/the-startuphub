@@ -1,6 +1,7 @@
 import { TrendSearch } from "@/components/TrendSearch";
-import { MarketResults } from "@/components/MarketResults";
-import { MarketLoadingState } from "@/components/MarketLoadingState";
+import { MarketResults } from "@/components/markets/MarketResults";
+import { MarketLoadingState } from "@/components/markets/MarketLoadingState";
+import { MarketHeader } from "@/components/markets/MarketHeader";
 import { useState } from "react";
 import type { TrendData } from "@/types/trends";
 
