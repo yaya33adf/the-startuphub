@@ -9,7 +9,7 @@ import { Loader2 } from "lucide-react";
 const Trends = () => {
   const [searchResults, setSearchResults] = useState<TrendData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [country, setCountry] = useState("US");
+  const [country, setCountry] = useState("global");
   const [period, setPeriod] = useState("7d");
 
   const handleSearchResults = async (results: TrendData) => {

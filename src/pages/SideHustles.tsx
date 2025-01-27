@@ -1,53 +1,38 @@
-import { useState } from "react";
-import { SideHustleHeader } from "@/components/side-hustles/SideHustleHeader";
-import { SideHustleResults } from "@/components/side-hustles/SideHustleResults";
 import { TrendSearch } from "@/components/TrendSearch";
+import { useState } from "react";
 import type { TrendData } from "@/types/trends";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Loader2 } from "lucide-react";
+import { SideHustleResults } from "@/components/SideHustleResults";
 
 const SideHustles = () => {
   const [searchResults, setSearchResults] = useState<TrendData | null>(null);
-
-  const { data: sideHustles, isLoading, error } = useQuery({
-    queryKey: ['sideHustles'],
-    queryFn: async () => {
-      console.log("Fetching side hustles data");
-      const { data, error } = await supabase
-        .from('side_hustles')
-        .select('*')
-        .order('trend_score', { ascending: false });
-
-      if (error) {
-        console.error("Error fetching side hustles:", error);
-        throw error;
-      }
-
-      return data;
-    }
-  });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSearchResults = async (results: TrendData) => {
+    setIsLoading(true);
     try {
-      console.log("Side hustles search results:", results);
       setSearchResults(results);
-    } catch (error) {
-      console.error("Error handling side hustles search:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  const handleCountryChange = (country: string) => {
+    console.log("Country changed:", country);
+  };
+
+  const handlePeriodChange = (period: string) => {
+    console.log("Period changed:", period);
+  };
+
   return (
-    <div className="container mx-auto py-8 px-4">
-      <SideHustleHeader />
+    <div className="container mx-auto p-8">
       <div className="space-y-8">
-        <TrendSearch onSearchResults={handleSearchResults} />
-        <SideHustleResults 
-          trendResults={searchResults}
-          sideHustles={sideHustles}
-          isLoading={isLoading}
-          error={error as Error | null}
+        <TrendSearch 
+          onSearchResults={handleSearchResults}
+          onCountryChange={handleCountryChange}
+          onPeriodChange={handlePeriodChange}
         />
+        {searchResults && <SideHustleResults data={searchResults} />}
       </div>
     </div>
   );

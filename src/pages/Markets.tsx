@@ -1,58 +1,45 @@
-import { useState } from "react";
-import { MarketHeader } from "@/components/markets/MarketHeader";
-import { MarketResults } from "@/components/markets/MarketResults";
 import { TrendSearch } from "@/components/TrendSearch";
+import { MarketResults } from "@/components/MarketResults";
+import { MarketLoadingState } from "@/components/MarketLoadingState";
+import { useState } from "react";
 import type { TrendData } from "@/types/trends";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 
 const Markets = () => {
   const [searchResults, setSearchResults] = useState<TrendData | null>(null);
-
-  const { data: marketData, isLoading, error } = useQuery({
-    queryKey: ['markets'],
-    queryFn: async () => {
-      console.log("Fetching market data");
-      const { data, error } = await supabase
-        .from('side_hustles')
-        .select('*')
-        .order('trend_score', { ascending: false })
-        .limit(10);
-
-      if (error) {
-        console.error("Error fetching market data:", error);
-        throw error;
-      }
-
-      return data.map(market => ({
-        name: market.name,
-        trendScore: market.trend_score || 0,
-        potentialEarnings: market.monthly_earnings_max || 0,
-      }));
-    }
-  });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSearchResults = async (results: TrendData) => {
+    setIsLoading(true);
     try {
-      console.log("Market search results:", results);
       setSearchResults(results);
-    } catch (error) {
-      console.error("Error handling market search:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  const handleCountryChange = (country: string) => {
+    console.log("Country changed:", country);
+  };
+
+  const handlePeriodChange = (period: string) => {
+    console.log("Period changed:", period);
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto p-8">
       <MarketHeader />
-      <div className="space-y-8">
-        <TrendSearch onSearchResults={handleSearchResults} />
-        <MarketResults 
-          trendResults={searchResults}
-          marketData={marketData || []}
-          isLoading={isLoading}
-          error={error as Error | null}
+      <div className="mt-8">
+        <TrendSearch 
+          onSearchResults={handleSearchResults}
+          onCountryChange={handleCountryChange}
+          onPeriodChange={handlePeriodChange}
         />
       </div>
+      {isLoading ? (
+        <MarketLoadingState />
+      ) : (
+        searchResults && <MarketResults data={searchResults} />
+      )}
     </div>
   );
 };
