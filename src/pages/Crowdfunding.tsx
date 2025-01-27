@@ -9,7 +9,7 @@ import { CrowdfundingSearch } from "@/components/crowdfunding/CrowdfundingSearch
 import { CrowdfundingList } from "@/components/crowdfunding/CrowdfundingList";
 import { Loader2 } from "lucide-react";
 
-type CrowdfundingCompany = Database['public']['Tables']['crowdfunding_companies']['Row'];
+type CrowdfundingCompany = Database["public"]["Tables"]["crowdfunding_companies"]["Row"];
 
 const Crowdfunding = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -43,8 +43,8 @@ const Crowdfunding = () => {
       }
       
       console.log("Fetched companies:", data);
-      return (data || []) as CrowdfundingCompany[];
-    },
+      return data ?? [];
+    }
   });
 
   const handleTrendResults = async (results: TrendData) => {
