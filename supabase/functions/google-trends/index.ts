@@ -19,8 +19,22 @@ serve(async (req) => {
 
     if (action === 'daily-trends') {
       try {
+        // Convert country code to uppercase for Google Trends API
+        const countryCode = country?.toUpperCase() || 'US'
+        
+        console.log('Fetching daily trends for country:', countryCode)
+        
         const dailyTrends = await googleTrends.dailyTrends({
-          geo: country || 'US',
+          geo: countryCode,
+          // Add error handling for unsupported countries
+        }).catch(error => {
+          console.error('Google Trends API error:', error)
+          // If country is not supported, fallback to US
+          if (error.message.includes('Could not locate')) {
+            console.log('Falling back to US trends')
+            return googleTrends.dailyTrends({ geo: 'US' })
+          }
+          throw error
         })
 
         const data = JSON.parse(dailyTrends)
