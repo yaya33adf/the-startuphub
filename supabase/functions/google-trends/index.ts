@@ -38,15 +38,17 @@ serve(async (req) => {
         })
 
         const data = JSON.parse(dailyTrends)
-        console.log('Daily trends data received')
+        console.log('Daily trends data received:', data)
 
         // Process and format the trending searches
         const trends = data.default.trendingSearchesDays[0].trendingSearches
           .map((trend: any) => ({
             title: trend.title.query,
-            score: trend.formattedTraffic,
+            score: parseInt(trend.formattedTraffic.replace('K+', '000').replace('M+', '000000').replace(/[^0-9]/g, '')) || 0,
           }))
           .slice(0, 10) // Get top 10 trends
+
+        console.log('Processed trends:', trends)
 
         return new Response(
           JSON.stringify({ trends }),
