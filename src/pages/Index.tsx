@@ -24,7 +24,10 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
       <StructuredData type="website" />
-      <HeroSection />
+      <HeroSection 
+        searchResults={searchResults} 
+        onSearchResults={handleSearchResults} 
+      />
       <StatisticsSection />
       <HowItWorksSection />
       <CoreValuesSection />

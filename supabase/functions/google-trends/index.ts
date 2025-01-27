@@ -14,62 +14,10 @@ serve(async (req) => {
   }
 
   try {
-    const { query, country, timeframe, action } = await req.json()
-    console.log('Google Trends request:', { query, country, timeframe, action })
+    const { query } = await req.json()
+    console.log('Searching Google Trends for:', query)
 
-    if (action === 'daily-trends') {
-      try {
-        // Convert country code to uppercase for Google Trends API
-        const countryCode = country?.toUpperCase() || 'US'
-        
-        console.log('Fetching daily trends for country:', countryCode)
-        
-        const dailyTrends = await googleTrends.dailyTrends({
-          geo: countryCode,
-          // Add error handling for unsupported countries
-        }).catch(error => {
-          console.error('Google Trends API error:', error)
-          // If country is not supported, fallback to US
-          if (error.message.includes('Could not locate')) {
-            console.log('Falling back to US trends')
-            return googleTrends.dailyTrends({ geo: 'US' })
-          }
-          throw error
-        })
-
-        const data = JSON.parse(dailyTrends)
-        console.log('Daily trends data received:', data)
-
-        // Process and format the trending searches
-        const trends = data.default.trendingSearchesDays[0].trendingSearches
-          .map((trend: any) => ({
-            title: trend.title.query,
-            score: parseInt(trend.formattedTraffic.replace('K+', '000').replace('M+', '000000').replace(/[^0-9]/g, '')) || 0,
-          }))
-          .slice(0, 10) // Get top 10 trends
-
-        console.log('Processed trends:', trends)
-
-        return new Response(
-          JSON.stringify({ trends }),
-          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        )
-      } catch (googleError) {
-        console.error('Error fetching daily trends:', googleError)
-        return new Response(
-          JSON.stringify({ 
-            error: 'Failed to fetch daily trends',
-            details: googleError.message 
-          }),
-          { 
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-            status: 500 
-          }
-        )
-      }
-    }
-
-    // Original trend calculation logic for search queries
+    // Get interest over time with proper error handling
     try {
       const interestOverTime = await googleTrends.interestOverTime({
         keyword: query,

@@ -9,7 +9,7 @@ import { CrowdfundingSearch } from "@/components/crowdfunding/CrowdfundingSearch
 import { CrowdfundingList } from "@/components/crowdfunding/CrowdfundingList";
 import { Loader2 } from "lucide-react";
 
-type CrowdfundingCompany = Database["public"]["Tables"]["crowdfunding_companies"]["Row"];
+type CrowdfundingCompany = Database['public']['Tables']['crowdfunding_companies']['Row'];
 
 const Crowdfunding = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -18,7 +18,7 @@ const Crowdfunding = () => {
   const [trendResults, setTrendResults] = useState<TrendData | null>(null);
   const [isSearching, setIsSearching] = useState(false);
 
-  const { data: companies = [], isLoading } = useQuery({
+  const { data: companies = [], isLoading, refetch } = useQuery({
     queryKey: ["crowdfunding-companies", searchQuery, country, period],
     queryFn: async () => {
       console.log("Fetching crowdfunding companies with search:", searchQuery, "country:", country, "period:", period);
@@ -43,8 +43,8 @@ const Crowdfunding = () => {
       }
       
       console.log("Fetched companies:", data);
-      return data ?? [];
-    }
+      return data;
+    },
   });
 
   const handleTrendResults = async (results: TrendData) => {
@@ -70,7 +70,7 @@ const Crowdfunding = () => {
         period={period}
         setPeriod={setPeriod}
         onTrendResults={handleTrendResults}
-        refetchCompanies={() => {}}
+        refetchCompanies={refetch}
       />
 
       {isSearching ? (
