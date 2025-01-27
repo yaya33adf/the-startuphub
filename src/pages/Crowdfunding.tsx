@@ -43,7 +43,7 @@ const Crowdfunding = () => {
       }
       
       console.log("Fetched companies:", data);
-      return data as CrowdfundingCompany[];
+      return (data || []) as CrowdfundingCompany[];
     },
   });
 
