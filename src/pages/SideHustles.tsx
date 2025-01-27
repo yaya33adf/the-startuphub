@@ -1,7 +1,7 @@
 import { TrendSearch } from "@/components/TrendSearch";
 import { useState } from "react";
 import type { TrendData } from "@/types/trends";
-import { SideHustleResults } from "@/components/SideHustleResults";
+import { SideHustleResults } from "@/components/side-hustles/SideHustleResults";
 
 const SideHustles = () => {
   const [searchResults, setSearchResults] = useState<TrendData | null>(null);
