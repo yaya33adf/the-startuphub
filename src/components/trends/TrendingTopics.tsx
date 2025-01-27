@@ -22,8 +22,8 @@ export const TrendingTopics = ({ country, period }: TrendingTopicsProps) => {
       const { data, error } = await supabase.functions.invoke('google-trends', {
         body: { 
           action: 'daily-trends',
-          country: country,
-          timeframe: period
+          country: country || 'US',
+          timeframe: period || '7d'
         }
       });
 
@@ -32,6 +32,7 @@ export const TrendingTopics = ({ country, period }: TrendingTopicsProps) => {
         throw error;
       }
 
+      console.log("Received trending topics:", data?.trends);
       return data?.trends || [];
     }
   });
@@ -51,6 +52,19 @@ export const TrendingTopics = ({ country, period }: TrendingTopicsProps) => {
     );
   }
 
+  if (!trendingTopics || trendingTopics.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Today's Trending Topics</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">No trending topics found.</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -58,7 +72,7 @@ export const TrendingTopics = ({ country, period }: TrendingTopicsProps) => {
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap gap-2">
-          {trendingTopics?.map((topic: TrendingTopic, index: number) => (
+          {trendingTopics.map((topic: TrendingTopic, index: number) => (
             <Badge 
               key={index}
               variant={index < 3 ? "default" : "secondary"}
