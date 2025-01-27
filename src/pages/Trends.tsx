@@ -33,13 +33,9 @@ const Trends = () => {
         <h1 className="text-3xl font-bold text-center mb-8">Market Trend Analysis</h1>
         
         <div className="space-y-8">
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            <div className="md:col-span-2">
-              <TrendSearch onSearchResults={handleSearchResults} />
-            </div>
-            <div className="md:col-span-1">
-              <TrendingTopics country={country} />
-            </div>
+          <div className="space-y-8">
+            <TrendSearch onSearchResults={handleSearchResults} />
+            <TrendingTopics country={country} />
           </div>
 
           {isLoading ? (
