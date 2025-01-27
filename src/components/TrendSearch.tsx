@@ -22,7 +22,12 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
   return (
     <div className="space-y-6">
       <SearchHeader />
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
+      <SearchLogic 
+        onSearchResults={handleSearchResults}
+        country={country}
+        period={period}
+      />
+      <div className="flex flex-col md:flex-row gap-4">
         <LocationPeriodSelect
           country={country}
           setCountry={setCountry}
@@ -30,11 +35,6 @@ export const TrendSearch = ({ onSearchResults }: TrendSearchProps) => {
           setPeriod={setPeriod}
         />
       </div>
-      <SearchLogic 
-        onSearchResults={handleSearchResults}
-        country={country}
-        period={period}
-      />
     </div>
   );
 };
