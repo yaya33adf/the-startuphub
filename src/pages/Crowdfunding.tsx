@@ -18,7 +18,7 @@ const Crowdfunding = () => {
   const [trendResults, setTrendResults] = useState<TrendData | null>(null);
   const [isSearching, setIsSearching] = useState(false);
 
-  const { data: companies = [], isLoading } = useQuery<CrowdfundingCompany[]>({
+  const { data: companies = [], isLoading } = useQuery({
     queryKey: ["crowdfunding-companies", searchQuery, country, period],
     queryFn: async () => {
       console.log("Fetching crowdfunding companies with search:", searchQuery, "country:", country, "period:", period);
@@ -43,7 +43,7 @@ const Crowdfunding = () => {
       }
       
       console.log("Fetched companies:", data);
-      return data;
+      return data as CrowdfundingCompany[];
     },
   });
 
