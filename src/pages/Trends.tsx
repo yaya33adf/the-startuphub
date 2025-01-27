@@ -1,44 +1,46 @@
+import { useState } from "react";
 import { TrendSearch } from "@/components/TrendSearch";
 import { TrendResults } from "@/components/TrendResults";
-import { useState } from "react";
+import { TrendHeader } from "@/components/trends/TrendHeader";
+import { TrendMetricsCards } from "@/components/trends/TrendMetricsCards";
+import { TrendInsights } from "@/components/trends/TrendInsights";
+import { TrendFooter } from "@/components/trends/TrendFooter";
+import { ChartSection } from "@/components/trends/ChartSection";
+import { CompetitorAnalysis } from "@/components/trends/CompetitorAnalysis";
+import { GrowthOpportunities } from "@/components/trends/GrowthOpportunities";
+import { SentimentAnalysis } from "@/components/trends/SentimentAnalysis";
+import { PredictiveAnalysis } from "@/components/trends/PredictiveAnalysis";
 import type { TrendData } from "@/types/trends";
 import { PageSEO } from "@/components/seo/PageSEO";
-import { Loader2 } from "lucide-react";
 
 const Trends = () => {
   const [searchResults, setSearchResults] = useState<TrendData | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSearchResults = async (results: TrendData) => {
-    try {
-      setIsLoading(true);
-      console.log("Search results received:", results);
-      setSearchResults(results);
-    } catch (error) {
-      console.error("Error handling search results:", error);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleSearchResults = (results: TrendData) => {
+    setSearchResults(results);
   };
 
   return (
-    <>
+    <div className="container mx-auto px-4 py-8">
       <PageSEO 
-        title="Market Trend Analysis"
-        description="Track and analyze market trends in real-time with our comprehensive trend analysis tools and insights."
+        title="Trend Analysis & Market Intelligence"
+        description="Track and analyze market trends in real-time. Get insights into consumer behavior, market opportunities, and competitive analysis."
       />
-      <div className="container mx-auto p-8 space-y-8">
-        <h1 className="text-3xl font-bold text-center mb-8">Market Trend Analysis</h1>
+      <h1 className="text-4xl font-bold mb-8">Trend Analysis & Market Intelligence</h1>
+      <TrendHeader />
+      <div className="mb-8">
         <TrendSearch onSearchResults={handleSearchResults} />
-        {isLoading ? (
-          <div className="flex justify-center items-center min-h-[200px]">
-            <Loader2 className="h-8 w-8 animate-spin" />
-          </div>
-        ) : (
-          searchResults && <TrendResults data={searchResults} />
-        )}
+        {searchResults && <TrendResults data={searchResults} />}
       </div>
-    </>
+      <TrendMetricsCards />
+      <ChartSection />
+      <TrendInsights />
+      <CompetitorAnalysis />
+      <GrowthOpportunities />
+      <SentimentAnalysis />
+      <PredictiveAnalysis />
+      <TrendFooter />
+    </div>
   );
 };
 

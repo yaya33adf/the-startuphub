@@ -5,6 +5,7 @@ import { TrendSearch } from "@/components/TrendSearch";
 import type { TrendData } from "@/types/trends";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { PageSEO } from "@/components/seo/PageSEO";
 
 const Markets = () => {
   const [searchResults, setSearchResults] = useState<TrendData | null>(null);
@@ -43,7 +44,11 @@ const Markets = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <MarketHeader />
+      <PageSEO 
+        title="Market Analysis & Trends"
+        description="Analyze market trends, discover business opportunities, and make data-driven decisions with our comprehensive market analysis tools."
+      />
+      <h1 className="text-4xl font-bold mb-8">Market Analysis & Trends</h1>
       <div className="space-y-8">
         <TrendSearch onSearchResults={handleSearchResults} />
         <MarketResults 
