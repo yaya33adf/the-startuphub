@@ -14,10 +14,46 @@ serve(async (req) => {
   }
 
   try {
-    const { query } = await req.json()
-    console.log('Searching Google Trends for:', query)
+    const { query, country, timeframe, action } = await req.json()
+    console.log('Google Trends request:', { query, country, timeframe, action })
 
-    // Get interest over time with proper error handling
+    if (action === 'daily-trends') {
+      try {
+        const dailyTrends = await googleTrends.dailyTrends({
+          geo: country || 'US',
+        })
+
+        const data = JSON.parse(dailyTrends)
+        console.log('Daily trends data received')
+
+        // Process and format the trending searches
+        const trends = data.default.trendingSearchesDays[0].trendingSearches
+          .map((trend: any) => ({
+            title: trend.title.query,
+            score: trend.formattedTraffic,
+          }))
+          .slice(0, 10) // Get top 10 trends
+
+        return new Response(
+          JSON.stringify({ trends }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      } catch (googleError) {
+        console.error('Error fetching daily trends:', googleError)
+        return new Response(
+          JSON.stringify({ 
+            error: 'Failed to fetch daily trends',
+            details: googleError.message 
+          }),
+          { 
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+            status: 500 
+          }
+        )
+      }
+    }
+
+    // Original trend calculation logic for search queries
     try {
       const interestOverTime = await googleTrends.interestOverTime({
         keyword: query,
