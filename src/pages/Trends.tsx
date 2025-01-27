@@ -10,6 +10,7 @@ const Trends = () => {
   const [searchResults, setSearchResults] = useState<TrendData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [country, setCountry] = useState("US");
+  const [period, setPeriod] = useState("7d");
 
   const handleSearchResults = async (results: TrendData) => {
     try {
@@ -23,6 +24,16 @@ const Trends = () => {
     }
   };
 
+  const handleCountryChange = (newCountry: string) => {
+    console.log("Country changed to:", newCountry);
+    setCountry(newCountry);
+  };
+
+  const handlePeriodChange = (newPeriod: string) => {
+    console.log("Period changed to:", newPeriod);
+    setPeriod(newPeriod);
+  };
+
   return (
     <>
       <PageSEO 
@@ -34,8 +45,12 @@ const Trends = () => {
         
         <div className="space-y-8">
           <div className="space-y-8">
-            <TrendSearch onSearchResults={handleSearchResults} />
-            <TrendingTopics country={country} />
+            <TrendSearch 
+              onSearchResults={handleSearchResults} 
+              onCountryChange={handleCountryChange}
+              onPeriodChange={handlePeriodChange}
+            />
+            <TrendingTopics country={country} period={period} />
           </div>
 
           {isLoading ? (

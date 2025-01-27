@@ -11,17 +11,19 @@ interface TrendingTopic {
 
 interface TrendingTopicsProps {
   country: string;
+  period: string;
 }
 
-export const TrendingTopics = ({ country }: TrendingTopicsProps) => {
+export const TrendingTopics = ({ country, period }: TrendingTopicsProps) => {
   const { data: trendingTopics, isLoading } = useQuery({
-    queryKey: ["trending-topics", country],
+    queryKey: ["trending-topics", country, period],
     queryFn: async () => {
-      console.log("Fetching trending topics for country:", country);
+      console.log("Fetching trending topics for:", { country, period });
       const { data, error } = await supabase.functions.invoke('google-trends', {
         body: { 
           action: 'daily-trends',
-          country: country 
+          country: country,
+          timeframe: period
         }
       });
 
