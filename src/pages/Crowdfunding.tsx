@@ -8,6 +8,7 @@ import { CrowdfundingHeader } from "@/components/crowdfunding/CrowdfundingHeader
 import { CrowdfundingSearch } from "@/components/crowdfunding/CrowdfundingSearch";
 import { CrowdfundingList } from "@/components/crowdfunding/CrowdfundingList";
 import { Loader2 } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
 
 type CrowdfundingCompany = Database['public']['Tables']['crowdfunding_companies']['Row'];
 
@@ -17,40 +18,65 @@ const Crowdfunding = () => {
   const [period, setPeriod] = useState("7d");
   const [trendResults, setTrendResults] = useState<TrendData | null>(null);
   const [isSearching, setIsSearching] = useState(false);
+  const { toast } = useToast();
 
   const { data: companies = [], isLoading, refetch } = useQuery({
     queryKey: ["crowdfunding-companies", searchQuery, country, period],
     queryFn: async () => {
-      console.log("Fetching crowdfunding companies with search:", searchQuery, "country:", country, "period:", period);
-      let query = supabase
-        .from("crowdfunding_companies")
-        .select("*")
-        .order("score", { ascending: false });
+      try {
+        console.log("Fetching crowdfunding companies with search:", searchQuery, "country:", country, "period:", period);
+        let query = supabase
+          .from("crowdfunding_companies")
+          .select("*")
+          .order("score", { ascending: false });
 
-      if (searchQuery) {
-        query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%,category.ilike.%${searchQuery}%`);
-      }
+        if (searchQuery) {
+          query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%,category.ilike.%${searchQuery}%`);
+        }
 
-      if (country !== "global") {
-        query = query.eq("region", country);
-      }
+        if (country !== "global") {
+          query = query.eq("region", country);
+        }
 
-      const { data, error } = await query;
-      
-      if (error) {
-        console.error("Error fetching crowdfunding companies:", error);
-        throw error;
+        const { data, error } = await query;
+        
+        if (error) {
+          console.error("Error fetching crowdfunding companies:", error);
+          toast({
+            title: "Error fetching companies",
+            description: "Please try again later",
+            variant: "destructive",
+          });
+          return [];
+        }
+        
+        console.log("Fetched companies:", data);
+        return (data || []) as CrowdfundingCompany[];
+      } catch (error) {
+        console.error("Unexpected error:", error);
+        toast({
+          title: "Error fetching companies",
+          description: "An unexpected error occurred",
+          variant: "destructive",
+        });
+        return [];
       }
-      
-      console.log("Fetched companies:", data);
-      return data as CrowdfundingCompany[];
     },
+    retry: 2,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
   const handleTrendResults = (results: TrendData) => {
     setIsSearching(true);
     try {
       setTrendResults(results);
+    } catch (error) {
+      console.error("Error handling trend results:", error);
+      toast({
+        title: "Error",
+        description: "Failed to process trend results",
+        variant: "destructive",
+      });
     } finally {
       setIsSearching(false);
     }
