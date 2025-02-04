@@ -25,17 +25,18 @@ const Crowdfunding = () => {
     queryFn: async () => {
       try {
         console.log("Fetching crowdfunding companies with search:", searchQuery, "country:", country, "period:", period);
-        let query = supabase
+        const query = supabase
           .from("crowdfunding_companies")
           .select("*")
           .order("score", { ascending: false });
 
         if (searchQuery) {
-          query = query.or(`name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%,category.ilike.%${searchQuery}%`);
+          const searchFilter = `name.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%,category.ilike.%${searchQuery}%`;
+          query.or(searchFilter);
         }
 
         if (country !== "global") {
-          query = query.eq("region", country);
+          query.eq("region", country);
         }
 
         const { data, error } = await query;
