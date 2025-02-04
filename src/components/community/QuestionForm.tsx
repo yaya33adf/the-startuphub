@@ -21,6 +21,7 @@ interface QuestionFormProps {
 
 export const QuestionForm = ({ userId }: QuestionFormProps) => {
   const [open, setOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [newQuestion, setNewQuestion] = useState({
     title: "",
     content: "",
@@ -29,18 +30,28 @@ export const QuestionForm = ({ userId }: QuestionFormProps) => {
   const { toast } = useToast();
 
   const handleSubmitQuestion = async () => {
+    if (!userId) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to post a question.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!newQuestion.title.trim() || !newQuestion.content.trim()) {
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Title and content are required.",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
       console.log("Submitting question:", newQuestion);
       
-      if (!newQuestion.title.trim() || !newQuestion.content.trim()) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Title and content are required.",
-        });
-        return;
-      }
-
       const { error } = await supabase.from("community_posts").insert([
         {
           title: newQuestion.title.trim(),
@@ -50,7 +61,34 @@ export const QuestionForm = ({ userId }: QuestionFormProps) => {
         },
       ]);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error details:", {
+          code: error.code,
+          message: error.message,
+          details: error.details
+        });
+
+        if (error.code === "42501") {
+          toast({
+            title: "Permission Denied",
+            description: "You don't have permission to post questions.",
+            variant: "destructive",
+          });
+        } else if (error.code === "23505") {
+          toast({
+            title: "Duplicate Question",
+            description: "A similar question already exists.",
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: "Failed to submit your question. Please try again.",
+            variant: "destructive",
+          });
+        }
+        return;
+      }
 
       toast({
         title: "Success",
@@ -61,12 +99,14 @@ export const QuestionForm = ({ userId }: QuestionFormProps) => {
       setNewQuestion({ title: "", content: "", tags: "" });
       setOpen(false);
     } catch (error) {
-      console.error("Error submitting question:", error);
+      console.error("Unexpected error:", error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to submit your question. Please try again.",
+        description: "An unexpected error occurred. Please try again later.",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -120,8 +160,12 @@ export const QuestionForm = ({ userId }: QuestionFormProps) => {
               placeholder="Add tags separated by commas (e.g., startup, funding, marketing)"
             />
           </div>
-          <Button onClick={handleSubmitQuestion} className="w-full">
-            Submit Question
+          <Button 
+            onClick={handleSubmitQuestion} 
+            className="w-full"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Submit Question"}
           </Button>
         </div>
       </DialogContent>

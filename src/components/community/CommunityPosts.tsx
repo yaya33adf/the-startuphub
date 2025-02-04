@@ -19,34 +19,75 @@ export const CommunityPosts = ({ userId }: CommunityPostsProps) => {
     queryKey: ["communityPosts"],
     queryFn: async () => {
       console.log("Fetching community posts for user:", userId);
-      const { data, error } = await supabase
-        .from("community_posts")
-        .select(`
-          *,
-          users (
-            name
-          )
-        `)
-        .order("created_at", { ascending: false });
+      try {
+        const { data, error } = await supabase
+          .from("community_posts")
+          .select(`
+            *,
+            users (
+              name
+            )
+          `)
+          .order("created_at", { ascending: false });
 
-      if (error) {
-        console.error("Error fetching posts:", error);
+        if (error) {
+          console.error("Error details:", {
+            code: error.code,
+            message: error.message,
+            details: error.details
+          });
+          
+          // Handle specific error cases
+          if (error.code === "PGRST116") {
+            toast({
+              title: "Authentication Error",
+              description: "Please sign in to view community posts.",
+              variant: "destructive",
+            });
+          } else if (error.code === "42501") {
+            toast({
+              title: "Permission Denied",
+              description: "You don't have permission to access these posts.",
+              variant: "destructive",
+            });
+          } else {
+            toast({
+              title: "Error",
+              description: "Failed to load community posts. Please try again.",
+              variant: "destructive",
+            });
+          }
+          throw error;
+        }
+
+        if (!data) {
+          console.log("No posts found");
+          return [];
+        }
+
+        console.log("Successfully fetched posts:", data);
+        return data;
+      } catch (error) {
+        console.error("Unexpected error:", error);
         toast({
           title: "Error",
-          description: "Failed to load community posts. Please try again.",
+          description: "An unexpected error occurred. Please try again later.",
           variant: "destructive",
         });
         throw error;
       }
-
-      console.log("Successfully fetched posts:", data);
-      return data || [];
     },
     enabled: !!userId,
-    staleTime: 30000, // Cache data for 30 seconds
+    staleTime: 30000,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
-    retry: 1,
+    retry: (failureCount, error: any) => {
+      // Don't retry on authentication or permission errors
+      if (error?.code === "PGRST116" || error?.code === "42501") {
+        return false;
+      }
+      return failureCount < 3;
+    },
     meta: {
       errorMessage: "Failed to load community posts"
     }
